@@ -1,0 +1,78 @@
+.navButton {
+    color: white;
+    background: #042857;
+    border-radius: 0;
+    height: auto;
+    padding-left: 1.5ch;
+    padding-bottom: 0.45em;
+    padding-top: 0.45em;
+    border: black;
+    text-align: left;
+    transition: all 100ms;
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    font-size: 100%;
+}
+
+.navButton:hover {
+    color: white;
+    background: rebeccapurple;
+    transition: all 500ms;
+}
+
+.navButton.active {
+    color: white !important;
+    background: rebeccapurple !important;
+}
+
+.navButton.disabled {
+    color: grey !important;
+    background: #042857 !important;
+    outline: none;
+    border: none;
+}
+
+.customLink {
+    color: white;
+    background: #042857;
+    text-decoration: none;
+    width: 100%;
+    padding: 0.42em 1.5ch;
+}
+
+.customLink:hover {
+    color: white;
+    background: rebeccapurple;
+    transition: all 500ms;
+}
+
+.activeLink {
+    color: white;
+    background: rebeccapurple;
+    text-decoration: none;
+    padding: 0.42em 1.5ch;
+    width: 100%;
+}
+
+.activeLink:hover {
+    color: white;
+}
+
+.disabledLink {
+    color: grey;
+    background: #042857;
+    text-decoration: none;
+    padding-left: 1.5ch;
+    padding-top: 0.42em;
+    padding-bottom: 0.42em;
+    width: 100%;
+    pointer-events: none
+}
+
+
+
+
+

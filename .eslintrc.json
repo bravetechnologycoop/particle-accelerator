@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "eslint-config-brave"
+  ],
+  "rules": {
+    "react/jsx-no-bind": "off"
+  },
+  "env": {
+    "browser": true
+  }
+}

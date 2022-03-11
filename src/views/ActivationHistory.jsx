@@ -1,0 +1,43 @@
+import PropTypes from 'prop-types'
+import React from 'react'
+import ActivationAttempt from '../utilities/ActivationAttempt'
+import ActivationRow from '../components/ActivationRow'
+
+function ActivationHistory(props) {
+  // eslint-disable-next-line no-unused-vars
+  const { activationHistory } = props
+
+  if (activationHistory.length === 0) {
+    return (
+      <>
+        <h1>Activation History</h1>
+        <hr />
+        <h3>No Activation History</h3>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <h1>Activation History</h1>
+      <hr />
+      {activationHistory.map(attempt => {
+        return (
+          <li key={`${attempt.timeStamp}${attempt.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
+            <ActivationRow attempt={attempt} />
+          </li>
+        )
+      })}
+    </>
+  )
+}
+
+ActivationHistory.propTypes = {
+  activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)),
+}
+
+ActivationHistory.defaultProps = {
+  activationHistory: [],
+}
+
+export default ActivationHistory
