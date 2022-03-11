@@ -23,9 +23,7 @@ function ClickupLogin() {
   if (getClickupToken() === '' || getClickupToken() === null) {
     return (
       <>
-        <Button href="https://app.clickup.com/api?client_id=CGMSSFGHWVSER0UKFOSXAJHBXJXNE3XS&redirect_uri=http://localhost:3000/clickup">
-          Log in to ClickUp
-        </Button>
+        <Button>Log in to ClickUp</Button>
         <Button onClick={buttonHandler}>Get token</Button>
       </>
     )
