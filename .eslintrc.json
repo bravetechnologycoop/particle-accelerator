@@ -7,5 +7,6 @@
   },
   "env": {
     "browser": true
-  }
+  },
+  "ignorePatterns": ["reportWebVitals.js"]
 }
