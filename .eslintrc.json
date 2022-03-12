@@ -3,7 +3,8 @@
     "eslint-config-brave"
   ],
   "rules": {
-    "react/jsx-no-bind": "off"
+    "react/jsx-no-bind": "off",
+    "no-console": "off",
   },
   "env": {
     "browser": true
