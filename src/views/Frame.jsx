@@ -65,6 +65,7 @@ function Frame(props) {
   return (
     <div style={styles.main}>
       <h1>home</h1>
+      <h3>{process.env.NODE_ENV}</h3>
     </div>
   )
 }
