@@ -65,7 +65,7 @@ function Frame(props) {
   return (
     <div style={styles.main}>
       <h1>home</h1>
-      <h3>{process.env.NODE_ENV}</h3>
+      <h3>{process.env.REACT_APP_CLICKUP_CLIENT_ID}</h3>
     </div>
   )
 }
