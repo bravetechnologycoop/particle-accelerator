@@ -25,6 +25,7 @@ function App() {
         <Route path="/validator" element={<RouterInterface viewState="Validator" changeViewState={changeViewState} />} />
         <Route path="/activation-history" element={<RouterInterface viewState="Activation History" changeViewState={changeViewState} />} />
         <Route path="/activated-devices" element={<RouterInterface viewState="Activated Devices" changeViewState={changeViewState} />} />
+        <Route path="/door-sensor-pairing" element={<RouterInterface viewState="Door Sensor Pairing" changeViewState={changeViewState} />} />
       </Routes>
     </BrowserRouter>
   )

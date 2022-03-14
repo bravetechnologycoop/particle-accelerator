@@ -3,11 +3,7 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 
-const ParticleFunctions = require('../utilities/ParticleFunctions')
-const StorageFunctions = require('../utilities/StorageFunctions')
-
-const { login } = ParticleFunctions
-const { changeParticleToken, changeParticleLoginState } = StorageFunctions
+const { login } = require('../utilities/ParticleFunctions')
 
 /**
  * LoginForm:
@@ -31,11 +27,9 @@ function LoginForm(props) {
       setPassword('')
       changeLoginState('true')
       changeToken(token)
-      changeParticleLoginState('true')
-      changeParticleToken(token)
     } else {
+      changeToken('passwordincorrect')
       changeLoginState('passwordincorrect')
-      changeParticleLoginState('passwordincorrect')
     }
   }
 

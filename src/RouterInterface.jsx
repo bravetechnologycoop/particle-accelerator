@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Navigation from './components/Navigation'
 import Frame from './views/Frame'
-import { getParticleLoginState, getParticleToken, getSafeModeState, setSafeModeState } from './utilities/StorageFunctions'
+import {
+  getParticleLoginState,
+  getParticleToken,
+  getSafeModeState,
+  storeParticleLoginState,
+  storeParticleToken,
+  storeSafeModeState,
+} from './utilities/StorageFunctions'
 
 function RouterInterface(props) {
   const { viewState, changeViewState } = props
@@ -16,15 +23,17 @@ function RouterInterface(props) {
   })
 
   function changeToken(newToken) {
+    storeParticleToken(newToken)
     setToken(newToken)
   }
 
   function changeLoginState(newState) {
+    storeParticleLoginState(newState)
     setLoginState(newState)
   }
 
   function changeSafeModeState(newState) {
-    setSafeModeState(newState)
+    storeSafeModeState(newState)
     setSafeMode(newState)
   }
 

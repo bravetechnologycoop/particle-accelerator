@@ -9,7 +9,7 @@ import ActivationAttempt from '../utilities/ActivationAttempt'
 import StatusBadge from '../components/StatusBadge'
 import DeviceIDStatus from '../components/DeviceIDStatus'
 import ICCIDStatus from '../components/ICCIDStatus'
-import { getActivatedDevices, getActivationHistory, setActivatedDevices, setActivationHistory } from '../utilities/StorageFunctions'
+// import { getActivatedDevices, getActivationHistory } from '../utilities/StorageFunctions'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 
 const { getDeviceInfo } = require('../utilities/ParticleFunctions')
@@ -22,7 +22,7 @@ const { changeDeviceName } = require('../utilities/ParticleFunctions')
 
 const { verifyDeviceRegistration } = require('../utilities/ParticleFunctions')
 
-const { getParticleToken } = require('../utilities/StorageFunctions')
+// const { getParticleToken } = require('../utilities/StorageFunctions')
 
 // CSS Styles
 const styles = {
@@ -72,13 +72,14 @@ const styles = {
  *                3. Device activation log.
  */
 function ActivatorView(props) {
+  // eslint-disable-next-line no-unused-vars
   const { token, changeToken, activationHistory, changeActivationHistory, activatedDevices, changeActivatedDevices, safeModeState } = props
 
-  useEffect(() => {
+  /* useEffect(() => {
     changeToken(getParticleToken())
     changeActivationHistory(getActivationHistory())
     changeActivatedDevices(getActivatedDevices())
-  }, [])
+  }, []) */
 
   const [productList, setProductList] = useState([])
   const [serialNumber, setSerialNumber] = useState('')
@@ -97,14 +98,12 @@ function ActivatorView(props) {
     const newAttemptArray = [newAttempt]
     const updatedList = newAttemptArray.concat(activationHistory)
     changeActivationHistory(updatedList)
-    setActivationHistory(updatedList)
   }
 
   function pushDevice(newDevice) {
     const newDeviceArray = [newDevice]
     const updatedList = newDeviceArray.concat(activatedDevices)
     changeActivatedDevices(updatedList)
-    setActivatedDevices(updatedList)
   }
 
   async function resetDefaults() {

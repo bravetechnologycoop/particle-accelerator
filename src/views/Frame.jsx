@@ -5,8 +5,9 @@ import Validator from '../components/Validator'
 import LoginView from './LoginView'
 import ClickupLogin from './ClickupLogin'
 import ActivationHistory from './ActivationHistory'
-import { getActivatedDevices, getActivationHistory } from '../utilities/StorageFunctions'
+import { getActivatedDevices, getActivationHistory, storeActivatedDevices, storeActivationHistory } from '../utilities/StorageFunctions'
 import ActivatedDevices from './ActivatedDevices'
+import DoorSensorView from './DoorSensorView'
 
 function Frame(props) {
   const { token, changeToken, loginState, changeLoginState, viewState, safeModeState } = props
@@ -16,10 +17,12 @@ function Frame(props) {
 
   function changeActivationHistory(newHistory) {
     setActivationHistory(newHistory)
+    storeActivationHistory(newHistory)
   }
 
   function changeActivatedDevices(newActivatedDevices) {
     setActivatedDevices(newActivatedDevices)
+    storeActivatedDevices(newActivatedDevices)
   }
 
   const styles = {
@@ -75,6 +78,13 @@ function Frame(props) {
     return (
       <div style={styles.main}>
         <ActivatedDevices activatedDeviceList={activatedDevices} />
+      </div>
+    )
+  }
+  if (viewState === 'Door Sensor Pairing') {
+    return (
+      <div style={styles.main}>
+        <DoorSensorView />
       </div>
     )
   }

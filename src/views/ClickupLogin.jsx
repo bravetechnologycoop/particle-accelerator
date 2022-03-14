@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button'
 import React, { useEffect } from 'react'
 import { getClickupToken } from '../utilities/StorageFunctions'
-import getClickupAccessToken from '../utilities/ClickupFunctions'
+import { getClickupAccessToken } from '../utilities/ClickupFunctions'
 
 function ClickupLogin() {
   const urlParams = new URLSearchParams(window.location.search)

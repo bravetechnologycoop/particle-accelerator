@@ -10,11 +10,11 @@ export function getParticleToken() {
   return result
 }
 
-export function changeParticleToken(newToken) {
+export function storeParticleToken(newToken) {
   sessionStorage.setItem('particleToken', newToken)
 }
 
-export function changeParticleLoginState(newParticleLoginState) {
+export function storeParticleLoginState(newParticleLoginState) {
   sessionStorage.setItem('particleLoginState', newParticleLoginState)
 }
 
@@ -35,7 +35,7 @@ export function getClickupLoginState() {
   }
 }
 
-export function setClickupLoginState(newState) {
+export function storeClickupLoginState(newState) {
   sessionStorage.setItem('clickupLoginState', newState)
 }
 
@@ -47,11 +47,11 @@ export function getClickupToken() {
   }
 }
 
-export function setClickupToken(newToken) {
+export function storeClickupToken(newToken) {
   sessionStorage.setItem('clickupToken', newToken)
 }
 
-export function setActivationHistory(newHistory) {
+export function storeActivationHistory(newHistory) {
   const stringedData = JSON.stringify(newHistory)
   localStorage.setItem('activationHistory', stringedData)
 }
@@ -102,12 +102,12 @@ export function getActivatedDevices() {
   )
 }
 
-export function setActivatedDevices(newActivatedDeviceList) {
+export function storeActivatedDevices(newActivatedDeviceList) {
   const stringedData = JSON.stringify(newActivatedDeviceList)
   localStorage.setItem('activatedDevices', stringedData)
 }
 
-export function setSafeModeState(newState) {
+export function storeSafeModeState(newState) {
   const stringedData = JSON.stringify(newState)
   localStorage.setItem('safeMode', stringedData)
 }

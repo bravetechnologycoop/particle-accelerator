@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
+import React from 'react'
 import LoginStatus from '../components/LoginStatus'
 import LoginForm from '../components/LoginForm'
 import WelcomeText from '../components/WelcomeText'
 import LogoutButton from '../components/LogoutButton'
-import { getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
+// import { getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 
 /**
  * LoginView: React Component that provides a login form for a user to login
@@ -13,10 +13,10 @@ import { getParticleLoginState, getParticleToken } from '../utilities/StorageFun
 function LoginView(props) {
   const { token, loginState, changeToken, changeLoginState } = props
 
-  useEffect(() => {
+  /* useEffect(() => {
     changeToken(getParticleToken())
     changeLoginState(getParticleLoginState())
-  })
+  }) */
 
   if (loginState === 'true') {
     return (

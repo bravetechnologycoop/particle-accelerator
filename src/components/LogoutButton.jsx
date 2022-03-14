@@ -1,7 +1,6 @@
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { changeParticleLoginState, changeParticleToken } from '../utilities/StorageFunctions'
 
 /**
  * LogoutButton: React component (button) for resetting the token and loginState
@@ -20,8 +19,6 @@ function LogoutButton(props) {
         onClick={() => {
           changeLoginState('false')
           changeToken('')
-          changeParticleLoginState('false')
-          changeParticleToken('')
         }}
         disabled={disabledStatus}
         size="sm"
