@@ -41,12 +41,15 @@
     text-decoration: none;
     width: 100%;
     padding: 0.42em 1.5ch;
+    outline: none;
+    border: none;
 }
 
 .customLink:hover {
     color: white;
     background: rebeccapurple;
     transition: all 500ms;
+    outline: none;
 }
 
 .activeLink {
@@ -55,6 +58,7 @@
     text-decoration: none;
     padding: 0.42em 1.5ch;
     width: 100%;
+    outline: none;
 }
 
 .activeLink:hover {

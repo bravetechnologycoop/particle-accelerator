@@ -5,15 +5,21 @@ import Validator from '../components/Validator'
 import LoginView from './LoginView'
 import ClickupLogin from './ClickupLogin'
 import ActivationHistory from './ActivationHistory'
-import { getActivationHistory } from '../utilities/StorageFunctions'
+import { getActivatedDevices, getActivationHistory } from '../utilities/StorageFunctions'
+import ActivatedDevices from './ActivatedDevices'
 
 function Frame(props) {
-  const { token, changeToken, loginState, changeLoginState, viewState } = props
+  const { token, changeToken, loginState, changeLoginState, viewState, safeModeState } = props
 
   const [activationHistory, setActivationHistory] = useState(getActivationHistory())
+  const [activatedDevices, setActivatedDevices] = useState(getActivatedDevices())
 
   function changeActivationHistory(newHistory) {
     setActivationHistory(newHistory)
+  }
+
+  function changeActivatedDevices(newActivatedDevices) {
+    setActivatedDevices(newActivatedDevices)
   }
 
   const styles = {
@@ -29,7 +35,10 @@ function Frame(props) {
           token={token}
           changeToken={changeToken}
           activationHistory={activationHistory}
+          activatedDevices={activatedDevices}
           changeActivationHistory={changeActivationHistory}
+          changeActivatedDevices={changeActivatedDevices}
+          safeModeState={safeModeState}
         />
       </div>
     )
@@ -62,10 +71,16 @@ function Frame(props) {
       </div>
     )
   }
+  if (viewState === 'Activated Devices') {
+    return (
+      <div style={styles.main}>
+        <ActivatedDevices activatedDeviceList={activatedDevices} />
+      </div>
+    )
+  }
   return (
     <div style={styles.main}>
       <h1>home</h1>
-      <h3>{process.env.REACT_APP_CLICKUP_CLIENT_ID}</h3>
     </div>
   )
 }
@@ -76,6 +91,7 @@ Frame.propTypes = {
   loginState: PropTypes.string,
   changeLoginState: PropTypes.func,
   viewState: PropTypes.string,
+  safeModeState: PropTypes.bool,
 }
 
 Frame.defaultProps = {
@@ -84,6 +100,7 @@ Frame.defaultProps = {
   loginState: 'false',
   changeLoginState: () => {},
   viewState: 'Home',
+  safeModeState: false,
 }
 
 export default Frame

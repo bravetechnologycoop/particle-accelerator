@@ -6,9 +6,10 @@ import React, { useEffect } from 'react'
 import RowButton from './RowButton'
 import LoginRowButton from './LoginRowButton'
 import { getActivationHistory, getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
+import RowToggler from './RowToggler'
 
 function Navigation(props) {
-  const { viewState, changeViewState, loginStatus, token, changeToken, changeLoginState } = props
+  const { viewState, changeViewState, loginStatus, token, changeToken, changeLoginState, safeModeState, changeSafeModeState } = props
 
   useEffect(() => {
     changeToken(getParticleToken())
@@ -58,7 +59,9 @@ function Navigation(props) {
           <LoginRowButton label="ClickUp" handler={changeViewState} state={viewState} />
           <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
           <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory() !== []} />
+          <RowButton label="Activated Devices" handler={changeViewState} state={viewState} />
           <RowButton label="Validator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
+          <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
         </ButtonGroup>
       </div>
     </div>
@@ -72,6 +75,8 @@ Navigation.propTypes = {
   token: PropTypes.string,
   changeToken: PropTypes.func,
   changeLoginState: PropTypes.func,
+  safeModeState: PropTypes.bool,
+  changeSafeModeState: PropTypes.func,
 }
 
 Navigation.defaultProps = {
@@ -81,6 +86,8 @@ Navigation.defaultProps = {
   token: '',
   changeToken: () => {},
   changeLoginState: PropTypes.func,
+  safeModeState: true,
+  changeSafeModeState: () => {},
 }
 
 export default Navigation

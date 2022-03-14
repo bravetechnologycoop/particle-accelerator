@@ -25,7 +25,6 @@ function RowButton(props) {
       {label}
     </Link>
   )
-  // return <ToggleButton className="navButton" id={label} type="radio" value={label} active={state === label} onChange={x => handler(x.target.value)} disabled={!enabled} >{label}</ToggleButton>
 }
 
 RowButton.propTypes = {

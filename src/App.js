@@ -24,6 +24,7 @@ function App() {
         <Route path="/activator" element={<RouterInterface viewState="Activator" changeViewState={changeViewState} />} />
         <Route path="/validator" element={<RouterInterface viewState="Validator" changeViewState={changeViewState} />} />
         <Route path="/activation-history" element={<RouterInterface viewState="Activation History" changeViewState={changeViewState} />} />
+        <Route path="/activated-devices" element={<RouterInterface viewState="Activated Devices" changeViewState={changeViewState} />} />
       </Routes>
     </BrowserRouter>
   )

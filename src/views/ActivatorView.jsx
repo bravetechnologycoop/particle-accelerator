@@ -9,7 +9,8 @@ import ActivationAttempt from '../utilities/ActivationAttempt'
 import StatusBadge from '../components/StatusBadge'
 import DeviceIDStatus from '../components/DeviceIDStatus'
 import ICCIDStatus from '../components/ICCIDStatus'
-import { getActivationHistory, setActivationHistory } from '../utilities/StorageFunctions'
+import { getActivatedDevices, getActivationHistory, setActivatedDevices, setActivationHistory } from '../utilities/StorageFunctions'
+import ActivatedDevice from '../utilities/ActivatedDevice'
 
 const { getDeviceInfo } = require('../utilities/ParticleFunctions')
 
@@ -71,11 +72,12 @@ const styles = {
  *                3. Device activation log.
  */
 function ActivatorView(props) {
-  const { token, changeToken, activationHistory, changeActivationHistory } = props
+  const { token, changeToken, activationHistory, changeActivationHistory, activatedDevices, changeActivatedDevices, safeModeState } = props
 
   useEffect(() => {
     changeToken(getParticleToken())
     changeActivationHistory(getActivationHistory())
+    changeActivatedDevices(getActivatedDevices())
   }, [])
 
   const [productList, setProductList] = useState([])
@@ -91,11 +93,18 @@ function ActivatorView(props) {
   const [statusView, setStatusView] = useState(false)
   const [formLock, setFormLock] = useState(false)
 
-  async function pushAttempt(newAttempt) {
+  function pushAttempt(newAttempt) {
     const newAttemptArray = [newAttempt]
     const updatedList = newAttemptArray.concat(activationHistory)
     changeActivationHistory(updatedList)
     setActivationHistory(updatedList)
+  }
+
+  function pushDevice(newDevice) {
+    const newDeviceArray = [newDevice]
+    const updatedList = newDeviceArray.concat(activatedDevices)
+    changeActivatedDevices(updatedList)
+    setActivatedDevices(updatedList)
   }
 
   async function resetDefaults() {
@@ -121,88 +130,110 @@ function ActivatorView(props) {
   }, [token])
 
   async function handleSubmit(event) {
+    event.preventDefault()
+
     setFormLock(true)
 
-    let totalStatusCopy = 'idle'
-    let deviceIDCopy = 'idle'
-    let iccidCopy = 'idle'
-    let activationStatusCopy = 'idle'
-    let renameStatusCopy = 'idle'
+    let deviceMatches = []
 
-    event.preventDefault()
-    setStatusView(true)
-
-    setDeviceID('waiting')
-    deviceIDCopy = 'waiting'
-    setICCID('waiting')
-    iccidCopy = 'waiting'
-    const deviceInfo = await getDeviceInfo(serialNumber, token)
-    setDeviceID(deviceInfo.deviceID)
-    deviceIDCopy = deviceInfo.deviceID
-    setICCID(deviceInfo.iccid)
-    iccidCopy = deviceInfo.iccid
-
-    if (!iccidCopy) {
-      iccidCopy = 'error'
+    if (safeModeState) {
+      console.log(activatedDevices)
+      deviceMatches = activatedDevices.filter(device => {
+        return device.deviceName === newDeviceName
+      })
     }
 
-    if (!deviceIDCopy) {
-      deviceIDCopy = 'error'
-    }
+    console.log('devicematches', deviceMatches.length)
 
-    setActivationStatus('waiting')
-    activationStatusCopy = 'waiting'
-    const SIMStatus = await activateDeviceSIM(deviceInfo.iccid, country, `${productID}`, token)
-    if (SIMStatus) {
-      setActivationStatus('true')
-      activationStatusCopy = 'true'
+    if (!safeModeState || deviceMatches.length === 0) {
+      let totalStatusCopy = 'idle'
+      let deviceIDCopy = 'idle'
+      let iccidCopy = 'idle'
+      let activationStatusCopy = 'idle'
+      let renameStatusCopy = 'idle'
+
+      setStatusView(true)
+
+      setDeviceID('waiting')
+      deviceIDCopy = 'waiting'
+      setICCID('waiting')
+      iccidCopy = 'waiting'
+      const deviceInfo = await getDeviceInfo(serialNumber, token)
+      setDeviceID(deviceInfo.deviceID)
+      deviceIDCopy = deviceInfo.deviceID
+      setICCID(deviceInfo.iccid)
+      iccidCopy = deviceInfo.iccid
+
+      if (!iccidCopy) {
+        iccidCopy = 'error'
+      }
+
+      if (!deviceIDCopy) {
+        deviceIDCopy = 'error'
+      }
+
+      setActivationStatus('waiting')
+      activationStatusCopy = 'waiting'
+      const SIMStatus = await activateDeviceSIM(deviceInfo.iccid, country, `${productID}`, token)
+      if (SIMStatus) {
+        setActivationStatus('true')
+        activationStatusCopy = 'true'
+      } else {
+        setActivationStatus('error')
+        activationStatusCopy = 'error'
+      }
+
+      setRenameStatus('waiting')
+      renameStatusCopy = 'waiting'
+
+      setDeviceID(deviceInfo.deviceID)
+      const rename = await changeDeviceName(deviceInfo.deviceID, productID, newDeviceName, token)
+
+      if (rename) {
+        setRenameStatus('true')
+        renameStatusCopy = 'true'
+      } else {
+        setRenameStatus('error')
+        renameStatusCopy = 'error'
+      }
+
+      setTotalStatus('waiting')
+      totalStatusCopy = 'waiting'
+
+      const finalVerification = await verifyDeviceRegistration(deviceInfo.deviceID, newDeviceName, productID, deviceInfo.iccid, serialNumber, token)
+
+      if (finalVerification) {
+        setTotalStatus('true')
+        totalStatusCopy = 'true'
+      } else {
+        setTotalStatus('false')
+        totalStatusCopy = 'false'
+      }
+
+      pushAttempt(
+        new ActivationAttempt(
+          serialNumber,
+          newDeviceName,
+          productID,
+          deviceIDCopy,
+          iccidCopy,
+          country,
+          activationStatusCopy,
+          renameStatusCopy,
+          totalStatusCopy,
+          null,
+          null,
+        ),
+      )
+
+      if (totalStatusCopy === 'true') {
+        pushDevice(new ActivatedDevice(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, null, null))
+      }
     } else {
-      setActivationStatus('error')
-      activationStatusCopy = 'error'
+      pushAttempt(
+        new ActivationAttempt('null', `${newDeviceName} already registered.`, 'null', 'null', 'null', 'null', 'false', 'false', 'false', null, null),
+      )
     }
-
-    setRenameStatus('waiting')
-    renameStatusCopy = 'waiting'
-
-    setDeviceID(deviceInfo.deviceID)
-    const rename = await changeDeviceName(deviceInfo.deviceID, productID, newDeviceName, token)
-
-    if (rename) {
-      setRenameStatus('true')
-      renameStatusCopy = 'true'
-    } else {
-      setRenameStatus('error')
-      renameStatusCopy = 'error'
-    }
-
-    setTotalStatus('waiting')
-    totalStatusCopy = 'waiting'
-
-    const finalVerification = await verifyDeviceRegistration(deviceInfo.deviceID, newDeviceName, productID, deviceInfo.iccid, serialNumber, token)
-
-    if (finalVerification) {
-      setTotalStatus('true')
-      totalStatusCopy = 'true'
-    } else {
-      setTotalStatus('false')
-      totalStatusCopy = 'false'
-    }
-
-    pushAttempt(
-      new ActivationAttempt(
-        serialNumber,
-        newDeviceName,
-        productID,
-        deviceIDCopy,
-        iccidCopy,
-        country,
-        activationStatusCopy,
-        renameStatusCopy,
-        totalStatusCopy,
-        null,
-        null,
-      ),
-    )
   }
 
   // eslint-disable-next-line
@@ -377,6 +408,9 @@ ActivatorView.propTypes = {
   changeToken: PropTypes.func,
   activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)),
   changeActivationHistory: PropTypes.func,
+  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
+  changeActivatedDevices: PropTypes.func,
+  safeModeState: PropTypes.bool,
 }
 
 ActivatorView.defaultProps = {
@@ -384,6 +418,9 @@ ActivatorView.defaultProps = {
   changeToken: () => {},
   activationHistory: [],
   changeActivationHistory: () => {},
+  activatedDevices: [new ActivatedDevice()],
+  changeActivatedDevices: () => {},
+  safeModeState: false,
 }
 
 export default ActivatorView

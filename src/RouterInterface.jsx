@@ -1,14 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Navigation from './components/Navigation'
 import Frame from './views/Frame'
-import { getParticleLoginState, getParticleToken } from './utilities/StorageFunctions'
+import { getParticleLoginState, getParticleToken, getSafeModeState, setSafeModeState } from './utilities/StorageFunctions'
 
 function RouterInterface(props) {
   const { viewState, changeViewState } = props
 
   const [token, setToken] = useState(getParticleToken())
   const [loginState, setLoginState] = useState(getParticleLoginState())
+  const [safeMode, setSafeMode] = useState(true)
+
+  useEffect(() => {
+    setSafeMode(getSafeModeState())
+  })
 
   function changeToken(newToken) {
     setToken(newToken)
@@ -16,6 +21,11 @@ function RouterInterface(props) {
 
   function changeLoginState(newState) {
     setLoginState(newState)
+  }
+
+  function changeSafeModeState(newState) {
+    setSafeModeState(newState)
+    setSafeMode(newState)
   }
 
   const styles = {
@@ -54,10 +64,20 @@ function RouterInterface(props) {
           token={token}
           changeToken={changeToken}
           changeLoginState={changeLoginState}
+          safeModeState={safeMode}
+          changeSafeModeState={changeSafeModeState}
         />
       </div>
       <div style={styles.main}>
-        <Frame changeLoginState={changeLoginState} changeToken={changeToken} loginState={loginState} token={token} viewState={viewState} />
+        <Frame
+          changeLoginState={changeLoginState}
+          changeToken={changeToken}
+          loginState={loginState}
+          token={token}
+          viewState={viewState}
+          safeModeState={safeMode}
+          changeSafeModeState={changeSafeModeState}
+        />
       </div>
     </div>
   )

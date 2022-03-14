@@ -1,13 +1,21 @@
-/* export default class ActivatedDevice {
-    serialNumber
+export default class ActivatedDevice {
+  constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp) {
+    this.deviceName = deviceName
+    this.serialNumber = serialNumber
+    this.productID = productID
+    this.deviceID = deviceID
+    this.iccid = iccid
 
-    deviceName
+    if (timeStamp === null) {
+      this.timeStamp = new Date().toLocaleTimeString()
+    } else {
+      this.timeStamp = timeStamp
+    }
 
-    productID
-
-    deviceID
-
-    iccid
-
-    doorSensorID
-} */
+    if (dateStamp === null) {
+      this.dateStamp = new Date().toLocaleTimeString()
+    } else {
+      this.dateStamp = dateStamp
+    }
+  }
+}
