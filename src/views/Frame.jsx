@@ -8,6 +8,7 @@ import ActivationHistory from './ActivationHistory'
 import { getActivatedDevices, getActivationHistory, storeActivatedDevices, storeActivationHistory } from '../utilities/StorageFunctions'
 import ActivatedDevices from './ActivatedDevices'
 import DoorSensorView from './DoorSensorView'
+import RenamerView from './RenamerView'
 
 function Frame(props) {
   const { token, changeToken, loginState, changeLoginState, viewState, safeModeState } = props
@@ -83,6 +84,13 @@ function Frame(props) {
     return (
       <div style={styles.main}>
         <DoorSensorView activatedDevices={activatedDevices} />
+      </div>
+    )
+  }
+  if (viewState === 'Renamer') {
+    return (
+      <div style={styles.main}>
+        <RenamerView />
       </div>
     )
   }

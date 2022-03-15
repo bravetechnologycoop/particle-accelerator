@@ -26,6 +26,7 @@ function App() {
         <Route path="/activation-history" element={<RouterInterface viewState="Activation History" changeViewState={changeViewState} />} />
         <Route path="/activated-devices" element={<RouterInterface viewState="Activated Devices" changeViewState={changeViewState} />} />
         <Route path="/door-sensor-pairing" element={<RouterInterface viewState="Door Sensor Pairing" changeViewState={changeViewState} />} />
+        <Route path="/renamer" element={<RouterInterface viewState="Renamer" changeViewState={changeViewState} />} />
       </Routes>
     </BrowserRouter>
   )
