@@ -1,5 +1,5 @@
 export default class ActivatedDevice {
-  constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp) {
+  constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp, doorSensorID) {
     this.deviceName = deviceName
     this.serialNumber = serialNumber
     this.productID = productID
@@ -16,6 +16,12 @@ export default class ActivatedDevice {
       this.dateStamp = new Date().toLocaleTimeString()
     } else {
       this.dateStamp = dateStamp
+    }
+
+    if (doorSensorID === null) {
+      this.doorSensorID = 'null'
+    } else {
+      this.doorSensorID = doorSensorID
     }
   }
 }

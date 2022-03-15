@@ -98,6 +98,7 @@ export function getActivatedDevices() {
         device.iccid,
         device.timeStamp,
         device.dateStamp,
+        device.doorSensorID,
       ),
   )
 }

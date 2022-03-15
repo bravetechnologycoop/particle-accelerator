@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ActivatedDevice from '../utilities/ActivatedDevice'
+import DoorSensorEntryCard from '../components/DoorSensorEntryCard'
 
 function DoorSensorView(props) {
   // eslint-disable-next-line no-unused-vars
-  const { activatedDevices } = props
+  const { activatedDevices, changeActivatedDevices } = props
 
   const styles = {
     parent: {
@@ -24,6 +25,9 @@ function DoorSensorView(props) {
     queueBox: {
       flex: '1 1 75vh',
     },
+    scrollView: {
+      overflowY: 'auto',
+    },
   }
 
   return (
@@ -32,6 +36,15 @@ function DoorSensorView(props) {
         <div>
           <h3>Activated Devices</h3>
           <hr />
+        </div>
+        <div style={styles.scrollView}>
+          {activatedDevices.map(device => {
+            return (
+              <div style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch' }}>
+                <DoorSensorEntryCard device={device} />
+              </div>
+            )
+          })}
         </div>
       </div>
       <div style={styles.column}>
@@ -56,10 +69,12 @@ function DoorSensorView(props) {
 
 DoorSensorView.propTypes = {
   activatedDevices: PropTypes.instanceOf(ActivatedDevice),
+  changeActivatedDevices: PropTypes.func,
 }
 
 DoorSensorView.defaultProps = {
   activatedDevices: new ActivatedDevice(),
+  changeActivatedDevices: () => {},
 }
 
 export default DoorSensorView

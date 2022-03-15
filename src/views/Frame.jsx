@@ -26,9 +26,7 @@ function Frame(props) {
   }
 
   const styles = {
-    main: {
-      overflow: 'auto',
-    },
+    main: {},
   }
 
   if (viewState === 'Activator') {
@@ -84,7 +82,7 @@ function Frame(props) {
   if (viewState === 'Door Sensor Pairing') {
     return (
       <div style={styles.main}>
-        <DoorSensorView />
+        <DoorSensorView activatedDevices={activatedDevices} />
       </div>
     )
   }

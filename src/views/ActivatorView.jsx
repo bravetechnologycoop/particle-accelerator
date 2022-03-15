@@ -132,6 +132,7 @@ function ActivatorView(props) {
     event.preventDefault()
 
     setFormLock(true)
+    setStatusView(true)
 
     let deviceMatches = []
 
@@ -150,8 +151,6 @@ function ActivatorView(props) {
       let iccidCopy = 'idle'
       let activationStatusCopy = 'idle'
       let renameStatusCopy = 'idle'
-
-      setStatusView(true)
 
       setDeviceID('waiting')
       deviceIDCopy = 'waiting'
@@ -226,9 +225,11 @@ function ActivatorView(props) {
       )
 
       if (totalStatusCopy === 'true') {
-        pushDevice(new ActivatedDevice(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, null, null))
+        pushDevice(new ActivatedDevice(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, null, null, null))
       }
     } else {
+      setFormLock(false)
+      setStatusView(false)
       pushAttempt(
         new ActivationAttempt('null', `${newDeviceName} already registered.`, 'null', 'null', 'null', 'null', 'false', 'false', 'false', null, null),
       )
@@ -247,18 +248,6 @@ function ActivatorView(props) {
         <div style={styles.scrollView}>
           {/* eslint-disable-next-line react/jsx-no-bind */}
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formDeviceID">
-              <Form.Label>Device Serial Number</Form.Label>
-              <Form.Control
-                disabled={formLock}
-                placeholder="Enter ID"
-                value={serialNumber}
-                maxLength="15"
-                onChange={x => setSerialNumber(x.target.value)}
-              />
-              <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
-            </Form.Group>
-
             <Form.Group className="mb-3" controlId="formNewName">
               <Form.Label>New Device Name</Form.Label>
               <Form.Control disabled={formLock} placeholder="Device Name" value={newDeviceName} onChange={x => setNewDeviceName(x.target.value)} />
@@ -310,9 +299,29 @@ function ActivatorView(props) {
               </Form.Control>
             </Form.Group>
 
-            <Button variant="primary" type="submit" disabled={formLock}>
-              Submit
-            </Button>
+            <Form.Group className="mb-3" controlId="formDeviceID">
+              <Form.Label>Device Serial Number</Form.Label>
+              <Form.Control
+                disabled={formLock || country === '' || productID === 'null' || newDeviceName === ''}
+                placeholder="Enter ID"
+                value={serialNumber}
+                maxLength="15"
+                onChange={x => setSerialNumber(x.target.value)}
+              />
+              <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
+            </Form.Group>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div>
+                <Button variant="primary" type="submit" disabled={formLock}>
+                  Submit
+                </Button>
+              </div>
+              <div style={{ paddingLeft: '10px' }}>
+                <Button variant="danger" type="button" onClick={resetDefaults}>
+                  Clear Form
+                </Button>
+              </div>
+            </div>
           </Form>
         </div>
       </div>
@@ -352,7 +361,14 @@ function ActivatorView(props) {
 
           <div style={styles.child}>
             {/* eslint-disable-next-line react/jsx-no-bind */}
-            <Button variant="primary" onClick={resetDefaults} disabled={!statusView}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setFormLock(false)
+                setStatusView(false)
+              }}
+              disabled={!statusView}
+            >
               Next Device
             </Button>
             {/* eslint-disable-next-line react/jsx-no-bind */}
