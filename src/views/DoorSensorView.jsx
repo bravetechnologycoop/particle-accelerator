@@ -48,14 +48,8 @@ function DoorSensorView(props) {
         </div>
       </div>
       <div style={styles.column}>
-        <div style={styles.checkerBox}>
-          <h3>Checking Firmware State</h3>
-          <hr />
-        </div>
-        <div style={styles.queueBox}>
-          <h3>Queue</h3>
-          <hr />
-        </div>
+        <h3>Queue</h3>
+        <hr />
       </div>
       <div style={styles.column}>
         <div>

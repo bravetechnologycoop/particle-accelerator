@@ -99,7 +99,7 @@ function Frame(props) {
   if (viewState === 'Renamer') {
     return (
       <div style={styles.main}>
-        <RenamerView />
+        <RenamerView particleSettings={particleSettings} />
       </div>
     )
   }
