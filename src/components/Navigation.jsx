@@ -7,9 +7,10 @@ import RowButton from './RowButton'
 import LoginRowButton from './LoginRowButton'
 import { getActivationHistory, getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 import RowToggler from './RowToggler'
+import ParticleSettings from '../utilities/ParticleSettings'
 
 function Navigation(props) {
-  const { viewState, changeViewState, loginStatus, token, changeToken, changeLoginState, safeModeState, changeSafeModeState } = props
+  const { viewState, changeViewState, loginStatus, changeToken, changeLoginState, safeModeState, changeSafeModeState, particleSettings } = props
 
   useEffect(() => {
     changeToken(getParticleToken())
@@ -54,7 +55,7 @@ function Navigation(props) {
             state={viewState}
             loginState={loginStatus}
             changeToken={changeToken}
-            token={token}
+            particleSettings={particleSettings}
           />
           <LoginRowButton label="ClickUp" handler={changeViewState} state={viewState} />
           <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
@@ -74,22 +75,22 @@ Navigation.propTypes = {
   viewState: PropTypes.string,
   changeViewState: PropTypes.func,
   loginStatus: PropTypes.string,
-  token: PropTypes.string,
   changeToken: PropTypes.func,
   changeLoginState: PropTypes.func,
   safeModeState: PropTypes.bool,
   changeSafeModeState: PropTypes.func,
+  particleSettings: PropTypes.instanceOf(ParticleSettings),
 }
 
 Navigation.defaultProps = {
   viewState: 'Home',
   changeViewState: () => {},
   loginStatus: '',
-  token: '',
   changeToken: () => {},
   changeLoginState: PropTypes.func,
   safeModeState: true,
   changeSafeModeState: () => {},
+  particleSettings: new ParticleSettings(),
 }
 
 export default Navigation

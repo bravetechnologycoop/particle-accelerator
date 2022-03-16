@@ -1,26 +1,56 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Navigation from './components/Navigation'
 import Frame from './views/Frame'
 import {
   getParticleLoginState,
+  getParticleSettings,
   getParticleToken,
   getSafeModeState,
   storeParticleLoginState,
+  storeParticleSettings,
   storeParticleToken,
   storeSafeModeState,
 } from './utilities/StorageFunctions'
+import ParticleSettings from './utilities/ParticleSettings'
 
 function RouterInterface(props) {
   const { viewState, changeViewState } = props
 
   const [token, setToken] = useState(getParticleToken())
   const [loginState, setLoginState] = useState(getParticleLoginState())
-  const [safeMode, setSafeMode] = useState(true)
+  const [safeMode, setSafeMode] = useState(getSafeModeState())
+  const [particleSettings, setParticleSettings] = useState(getParticleSettings())
 
-  useEffect(() => {
-    setSafeMode(getSafeModeState())
-  })
+  function changeParticleSettings(setting, newValue) {
+    const newParticleSettings = new ParticleSettings(
+      particleSettings.userName,
+      particleSettings.productFirmwareVersion,
+      particleSettings.deviceOSVersion,
+      particleSettings.productList,
+    )
+
+    if (setting === 'userName') {
+      newParticleSettings.userName = newValue
+      setParticleSettings(newParticleSettings)
+      storeParticleSettings(newParticleSettings)
+    } else if (setting === 'productFirmwareVersion') {
+      newParticleSettings.productFirmwareVersion = newValue
+      setParticleSettings(newParticleSettings)
+      storeParticleSettings(newParticleSettings)
+    } else if (setting === 'deviceOSVersion') {
+      newParticleSettings.deviceOSVersion = newValue
+      setParticleSettings(newParticleSettings)
+      storeParticleSettings(newParticleSettings)
+    } else if (setting === 'productList') {
+      newParticleSettings.productList = newValue
+      setParticleSettings(newParticleSettings)
+      storeParticleSettings(newParticleSettings)
+    } else if (setting === 'clear' && newValue === 'clear') {
+      const blankSettings = new ParticleSettings('', '', '', [])
+      storeParticleSettings(blankSettings)
+    }
+  }
 
   function changeToken(newToken) {
     storeParticleToken(newToken)
@@ -75,6 +105,7 @@ function RouterInterface(props) {
           changeLoginState={changeLoginState}
           safeModeState={safeMode}
           changeSafeModeState={changeSafeModeState}
+          particleSettings={particleSettings}
         />
       </div>
       <div style={styles.main}>
@@ -86,6 +117,8 @@ function RouterInterface(props) {
           viewState={viewState}
           safeModeState={safeMode}
           changeSafeModeState={changeSafeModeState}
+          particleSettings={particleSettings}
+          changeParticleSettings={changeParticleSettings}
         />
       </div>
     </div>

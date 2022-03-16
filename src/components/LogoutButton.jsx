@@ -8,7 +8,7 @@ import React from 'react'
  * @effects the global token variable and the global loginState variable
  */
 function LogoutButton(props) {
-  const { token, changeToken, changeLoginState } = props
+  const { token, changeToken, changeLoginState, changeParticleSettings } = props
 
   const disabledStatus = token === ''
 
@@ -19,6 +19,7 @@ function LogoutButton(props) {
         onClick={() => {
           changeLoginState('false')
           changeToken('')
+          changeParticleSettings('clear', 'clear')
         }}
         disabled={disabledStatus}
         size="sm"
@@ -33,12 +34,14 @@ LogoutButton.propTypes = {
   token: PropTypes.string,
   changeToken: PropTypes.func,
   changeLoginState: PropTypes.func,
+  changeParticleSettings: PropTypes.func,
 }
 
 LogoutButton.defaultProps = {
   token: '',
   changeToken: () => {},
   changeLoginState: () => {},
+  changeParticleSettings: () => {},
 }
 
 export default LogoutButton

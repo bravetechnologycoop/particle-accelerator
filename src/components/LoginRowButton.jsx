@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import React from 'react'
 import LoginStatus from './LoginStatus'
+import ParticleSettings from '../utilities/ParticleSettings'
 
 function LoginRowButton(props) {
-  const { label, state, enabled, loginState, token } = props
+  const { label, state, enabled, loginState, particleSettings } = props
 
   const styles = {
     parent: {
@@ -34,7 +35,7 @@ function LoginRowButton(props) {
       <div style={styles.parent}>
         {label}{' '}
         <div style={{ paddingLeft: '1ch' }}>
-          <LoginStatus loginState={loginState} token={token} />
+          <LoginStatus loginState={loginState} userName={particleSettings.userName} />
         </div>
       </div>
     </Link>
@@ -46,9 +47,9 @@ LoginRowButton.propTypes = {
   state: PropTypes.string,
   enabled: PropTypes.bool,
   loginState: PropTypes.string,
-  token: PropTypes.string,
   // eslint-disable-next-line react/no-unused-prop-types
   changeToken: PropTypes.func,
+  particleSettings: PropTypes.instanceOf(ParticleSettings),
 }
 
 LoginRowButton.defaultProps = {
@@ -56,8 +57,8 @@ LoginRowButton.defaultProps = {
   state: '',
   enabled: true,
   loginState: 'false',
-  token: '',
   changeToken: () => {},
+  particleSettings: new ParticleSettings(),
 }
 
 export default LoginRowButton

@@ -1,7 +1,6 @@
 import { Badge } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import React from 'react'
-import WelcomeText from './WelcomeText'
 
 /**
  * LoginStatus: React component for displaying the current login state of the
@@ -9,7 +8,7 @@ import WelcomeText from './WelcomeText'
  * hook.
  */
 function LoginStatus(props) {
-  const { token, loginState } = props
+  const { loginState, userName } = props
 
   if (loginState === 'waiting') {
     return (
@@ -28,9 +27,7 @@ function LoginStatus(props) {
   if (loginState === 'true') {
     return (
       <div>
-        <Badge bg="success">
-          <WelcomeText token={token} />
-        </Badge>
+        <Badge bg="success">{userName}</Badge>
       </div>
     )
   }
@@ -43,12 +40,12 @@ function LoginStatus(props) {
 
 LoginStatus.propTypes = {
   loginState: PropTypes.string,
-  token: PropTypes.string,
+  userName: PropTypes.string,
 }
 
 LoginStatus.defaultProps = {
   loginState: '',
-  token: '',
+  userName: '',
 }
 
 export default LoginStatus

@@ -9,9 +9,10 @@ import { getActivatedDevices, getActivationHistory, storeActivatedDevices, store
 import ActivatedDevices from './ActivatedDevices'
 import DoorSensorView from './DoorSensorView'
 import RenamerView from './RenamerView'
+import ParticleSettings from '../utilities/ParticleSettings'
 
 function Frame(props) {
-  const { token, changeToken, loginState, changeLoginState, viewState, safeModeState } = props
+  const { token, changeToken, loginState, changeLoginState, viewState, safeModeState, particleSettings, changeParticleSettings } = props
 
   const [activationHistory, setActivationHistory] = useState(getActivationHistory())
   const [activatedDevices, setActivatedDevices] = useState(getActivatedDevices())
@@ -55,7 +56,14 @@ function Frame(props) {
   if (viewState === 'Particle') {
     return (
       <div style={styles.main}>
-        <LoginView loginState={loginState} changeLoginState={changeLoginState} changeToken={changeToken} token={token} />
+        <LoginView
+          loginState={loginState}
+          changeLoginState={changeLoginState}
+          changeToken={changeToken}
+          token={token}
+          particleSettings={particleSettings}
+          changeParticleSettings={changeParticleSettings}
+        />
       </div>
     )
   }
@@ -108,6 +116,8 @@ Frame.propTypes = {
   changeLoginState: PropTypes.func,
   viewState: PropTypes.string,
   safeModeState: PropTypes.bool,
+  particleSettings: PropTypes.instanceOf(ParticleSettings),
+  changeParticleSettings: PropTypes.func,
 }
 
 Frame.defaultProps = {
@@ -117,6 +127,8 @@ Frame.defaultProps = {
   changeLoginState: () => {},
   viewState: 'Home',
   safeModeState: false,
+  particleSettings: new ParticleSettings(),
+  changeParticleSettings: () => {},
 }
 
 export default Frame

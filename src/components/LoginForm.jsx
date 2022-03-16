@@ -2,6 +2,7 @@ import Form from 'react-bootstrap/Form'
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
+import { getDisplayName } from '../utilities/ParticleFunctions'
 
 const { login } = require('../utilities/ParticleFunctions')
 
@@ -12,7 +13,7 @@ const { login } = require('../utilities/ParticleFunctions')
  * @modifies the global token variable and the global loginState variable.
  */
 function LoginForm(props) {
-  const { changeToken, changeLoginState } = props
+  const { changeToken, changeLoginState, changeParticleSettings } = props
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,6 +28,7 @@ function LoginForm(props) {
       setPassword('')
       changeLoginState('true')
       changeToken(token)
+      changeParticleSettings('userName', await getDisplayName(token))
     } else {
       changeToken('passwordincorrect')
       changeLoginState('passwordincorrect')
@@ -55,11 +57,13 @@ function LoginForm(props) {
 LoginForm.propTypes = {
   changeToken: PropTypes.func,
   changeLoginState: PropTypes.func,
+  changeParticleSettings: PropTypes.func,
 }
 
 LoginForm.defaultProps = {
   changeToken: () => {},
   changeLoginState: () => {},
+  changeParticleSettings: () => {},
 }
 
 export default LoginForm

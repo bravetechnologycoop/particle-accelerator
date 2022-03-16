@@ -1,5 +1,7 @@
 import ActivationAttempt from './ActivationAttempt'
 import ActivatedDevice from './ActivatedDevice'
+import ParticleSettings from './ParticleSettings'
+import Product from './Product'
 
 export function getParticleToken() {
   const result = sessionStorage.getItem('particleToken')
@@ -126,4 +128,23 @@ export function getSafeModeState() {
     return true
   }
   return parsedData
+}
+
+export function storeParticleSettings(newSettings) {
+  const stringedData = JSON.stringify(newSettings)
+  sessionStorage.setItem('particleSettings', stringedData)
+}
+
+export function getParticleSettings() {
+  const stringedData = sessionStorage.getItem('particleSettings')
+  if (stringedData === null) {
+    return new ParticleSettings('', '', '', [])
+  }
+  const parsedData = JSON.parse(stringedData)
+  const tempProductList = []
+  if (parsedData.productList !== [])
+    for (const product of parsedData.productList) {
+      tempProductList.push(new Product(product.name, product.id, product.platform_id))
+    }
+  return new ParticleSettings(parsedData.userName, parsedData.productFirmwareVersion, parsedData.deviceOSVersion, tempProductList)
 }
