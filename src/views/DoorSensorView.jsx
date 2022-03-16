@@ -68,7 +68,7 @@ function DoorSensorView(props) {
 }
 
 DoorSensorView.propTypes = {
-  activatedDevices: PropTypes.instanceOf(ActivatedDevice),
+  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
   changeActivatedDevices: PropTypes.func,
 }
 

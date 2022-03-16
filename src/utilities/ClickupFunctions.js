@@ -6,7 +6,7 @@ export async function getClickupAccessToken(code) {
     Origin: 'https://api.clickup.com',
   }
 
-  const url = `https://api.clickup.com/api/v2/oauth/token?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&client_secret=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&code=${code}`
+  const url = `https://api.clickup.com/api/v2/oauth/token?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&client_secret=${process.env.REACT_APP_CLICKUP_CLIENT_SECRET}&code=${code}`
 
   try {
     const response = await axios.post(url, headers)
