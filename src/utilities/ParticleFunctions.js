@@ -64,6 +64,7 @@ export async function getDisplayName(token) {
 export async function getProducts(token) {
   try {
     const response = await particle.listProducts({ auth: token })
+    console.log(response)
     const rawProducts = response.body.products
     const productList = []
     // eslint-disable-next-line no-restricted-syntax

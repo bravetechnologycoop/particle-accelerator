@@ -6,10 +6,10 @@ import ValidationAttempt from '../utilities/ValidationAttempt'
 import ValueBadge from './ValueBadge'
 import DeviceIDStatus from './DeviceIDStatus'
 import ICCIDStatus from './ICCIDStatus'
-import Product from '../utilities/Product'
 import { getParticleToken } from '../utilities/StorageFunctions'
+import ParticleSettings from '../utilities/ParticleSettings'
 
-const { getDeviceDetails, getProducts } = require('../utilities/ParticleFunctions')
+const { getDeviceDetails } = require('../utilities/ParticleFunctions')
 
 const styles = {
   column: {
@@ -27,7 +27,7 @@ const styles = {
   },
 }
 function Validator(props) {
-  const { token, changeToken } = props
+  const { token, changeToken, particleSettings } = props
 
   useEffect(() => {
     changeToken(getParticleToken())
@@ -36,15 +36,7 @@ function Validator(props) {
   const [productID, setProductID] = useState('')
   const [serialNumber, setSerialNumber] = useState('')
   const [attemptList, setAttemptList] = useState([])
-  const [productList, setProductList] = useState([new Product('Loading', 'Loading', '0')])
 
-  useEffect(() => {
-    async function fetchUserInfo() {
-      const response = await getProducts(token)
-      setProductList(response)
-    }
-    fetchUserInfo()
-  }, [token])
   async function pushAttempt(newAttempt) {
     const newAttemptArray = [newAttempt]
     setAttemptList(newAttemptArray.concat(attemptList))
@@ -96,7 +88,7 @@ function Validator(props) {
               >
                 <option id="">No Product Family</option>
                 {/* eslint-disable-next-line react/prop-types */}
-                {productList.map(product => {
+                {particleSettings.productList.map(product => {
                   return (
                     <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
                       {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
@@ -159,11 +151,13 @@ function Validator(props) {
 Validator.propTypes = {
   token: PropTypes.string,
   changeToken: PropTypes.func,
+  particleSettings: PropTypes.instanceOf(ParticleSettings),
 }
 
 Validator.defaultProps = {
   token: '',
   changeToken: () => {},
+  particleSettings: new ParticleSettings(),
 }
 
 export default Validator

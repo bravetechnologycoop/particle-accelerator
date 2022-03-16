@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Badge, Card } from 'react-bootstrap'
@@ -11,10 +11,11 @@ import DeviceIDStatus from '../components/DeviceIDStatus'
 import ICCIDStatus from '../components/ICCIDStatus'
 // import { getActivatedDevices, getActivationHistory } from '../utilities/StorageFunctions'
 import ActivatedDevice from '../utilities/ActivatedDevice'
+import ParticleSettings from '../utilities/ParticleSettings'
 
 const { getDeviceInfo } = require('../utilities/ParticleFunctions')
 
-const { getProducts } = require('../utilities/ParticleFunctions')
+// const { getProducts } = require('../utilities/ParticleFunctions')
 
 const { activateDeviceSIM } = require('../utilities/ParticleFunctions')
 
@@ -73,7 +74,7 @@ const styles = {
  */
 function ActivatorView(props) {
   // eslint-disable-next-line no-unused-vars
-  const { token, changeToken, activationHistory, changeActivationHistory, activatedDevices, changeActivatedDevices, safeModeState } = props
+  const { token, activationHistory, changeActivationHistory, activatedDevices, changeActivatedDevices, safeModeState, particleSettings } = props
 
   /* useEffect(() => {
     changeToken(getParticleToken())
@@ -81,7 +82,6 @@ function ActivatorView(props) {
     changeActivatedDevices(getActivatedDevices())
   }, []) */
 
-  const [productList, setProductList] = useState([])
   const [serialNumber, setSerialNumber] = useState('')
   const [deviceID, setDeviceID] = useState('idle')
   const [iccid, setICCID] = useState('idle')
@@ -120,14 +120,6 @@ function ActivatorView(props) {
     setFormLock(false)
   }
 
-  useEffect(() => {
-    async function fetchUserInfo() {
-      const response = await getProducts(token)
-      setProductList(response)
-    }
-    fetchUserInfo()
-  }, [token])
-
   async function handleSubmit(event) {
     event.preventDefault()
 
@@ -137,7 +129,6 @@ function ActivatorView(props) {
     let deviceMatches = []
 
     if (safeModeState) {
-      console.log(activatedDevices)
       deviceMatches = activatedDevices.filter(device => {
         return device.deviceName === newDeviceName
       })
@@ -267,7 +258,7 @@ function ActivatorView(props) {
                 <option id="null" key="null" value="null">
                   No Product Family
                 </option>
-                {productList.map(product => {
+                {particleSettings.productList.map(product => {
                   return (
                     <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
                       {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
@@ -420,22 +411,22 @@ function ActivatorView(props) {
 
 ActivatorView.propTypes = {
   token: PropTypes.string,
-  changeToken: PropTypes.func,
   activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)),
   changeActivationHistory: PropTypes.func,
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
   changeActivatedDevices: PropTypes.func,
   safeModeState: PropTypes.bool,
+  particleSettings: PropTypes.instanceOf(ParticleSettings),
 }
 
 ActivatorView.defaultProps = {
   token: '',
-  changeToken: () => {},
   activationHistory: [],
   changeActivationHistory: () => {},
   activatedDevices: [new ActivatedDevice()],
   changeActivatedDevices: () => {},
   safeModeState: false,
+  particleSettings: new ParticleSettings(),
 }
 
 export default ActivatorView

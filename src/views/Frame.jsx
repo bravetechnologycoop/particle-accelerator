@@ -42,6 +42,7 @@ function Frame(props) {
           changeActivationHistory={changeActivationHistory}
           changeActivatedDevices={changeActivatedDevices}
           safeModeState={safeModeState}
+          particleSettings={particleSettings}
         />
       </div>
     )
@@ -49,7 +50,7 @@ function Frame(props) {
   if (viewState === 'Validator') {
     return (
       <div style={styles.main}>
-        <Validator token={token} changeToken={changeToken} />
+        <Validator token={token} changeToken={changeToken} particleSettings={particleSettings} />
       </div>
     )
   }

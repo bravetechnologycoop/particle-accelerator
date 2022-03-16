@@ -2,7 +2,7 @@ import Form from 'react-bootstrap/Form'
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
-import { getDisplayName } from '../utilities/ParticleFunctions'
+import { getDisplayName, getProducts } from '../utilities/ParticleFunctions'
 
 const { login } = require('../utilities/ParticleFunctions')
 
@@ -29,6 +29,8 @@ function LoginForm(props) {
       changeLoginState('true')
       changeToken(token)
       changeParticleSettings('userName', await getDisplayName(token))
+      changeParticleSettings('productList', await getProducts(token))
+      console.log(await getProducts(token))
     } else {
       changeToken('passwordincorrect')
       changeLoginState('passwordincorrect')

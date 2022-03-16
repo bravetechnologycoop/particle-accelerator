@@ -144,7 +144,7 @@ export function getParticleSettings() {
   const tempProductList = []
   if (parsedData.productList !== [])
     for (const product of parsedData.productList) {
-      tempProductList.push(new Product(product.name, product.id, product.platform_id))
+      tempProductList.push(new Product(product.name, product.id, product.deviceType))
     }
   return new ParticleSettings(parsedData.userName, parsedData.productFirmwareVersion, parsedData.deviceOSVersion, tempProductList)
 }

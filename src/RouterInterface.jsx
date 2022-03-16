@@ -23,11 +23,13 @@ function RouterInterface(props) {
   const [particleSettings, setParticleSettings] = useState(getParticleSettings())
 
   function changeParticleSettings(setting, newValue) {
+    const storedParticleSettings = getParticleSettings()
+
     const newParticleSettings = new ParticleSettings(
-      particleSettings.userName,
-      particleSettings.productFirmwareVersion,
-      particleSettings.deviceOSVersion,
-      particleSettings.productList,
+      storedParticleSettings.userName,
+      storedParticleSettings.productFirmwareVersion,
+      storedParticleSettings.deviceOSVersion,
+      storedParticleSettings.productList,
     )
 
     if (setting === 'userName') {
@@ -48,6 +50,7 @@ function RouterInterface(props) {
       storeParticleSettings(newParticleSettings)
     } else if (setting === 'clear' && newValue === 'clear') {
       const blankSettings = new ParticleSettings('', '', '', [])
+      setParticleSettings(blankSettings)
       storeParticleSettings(blankSettings)
     }
   }
