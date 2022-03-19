@@ -3,6 +3,8 @@ import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 import ParticleSettings from '../utilities/ParticleSettings'
+import DoorSensorLabel from '../pdf/DoorSensorLabel'
+import MainSensorLabel from '../pdf/MainSensorLabel'
 
 function RenamerView(props) {
   const { particleSettings } = props
@@ -80,6 +82,10 @@ function RenamerView(props) {
         <div style={styles.expandedColumn}>
           <h3>In Progress</h3>
           <hr />
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+            <DoorSensorLabel locationName="WES" sensorNumber={133} locationNumber={3} />
+            <MainSensorLabel locationName="WES" sensorNumber={133} locationNumber={3} />
+          </div>
         </div>
         <div style={styles.column}>
           <h3>Completed</h3>
