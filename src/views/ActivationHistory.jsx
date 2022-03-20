@@ -21,13 +21,15 @@ function ActivationHistory(props) {
     <>
       <h1>Activation History</h1>
       <hr />
-      {activationHistory.map(attempt => {
-        return (
-          <li key={`${attempt.timeStamp}${attempt.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
-            <ActivationRow attempt={attempt} />
-          </li>
-        )
-      })}
+      <div style={{ overflowY: 'auto' }}>
+        {activationHistory.map(attempt => {
+          return (
+            <li key={`${attempt.timeStamp}${attempt.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
+              <ActivationRow attempt={attempt} />
+            </li>
+          )
+        })}
+      </div>
     </>
   )
 }

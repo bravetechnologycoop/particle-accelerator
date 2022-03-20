@@ -28,7 +28,9 @@ function Frame(props) {
   }
 
   const styles = {
-    main: {},
+    main: {
+      height: '100vh',
+    },
   }
 
   if (viewState === 'Activator') {
@@ -99,7 +101,7 @@ function Frame(props) {
   if (viewState === 'Renamer') {
     return (
       <div style={styles.main}>
-        <RenamerView particleSettings={particleSettings} />
+        <RenamerView particleSettings={particleSettings} activatedDevices={activatedDevices} />
       </div>
     )
   }

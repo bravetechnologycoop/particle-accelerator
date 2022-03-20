@@ -3,6 +3,7 @@ import { useReactToPrint } from 'react-to-print'
 
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
+import { Card } from 'react-bootstrap'
 import MainSensorContent from './MainSensorContent'
 
 function MainSensorLabel(props) {
@@ -21,14 +22,19 @@ function MainSensorLabel(props) {
   })
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-      <MainSensorContent ref={componentRef} sensorNumber={sensorNumber} locationNumber={locationNumber} locationName={locationName} />
-      <div>
-        <Button type="button" onClick={handlePrint}>
-          Print
-        </Button>
-      </div>
-    </div>
+    <Card>
+      <Card.Header>Main Sensor Label</Card.Header>
+      <Card.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px' }}>
+        <div style={{ border: '1px solid grey', borderRadius: '10px' }}>
+          <MainSensorContent ref={componentRef} sensorNumber={sensorNumber} locationNumber={locationNumber} locationName={locationName} />
+        </div>
+        <div style={{ paddingTop: '10px' }}>
+          <Button type="button" variant="outline-secondary" onClick={handlePrint}>
+            Print
+          </Button>
+        </div>
+      </Card.Body>
+    </Card>
   )
 }
 
