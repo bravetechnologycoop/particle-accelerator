@@ -8,9 +8,12 @@ function ClickupLogin() {
   const clickupCode = urlParams.get('code')
 
   useEffect(() => {
-    if (clickupCode !== null) {
-      getClickupAccessToken(clickupCode)
+    async function effectHandler() {
+      if (clickupCode !== null) {
+        const clickupToken = await getClickupAccessToken(clickupCode)
+      }
     }
+    effectHandler()
   })
 
   function buttonHandler(evt) {

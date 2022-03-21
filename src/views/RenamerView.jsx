@@ -152,6 +152,11 @@ function RenamerView(props) {
     setFoundDevice(blankActivatedDevice)
     setSearchState('waiting')
     setLocationID('')
+    setParticleCheck(false)
+    setClickupCheck(false)
+    setTwilioCheck(false)
+    setDashboardCheck(false)
+    setParticleStatus('idle')
   }
 
   return (
