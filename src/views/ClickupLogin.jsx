@@ -8,6 +8,7 @@ function ClickupLogin() {
   const clickupCode = urlParams.get('code')
 
   const [token, setToken] = useState('')
+  const [userName, setUserName] = useState
 
   useEffect(() => {
     async function effectHandler() {
@@ -15,17 +16,12 @@ function ClickupLogin() {
         const clickupToken = await getClickupAccessToken(clickupCode)
         console.log('token: ', clickupToken)
         setToken(clickupToken)
+        const username = await getClickupUserName(token)
+        setUserName(username)
       }
     }
     effectHandler()
   })
-
-  function buttonHandler(evt) {
-    evt.preventDefault()
-    if (clickupCode !== null) {
-      getClickupUserName(token)
-    }
-  }
 
   if (getClickupToken() === '' || getClickupToken() === null) {
     return (
@@ -35,12 +31,11 @@ function ClickupLogin() {
         >
           Log in to ClickUp
         </Button>
-        <Button onClick={buttonHandler}>Get token</Button>
       </>
     )
   }
-  if (getClickupToken() !== '') {
-    return <h1>Logged In!</h1>
+  if (token !== '') {
+    return <h1>Logged In as {userName}</h1>
   }
 }
 

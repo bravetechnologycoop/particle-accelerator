@@ -7,8 +7,8 @@ const MainSensorContent = React.forwardRef((props, ref) => {
 
   const styles = {
     main: {
-      height: '1.2in',
-      width: '2.4in',
+      height: '1.199in',
+      width: '2.399in',
       fontFamily: 'Arial, Helvetica, sans-serif',
       display: 'flex',
       flexDirection: 'row',
