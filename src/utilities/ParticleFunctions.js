@@ -172,7 +172,7 @@ export async function verifyDeviceRegistration(deviceID, name, product, iccid, s
     const response = await particle.listDevices({
       auth: token,
       product,
-      perPage: 100000,
+      perPage: Number.MAX_SAFE_INTEGER,
     })
     const filtered = response.body.devices.filter(device => {
       return device.id === deviceID
@@ -205,17 +205,15 @@ export async function searchDeviceByName(deviceName, token, productID) {
 
     const list = response.body.devices
 
-    const searchFor = 'sensor_101'
-
     const filteredList = list.filter(device => {
-      return device.name === searchFor
+      return device.name === deviceName
     })
 
     if (filteredList.length !== 1) {
       return null
     }
 
-    return filteredList
+    return filteredList[0]
   } catch (err) {
     console.error(err)
   }

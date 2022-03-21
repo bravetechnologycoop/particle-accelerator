@@ -59,7 +59,7 @@ MainSensorContent.propTypes = {
 }
 
 MainSensorContent.defaultProps = {
-  sensorNumber: '',
+  sensorNumber: 'w',
   locationID: '',
 }
 

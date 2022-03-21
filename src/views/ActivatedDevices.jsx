@@ -23,7 +23,7 @@ function ActivatedDevices(props) {
 
   return (
     <>
-      <h1>Activation Devices</h1>
+      <h1>Activated Devices</h1>
       <hr />
       {activatedDeviceList.map(device => {
         return (
