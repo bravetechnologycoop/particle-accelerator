@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import DoorSensorEntryCard from '../components/DoorSensorEntryCard'
@@ -6,6 +6,8 @@ import DoorSensorEntryCard from '../components/DoorSensorEntryCard'
 function DoorSensorView(props) {
   // eslint-disable-next-line no-unused-vars
   const { activatedDevices, changeActivatedDevices } = props
+
+  const [checkList, setCheckList] = useState([])
 
   const styles = {
     parent: {

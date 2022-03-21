@@ -21,7 +21,7 @@ export async function getClickupUserName(token) {
   try {
     const response = await axios.get(url, {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     })
     console.log(response)
