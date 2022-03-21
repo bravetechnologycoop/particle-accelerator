@@ -25,13 +25,11 @@ function ClickupLogin() {
 
   if (getClickupToken() === '' || getClickupToken() === null) {
     return (
-      <>
-        <Button
-          href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=https://particle-accelerator-w93d4.ondigitalocean.app/clickup`}
-        >
-          Log in to ClickUp
-        </Button>
-      </>
+      <Button
+        href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=https://particle-accelerator-w93d4.ondigitalocean.app/clickup`}
+      >
+        Log in to ClickUp
+      </Button>
     )
   }
   if (token !== '') {
