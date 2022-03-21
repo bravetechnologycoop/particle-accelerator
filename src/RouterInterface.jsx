@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Navigation from './components/Navigation'
 import Frame from './views/Frame'
 import {
+  getClickupToken,
   getParticleLoginState,
   getParticleSettings,
   getParticleToken,
@@ -21,6 +22,8 @@ function RouterInterface(props) {
   const [loginState, setLoginState] = useState(getParticleLoginState())
   const [safeMode, setSafeMode] = useState(getSafeModeState())
   const [particleSettings, setParticleSettings] = useState(getParticleSettings())
+  const [clickupToken, setClickupToken] = useState(getClickupToken())
+  const [clickupSettings, setClickupSettings] = useState()
 
   function changeParticleSettings(setting, newValue) {
     const storedParticleSettings = getParticleSettings()

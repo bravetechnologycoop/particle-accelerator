@@ -148,3 +148,17 @@ export function getParticleSettings() {
     }
   return new ParticleSettings(parsedData.userName, parsedData.productFirmwareVersion, parsedData.deviceOSVersion, tempProductList)
 }
+
+export function storeClickupUserName(newUserName) {
+  const stringedData = JSON.stringify(newUserName)
+  sessionStorage.setItem('particleSettings', stringedData)
+}
+
+export function retClickupUserName() {
+  const result = sessionStorage.getItem('particleToken')
+
+  if (result === null) {
+    return ''
+  }
+  return result
+}

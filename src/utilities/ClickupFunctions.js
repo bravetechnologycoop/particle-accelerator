@@ -14,3 +14,21 @@ export async function getClickupAccessToken(code) {
     return null
   }
 }
+
+export async function getClickupUserName(token) {
+  const config = {
+    headers: {
+      Authorization: `${token}`,
+    },
+  }
+
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/user`
+
+  try {
+    const response = await axios.post(url, config)
+    console.log(response)
+  } catch (err) {
+    console.error(err)
+    return ''
+  }
+}

@@ -1,16 +1,19 @@
 import Button from 'react-bootstrap/Button'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getClickupToken } from '../utilities/StorageFunctions'
-import { getClickupAccessToken } from '../utilities/ClickupFunctions'
+import { getClickupAccessToken, getClickupUserName } from '../utilities/ClickupFunctions'
 
 function ClickupLogin() {
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
 
+  const [token, setToken] = useState()
+
   useEffect(() => {
     async function effectHandler() {
       if (clickupCode !== null) {
         const clickupToken = await getClickupAccessToken(clickupCode)
+        setToken(clickupToken)
       }
     }
     effectHandler()
@@ -19,7 +22,7 @@ function ClickupLogin() {
   function buttonHandler(evt) {
     evt.preventDefault()
     if (clickupCode !== null) {
-      getClickupAccessToken(clickupCode)
+      getClickupUserName(token)
     }
   }
 
