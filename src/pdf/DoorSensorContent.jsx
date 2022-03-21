@@ -33,7 +33,7 @@ const DoorSensorContent = React.forwardRef((props, ref) => {
 
   return (
     <div ref={ref} style={styles.main}>
-      <link href="http://fonts.cdnfonts.com/css/league-spartan" rel="stylesheet" />
+      <link href="https://fonts.cdnfonts.com/css/league-spartan" rel="stylesheet" />
       <div style={styles.logo}>
         <img src={BraveLogo} alt="Brave Logo" style={{ width: '0.59in' }} />
       </div>
