@@ -11,7 +11,7 @@ function ClickupLogin() {
 
   useEffect(() => {
     async function effectHandler() {
-      if (clickupCode !== null && token !== '') {
+      if (clickupCode !== null && token === '') {
         const clickupToken = await getClickupAccessToken(clickupCode)
         console.log('token: ', clickupToken)
         setToken(clickupToken)
