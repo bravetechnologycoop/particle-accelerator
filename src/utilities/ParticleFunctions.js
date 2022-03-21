@@ -198,3 +198,25 @@ export async function getDeviceDetails(serialNumber, product, token) {
     return null
   }
 }
+
+export async function searchDeviceByName(deviceName, token, productID) {
+  try {
+    const response = await particle.listDevices({ product: productID, auth: token, perPage: Number.MAX_SAFE_INTEGER })
+
+    const list = response.body.devices
+
+    const searchFor = 'sensor_101'
+
+    const filteredList = list.filter(device => {
+      return device.name === searchFor
+    })
+
+    if (filteredList.length !== 1) {
+      return null
+    }
+
+    return filteredList
+  } catch (err) {
+    console.error(err)
+  }
+}

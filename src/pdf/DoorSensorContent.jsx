@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import BraveLogo from './BraveLogo.svg'
 
 const DoorSensorContent = React.forwardRef((props, ref) => {
-  const { sensorNumber, locationName, locationNumber } = props
+  const { sensorNumber, locationID } = props
 
   const styles = {
     main: {
@@ -42,10 +42,10 @@ const DoorSensorContent = React.forwardRef((props, ref) => {
           <div style={{ fontSize: '15.5px', fontFamily: 'League Spartan, Arial, sans-serif', paddingTop: '0.1875in' }}>
             Door <br /> Sensor
           </div>
-          <div style={{ padding: '15px', fontSize: '9.6px' }}>{sensorNumber}</div>
+          <div style={{ padding: '20px', fontSize: '9.6px' }}>{sensorNumber}</div>
         </div>
         <div style={{ fontSize: '12px', fontFamily: 'Helvetica, sans-serif', paddingTop: '3px' }}>
-          ID: <b>{`${locationName}_${locationNumber}`}</b>
+          ID: <b>{locationID}</b>
         </div>
         <div style={{ fontSize: '8px', paddingTop: '5px' }}>clientsupport@brave.coop</div>
       </div>
@@ -54,15 +54,13 @@ const DoorSensorContent = React.forwardRef((props, ref) => {
 })
 
 DoorSensorContent.propTypes = {
-  sensorNumber: PropTypes.number,
-  locationName: PropTypes.string,
-  locationNumber: PropTypes.number,
+  sensorNumber: PropTypes.string,
+  locationID: PropTypes.string,
 }
 
 DoorSensorContent.defaultProps = {
-  sensorNumber: 0,
-  locationName: 'NO_LOCATION',
-  locationNumber: 0,
+  sensorNumber: '',
+  locationID: '',
 }
 
 export default DoorSensorContent

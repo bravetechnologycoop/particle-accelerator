@@ -7,7 +7,7 @@ import { Card } from 'react-bootstrap'
 import DoorSensorContent from './DoorSensorContent'
 
 function DoorSensorLabel(props) {
-  const { sensorNumber, locationName, locationNumber } = props
+  const { sensorNumber, locationID } = props
 
   const pageStyle = `
   @page {
@@ -26,7 +26,7 @@ function DoorSensorLabel(props) {
       <Card.Header>Door Sensor Label</Card.Header>
       <Card.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px' }}>
         <div style={{ border: '1px solid grey', borderRadius: '10px' }}>
-          <DoorSensorContent ref={componentRef} sensorNumber={sensorNumber} locationNumber={locationNumber} locationName={locationName} />
+          <DoorSensorContent ref={componentRef} sensorNumber={sensorNumber} locationID={locationID} />
         </div>
         <div style={{ paddingTop: '10px' }}>
           <Button type="button" variant="outline-secondary" onClick={handlePrint}>
@@ -39,9 +39,13 @@ function DoorSensorLabel(props) {
 }
 
 DoorSensorLabel.propTypes = {
-  sensorNumber: PropTypes.number.isRequired,
-  locationName: PropTypes.string.isRequired,
-  locationNumber: PropTypes.number.isRequired,
+  sensorNumber: PropTypes.string,
+  locationID: PropTypes.string,
+}
+
+DoorSensorLabel.defaultProps = {
+  sensorNumber: '',
+  locationID: '',
 }
 
 export default DoorSensorLabel

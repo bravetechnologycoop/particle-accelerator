@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import { Card, Form } from 'react-bootstrap'
+import { Badge, ButtonGroup, Card, Form, ToggleButton } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
-import { BsFillArrowRightSquareFill } from 'react-icons/bs'
-import { IconContext } from 'react-icons'
 import ParticleSettings from '../utilities/ParticleSettings'
 import DoorSensorLabel from '../pdf/DoorSensorLabel'
 import MainSensorLabel from '../pdf/MainSensorLabel'
@@ -13,10 +11,13 @@ import RenamerDeviceRow from '../components/RenamerDeviceRow'
 function RenamerView(props) {
   const { particleSettings, activatedDevices } = props
 
+  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', '', '', '')
+
   const [productID, setProductID] = useState('')
   const [serialNumber, setSerialNumber] = useState('')
-  const [selectedDevice, setSelectedDevice] = useState(new ActivatedDevice())
+  const [selectedDevice, setSelectedDevice] = useState(blankActivatedDevice)
   const [locationID, setLocationID] = useState('')
+  const [selectorState, setSelectorState] = useState('searchSerial')
 
   function changeLocationID(newLocationID) {
     setLocationID(newLocationID)
@@ -28,7 +29,15 @@ function RenamerView(props) {
     setSerialNumber(newDevice.serialNumber)
   }
 
-  async function handleSubmit(event) {
+  function changeProductID(newProductID) {
+    setProductID(newProductID)
+  }
+
+  function changeSerialNumber(newSerialNumber) {
+    setSerialNumber(newSerialNumber)
+  }
+
+  async function handleRenameSubmit(event) {
     event.preventDefault()
   }
 
@@ -53,6 +62,16 @@ function RenamerView(props) {
       paddingRight: '20px',
       paddingTop: '20px',
     },
+    toggleButton: {
+      fontSize: 'small',
+    },
+  }
+
+  function handleToggle(x) {
+    setSelectorState(x.target.value)
+    setProductID('')
+    setSerialNumber('')
+    setSelectedDevice(blankActivatedDevice)
   }
 
   return (
@@ -62,64 +81,90 @@ function RenamerView(props) {
         <div style={styles.column}>
           <h3>Select Device</h3>
           <hr />
-          <h4>Search Device</h4>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formProductSelect">
-              <Form.Label>Select Device Product Family</Form.Label>
-              <Form.Control
-                as="select"
-                value={productID}
-                onChange={x => {
-                  setProductID(x.target.value)
-                }}
-              >
-                <option id="">No Product Family</option>
-                {/* eslint-disable-next-line react/prop-types */}
-                {particleSettings.productList.map(product => {
-                  return (
-                    <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
-                      {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
-                    </option>
-                  )
-                })}
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formDeviceID">
-              <Form.Label>Device Serial Number</Form.Label>
-              <Form.Control placeholder="Serial Number" value={serialNumber} maxLength="15" onChange={x => setSerialNumber(x.target.value)} />
-              <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
-            </Form.Group>
-
-            <Button variant="outline-primary" type="submit">
-              Search
-            </Button>
-          </Form>
-          <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
-          <div style={{ overflowY: 'scroll' }}>
-            {activatedDevices.map(device => {
-              return (
-                <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
-                  <RenamerDeviceRow device={device} currentDevice={selectedDevice} changeCurrentDevice={changeSelectedDevice} />
-                </li>
-              )
-            })}
-          </div>
+          <ButtonGroup style={{ paddingBottom: '15px' }}>
+            <ToggleButton
+              value="searchSerial"
+              id="searchSerial"
+              type="radio"
+              key={0}
+              variant="outline-secondary"
+              checked={selectorState === 'searchSerial'}
+              onChange={x => {
+                handleToggle(x)
+              }}
+              style={styles.toggleButton}
+            >
+              Find by Serial Number
+            </ToggleButton>
+            <ToggleButton
+              value="searchSensor"
+              id="searchSensor"
+              key={2}
+              type="radio"
+              variant="outline-secondary"
+              checked={selectorState === 'searchSensor'}
+              onChange={x => handleToggle(x)}
+              style={styles.toggleButton}
+            >
+              Find by Sensor Number
+            </ToggleButton>
+            <ToggleButton
+              value="select"
+              id="select"
+              key={1}
+              type="radio"
+              variant="outline-secondary"
+              checked={selectorState === 'select'}
+              onChange={x => handleToggle(x)}
+              style={styles.toggleButton}
+            >
+              Select from Activated Devices
+            </ToggleButton>
+          </ButtonGroup>
+          <DeviceSelector
+            selectorState={selectorState}
+            selectedDevice={selectedDevice}
+            serialNumber={serialNumber}
+            productID={productID}
+            particleSettings={particleSettings}
+            activatedDevices={activatedDevices}
+            changeSerialNumber={changeSerialNumber}
+            changeSelectedDevice={changeSelectedDevice}
+            changeProductID={changeProductID}
+          />
         </div>
         <div style={styles.expandedColumn}>
           <h3>In Progress</h3>
           <hr />
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-            <CurrentDeviceCard currentDeviceName={selectedDevice.deviceName} />
-            {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
-            <IconContext.Provider value={{ color: '#0b6efd', size: '2em' }}>
-              <BsFillArrowRightSquareFill />
-            </IconContext.Provider>
-            <NewNameCard locationID={locationID} changeLocationID={changeLocationID} />
-          </div>
+          <Card>
+            <Card.Header>Device Rename Configuration</Card.Header>
+            <Card.Body>
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <h6>Current Device Name: </h6>{' '}
+                <h6 style={{ paddingLeft: '5px' }}>
+                  <Badge bg="primary">{selectedDevice.deviceName}</Badge>
+                </h6>
+              </div>
+              <Form onSubmit={handleRenameSubmit}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                  <h6 style={{ paddingRight: '5px' }}>New Device Name (Location ID): </h6>
+                  <Form.Group>
+                    <Form.Control value={locationID} onChange={x => changeLocationID(x.target.value)} />
+                  </Form.Group>
+                </div>
+                <Form.Check type="checkbox" id="default-checkbox" label="Rename on Particle" />
+                <Form.Check type="checkbox" id="default-checkbox" label="Rename on ClickUp" />
+                <Form.Check type="checkbox" id="default-checkbox" label="Register to Dashboard" />
+                <Form.Check type="checkbox" id="default-checkbox" label="Purchase and Register Twilio Number" />
+                <div style={{ paddingTop: '10px' }}>
+                  <Button type="submit">Rename Device</Button>
+                </div>
+              </Form>
+            </Card.Body>
+          </Card>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-            <DoorSensorLabel locationName="WES" sensorNumber={133} locationNumber={3} />
-            <MainSensorLabel locationName="WES" sensorNumber={133} locationNumber={3} />
+            <MainSensorLabel locationID={locationID} sensorNumber={selectedDevice.deviceName.replace(/[^0-9]*/, '')} />
+            <DoorSensorLabel locationID={locationID} sensorNumber={selectedDevice.deviceName.replace(/[^0-9]*/, '')} />
           </div>
         </div>
         <div style={styles.column}>
@@ -136,60 +181,100 @@ RenamerView.propTypes = {
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
 }
 
-function CurrentDeviceCard(props) {
-  const { currentDeviceName } = props
+function DeviceSelector(props) {
+  const {
+    selectorState,
+    selectedDevice,
+    changeSelectedDevice,
+    serialNumber,
+    changeSerialNumber,
+    productID,
+    changeProductID,
+    particleSettings,
+    activatedDevices,
+  } = props
 
-  return (
-    <Card style={{ height: '100%' }}>
-      <Card.Header>Current Device Name</Card.Header>
-      <Card.Body style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div>
-          <h4 style={{ textAlign: 'center' }}>{currentDeviceName}</h4>
-        </div>
-      </Card.Body>
-    </Card>
-  )
-}
+  function handleSearchSubmit(event) {
+    event.preventDefault()
+  }
 
-CurrentDeviceCard.propTypes = {
-  currentDeviceName: PropTypes.string,
-}
-
-CurrentDeviceCard.defaultProps = {
-  currentDeviceName: '',
-}
-
-function NewNameCard(props) {
-  const { locationID, changeLocationID, handleSubmit } = props
-
-  return (
-    <Card>
-      <Card.Header>New Device Name</Card.Header>
-      <Card.Body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group>
-            <Form.Text>Location ID</Form.Text>
-            <Form.Control value={locationID} onChange={x => changeLocationID(x.target.value)} />
+  if (selectorState === 'searchSerial') {
+    return (
+      <>
+        <h4>Search Device</h4>
+        <Form onSubmit={handleSearchSubmit}>
+          <Form.Group className="mb-3" controlId="formProductSelect">
+            <Form.Label>Select Device Product Family</Form.Label>
+            <Form.Control
+              as="select"
+              value={productID}
+              onChange={x => {
+                changeProductID(x.target.value)
+              }}
+            >
+              <option id="">No Product Family</option>
+              {/* eslint-disable-next-line react/prop-types */}
+              {particleSettings.productList.map(product => {
+                return (
+                  <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
+                    {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
+                  </option>
+                )
+              })}
+            </Form.Control>
           </Form.Group>
-          <div style={{ paddingTop: '10px' }}>
-            <Button type="submit">Rename Device</Button>
-          </div>
+
+          <Form.Group className="mb-3" controlId="formDeviceID">
+            <Form.Label>Device Serial Number</Form.Label>
+            <Form.Control placeholder="Serial Number" value={serialNumber} maxLength="15" onChange={x => changeSerialNumber(x.target.value)} />
+            <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
+          </Form.Group>
+
+          <Button variant="outline-primary" type="submit">
+            Search
+          </Button>
         </Form>
-      </Card.Body>
-    </Card>
-  )
+      </>
+    )
+  }
+  if (selectorState === 'select') {
+    return (
+      <>
+        <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
+        <div style={{ overflowY: 'scroll' }}>
+          {activatedDevices.map(device => {
+            return (
+              <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
+                <RenamerDeviceRow device={device} currentDevice={selectedDevice} changeCurrentDevice={changeSelectedDevice} />
+              </li>
+            )
+          })}
+        </div>
+      </>
+    )
+  }
+  if (selectorState === 'searchSensor') {
+    return <h1>sensor search</h1>
+  }
+  return <h2>top text</h2>
 }
 
-NewNameCard.propTypes = {
-  locationID: PropTypes.string,
-  changeLocationID: PropTypes.func,
-  handleSubmit: PropTypes.func,
+DeviceSelector.propTypes = {
+  selectorState: PropTypes.string.isRequired,
+  selectedDevice: PropTypes.instanceOf(ActivatedDevice).isRequired,
+  changeSelectedDevice: PropTypes.func,
+  serialNumber: PropTypes.string.isRequired,
+  changeSerialNumber: PropTypes.func,
+  productID: PropTypes.string.isRequired,
+  changeProductID: PropTypes.func,
+  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
+  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
 }
 
-NewNameCard.defaultProps = {
-  locationID: '',
-  changeLocationID: () => {},
-  handleSubmit: () => {},
+DeviceSelector.defaultProps = {
+  changeSelectedDevice: () => {},
+  changeSerialNumber: () => {},
+  changeProductID: () => {},
 }
 
 export default RenamerView

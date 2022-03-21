@@ -21,7 +21,7 @@ function ActivationHistory(props) {
     <>
       <h1>Activation History</h1>
       <hr />
-      <div style={{ overflowY: 'auto' }}>
+      <div style={{ overflow: 'auto' }}>
         {activationHistory.map(attempt => {
           return (
             <li key={`${attempt.timeStamp}${attempt.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
