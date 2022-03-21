@@ -7,11 +7,11 @@ function ClickupLogin() {
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
 
-  const [token, setToken] = useState()
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     async function effectHandler() {
-      if (clickupCode !== null) {
+      if (clickupCode !== null && token !== '') {
         const clickupToken = await getClickupAccessToken(clickupCode)
         console.log('token: ', clickupToken)
         setToken(clickupToken)
