@@ -16,16 +16,14 @@ export async function getClickupAccessToken(code) {
 }
 
 export async function getClickupUserName(token) {
-  const config = {
-    headers: {
-      Authorization: `${token}`,
-    },
-  }
-
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/user`
 
   try {
-    const response = await axios.get(url, config)
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: token,
+      },
+    })
     console.log(response)
   } catch (err) {
     console.error(err)
