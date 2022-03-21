@@ -13,6 +13,7 @@ function ClickupLogin() {
     async function effectHandler() {
       if (clickupCode !== null) {
         const clickupToken = await getClickupAccessToken(clickupCode)
+        console.log('token: ', clickupToken)
         setToken(clickupToken)
       }
     }

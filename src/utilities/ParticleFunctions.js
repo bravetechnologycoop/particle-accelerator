@@ -90,7 +90,7 @@ export async function getDeviceInfo(serialNum, token) {
   try {
     const deviceData = await particle.lookupSerialNumber({ serialNumber: serialNum, auth: token })
     // eslint-disable-next-line
-    const { device_id } = deviceData.body
+    const { device_id } = deviceData.body;
     const { iccid } = deviceData.body
     const deviceID = device_id
     return { deviceID, iccid }
@@ -216,5 +216,21 @@ export async function searchDeviceByName(deviceName, token, productID) {
     return filteredList[0]
   } catch (err) {
     console.error(err)
+  }
+}
+
+export async function getCurrentFirmwareVersion(productID, token) {
+  try {
+    const response = await particle.listProductFirmware({ product: productID, auth: token })
+    const firmwareVersion = response.body[0].version
+
+    if (response.body.length !== 1) {
+      return null
+    }
+
+    return firmwareVersion
+  } catch (err) {
+    console.error(err)
+    return null
   }
 }
