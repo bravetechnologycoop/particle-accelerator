@@ -152,7 +152,7 @@ export function storeClickupToken(newToken) {
 
 export function storeClickupUserName(newUserName) {
   const stringedData = JSON.stringify(newUserName)
-  sessionStorage.setItem('particleSettings', stringedData)
+  sessionStorage.setItem('clickupUserName', stringedData)
 }
 
 export function retClickupUserName() {
