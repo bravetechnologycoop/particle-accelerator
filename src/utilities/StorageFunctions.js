@@ -151,8 +151,7 @@ export function storeClickupToken(newToken) {
 }
 
 export function storeClickupUserName(newUserName) {
-  const stringedData = JSON.stringify(newUserName)
-  sessionStorage.setItem('clickupUserName', stringedData)
+  sessionStorage.setItem('clickupUserName', newUserName)
 }
 
 export function retClickupUserName() {
@@ -176,4 +175,43 @@ export function retClickupListID() {
     return ''
   }
   return result
+}
+
+export function storeClickupWorkspaces(workspaces) {
+  const stringedData = JSON.stringify(workspaces)
+  sessionStorage.setItem('clickupWorkspaces', stringedData)
+}
+
+export function retClickupWorkspaces() {
+  const result = sessionStorage.getItem('clickupWorkspaces')
+  if (result === null) {
+    return []
+  }
+  return JSON.parse(result)
+}
+
+export function storeClickupSpaces(spaces) {
+  const stringedData = JSON.stringify(spaces)
+  sessionStorage.setItem('clickupSpaces', stringedData)
+}
+
+export function retClickupSpaces() {
+  const result = sessionStorage.getItem('clickupSpaces')
+  if (result === null) {
+    return []
+  }
+  return JSON.parse(result)
+}
+
+export function storeClickupLists(lists) {
+  const stringedData = JSON.stringify(lists)
+  sessionStorage.setItem('clickupLists', stringedData)
+}
+
+export function retClickupLists() {
+  const result = sessionStorage.getItem('clickupLists')
+  if (result === null) {
+    return []
+  }
+  return JSON.parse(result)
 }

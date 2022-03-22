@@ -9,6 +9,14 @@ import {
   getClickupUserName,
   getClickupWorkspaces,
 } from '../utilities/ClickupFunctions'
+import {
+  retClickupLists,
+  retClickupSpaces,
+  retClickupWorkspaces,
+  storeClickupLists,
+  storeClickupSpaces,
+  storeClickupWorkspaces,
+} from '../utilities/StorageFunctions'
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
@@ -16,10 +24,24 @@ function ClickupLogin(props) {
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
 
-  const [workspaces, setWorkspaces] = useState([])
-  const [spaces, setSpaces] = useState([])
-  const [folders, setFolders] = useState([])
-  const [lists, setLists] = useState([])
+  const [workspaces, setWorkspaces] = useState(retClickupWorkspaces)
+  const [spaces, setSpaces] = useState(retClickupSpaces)
+  const [lists, setLists] = useState(retClickupLists)
+
+  function changeWorkspaces(newWorkspaces) {
+    setWorkspaces(newWorkspaces)
+    storeClickupWorkspaces(newWorkspaces)
+  }
+
+  function changeSpaces(newSpaces) {
+    setSpaces(newSpaces)
+    storeClickupSpaces(newSpaces)
+  }
+
+  function changeLists(newLists) {
+    setLists(newLists)
+    storeClickupLists(newLists)
+  }
 
   const [selectedWorkspaceID, setSelectedWorkspaceID] = useState('')
   const [selectedSpaceID, setSelectedSpaceID] = useState('')
@@ -30,6 +52,16 @@ function ClickupLogin(props) {
 
   function changeSelectedSpaceID(newID) {
     setSelectedSpaceID(newID)
+  }
+
+  async function getSpaces() {
+    const response = await getClickupSpaces(clickupToken, selectedWorkspaceID)
+    changeSpaces(response)
+  }
+
+  async function getLists() {
+    const response = await getAllClickupListsInSpace(clickupToken, selectedSpaceID)
+    changeLists(response)
   }
 
   useEffect(() => {
@@ -43,22 +75,9 @@ function ClickupLogin(props) {
       const retrievedWorkspaces = await getClickupWorkspaces(tempClickupToken)
       setWorkspaces(retrievedWorkspaces)
     }
-    async function getSpaces() {
-      const response = await getClickupSpaces(clickupToken, selectedWorkspaceID)
-      setSpaces(response)
-    }
-    async function getLists() {
-      const response = await getAllClickupListsInSpace(clickupToken, selectedSpaceID)
-    }
     console.log('clickup token: ', clickupToken)
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
-    }
-    if (selectedWorkspaceID !== '' && spaces === []) {
-      getSpaces()
-    }
-    if (selectedSpaceID !== '' && lists === []) {
-      getLists()
     }
   })
 
@@ -75,9 +94,24 @@ function ClickupLogin(props) {
               changeItem={changeSelectedWorkspaceID}
               loading={workspaces === []}
               title="Workspace"
+              nextFunction={getSpaces}
             />
-            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spaces === []} title="Space" />
-            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={lists === []} title="List" />
+            <DropdownList
+              itemList={spaces}
+              item={selectedSpaceID}
+              changeItem={changeSelectedSpaceID}
+              loading={spaces === []}
+              title="Space"
+              nextFunction={getLists}
+            />
+            <DropdownList
+              itemList={lists}
+              item={clickupListID}
+              changeItem={changeClickupListID}
+              loading={lists === []}
+              title="List"
+              nextFunction={() => console.log(clickupListID)}
+            />
           </Form>
         </Card>
       </>
@@ -114,10 +148,18 @@ ClickupLogin.defaultProps = {
 }
 
 function DropdownList(props) {
-  const { loading, item, changeItem, itemList, title } = props
+  const { loading, item, changeItem, itemList, title, nextFunction } = props
   return (
     <Form>
-      <Form.Control disabled={loading} as="select" value={item} onChange={x => changeItem(x.target.value)}>
+      <Form.Control
+        disabled={loading}
+        as="select"
+        value={item}
+        onChange={x => {
+          changeItem(x.target.value)
+          nextFunction()
+        }}
+      >
         <option id="" key="" value="">
           Select {title}
         </option>
@@ -140,6 +182,7 @@ DropdownList.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   itemList: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string,
+  nextFunction: PropTypes.func,
 }
 
 DropdownList.defaultProps = {
@@ -147,6 +190,7 @@ DropdownList.defaultProps = {
   item: '',
   changeItem: () => {},
   title: '',
+  nextFunction: () => {},
 }
 
 export default ClickupLogin
