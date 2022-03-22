@@ -2,12 +2,7 @@ import Button from 'react-bootstrap/Button'
 import React, { useEffect, useState } from 'react'
 import { Card, Form, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import {
-  getClickupAccessToken,
-  getClickupSpaces,
-  getClickupUserName,
-  getClickupWorkspaces
-} from "../utilities/ClickupFunctions";
+import { getClickupAccessToken, getClickupSpaces, getClickupUserName, getClickupWorkspaces } from '../utilities/ClickupFunctions'
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
