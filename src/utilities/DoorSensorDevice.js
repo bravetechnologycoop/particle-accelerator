@@ -15,6 +15,6 @@ export default class DoorSensorDevice extends ActivatedDevice {
   }
 
   startFirmwareChecks() {
-
+    setInterval
   }
 }
