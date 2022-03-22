@@ -152,6 +152,8 @@ function RouterInterface(props) {
           changeClickupToken={changeClickupToken}
           clickupUserName={clickupUserName}
           changeClickupUserName={changeClickupUserName}
+          clickupListID={clickupListID}
+          changeClickupListID={changeClickupListID}
         />
       </div>
     </div>

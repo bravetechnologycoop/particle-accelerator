@@ -40,7 +40,7 @@ export async function getClickupWorkspaces(token) {
     })
     console.log(response)
     return response.teams.map(team => {
-      return { workspaceName: team.name, workspaceID: team.id }
+      return { name: team.name, id: team.id }
     })
   } catch (err) {
     console.error(err)
@@ -58,7 +58,7 @@ export async function getClickupSpaces(token, workspaceID) {
     })
     console.log('spaces: ', response)
     return response.spaces.map(space => {
-      return { spaceName: space.name, spaceID: space.id }
+      return { name: space.name, id: space.id }
     })
   } catch (err) {
     console.error(err)
@@ -76,7 +76,7 @@ export async function getClickupSpaceFolders(token, spaceID) {
     })
     console.log('folders: ', response)
     return response.folders.map(folder => {
-      return { folderName: folder.name, folderID: folder.id }
+      return { name: folder.name, id: folder.id }
     })
   } catch (err) {
     console.error(err)
@@ -94,7 +94,7 @@ export async function getClickupListsInFolders(token, folderID) {
     })
     console.log(`lists in folder ${folderID}: `, response)
     return response.lists.map(list => {
-      return { listName: list.name, listID: list.id }
+      return { name: list.name, id: list.id }
     })
   } catch (err) {
     console.error(err)
@@ -112,7 +112,7 @@ export async function getClickupListsWithoutFolders(token, spaceID) {
     })
     console.log(`lists in space ${spaceID}: `, response)
     return response.lists.map(list => {
-      return { listName: list.name, listID: list.id }
+      return { name: list.name, id: list.id }
     })
   } catch (err) {
     console.error(err)
@@ -127,14 +127,14 @@ export async function getAllClickupListsInSpace(token, spaceID) {
     for (const folder of folders) {
       const listsInFolder = await getClickupListsInFolders(token, folder.folderID)
       const taggedListsInFolder = listsInFolder.map(list => {
-        return { folderName: folder.folderName, listName: list.listName, listID: list.listID }
+        return { folderName: folder.name, listName: list.name, listID: list.id }
       })
       allLists.push(taggedListsInFolder)
     }
   }
   const listsWithoutFolders = await getClickupListsWithoutFolders(token, spaceID)
   const taggedListsWithoutFolders = listsWithoutFolders.map(list => {
-    return { folderName: '', listName: list.listName, listID: list.listID }
+    return { folderName: '', listName: list.name, listID: list.id }
   })
   allLists.push(taggedListsWithoutFolders)
   return allLists

@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button'
 import React, { useEffect, useState } from 'react'
-import { Card } from 'react-bootstrap'
+import { Card, Form, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { getClickupAccessToken, getClickupUserName } from '../utilities/ClickupFunctions'
 
@@ -11,7 +11,7 @@ function ClickupLogin(props) {
   const clickupCode = urlParams.get('code')
 
   useEffect(() => {
-    async function effectHandler() {
+    async function tokenLogin() {
       const tempClickupToken = await getClickupAccessToken(clickupCode)
       console.log('token: ', tempClickupToken)
       changeClickupToken(tempClickupToken)
@@ -19,8 +19,9 @@ function ClickupLogin(props) {
       changeClickupUserName(tempUserName)
       console.log('username: ', tempUserName)
     }
+    console.log('clickup token: ', clickupToken)
     if (clickupCode !== null && clickupToken === '') {
-      effectHandler()
+      tokenLogin()
     }
   })
 
@@ -62,6 +63,42 @@ ClickupLogin.defaultProps = {
   changeClickupUserName: () => {},
   clickupListID: '',
   changeClickupListID: () => {},
+}
+
+function DropdownList(props) {
+  const { loading, item, changeItem, itemList, title } = props
+  return (
+    <Form>
+      <Form.Control disabled={loading} as="select" value={item} onChange={x => changeItem(x.target.value)}>
+        <option id="" key="" value="">
+          Select {title}
+        </option>
+        {itemList.map(itemInList => {
+          return (
+            <option key={itemInList.id} id={itemInList.id} value={itemInList.id}>
+              {itemInList.name}
+            </option>
+          )
+        })}
+      </Form.Control>
+    </Form>
+  )
+}
+
+DropdownList.propTypes = {
+  loading: PropTypes.bool,
+  item: PropTypes.string,
+  changeItem: PropTypes.func,
+  // eslint-disable-next-line react/forbid-prop-types
+  itemList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  title: PropTypes.string,
+}
+
+DropdownList.defaultProps = {
+  loading: true,
+  item: '',
+  changeItem: () => {},
+  title: '',
 }
 
 export default ClickupLogin
