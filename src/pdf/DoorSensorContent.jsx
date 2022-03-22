@@ -7,8 +7,8 @@ const DoorSensorContent = React.forwardRef((props, ref) => {
 
   const styles = {
     main: {
-      height: '1.199in',
-      width: '2.399in',
+      height: '1.15in',
+      width: '2.35in',
       fontFamily: 'Arial, Helvetica, sans-serif',
       display: 'flex',
       flexDirection: 'row',
@@ -44,7 +44,7 @@ const DoorSensorContent = React.forwardRef((props, ref) => {
           <div style={{ fontSize: '22px', fontFamily: 'Spartan, Arial, sans-serif', paddingTop: '0.08in', letterSpacing: '-1px' }}>
             Door <br style={{ display: 'block', marginBottom: '0px' }} /> Sensor
           </div>
-          <div style={{ paddingRight: '20px', paddingTop: '10px', fontSize: '12px' }}>{sensorNumber}</div>
+          <div style={{ paddingRight: '30px', paddingTop: '10px', fontSize: '12px' }}>{sensorNumber}</div>
         </div>
         <div style={{ fontSize: '16px', fontFamily: 'Helvetica, sans-serif', paddingTop: '0px' }}>
           ID: <b>{locationID}</b>

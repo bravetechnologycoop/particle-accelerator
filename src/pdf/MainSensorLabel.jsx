@@ -11,7 +11,7 @@ function MainSensorLabel(props) {
 
   const pageStyle = `
   @page {
-    size: 60mm 30mm;
+    size: 58mm 28mm portrait;
   }
 `
 

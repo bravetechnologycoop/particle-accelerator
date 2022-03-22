@@ -8,7 +8,7 @@ function ClickupLogin() {
   const clickupCode = urlParams.get('code')
 
   const [token, setToken] = useState('')
-  const [userName, setUserName] = useState
+  const [userName, setUserName] = useState('')
 
   useEffect(() => {
     async function effectHandler() {
