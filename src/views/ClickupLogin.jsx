@@ -1,34 +1,41 @@
 import Button from 'react-bootstrap/Button'
 import React, { useEffect, useState } from 'react'
-import { getClickupToken } from '../utilities/StorageFunctions'
+import { Card } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 import { getClickupAccessToken, getClickupUserName } from '../utilities/ClickupFunctions'
 
-function ClickupLogin() {
+function ClickupLogin(props) {
+  const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
+
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
 
-  const [token, setToken] = useState('')
-  const [userName, setUserName] = useState('')
-
   useEffect(() => {
     async function effectHandler() {
-      if (clickupCode !== null && token === '') {
-        const clickupToken = await getClickupAccessToken(clickupCode)
-        console.log('token: ', clickupToken)
-        setToken(clickupToken)
-        const tempUserName = await getClickupUserName(clickupToken)
-        setUserName(tempUserName)
-        console.log('username: ', tempUserName)
-      }
+      const tempClickupToken = await getClickupAccessToken(clickupCode)
+      console.log('token: ', tempClickupToken)
+      changeClickupToken(tempClickupToken)
+      const tempUserName = await getClickupUserName(tempClickupToken)
+      changeClickupUserName(tempUserName)
+      console.log('username: ', tempUserName)
     }
-    effectHandler()
+    if (clickupCode !== null && clickupToken === '') {
+      effectHandler()
+    }
   })
 
-  if (token !== '') {
-    return <h1>Logged In as {userName}</h1>
+  if (clickupToken !== '') {
+    return (
+      <>
+        <h1>Logged In as {clickupUserName}</h1>
+        <Card>
+          <Card.Title>Set Clickup Configuration</Card.Title>
+        </Card>
+      </>
+    )
   }
 
-  if (token === '') {
+  if (clickupToken === '') {
     return (
       <Button
         href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=https://particle-accelerator-w93d4.ondigitalocean.app/clickup`}
@@ -37,6 +44,24 @@ function ClickupLogin() {
       </Button>
     )
   }
+}
+
+ClickupLogin.propTypes = {
+  clickupToken: PropTypes.string,
+  changeClickupToken: PropTypes.func,
+  clickupUserName: PropTypes.string,
+  changeClickupUserName: PropTypes.func,
+  clickupListID: PropTypes.string,
+  changeClickupListID: PropTypes.func,
+}
+
+ClickupLogin.defaultProps = {
+  clickupToken: '',
+  changeClickupToken: () => {},
+  clickupUserName: '',
+  changeClickupUserName: () => {},
+  clickupListID: '',
+  changeClickupListID: () => {},
 }
 
 export default ClickupLogin

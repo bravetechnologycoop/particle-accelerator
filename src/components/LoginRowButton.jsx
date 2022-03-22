@@ -6,7 +6,7 @@ import LoginStatus from './LoginStatus'
 import ParticleSettings from '../utilities/ParticleSettings'
 
 function LoginRowButton(props) {
-  const { label, state, enabled, loginState, particleSettings } = props
+  const { label, state, enabled, loginState, userName } = props
 
   const styles = {
     parent: {
@@ -35,7 +35,7 @@ function LoginRowButton(props) {
       <div style={styles.parent}>
         {label}{' '}
         <div style={{ paddingLeft: '1ch' }}>
-          <LoginStatus loginState={loginState} userName={particleSettings.userName} />
+          <LoginStatus loginState={loginState} userName={userName} />
         </div>
       </div>
     </Link>
@@ -49,7 +49,7 @@ LoginRowButton.propTypes = {
   loginState: PropTypes.string,
   // eslint-disable-next-line react/no-unused-prop-types
   changeToken: PropTypes.func,
-  particleSettings: PropTypes.instanceOf(ParticleSettings),
+  userName: PropTypes.string,
 }
 
 LoginRowButton.defaultProps = {
@@ -58,7 +58,7 @@ LoginRowButton.defaultProps = {
   enabled: true,
   loginState: 'false',
   changeToken: () => {},
-  particleSettings: new ParticleSettings(),
+  userName: '',
 }
 
 export default LoginRowButton

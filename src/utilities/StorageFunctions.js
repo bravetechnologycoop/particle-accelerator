@@ -155,7 +155,21 @@ export function storeClickupUserName(newUserName) {
 }
 
 export function retClickupUserName() {
-  const result = sessionStorage.getItem('particleToken')
+  const result = sessionStorage.getItem('clickupUserName')
+
+  if (result === null) {
+    return ''
+  }
+  return result
+}
+
+export function storeClickupListID(newListID) {
+  const stringedData = JSON.stringify(newListID)
+  sessionStorage.setItem('clickupListID', newListID)
+}
+
+export function retClickupListID() {
+  const result = sessionStorage.getItem('clickupListID')
 
   if (result === null) {
     return ''

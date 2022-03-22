@@ -8,6 +8,11 @@ import {
   getParticleSettings,
   getParticleToken,
   getSafeModeState,
+  retClickupListID,
+  retClickupUserName,
+  storeClickupListID,
+  storeClickupToken,
+  storeClickupUserName,
   storeParticleLoginState,
   storeParticleSettings,
   storeParticleToken,
@@ -23,7 +28,23 @@ function RouterInterface(props) {
   const [safeMode, setSafeMode] = useState(getSafeModeState())
   const [particleSettings, setParticleSettings] = useState(getParticleSettings())
   const [clickupToken, setClickupToken] = useState(getClickupToken())
-  const [clickupSettings, setClickupSettings] = useState()
+  const [clickupUserName, setClickupUserName] = useState(retClickupUserName())
+  const [clickupListID, setClickupListID] = useState(retClickupListID())
+
+  function changeClickupListID(newClickupListID) {
+    storeClickupListID(newClickupListID)
+    setClickupListID(newClickupListID)
+  }
+
+  function changeClickupUserName(newUserName) {
+    storeClickupUserName(newUserName)
+    setClickupUserName(newUserName)
+  }
+
+  function changeClickupToken(newToken) {
+    storeClickupToken(newToken)
+    setClickupToken(newToken)
+  }
 
   function changeParticleSettings(setting, newValue) {
     const storedParticleSettings = getParticleSettings()
@@ -112,6 +133,8 @@ function RouterInterface(props) {
           safeModeState={safeMode}
           changeSafeModeState={changeSafeModeState}
           particleSettings={particleSettings}
+          clickupToken={clickupToken}
+          clickupUserName={clickupUserName}
         />
       </div>
       <div style={styles.main}>
@@ -125,6 +148,10 @@ function RouterInterface(props) {
           changeSafeModeState={changeSafeModeState}
           particleSettings={particleSettings}
           changeParticleSettings={changeParticleSettings}
+          clickupToken={clickupToken}
+          changeClickupToken={changeClickupToken}
+          clickupUserName={clickupUserName}
+          changeClickupUserName={changeClickupUserName}
         />
       </div>
     </div>

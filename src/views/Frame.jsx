@@ -12,7 +12,22 @@ import RenamerView from './RenamerView'
 import ParticleSettings from '../utilities/ParticleSettings'
 
 function Frame(props) {
-  const { token, changeToken, loginState, changeLoginState, viewState, safeModeState, particleSettings, changeParticleSettings } = props
+  const {
+    token,
+    changeToken,
+    loginState,
+    changeLoginState,
+    viewState,
+    safeModeState,
+    particleSettings,
+    changeParticleSettings,
+    clickupToken,
+    changeClickupToken,
+    clickupUserName,
+    changeClickupUserName,
+    clickupListID,
+    changeClickupListID,
+  } = props
 
   const [activationHistory, setActivationHistory] = useState(getActivationHistory())
   const [activatedDevices, setActivatedDevices] = useState(getActivatedDevices())
@@ -73,7 +88,14 @@ function Frame(props) {
   if (viewState === 'ClickUp') {
     return (
       <div style={styles.main}>
-        <ClickupLogin />
+        <ClickupLogin
+          clickupToken={clickupToken}
+          changeClickupToken={changeClickupToken}
+          clickupListID={clickupListID}
+          changeClickupListID={changeClickupListID}
+          clickupUserName={clickupUserName}
+          changeClickupUserName={changeClickupUserName}
+        />
       </div>
     )
   }
@@ -121,6 +143,12 @@ Frame.propTypes = {
   safeModeState: PropTypes.bool,
   particleSettings: PropTypes.instanceOf(ParticleSettings),
   changeParticleSettings: PropTypes.func,
+  clickupToken: PropTypes.string,
+  changeClickupToken: PropTypes.func,
+  clickupUserName: PropTypes.string,
+  changeClickupUserName: PropTypes.func,
+  clickupListID: PropTypes.string,
+  changeClickupListID: PropTypes.func,
 }
 
 Frame.defaultProps = {
@@ -132,6 +160,12 @@ Frame.defaultProps = {
   safeModeState: false,
   particleSettings: new ParticleSettings(),
   changeParticleSettings: () => {},
+  clickupToken: '',
+  changeClickupToken: () => {},
+  clickupUserName: '',
+  changeClickupUserName: () => {},
+  clickupListID: '',
+  changeClickupListID: () => {},
 }
 
 export default Frame
