@@ -28,30 +28,23 @@ function ClickupLogin(props) {
   const [spaces, setSpaces] = useState(retClickupSpaces)
   const [lists, setLists] = useState(retClickupLists)
 
-  function changeWorkspaces(newWorkspaces) {
-    setWorkspaces(newWorkspaces)
-    storeClickupWorkspaces(newWorkspaces)
-  }
-
-  function changeSpaces(newSpaces) {
-    setSpaces(newSpaces)
-    storeClickupSpaces(newSpaces)
-  }
+  const [selectedWorkspaceID, setSelectedWorkspaceID] = useState('')
+  const [selectedSpaceID, setSelectedSpaceID] = useState('')
 
   function changeLists(newLists) {
     setLists(newLists)
     storeClickupLists(newLists)
   }
 
-  const [selectedWorkspaceID, setSelectedWorkspaceID] = useState('')
-  const [selectedSpaceID, setSelectedSpaceID] = useState('')
-
-  function changeSelectedWorkspaceID(newID) {
-    setSelectedWorkspaceID(newID)
+  async function getLists() {
+    const response = await getAllClickupListsInSpace(clickupToken, selectedSpaceID)
+    changeLists(response)
   }
 
-  function changeSelectedSpaceID(newID) {
-    setSelectedSpaceID(newID)
+  function changeSpaces(newSpaces) {
+    setSpaces(newSpaces)
+    storeClickupSpaces(newSpaces)
+    getLists()
   }
 
   async function getSpaces() {
@@ -59,9 +52,18 @@ function ClickupLogin(props) {
     changeSpaces(response)
   }
 
-  async function getLists() {
-    const response = await getAllClickupListsInSpace(clickupToken, selectedSpaceID)
-    changeLists(response)
+  function changeWorkspaces(newWorkspaces) {
+    setWorkspaces(newWorkspaces)
+    storeClickupWorkspaces(newWorkspaces)
+    getSpaces()
+  }
+
+  function changeSelectedWorkspaceID(newID) {
+    setSelectedWorkspaceID(newID)
+  }
+
+  function changeSelectedSpaceID(newID) {
+    setSelectedSpaceID(newID)
   }
 
   useEffect(() => {
@@ -73,7 +75,7 @@ function ClickupLogin(props) {
       changeClickupUserName(tempUserName)
       console.log('username: ', tempUserName)
       const retrievedWorkspaces = await getClickupWorkspaces(tempClickupToken)
-      setWorkspaces(retrievedWorkspaces)
+      changeWorkspaces(retrievedWorkspaces)
     }
     console.log('clickup token: ', clickupToken)
     if (clickupCode !== null && clickupToken === '') {
@@ -157,7 +159,6 @@ function DropdownList(props) {
         value={item}
         onChange={x => {
           changeItem(x.target.value)
-          nextFunction()
         }}
       >
         <option id="" key="" value="">
