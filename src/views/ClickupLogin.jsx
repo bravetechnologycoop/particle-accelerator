@@ -2,7 +2,13 @@ import Button from 'react-bootstrap/Button'
 import React, { useEffect, useState } from 'react'
 import { Card, Form, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { getClickupAccessToken, getClickupSpaces, getClickupUserName, getClickupWorkspaces } from '../utilities/ClickupFunctions'
+import {
+  getAllClickupListsInSpace,
+  getClickupAccessToken,
+  getClickupSpaces,
+  getClickupUserName,
+  getClickupWorkspaces,
+} from '../utilities/ClickupFunctions'
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
@@ -41,12 +47,18 @@ function ClickupLogin(props) {
       const response = await getClickupSpaces(clickupToken, selectedWorkspaceID)
       setSpaces(response)
     }
+    async function getLists() {
+      const response = await getAllClickupListsInSpace(clickupToken, selectedSpaceID)
+    }
     console.log('clickup token: ', clickupToken)
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
     }
-    if (selectedWorkspaceID !== '') {
+    if (selectedWorkspaceID !== '' && spaces === []) {
       getSpaces()
+    }
+    if (selectedSpaceID !== '' && lists === []) {
+      getLists()
     }
   })
 
@@ -64,6 +76,8 @@ function ClickupLogin(props) {
               loading={workspaces === []}
               title="Workspace"
             />
+            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spaces === []} title="Space" />
+            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={lists === []} title="List" />
           </Form>
         </Card>
       </>
