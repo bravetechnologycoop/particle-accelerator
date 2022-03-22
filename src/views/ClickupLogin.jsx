@@ -2,13 +2,29 @@ import Button from 'react-bootstrap/Button'
 import React, { useEffect, useState } from 'react'
 import { Card, Form, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { getClickupAccessToken, getClickupUserName } from '../utilities/ClickupFunctions'
+import { getClickupAccessToken, getClickupUserName, getClickupWorkspaces } from "../utilities/ClickupFunctions";
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
 
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
+
+  const [workspaces, setWorkspaces] = useState([])
+  const [spaces, setSpaces] = useState([])
+  const [folders, setFolders] = useState([])
+  const [lists, setLists] = useState([])
+
+  const [selectedWorkspaceID, setSelectedWorkspaceID] = useState('')
+  const [selectedSpaceID, setSelectedSpaceID] = useState('')
+
+  function changeSelectedWorkspaceID(newID) {
+    setSelectedWorkspaceID(newID)
+  }
+
+  function changeSelectedSpaceID(newID) {
+    setSelectedSpaceID(newID)
+  }
 
   useEffect(() => {
     async function tokenLogin() {
@@ -18,6 +34,8 @@ function ClickupLogin(props) {
       const tempUserName = await getClickupUserName(tempClickupToken)
       changeClickupUserName(tempUserName)
       console.log('username: ', tempUserName)
+      const retrievedWorkspaces = await getClickupWorkspaces(tempClickupToken)
+      setWorkspaces(retrievedWorkspaces)
     }
     console.log('clickup token: ', clickupToken)
     if (clickupCode !== null && clickupToken === '') {
@@ -31,6 +49,15 @@ function ClickupLogin(props) {
         <h1>Logged In as {clickupUserName}</h1>
         <Card>
           <Card.Title>Set Clickup Configuration</Card.Title>
+          <Form>
+            <DropdownList
+              itemList={workspaces}
+              item={selectedWorkspaceID}
+              changeItem={changeSelectedWorkspaceID}
+              loading={workspaces === []}
+              title="Workspace"
+            />
+          </Form>
         </Card>
       </>
     )

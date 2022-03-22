@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import React from 'react'
 import LoginStatus from './LoginStatus'
-import ParticleSettings from '../utilities/ParticleSettings'
 
 function LoginRowButton(props) {
   const { label, state, enabled, loginState, userName } = props
