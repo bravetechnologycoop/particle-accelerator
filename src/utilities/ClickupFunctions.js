@@ -25,8 +25,25 @@ export async function getClickupUserName(token) {
       },
     })
     console.log(response)
+    return response.data.user.username
   } catch (err) {
     console.error(err)
     return ''
+  }
+}
+
+export async function getClickupWorkspaces(token) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/team`
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    console.log(response)
+  } catch (err) {
+    console.error(err)
+    return []
   }
 }

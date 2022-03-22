@@ -16,8 +16,9 @@ function ClickupLogin() {
         const clickupToken = await getClickupAccessToken(clickupCode)
         console.log('token: ', clickupToken)
         setToken(clickupToken)
-        const username = await getClickupUserName(clickupToken)
-        setUserName(username.data.user.userName)
+        const tempUserName = await getClickupUserName(clickupToken)
+        setUserName(tempUserName)
+        console.log('username: ', tempUserName)
       }
     }
     effectHandler()
