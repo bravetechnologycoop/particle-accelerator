@@ -72,7 +72,7 @@ function Navigation(props) {
             label="ClickUp"
             handler={changeViewState}
             state={viewState}
-            loginState={`${clickupToken === ''}`}
+            loginState={`${clickupToken !== ''}`}
             userName={clickupUserName}
           />
           <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
