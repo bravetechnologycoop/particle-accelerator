@@ -16,7 +16,7 @@ function ClickupLogin() {
         const clickupToken = await getClickupAccessToken(clickupCode)
         console.log('token: ', clickupToken)
         setToken(clickupToken)
-        const username = await getClickupUserName(token)
+        const username = await getClickupUserName(clickupToken)
         setUserName(username)
       }
     }
