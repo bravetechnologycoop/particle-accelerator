@@ -23,7 +23,11 @@ function ClickupLogin() {
     effectHandler()
   })
 
-  if (getClickupToken() === '' || getClickupToken() === null) {
+  if (token !== '') {
+    return <h1>Logged In as {userName}</h1>
+  }
+
+  if (token === '') {
     return (
       <Button
         href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=https://particle-accelerator-w93d4.ondigitalocean.app/clickup`}
@@ -31,9 +35,6 @@ function ClickupLogin() {
         Log in to ClickUp
       </Button>
     )
-  }
-  if (token !== '') {
-    return <h1>Logged In as {userName}</h1>
   }
 }
 
