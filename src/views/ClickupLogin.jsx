@@ -2,7 +2,12 @@ import Button from 'react-bootstrap/Button'
 import React, { useEffect, useState } from 'react'
 import { Card, Form, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { getClickupAccessToken, getClickupUserName, getClickupWorkspaces } from '../utilities/ClickupFunctions'
+import {
+  getClickupAccessToken,
+  getClickupSpaces,
+  getClickupUserName,
+  getClickupWorkspaces
+} from "../utilities/ClickupFunctions";
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
@@ -37,9 +42,16 @@ function ClickupLogin(props) {
       const retrievedWorkspaces = await getClickupWorkspaces(tempClickupToken)
       setWorkspaces(retrievedWorkspaces)
     }
+    async function getSpaces() {
+      const response = await getClickupSpaces(clickupToken, selectedWorkspaceID)
+      setSpaces(response)
+    }
     console.log('clickup token: ', clickupToken)
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
+    }
+    if (selectedWorkspaceID !== '') {
+      getSpaces()
     }
   })
 

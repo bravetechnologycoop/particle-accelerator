@@ -39,7 +39,7 @@ export async function getClickupWorkspaces(token) {
       },
     })
     console.log(response)
-    return response.teams.map(team => {
+    return response.data.teams.map(team => {
       return { name: team.name, id: team.id }
     })
   } catch (err) {
@@ -57,7 +57,7 @@ export async function getClickupSpaces(token, workspaceID) {
       },
     })
     console.log('spaces: ', response)
-    return response.spaces.map(space => {
+    return response.data.spaces.map(space => {
       return { name: space.name, id: space.id }
     })
   } catch (err) {
@@ -75,7 +75,7 @@ export async function getClickupSpaceFolders(token, spaceID) {
       },
     })
     console.log('folders: ', response)
-    return response.folders.map(folder => {
+    return response.data.folders.map(folder => {
       return { name: folder.name, id: folder.id }
     })
   } catch (err) {
@@ -93,7 +93,7 @@ export async function getClickupListsInFolders(token, folderID) {
       },
     })
     console.log(`lists in folder ${folderID}: `, response)
-    return response.lists.map(list => {
+    return response.data.lists.map(list => {
       return { name: list.name, id: list.id }
     })
   } catch (err) {
@@ -111,7 +111,7 @@ export async function getClickupListsWithoutFolders(token, spaceID) {
       },
     })
     console.log(`lists in space ${spaceID}: `, response)
-    return response.lists.map(list => {
+    return response.data.lists.map(list => {
       return { name: list.name, id: list.id }
     })
   } catch (err) {
