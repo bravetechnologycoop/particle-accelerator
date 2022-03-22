@@ -41,18 +41,6 @@ export function storeClickupLoginState(newState) {
   sessionStorage.setItem('clickupLoginState', newState)
 }
 
-export function getClickupToken() {
-  try {
-    return sessionStorage.getItem('clickupToken')
-  } catch (err) {
-    return ''
-  }
-}
-
-export function storeClickupToken(newToken) {
-  sessionStorage.setItem('clickupToken', newToken)
-}
-
 export function storeActivationHistory(newHistory) {
   const stringedData = JSON.stringify(newHistory)
   localStorage.setItem('activationHistory', stringedData)
@@ -147,6 +135,19 @@ export function getParticleSettings() {
       tempProductList.push(new Product(product.name, product.id, product.deviceType))
     }
   return new ParticleSettings(parsedData.userName, parsedData.productFirmwareVersion, parsedData.deviceOSVersion, tempProductList)
+}
+
+export function getClickupToken() {
+  const result = sessionStorage.getItem('clickupToken')
+  if (result === null) {
+    return ''
+  }
+  return result
+}
+
+export function storeClickupToken(newToken) {
+  const stringedData = JSON.stringify(newToken)
+  sessionStorage.setItem('clickupToken', stringedData)
 }
 
 export function storeClickupUserName(newUserName) {
