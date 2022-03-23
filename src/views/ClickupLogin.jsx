@@ -31,14 +31,20 @@ function ClickupLogin(props) {
   const [selectedWorkspaceID, setSelectedWorkspaceID] = useState('')
   const [selectedSpaceID, setSelectedSpaceID] = useState('')
 
+  const [workspacesLoading, setWorkspacesLoading] = useState('idle')
+  const [spacesLoading, setSpacesLoading] = useState('idle')
+  const [listsLoading, setListsLoading] = useState('idle')
+
   function changeLists(newLists) {
     setLists(newLists)
     storeClickupLists(newLists)
   }
 
   async function getLists(newSpaceID) {
+    setListsLoading('true')
     const response = await getAllClickupListsInSpace(clickupToken, newSpaceID)
     changeLists(response)
+    setListsLoading('false')
   }
 
   function changeSpaces(newSpaces) {
@@ -47,14 +53,16 @@ function ClickupLogin(props) {
   }
 
   async function getSpaces(newWorkspaceID) {
+    setSpacesLoading('true')
     const response = await getClickupSpaces(clickupToken, newWorkspaceID)
-    console.log('spaces', response)
     changeSpaces(response)
+    setSpacesLoading('false')
   }
 
   function changeWorkspaces(newWorkspaces) {
     setWorkspaces(newWorkspaces)
     storeClickupWorkspaces(newWorkspaces)
+    setWorkspacesLoading('false')
   }
 
   function changeSelectedWorkspaceID(newID) {
@@ -75,6 +83,7 @@ function ClickupLogin(props) {
       const tempUserName = await getClickupUserName(tempClickupToken)
       changeClickupUserName(tempUserName)
       console.log('username: ', tempUserName)
+      setWorkspacesLoading('true')
       const retrievedWorkspaces = await getClickupWorkspaces(tempClickupToken)
       changeWorkspaces(retrievedWorkspaces)
     }
@@ -139,11 +148,25 @@ ClickupLogin.defaultProps = {
 }
 
 function DropdownList(props) {
-  const { loading, item, changeItem, itemList, title } = props
+  const { loading, item, changeItem, itemList, title, folderMode } = props
+  if (loading === 'idle') {
+    return (
+      <Form>
+        <Form.Control disabled>
+          <option id="" key="" value="">
+            Select List
+          </option>
+        </Form.Control>
+      </Form>
+    )
+  }
+  if (loading === 'true') {
+    return <Spinner animation="border" variant="primary" />
+  }
   return (
     <Form>
       <Form.Control
-        disabled={loading}
+        disabled={loading === 'true'}
         as="select"
         value={item}
         onChange={x => {
@@ -166,7 +189,7 @@ function DropdownList(props) {
 }
 
 DropdownList.propTypes = {
-  loading: PropTypes.bool,
+  loading: PropTypes.string,
   item: PropTypes.string,
   changeItem: PropTypes.func,
   // eslint-disable-next-line react/forbid-prop-types
@@ -175,7 +198,7 @@ DropdownList.propTypes = {
 }
 
 DropdownList.defaultProps = {
-  loading: true,
+  loading: 'idle',
   item: '',
   changeItem: () => {},
   title: '',

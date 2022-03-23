@@ -127,7 +127,7 @@ export async function getAllClickupListsInSpace(token, spaceID) {
     for (const folder of folders) {
       const listsInFolder = await getClickupListsInFolders(token, folder.id)
       const taggedListsInFolder = listsInFolder.map(list => {
-        return { folderName: folder.name, listName: list.name, listID: list.id }
+        return { folderName: folder.name, name: list.name, list: list.id }
       })
       console.log('tagged: ', taggedListsInFolder)
       for (const taggedListInFolder of taggedListsInFolder) {
