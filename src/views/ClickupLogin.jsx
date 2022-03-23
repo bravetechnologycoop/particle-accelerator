@@ -113,28 +113,36 @@ function ClickupLogin(props) {
     }
   })
 
-  if (clickupToken !== '') {
+  if (clickupToken === '') {
     return (
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-        <h1>Logged In as {clickupUserName}</h1>
-        <Card style={{ flex: '1 1 60ch' }}>
-          <Card.Title style={{ padding: '20px' }}>Set Clickup Configuration</Card.Title>
-          <Form>
-            <h6 style={{ paddingTop: '10px', paddingBottom: '10px' }}>Workspace</h6>
-            <DropdownList
-              itemList={workspaces}
-              item={selectedWorkspaceID}
-              changeItem={changeSelectedWorkspaceID}
-              loading={workspacesLoading}
-              title="Workspace"
-            />
-            <h6 style={{ paddingTop: '10px', paddingBottom: '10px' }}>Space</h6>
-            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spacesLoading} title="Space" />
-            <h6 style={{ paddingTop: '10px', paddingBottom: '10px' }}>List</h6>
-            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={listsLoading} title="List" />
-          </Form>
-        </Card>
-      </div>
+      <>
+        <h1>Logged in as: {clickupUserName}</h1>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '15px' }}>
+          <Card style={{ flex: '0 1 30ch' }}>
+            <h4 style={{ paddingLeft: '15px', paddingTop: '15px', paddingRight: '15px' }}>Clickup Configuration</h4>
+            <Form>
+              <h6 style={{ paddingLeft: '15px', paddingTop: '10px', paddingBottom: '3px' }}>Workspace</h6>
+              <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
+                <DropdownList
+                  itemList={workspaces}
+                  item={selectedWorkspaceID}
+                  changeItem={changeSelectedWorkspaceID}
+                  loading={workspacesLoading}
+                  title="Workspace"
+                />
+              </div>
+              <h6 style={{ paddingLeft: '15px', paddingTop: '10px', paddingBottom: '3px' }}>Space</h6>
+              <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
+                <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spacesLoading} title="Space" />
+              </div>
+              <h6 style={{ paddingLeft: '15px', paddingTop: '10px', paddingBottom: '3px' }}>List</h6>
+              <div style={{ paddingLeft: '15px', paddingRight: '15px', paddingBottom: '15px' }}>
+                <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={listsLoading} title="List" />
+              </div>
+            </Form>
+          </Card>
+        </div>
+      </>
     )
   }
 

@@ -154,3 +154,40 @@ export async function getClickupStatusesInList(token, listID) {
     console.error(err)
   }
 }
+
+export async function createTaskInSensorTracker(token, sensorName, listID, deviceID, serialNumber, statusID) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/task`
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  }
+  const data = {
+    name: sensorName,
+    status: statusID,
+    custom_fields: [
+      {
+        // Former Sensor Name
+        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_NAME,
+        value: sensorName,
+      },
+      {
+        // Device ID
+        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_ID,
+        value: deviceID,
+      },
+      {
+        // Serial Number
+        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SERIAL_NUMBER,
+        value: serialNumber,
+      },
+    ],
+  }
+  try {
+    const response = await axios.post(url, data, config)
+    console.log(response)
+  } catch (err) {
+    console.error(err)
+  }
+}
