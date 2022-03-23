@@ -107,11 +107,11 @@ function ClickupLogin(props) {
               itemList={workspaces}
               item={selectedWorkspaceID}
               changeItem={changeSelectedWorkspaceID}
-              loading={workspaces.length === 0}
+              loading={workspacesLoading}
               title="Workspace"
             />
-            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spaces.length === 0} title="Space" />
-            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={lists.length === 0} title="List" />
+            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spacesLoading} title="Space" />
+            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={listsLoading} title="List" />
           </Form>
         </Card>
       </>
@@ -148,7 +148,7 @@ ClickupLogin.defaultProps = {
 }
 
 function DropdownList(props) {
-  const { loading, item, changeItem, itemList, title, folderMode } = props
+  const { loading, item, changeItem, itemList, title } = props
   if (loading === 'idle') {
     return (
       <Form>
