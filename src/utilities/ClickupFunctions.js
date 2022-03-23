@@ -125,17 +125,22 @@ export async function getAllClickupListsInSpace(token, spaceID) {
   const allLists = []
   if (folders !== []) {
     for (const folder of folders) {
-      const listsInFolder = await getClickupListsInFolders(token, folder.folderID)
+      const listsInFolder = await getClickupListsInFolders(token, folder.id)
       const taggedListsInFolder = listsInFolder.map(list => {
         return { folderName: folder.name, listName: list.name, listID: list.id }
       })
-      allLists.push(taggedListsInFolder)
+      console.log('tagged: ', taggedListsInFolder)
+      for (const taggedListInFolder of taggedListsInFolder) {
+        allLists.push(taggedListInFolder)
+      }
     }
   }
   const listsWithoutFolders = await getClickupListsWithoutFolders(token, spaceID)
   const taggedListsWithoutFolders = listsWithoutFolders.map(list => {
     return { folderName: '', listName: list.name, listID: list.id }
   })
-  allLists.push(taggedListsWithoutFolders)
+  for (const taggedListNoFolder of taggedListsWithoutFolders) {
+    allLists.push(taggedListNoFolder)
+  }
   return allLists
 }

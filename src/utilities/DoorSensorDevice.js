@@ -1,7 +1,8 @@
 import ActivatedDevice from './ActivatedDevice'
+import { getCurrentFirmwareVersion, getDeviceDetails, getDeviceInfo } from './ParticleFunctions'
 
 export default class DoorSensorDevice extends ActivatedDevice {
-  constructor(device) {
+  constructor(device, token) {
     super(
       device.deviceName,
       device.serialNumber,
@@ -12,9 +13,13 @@ export default class DoorSensorDevice extends ActivatedDevice {
       device.dateStamp,
       device.doorSensorID,
     )
+    this.token = token
   }
 
   startFirmwareChecks() {
-    setInterval
+    setInterval(async () => {
+      const firmware = await getCurrentFirmwareVersion(this.productID, this.token)
+      const deviceInfo = getDeviceDetails(this.serialNumber, this.productID, this.token)
+    })
   }
 }

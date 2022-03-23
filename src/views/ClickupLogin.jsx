@@ -150,7 +150,7 @@ ClickupLogin.defaultProps = {
 }
 
 function DropdownList(props) {
-  const { loading, item, changeItem, itemList, title, nextFunction } = props
+  const { loading, item, changeItem, itemList, title } = props
   return (
     <Form>
       <Form.Control
@@ -183,7 +183,6 @@ DropdownList.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   itemList: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string,
-  nextFunction: PropTypes.func,
 }
 
 DropdownList.defaultProps = {
@@ -191,7 +190,6 @@ DropdownList.defaultProps = {
   item: '',
   changeItem: () => {},
   title: '',
-  nextFunction: () => {},
 }
 
 export default ClickupLogin
