@@ -213,3 +213,27 @@ export function retClickupLists() {
   }
   return JSON.parse(result)
 }
+
+export function storeClickupWorkspaceID(workspaceID) {
+  sessionStorage.setItem('clickupWorkspaceID', workspaceID)
+}
+
+export function retClickupWorkspaceID() {
+  const result = sessionStorage.getItem('clickupWorkspaceID')
+  if (result === null) {
+    return ''
+  }
+  return result
+}
+
+export function storeClickupSpaceID(spaceID) {
+  sessionStorage.setItem('clickupSpaceID', spaceID)
+}
+
+export function retClickupSpaceID() {
+  const result = sessionStorage.getItem('clickupSpaceID')
+  if (result === null) {
+    return ''
+  }
+  return result
+}

@@ -11,12 +11,14 @@ import {
 } from '../utilities/ClickupFunctions'
 import {
   retClickupLists,
+  retClickupSpaceID,
   retClickupSpaces,
+  retClickupWorkspaceID,
   retClickupWorkspaces,
-  storeClickupLists,
-  storeClickupSpaces,
-  storeClickupWorkspaces,
-} from '../utilities/StorageFunctions'
+  storeClickupLists, storeClickupSpaceID,
+  storeClickupSpaces, storeClickupWorkspaceID,
+  storeClickupWorkspaces
+} from "../utilities/StorageFunctions";
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
@@ -28,8 +30,8 @@ function ClickupLogin(props) {
   const [spaces, setSpaces] = useState(retClickupSpaces)
   const [lists, setLists] = useState(retClickupLists)
 
-  const [selectedWorkspaceID, setSelectedWorkspaceID] = useState('')
-  const [selectedSpaceID, setSelectedSpaceID] = useState('')
+  const [selectedWorkspaceID, setSelectedWorkspaceID] = useState(retClickupWorkspaceID)
+  const [selectedSpaceID, setSelectedSpaceID] = useState(retClickupSpaceID)
 
   const [workspacesLoading, setWorkspacesLoading] = useState('idle')
   const [spacesLoading, setSpacesLoading] = useState('idle')
@@ -71,6 +73,7 @@ function ClickupLogin(props) {
     }
     changeClickupListID('')
     setSelectedSpaceID(newID)
+    storeClickupSpaceID(newID)
     if (newID !== '') {
       getLists(newID)
     }
@@ -84,6 +87,7 @@ function ClickupLogin(props) {
     changeClickupListID('')
     changeSelectedSpaceID('')
     setSelectedWorkspaceID(newID)
+    storeClickupWorkspaceID(newID)
     if (newID !== '') {
       getSpaces(newID)
     }
@@ -109,14 +113,12 @@ function ClickupLogin(props) {
 
   if (clickupToken !== '') {
     return (
-      <>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <h1>Logged In as {clickupUserName}</h1>
-        <Card>
-          <Card.Title>Set Clickup Configuration</Card.Title>
-          {selectedWorkspaceID}
-          {selectedSpaceID}
-          {clickupListID}
+        <Card style={{ flex: '1 1 60ch' }}>
+          <Card.Title style={{ padding: '20px' }}>Set Clickup Configuration</Card.Title>
           <Form>
+            <h6 style={{ paddingTop: '10px', paddingBottom: '10px' }}>Workspace</h6>
             <DropdownList
               itemList={workspaces}
               item={selectedWorkspaceID}
@@ -124,11 +126,13 @@ function ClickupLogin(props) {
               loading={workspacesLoading}
               title="Workspace"
             />
+            <h6 style={{ paddingTop: '10px', paddingBottom: '10px' }}>Space</h6>
             <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spacesLoading} title="Space" />
+            <h6 style={{ paddingTop: '10px', paddingBottom: '10px' }}>List</h6>
             <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={listsLoading} title="List" />
           </Form>
         </Card>
-      </>
+      </div>
     )
   }
 
