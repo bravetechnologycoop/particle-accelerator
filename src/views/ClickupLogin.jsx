@@ -15,10 +15,12 @@ import {
   retClickupSpaces,
   retClickupWorkspaceID,
   retClickupWorkspaces,
-  storeClickupLists, storeClickupSpaceID,
-  storeClickupSpaces, storeClickupWorkspaceID,
-  storeClickupWorkspaces
-} from "../utilities/StorageFunctions";
+  storeClickupLists,
+  storeClickupSpaceID,
+  storeClickupSpaces,
+  storeClickupWorkspaceID,
+  storeClickupWorkspaces,
+} from '../utilities/StorageFunctions'
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
