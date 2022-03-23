@@ -146,8 +146,7 @@ export function getClickupToken() {
 }
 
 export function storeClickupToken(newToken) {
-  const stringedData = JSON.stringify(newToken)
-  sessionStorage.setItem('clickupToken', stringedData)
+  sessionStorage.setItem('clickupToken', newToken)
 }
 
 export function storeClickupUserName(newUserName) {
