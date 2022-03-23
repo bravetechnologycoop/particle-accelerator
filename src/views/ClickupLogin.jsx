@@ -48,6 +48,7 @@ function ClickupLogin(props) {
 
   async function getSpaces() {
     const response = await getClickupSpaces(clickupToken, selectedWorkspaceID)
+    console.log('spaces', response)
     changeSpaces(response)
   }
 
@@ -58,7 +59,7 @@ function ClickupLogin(props) {
 
   function changeSelectedWorkspaceID(newID) {
     setSelectedWorkspaceID(newID)
-    getSpaces()
+    getSpaces().then(() => {})
   }
 
   function changeSelectedSpaceID(newID) {
@@ -81,10 +82,6 @@ function ClickupLogin(props) {
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
     }
-    console.log('workspace ID: ', selectedWorkspaceID)
-    console.log('space id: ', selectedSpaceID)
-    console.log('spaces: ', spaces)
-    console.log('lists: ', lists)
   })
 
   if (clickupToken !== '') {
