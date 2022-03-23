@@ -44,7 +44,6 @@ function ClickupLogin(props) {
   function changeSpaces(newSpaces) {
     setSpaces(newSpaces)
     storeClickupSpaces(newSpaces)
-    getLists()
   }
 
   async function getSpaces() {
@@ -55,15 +54,16 @@ function ClickupLogin(props) {
   function changeWorkspaces(newWorkspaces) {
     setWorkspaces(newWorkspaces)
     storeClickupWorkspaces(newWorkspaces)
-    getSpaces()
   }
 
   function changeSelectedWorkspaceID(newID) {
     setSelectedWorkspaceID(newID)
+    getSpaces()
   }
 
   function changeSelectedSpaceID(newID) {
     setSelectedSpaceID(newID)
+    getLists()
   }
 
   useEffect(() => {
