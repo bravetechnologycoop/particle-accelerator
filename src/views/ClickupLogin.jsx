@@ -81,6 +81,8 @@ function ClickupLogin(props) {
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
     }
+    console.log('workspace ID: ', selectedWorkspaceID)
+    console.log('space id: ', selectedSpaceID)
   })
 
   if (clickupToken !== '') {
@@ -96,24 +98,9 @@ function ClickupLogin(props) {
               changeItem={changeSelectedWorkspaceID}
               loading={workspaces === []}
               title="Workspace"
-              nextFunction={getSpaces}
             />
-            <DropdownList
-              itemList={spaces}
-              item={selectedSpaceID}
-              changeItem={changeSelectedSpaceID}
-              loading={spaces === []}
-              title="Space"
-              nextFunction={getLists}
-            />
-            <DropdownList
-              itemList={lists}
-              item={clickupListID}
-              changeItem={changeClickupListID}
-              loading={lists === []}
-              title="List"
-              nextFunction={() => console.log(clickupListID)}
-            />
+            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spaces === []} title="Space" />
+            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={lists === []} title="List" />
           </Form>
         </Card>
       </>
