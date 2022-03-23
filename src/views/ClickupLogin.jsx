@@ -83,6 +83,8 @@ function ClickupLogin(props) {
     }
     console.log('workspace ID: ', selectedWorkspaceID)
     console.log('space id: ', selectedSpaceID)
+    console.log('spaces: ', spaces)
+    console.log('lists: ', lists)
   })
 
   if (clickupToken !== '') {
