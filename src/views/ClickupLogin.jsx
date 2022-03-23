@@ -68,7 +68,9 @@ function ClickupLogin(props) {
   function changeSelectedSpaceID(newID) {
     changeClickupListID('')
     setSelectedSpaceID(newID)
-    getLists(newID)
+    if (newID !== '') {
+      getLists(newID)
+    }
   }
 
   function changeSelectedWorkspaceID(newID) {
@@ -153,7 +155,7 @@ ClickupLogin.defaultProps = {
 
 function DropdownList(props) {
   const { loading, item, changeItem, itemList, title } = props
-  if (loading === 'idle') {
+  if (loading === 'idle' && itemList.length === 0) {
     return (
       <Form>
         <Form.Control disabled as="select">

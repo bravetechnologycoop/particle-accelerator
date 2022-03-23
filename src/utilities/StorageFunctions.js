@@ -164,8 +164,7 @@ export function retClickupUserName() {
 }
 
 export function storeClickupListID(newListID) {
-  const stringedData = JSON.stringify(newListID)
-  sessionStorage.setItem('clickupListID', stringedData)
+  sessionStorage.setItem('clickupListID', newListID)
 }
 
 export function retClickupListID() {
