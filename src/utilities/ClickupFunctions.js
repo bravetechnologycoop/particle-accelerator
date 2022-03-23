@@ -120,7 +120,7 @@ export async function getClickupListsWithoutFolders(token, spaceID) {
   }
 }
 
-async function getAllClickupListsInSpace(token, spaceID) {
+export async function getAllClickupListsInSpace(token, spaceID) {
   async function getTaggedListsInFolders(folderObject) {
     const listsInFolder = await getClickupListsInFolders(token, folderObject.id)
     return listsInFolder.map(list => {
