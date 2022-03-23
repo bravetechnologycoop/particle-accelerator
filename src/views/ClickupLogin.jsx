@@ -93,6 +93,9 @@ function ClickupLogin(props) {
         <h1>Logged In as {clickupUserName}</h1>
         <Card>
           <Card.Title>Set Clickup Configuration</Card.Title>
+          {selectedWorkspaceID}
+          {selectedSpaceID}
+          {clickupListID}
           <Form>
             <DropdownList
               itemList={workspaces}
