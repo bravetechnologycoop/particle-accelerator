@@ -144,3 +144,19 @@ export async function getAllClickupListsInSpace(token, spaceID) {
   }
   return allLists
 }
+
+export async function getClickupStatusesInList(token, listID) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}`
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data.statuses.map(status => {
+      return { name: status.status.replace(/(^\w)|(\s+\w)/g, letter => letter.toUpperCase()), id: status.status }
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
