@@ -36,8 +36,8 @@ function ClickupLogin(props) {
     storeClickupLists(newLists)
   }
 
-  async function getLists() {
-    const response = await getAllClickupListsInSpace(clickupToken, selectedSpaceID)
+  async function getLists(newSpaceID) {
+    const response = await getAllClickupListsInSpace(clickupToken, newSpaceID)
     changeLists(response)
   }
 
@@ -46,8 +46,8 @@ function ClickupLogin(props) {
     storeClickupSpaces(newSpaces)
   }
 
-  async function getSpaces() {
-    const response = await getClickupSpaces(clickupToken, selectedWorkspaceID)
+  async function getSpaces(newWorkspaceID) {
+    const response = await getClickupSpaces(clickupToken, newWorkspaceID)
     console.log('spaces', response)
     changeSpaces(response)
   }
@@ -59,12 +59,12 @@ function ClickupLogin(props) {
 
   function changeSelectedWorkspaceID(newID) {
     setSelectedWorkspaceID(newID)
-    getSpaces().then(() => {})
+    getSpaces(newID)
   }
 
   function changeSelectedSpaceID(newID) {
     setSelectedSpaceID(newID)
-    getLists()
+    getLists(newID)
   }
 
   useEffect(() => {
