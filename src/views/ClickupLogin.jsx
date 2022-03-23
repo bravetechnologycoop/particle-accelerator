@@ -98,11 +98,11 @@ function ClickupLogin(props) {
               itemList={workspaces}
               item={selectedWorkspaceID}
               changeItem={changeSelectedWorkspaceID}
-              loading={workspaces === []}
+              loading={workspaces.length === 0}
               title="Workspace"
             />
-            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spaces === []} title="Space" />
-            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={lists === []} title="List" />
+            <DropdownList itemList={spaces} item={selectedSpaceID} changeItem={changeSelectedSpaceID} loading={spaces.length === 0} title="Space" />
+            <DropdownList itemList={lists} item={clickupListID} changeItem={changeClickupListID} loading={lists.length === 0} title="List" />
           </Form>
         </Card>
       </>
