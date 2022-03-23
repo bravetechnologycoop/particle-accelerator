@@ -66,6 +66,7 @@ function ClickupLogin(props) {
   }
 
   function changeSelectedWorkspaceID(newID) {
+    setListsLoading('idle')
     setSelectedWorkspaceID(newID)
     getSpaces(newID)
   }
