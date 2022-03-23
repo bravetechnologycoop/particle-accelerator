@@ -65,15 +65,18 @@ function ClickupLogin(props) {
     setWorkspacesLoading('false')
   }
 
-  function changeSelectedWorkspaceID(newID) {
-    setListsLoading('idle')
-    setSelectedWorkspaceID(newID)
-    getSpaces(newID)
-  }
-
   function changeSelectedSpaceID(newID) {
+    changeClickupListID('')
     setSelectedSpaceID(newID)
     getLists(newID)
+  }
+
+  function changeSelectedWorkspaceID(newID) {
+    setListsLoading('idle')
+    changeClickupListID('')
+    changeSelectedSpaceID('')
+    setSelectedWorkspaceID(newID)
+    getSpaces(newID)
   }
 
   useEffect(() => {
