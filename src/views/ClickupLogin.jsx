@@ -152,9 +152,9 @@ function DropdownList(props) {
   if (loading === 'idle') {
     return (
       <Form>
-        <Form.Control disabled>
+        <Form.Control disabled as="select">
           <option id="" key="" value="">
-            Select List
+            Select {title}
           </option>
         </Form.Control>
       </Form>
