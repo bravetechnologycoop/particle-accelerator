@@ -66,6 +66,9 @@ function ClickupLogin(props) {
   }
 
   function changeSelectedSpaceID(newID) {
+    if (newID === '') {
+      setSpacesLoading('locked')
+    }
     changeClickupListID('')
     setSelectedSpaceID(newID)
     if (newID !== '') {
@@ -74,11 +77,16 @@ function ClickupLogin(props) {
   }
 
   function changeSelectedWorkspaceID(newID) {
-    setListsLoading('idle')
+    if (newID === '') {
+      setListsLoading('locked')
+      setSpacesLoading('locked')
+    }
     changeClickupListID('')
     changeSelectedSpaceID('')
     setSelectedWorkspaceID(newID)
-    getSpaces(newID)
+    if (newID !== '') {
+      getSpaces(newID)
+    }
   }
 
   useEffect(() => {
@@ -155,7 +163,7 @@ ClickupLogin.defaultProps = {
 
 function DropdownList(props) {
   const { loading, item, changeItem, itemList, title } = props
-  if (loading === 'idle' && itemList.length === 0) {
+  if ((loading === 'idle' && itemList.length === 0) || loading === 'locked') {
     return (
       <Form>
         <Form.Control disabled as="select">

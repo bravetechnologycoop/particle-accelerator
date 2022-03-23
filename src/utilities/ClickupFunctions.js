@@ -120,29 +120,23 @@ export async function getClickupListsWithoutFolders(token, spaceID) {
   }
 }
 
-export async function getAllClickupListsInSpace(token, spaceID) {
+async function getAllClickupListsInSpace(token, spaceID) {
+  async function getTaggedListsInFolders(folderObject) {
+    const listsInFolder = await getClickupListsInFolders(token, folderObject.id)
+    return listsInFolder.map(list => {
+      return { folderName: folderObject.name, name: list.name, id: list.id }
+    })
+  }
   const folders = await getClickupSpaceFolders(token, spaceID)
-  const allLists = []
+  let folderLists
   if (folders !== []) {
-    for (const folder of folders) {
-      const listsInFolder = await getClickupListsInFolders(token, folder.id)
-      const taggedListsInFolder = listsInFolder.map(list => {
-        return { folderName: folder.name, name: list.name, list: list.id }
-      })
-      console.log('tagged: ', taggedListsInFolder)
-      for (const taggedListInFolder of taggedListsInFolder) {
-        allLists.push(taggedListInFolder)
-      }
-    }
+    folderLists = (await Promise.all(folders.map(folder => getTaggedListsInFolders(token, folder)))).flat()
   }
   const listsWithoutFolders = await getClickupListsWithoutFolders(token, spaceID)
   const taggedListsWithoutFolders = listsWithoutFolders.map(list => {
     return { folderName: '', name: list.name, id: list.id }
   })
-  for (const taggedListNoFolder of taggedListsWithoutFolders) {
-    allLists.push(taggedListNoFolder)
-  }
-  return allLists
+  return taggedListsWithoutFolders.concat(folderLists)
 }
 
 export async function getClickupStatusesInList(token, listID) {
