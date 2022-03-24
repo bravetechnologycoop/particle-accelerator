@@ -76,12 +76,6 @@ function ActivatorView(props) {
   // eslint-disable-next-line no-unused-vars
   const { token, activationHistory, changeActivationHistory, activatedDevices, changeActivatedDevices, safeModeState, particleSettings } = props
 
-  /* useEffect(() => {
-    changeToken(getParticleToken())
-    changeActivationHistory(getActivationHistory())
-    changeActivatedDevices(getActivatedDevices())
-  }, []) */
-
   const [serialNumber, setSerialNumber] = useState('')
   const [deviceID, setDeviceID] = useState('idle')
   const [iccid, setICCID] = useState('idle')
@@ -93,6 +87,7 @@ function ActivatorView(props) {
   const [totalStatus, setTotalStatus] = useState('idle')
   const [statusView, setStatusView] = useState(false)
   const [formLock, setFormLock] = useState(false)
+  const [clickupListStatuses, setClickupListStatuses] = useState()
 
   function pushAttempt(newAttempt) {
     const newAttemptArray = [newAttempt]

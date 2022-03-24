@@ -113,7 +113,7 @@ function ClickupLogin(props) {
     }
   })
 
-  if (clickupToken === '') {
+  if (clickupToken !== '') {
     return (
       <>
         <h1>Logged in as: {clickupUserName}</h1>

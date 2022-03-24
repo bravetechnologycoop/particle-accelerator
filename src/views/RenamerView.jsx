@@ -13,7 +13,7 @@ import StatusBadge from '../components/StatusBadge'
 function RenamerView(props) {
   const { particleSettings, activatedDevices, token } = props
 
-  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', '', '', '')
+  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', '', '', '', null, null)
 
   const [productID, setProductID] = useState('')
   const [serialNumber, setSerialNumber] = useState('')
@@ -341,10 +341,10 @@ function DeviceSelector(props) {
     event.preventDefault()
     const data = await getDeviceDetails(serialNumber, productID, token)
     if (data !== null) {
-      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, ''))
+      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null))
       changeSearchState('found')
     } else {
-      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', ''))
+      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null))
       changeSearchState('error')
     }
   }

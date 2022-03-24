@@ -89,6 +89,8 @@ export function getActivatedDevices() {
         device.timeStamp,
         device.dateStamp,
         device.doorSensorID,
+        device.inPairingList,
+        device.intervalID,
       ),
   )
 }
@@ -236,4 +238,33 @@ export function retClickupSpaceID() {
     return ''
   }
   return result
+}
+
+export function storeClickupListStatuses(statuses) {
+  const stringedData = JSON.stringify(statuses)
+  sessionStorage.setItem('clickupListStatuses', stringedData)
+}
+
+export function copyActivatedDevices(activatedDevices) {
+  const stringedData = JSON.stringify(activatedDevices)
+  if (stringedData === null) {
+    return []
+  }
+  const parsedData = JSON.parse(stringedData)
+
+  return parsedData.map(
+    device =>
+      new ActivatedDevice(
+        device.deviceName,
+        device.serialNumber,
+        device.productID,
+        device.deviceID,
+        device.iccid,
+        device.timeStamp,
+        device.dateStamp,
+        device.doorSensorID,
+        device.inPairingList,
+        device.intervalID,
+      ),
+  )
 }

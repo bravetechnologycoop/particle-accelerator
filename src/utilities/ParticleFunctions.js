@@ -234,3 +234,19 @@ export async function getCurrentFirmwareVersion(productID, token) {
     return null
   }
 }
+
+export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
+  try {
+    const response = await particle.callFunction({
+      deviceId: deviceID,
+      name: 'Change_IM21_Door_ID',
+      argument: doorSensorID,
+      product: productID,
+      auth: token,
+    })
+    return response.body.connected && response.body.id === deviceID && response.body.return_value === 1
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
