@@ -119,7 +119,7 @@ function ClickupLogin(props) {
         <h1>Logged in as: {clickupUserName}</h1>
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '15px' }}>
           <Card style={{ flex: '0 1 30ch' }}>
-            <h4 style={{ paddingLeft: '15px', paddingTop: '15px', paddingRight: '15px' }}>Clickup Configuration</h4>
+            <h4 style={{ paddingLeft: '15px', paddingTop: '15px', paddingRight: '15px' }}>Clickup List Configuration</h4>
             <Form>
               <h6 style={{ paddingLeft: '15px', paddingTop: '10px', paddingBottom: '3px' }}>Workspace</h6>
               <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
