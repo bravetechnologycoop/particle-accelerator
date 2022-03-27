@@ -13,12 +13,13 @@ function DoorSensorView(props) {
   const { activatedDevices, changeActivatedDevices, particleToken, particleSettings } = props
 
   const DEFAULT_TIMEOUT_INTERVAL = 10000
+  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', null, null, '', false, '')
 
   const [updateInterval, setUpdateInterval] = useState(DEFAULT_TIMEOUT_INTERVAL)
   const [pairingStatuses, setPairingStatuses] = useState({})
 
   const [selectorState, setSelectorState] = useState('searchSerial')
-  const [foundDevice, setFoundDevice] = useState(ActivatedDevice.blankDevice)
+  const [foundDevice, setFoundDevice] = useState(blankActivatedDevice)
   const [searchState, setSearchState] = useState('idle')
   const [productID, setProductID] = useState('')
   const [serialNumber, setSerialNumber] = useState('')
@@ -52,6 +53,7 @@ function DoorSensorView(props) {
   }
 
   function modifyActivatedDevice(deviceID, field, newValue) {
+    console.log('field: ', field, 'new value: ', newValue)
     const copyOfActivatedDevices = copyActivatedDevices(activatedDevices)
     const targetIndex = copyOfActivatedDevices.findIndex(device => device.deviceID === deviceID)
     copyOfActivatedDevices[targetIndex][field] = newValue
@@ -88,7 +90,7 @@ function DoorSensorView(props) {
     setSelectorState(x.target.value)
     setProductID('')
     setSerialNumber('')
-    setFoundDevice(ActivatedDevice.blankDevice())
+    setFoundDevice(blankActivatedDevice)
     setSearchState('idle')
   }
 

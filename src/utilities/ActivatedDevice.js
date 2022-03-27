@@ -35,6 +35,7 @@ export default class ActivatedDevice {
     changeCheckState(this.deviceID, 'idle')
     reactStateHandler(this.deviceID, 'inPairingList', true)
     this.intervalID = setInterval(async () => {
+      reactStateHandler(this.deviceID, 'inPairingList', true)
       console.log('interval')
       changeCheckState(this.deviceID, 'firmwareCheck')
       const targetFirmwareVersion = await getCurrentFirmwareVersion(this.productID, token)
@@ -58,6 +59,7 @@ export default class ActivatedDevice {
   }
 
   stopPairing(reactStateHandler) {
+    console.log('interval id', this.intervalID)
     clearInterval(this.intervalID)
     reactStateHandler(this.deviceID, 'inPairingList', false)
   }
