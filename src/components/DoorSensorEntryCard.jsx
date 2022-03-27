@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 
 function DoorSensorEntryCard(props) {
-  const { device, submitDeviceHandler, searchState } = props
+  const { device, submitDeviceHandler, searchState, selectorState } = props
 
   const [doorSensorID, setDoorSensorID] = useState('')
   const [buttonStyle, setButtonStyle] = useState('primary')
@@ -14,18 +14,18 @@ function DoorSensorEntryCard(props) {
   const doorSensorIDRegex = /^[a-f0-9]{2}[,][a-f0-9]{2}[,][a-f0-9]{2}$/
 
   useEffect(() => {
-    if (device.inPairingList === false) {
+    if (device.inPairingList === false && buttonStyle !== 'danger') {
       setButtonStyle('primary')
       setButtonText('Add to Queue')
     }
   })
 
-  if (searchState === 'idle') {
+  if (searchState === 'idle' && selectorState !== 'select') {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>
   }
 
-  if (searchState === 'error') {
+  if (searchState === 'error' && selectorState !== 'select') {
     return <h4>Device Not Found</h4>
   }
 
@@ -36,9 +36,9 @@ function DoorSensorEntryCard(props) {
         onSubmit={event => {
           event.preventDefault()
           if (doorSensorIDRegex.test(doorSensorID)) {
+            submitDeviceHandler(device, doorSensorID)
             setButtonStyle('success')
             setButtonText('Added to Queue')
-            submitDeviceHandler(device, doorSensorID)
           } else {
             setButtonStyle('danger')
             setButtonText('Incorrect Formatting, Try Again')
@@ -68,6 +68,7 @@ DoorSensorEntryCard.propTypes = {
   device: PropTypes.instanceOf(ActivatedDevice),
   submitDeviceHandler: PropTypes.func,
   searchState: PropTypes.string.isRequired,
+  selectorState: PropTypes.string.isRequired,
 }
 
 DoorSensorEntryCard.defaultProps = {

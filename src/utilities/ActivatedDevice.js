@@ -32,7 +32,7 @@ export default class ActivatedDevice {
   }
 
   pairDoorSensor(token, doorSensorID, interval, changeCheckState, reactStateHandler) {
-    changeCheckState('idle')
+    changeCheckState(this.deviceID, 'idle')
     reactStateHandler(this.deviceID, 'inPairingList', true)
     this.intervalID = setInterval(async () => {
       console.log('interval')

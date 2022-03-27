@@ -12,7 +12,7 @@ function DoorSensorView(props) {
   // eslint-disable-next-line no-unused-vars
   const { activatedDevices, changeActivatedDevices, particleToken, particleSettings } = props
 
-  const DEFAULT_TIMEOUT_INTERVAL = 5000
+  const DEFAULT_TIMEOUT_INTERVAL = 10000
 
   const [updateInterval, setUpdateInterval] = useState(DEFAULT_TIMEOUT_INTERVAL)
   const [pairingStatuses, setPairingStatuses] = useState({})
@@ -65,14 +65,23 @@ function DoorSensorView(props) {
   }
 
   function submitDeviceHandler(device, doorSensorID) {
-    addNewPairingStatus(device.deviceName)
-    device.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice)
-    const matchingDevices = activatedDevices.filter(activatedDevice => {
-      return activatedDevice.deviceID === device.deviceID
-    })
-    if (matchingDevices.length === 0) {
-      pushDevice(device)
+    let targetDevice
+    if (selectorState === 'select') {
+      targetDevice = device
+    } else {
+      const matchingDevices = activatedDevices.filter(activatedDevice => {
+        return activatedDevice.deviceID === device.deviceID
+      })
+      console.log('matching devices length: ', matchingDevices.length)
+      if (matchingDevices.length === 0) {
+        pushDevice(device)
+        targetDevice = device
+      } else {
+        targetDevice = matchingDevices[0]
+      }
     }
+    addNewPairingStatus(targetDevice.deviceName)
+    targetDevice.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice)
   }
 
   function handleToggle(x) {
@@ -82,19 +91,6 @@ function DoorSensorView(props) {
     setFoundDevice(ActivatedDevice.blankDevice())
     setSearchState('idle')
   }
-
-  useEffect(() => {
-    console.log('pairing statuses: ', pairingStatuses)
-    console.log(activatedDevices)
-  })
-
-  /* useEffect(() => {
-    return () => {
-      storeActivatedDevices(activatedDevices)
-      const copiedActivatedDevices = getActivatedDevices()
-      changeActivatedDevices(copiedActivatedDevices)
-    }
-  }, activatedDevices) */
 
   const styles = {
     parent: {
@@ -254,7 +250,12 @@ function DoorSensorQueueCard(props) {
           <h5 style={{ paddingRight: '10px' }}>{device.deviceName}</h5>
           <QueueStatusBadge status={status} />
         </div>
-        <Button onClick={() => device.stopPairing(reactStateHandler)} type="button" variant="danger">
+        <Button
+          onClick={() => device.stopPairing(reactStateHandler)}
+          type="button"
+          variant="danger"
+          style={{ fontSize: 'small', paddingTop: '10px' }}
+        >
           Stop Pairing
         </Button>
       </Card.Body>
@@ -274,10 +275,6 @@ DoorSensorQueueCard.defaultProps = {
 
 function QueueStatusBadge(props) {
   const { status } = props
-
-  useEffect(() => {
-    console.log('status badge status: ', status)
-  })
 
   if (status === 'idle') {
     return <Badge bg="secondary">Waiting</Badge>
@@ -354,7 +351,12 @@ function DeviceSelector(props) {
           {activatedDevices.map(device => {
             return (
               <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                <DoorSensorEntryCard device={device} submitDeviceHandler={submitDeviceHandler} searchState={searchState} />
+                <DoorSensorEntryCard
+                  searchState={searchState}
+                  submitDeviceHandler={submitDeviceHandler}
+                  device={device}
+                  selectorState={selectorState}
+                />
               </li>
             )
           })}
@@ -362,6 +364,7 @@ function DeviceSelector(props) {
       </>
     )
   }
+
   if (selectorState === 'searchSerial') {
     return (
       <>
@@ -399,7 +402,12 @@ function DeviceSelector(props) {
           </Button>
         </Form>
         <div style={{ paddingTop: '15px' }}>
-          <DoorSensorEntryCard device={foundDevice} submitDeviceHandler={submitDeviceHandler} searchState={searchState} />
+          <DoorSensorEntryCard
+            device={foundDevice}
+            submitDeviceHandler={submitDeviceHandler}
+            searchState={searchState}
+            selectorState={selectorState}
+          />
         </div>
       </>
     )

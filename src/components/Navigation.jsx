@@ -79,7 +79,7 @@ function Navigation(props) {
           <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory() !== []} />
           <RowButton label="Activated Devices" handler={changeViewState} state={viewState} />
           <RowButton label="Validator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
-          <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} />
+          <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
           <RowButton label="Renamer" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
           <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
         </ButtonGroup>

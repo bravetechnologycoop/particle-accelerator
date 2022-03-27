@@ -22,7 +22,7 @@ function LoginView(props) {
     )
   }
   return (
-    <div style={{ width: '50ch' }}>
+    <div style={{ width: '25ch' }}>
       <h2>Particle Login</h2>
       <h4>
         <LoginStatus loginState={loginState} userName={particleSettings.userName} />

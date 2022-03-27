@@ -38,6 +38,7 @@ function Frame(props) {
   }
 
   function changeActivatedDevices(newActivatedDevices) {
+    console.log('changeActivatedDevices: ', newActivatedDevices)
     setActivatedDevices(newActivatedDevices)
     storeActivatedDevices(newActivatedDevices)
   }
