@@ -1,19 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Badge, Card } from 'react-bootstrap'
+import { Badge, ButtonGroup, Card, Form, ToggleButton } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import DoorSensorEntryCard from '../components/DoorSensorEntryCard'
 import { copyActivatedDevices } from '../utilities/StorageFunctions'
+import { getDeviceDetails } from '../utilities/ParticleFunctions'
+import ParticleSettings from '../utilities/ParticleSettings'
 
 function DoorSensorView(props) {
   // eslint-disable-next-line no-unused-vars
-  const { activatedDevices, changeActivatedDevices, token } = props
+  const { activatedDevices, changeActivatedDevices, particleToken, particleSettings } = props
 
   const DEFAULT_TIMEOUT_INTERVAL = 5000
 
   const [updateInterval, setUpdateInterval] = useState(DEFAULT_TIMEOUT_INTERVAL)
   const [pairingStatuses, setPairingStatuses] = useState({})
-  const [counter, setCounter] = useState(0)
+
+  const [selectorState, setSelectorState] = useState('searchSerial')
+  const [foundDevice, setFoundDevice] = useState(ActivatedDevice.blankDevice)
+  const [searchState, setSearchState] = useState('idle')
+  const [productID, setProductID] = useState('')
+  const [serialNumber, setSerialNumber] = useState('')
+
+  function changeProductID(newID) {
+    setProductID(newID)
+  }
+
+  function changeSerialNumber(newSerialNumber) {
+    setSerialNumber(newSerialNumber)
+  }
+
+  function changeSearchState(state) {
+    setSearchState(state)
+  }
+
+  function changeFoundDevice(device) {
+    setFoundDevice(device)
+  }
 
   function addNewPairingStatus(deviceID) {
     const copyOfPairingStatuses = JSON.parse(JSON.stringify(pairingStatuses))
@@ -34,9 +58,29 @@ function DoorSensorView(props) {
     changeActivatedDevices(copyOfActivatedDevices)
   }
 
+  function pushDevice(newDevice) {
+    const newDeviceArray = [newDevice]
+    const updatedList = newDeviceArray.concat(activatedDevices)
+    changeActivatedDevices(updatedList)
+  }
+
   function submitDeviceHandler(device, doorSensorID) {
     addNewPairingStatus(device.deviceName)
-    device.pairDoorSensor(token, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice)
+    device.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice)
+    const matchingDevices = activatedDevices.filter(activatedDevice => {
+      return activatedDevice.deviceID === device.deviceID
+    })
+    if (matchingDevices.length === 0) {
+      pushDevice(device)
+    }
+  }
+
+  function handleToggle(x) {
+    setSelectorState(x.target.value)
+    setProductID('')
+    setSerialNumber('')
+    setFoundDevice(ActivatedDevice.blankDevice())
+    setSearchState('idle')
   }
 
   useEffect(() => {
@@ -73,24 +117,72 @@ function DoorSensorView(props) {
     scrollView: {
       overflowY: 'auto',
     },
+    toggleButton: {
+      fontSize: 'small',
+    },
   }
 
   return (
     <div style={styles.parent}>
       <div style={styles.column}>
-        <div>
-          <h3>Activated Devices</h3>
-          <hr />
-        </div>
-        <div style={styles.scrollView}>
-          {activatedDevices.map(device => {
-            return (
-              <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                <DoorSensorEntryCard device={device} submitDeviceHandler={submitDeviceHandler} />
-              </li>
-            )
-          })}
-        </div>
+        <h3>Select Device</h3>
+        <hr />
+        <ButtonGroup style={{ paddingBottom: '15px' }}>
+          <ToggleButton
+            value="searchSerial"
+            id="searchSerial"
+            type="radio"
+            key={0}
+            variant="outline-secondary"
+            checked={selectorState === 'searchSerial'}
+            onChange={x => {
+              handleToggle(x)
+            }}
+            style={styles.toggleButton}
+          >
+            Find by Serial Number
+          </ToggleButton>
+          {/* <ToggleButton
+            value="searchSensor"
+            id="searchSensor"
+            key={2}
+            type="radio"
+            variant="outline-secondary"
+            checked={selectorState === 'searchSensor'}
+            onChange={x => handleToggle(x)}
+            style={styles.toggleButton}
+          >
+            Find by Sensor Number
+          </ToggleButton> */}
+          <ToggleButton
+            value="select"
+            id="select"
+            key={1}
+            type="radio"
+            variant="outline-secondary"
+            checked={selectorState === 'select'}
+            onChange={x => handleToggle(x)}
+            style={styles.toggleButton}
+            disabled={activatedDevices.length === 0}
+          >
+            Select from Activated Devices
+          </ToggleButton>
+        </ButtonGroup>
+        <DeviceSelector
+          foundDevice={foundDevice}
+          changeFoundDevice={changeFoundDevice}
+          selectorState={selectorState}
+          activatedDevices={activatedDevices}
+          particleSettings={particleSettings}
+          searchState={searchState}
+          changeSearchState={changeSearchState}
+          particleToken={particleToken}
+          productID={productID}
+          changeProductID={changeProductID}
+          serialNumber={serialNumber}
+          changeSerialNumber={changeSerialNumber}
+          submitDeviceHandler={submitDeviceHandler}
+        />
       </div>
       <div style={styles.column}>
         <h3>Queue</h3>
@@ -102,7 +194,7 @@ function DoorSensorView(props) {
           .map(device => {
             return (
               <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                <DoorSensorQueueCard device={device} status={pairingStatuses[device.deviceID]} />
+                <DoorSensorQueueCard device={device} status={pairingStatuses[device.deviceID]} reactStateHandler={modifyActivatedDevice} />
               </li>
             )
           })}
@@ -131,7 +223,8 @@ function DoorSensorView(props) {
 DoorSensorView.propTypes = {
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
   changeActivatedDevices: PropTypes.func,
-  token: PropTypes.string.isRequired,
+  particleToken: PropTypes.string.isRequired,
+  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
 }
 
 DoorSensorView.defaultProps = {
@@ -140,7 +233,7 @@ DoorSensorView.defaultProps = {
 }
 
 function DoorSensorQueueCard(props) {
-  const { device, status } = props
+  const { device, status, reactStateHandler } = props
   if (status === 'paired') {
     return (
       <Card key={`${device.dateStamp}${device.timeStamp}`}>
@@ -158,9 +251,12 @@ function DoorSensorQueueCard(props) {
     <Card key={`${device.dateStamp}${device.timeStamp}`}>
       <Card.Body>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <h5>{device.deviceName}</h5>
+          <h5 style={{ paddingRight: '10px' }}>{device.deviceName}</h5>
           <QueueStatusBadge status={status} />
         </div>
+        <Button onClick={() => device.stopPairing(reactStateHandler)} type="button" variant="danger">
+          Stop Pairing
+        </Button>
       </Card.Body>
     </Card>
   )
@@ -169,6 +265,11 @@ function DoorSensorQueueCard(props) {
 DoorSensorQueueCard.propTypes = {
   device: PropTypes.instanceOf(ActivatedDevice).isRequired,
   status: PropTypes.string.isRequired,
+  reactStateHandler: PropTypes.func,
+}
+
+DoorSensorQueueCard.defaultProps = {
+  reactStateHandler: () => {},
 }
 
 function QueueStatusBadge(props) {
@@ -211,6 +312,124 @@ function QueueStatusBadge(props) {
 
 QueueStatusBadge.propTypes = {
   status: PropTypes.string.isRequired,
+}
+
+function DeviceSelector(props) {
+  const {
+    foundDevice,
+    changeFoundDevice,
+    selectorState,
+    submitDeviceHandler,
+    activatedDevices,
+    particleSettings,
+    particleToken,
+    searchState,
+    changeSearchState,
+    productID,
+    changeProductID,
+    serialNumber,
+    changeSerialNumber,
+  } = props
+
+  async function handleSearchSerialSubmit(event) {
+    event.preventDefault()
+    const data = await getDeviceDetails(serialNumber, productID, particleToken)
+    if (data !== null) {
+      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null))
+      changeSearchState('found')
+    } else {
+      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null))
+      changeSearchState('error')
+    }
+  }
+
+  if (selectorState === 'select') {
+    return (
+      <>
+        <div>
+          <h3>Activated Devices</h3>
+          <hr />
+        </div>
+        <div style={{ overflowY: 'auto' }}>
+          {activatedDevices.map(device => {
+            return (
+              <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
+                <DoorSensorEntryCard device={device} submitDeviceHandler={submitDeviceHandler} searchState={searchState} />
+              </li>
+            )
+          })}
+        </div>
+      </>
+    )
+  }
+  if (selectorState === 'searchSerial') {
+    return (
+      <>
+        <h4>Search Device</h4>
+        <Form onSubmit={handleSearchSerialSubmit}>
+          <Form.Group className="mb-3" controlId="formProductSelect">
+            <Form.Label>Select Device Product Family</Form.Label>
+            <Form.Control
+              as="select"
+              value={productID}
+              onChange={x => {
+                changeProductID(x.target.value)
+              }}
+            >
+              <option id="">No Product Family</option>
+              {/* eslint-disable-next-line react/prop-types */}
+              {particleSettings.productList.map(product => {
+                return (
+                  <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
+                    {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
+                  </option>
+                )
+              })}
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formDeviceID">
+            <Form.Label>Device Serial Number</Form.Label>
+            <Form.Control placeholder="Serial Number" value={serialNumber} maxLength="15" onChange={x => changeSerialNumber(x.target.value)} />
+            <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
+          </Form.Group>
+
+          <Button variant="outline-primary" type="submit">
+            Search
+          </Button>
+        </Form>
+        <div style={{ paddingTop: '15px' }}>
+          <DoorSensorEntryCard device={foundDevice} submitDeviceHandler={submitDeviceHandler} searchState={searchState} />
+        </div>
+      </>
+    )
+  }
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <></>
+}
+
+DeviceSelector.propTypes = {
+  foundDevice: PropTypes.instanceOf(ActivatedDevice).isRequired,
+  changeFoundDevice: PropTypes.func,
+  selectorState: PropTypes.string.isRequired,
+  submitDeviceHandler: PropTypes.func,
+  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
+  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
+  searchState: PropTypes.string.isRequired,
+  changeSearchState: PropTypes.func,
+  particleToken: PropTypes.string.isRequired,
+  productID: PropTypes.string.isRequired,
+  changeProductID: PropTypes.func,
+  serialNumber: PropTypes.string.isRequired,
+  changeSerialNumber: PropTypes.func,
+}
+
+DeviceSelector.defaultProps = {
+  submitDeviceHandler: () => {},
+  changeFoundDevice: () => {},
+  changeSearchState: () => {},
+  changeProductID: () => {},
+  changeSerialNumber: () => {},
 }
 
 export default DoorSensorView

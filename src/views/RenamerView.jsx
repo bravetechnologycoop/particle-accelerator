@@ -341,7 +341,9 @@ function DeviceSelector(props) {
     event.preventDefault()
     const data = await getDeviceDetails(serialNumber, productID, token)
     if (data !== null) {
-      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null))
+      changeFoundDevice(
+        new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null),
+      )
       changeSearchState('found')
     } else {
       changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null))
@@ -413,9 +415,11 @@ function DeviceSelector(props) {
     )
   }
   if (selectorState === 'searchSensor') {
-    return <h1>sensor search</h1>
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>
   }
-  return <h2>top text</h2>
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <></>
 }
 
 DeviceSelector.propTypes = {

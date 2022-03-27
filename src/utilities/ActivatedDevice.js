@@ -32,7 +32,7 @@ export default class ActivatedDevice {
   }
 
   pairDoorSensor(token, doorSensorID, interval, changeCheckState, reactStateHandler) {
-    // this.inPairingList = true
+    changeCheckState('idle')
     reactStateHandler(this.deviceID, 'inPairingList', true)
     this.intervalID = setInterval(async () => {
       console.log('interval')
@@ -45,9 +45,7 @@ export default class ActivatedDevice {
         const pairing = await pairDoorSensor(this.deviceID, doorSensorID, this.productID, token)
         console.log('pairing request finished', pairing)
         if (pairing) {
-          // this.inPairingList = false
           reactStateHandler(this.deviceID, 'inPairingList', false)
-          // this.doorSensorID = doorSensorID
           reactStateHandler(this.deviceID, 'doorSensorID', doorSensorID)
           clearInterval(this.intervalID)
         } else {
@@ -57,5 +55,14 @@ export default class ActivatedDevice {
         changeCheckState(this.deviceID, 'idleNoFirmware')
       }
     }, interval)
+  }
+
+  stopPairing(reactStateHandler) {
+    clearInterval(this.intervalID)
+    reactStateHandler(this.deviceID, 'inPairingList', false)
+  }
+
+  static blankDevice() {
+    return new ActivatedDevice('', '', '', '', '', null, null, '', false, '')
   }
 }

@@ -116,7 +116,12 @@ function Frame(props) {
   if (viewState === 'Door Sensor Pairing') {
     return (
       <div style={styles.main}>
-        <DoorSensorView activatedDevices={activatedDevices} token={token} changeActivatedDevices={changeActivatedDevices} />
+        <DoorSensorView
+          activatedDevices={activatedDevices}
+          particleToken={token}
+          changeActivatedDevices={changeActivatedDevices}
+          particleSettings={particleSettings}
+        />
       </div>
     )
   }

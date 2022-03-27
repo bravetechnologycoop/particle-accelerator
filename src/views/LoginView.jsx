@@ -22,13 +22,13 @@ function LoginView(props) {
     )
   }
   return (
-    <>
-      <h2>Particle Accelerator</h2>
+    <div style={{ width: '50ch' }}>
+      <h2>Particle Login</h2>
       <h4>
         <LoginStatus loginState={loginState} userName={particleSettings.userName} />
       </h4>
       <LoginForm changeToken={changeToken} changeLoginState={changeLoginState} changeParticleSettings={changeParticleSettings} />
-    </>
+    </div>
   )
 }
 

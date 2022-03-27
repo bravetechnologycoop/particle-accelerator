@@ -1,18 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Form } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
-import StatusBadge from './StatusBadge'
 
 function DoorSensorEntryCard(props) {
-  const { device, submitDeviceHandler } = props
+  const { device, submitDeviceHandler, searchState } = props
 
   const [doorSensorID, setDoorSensorID] = useState('')
   const [buttonStyle, setButtonStyle] = useState('primary')
   const [buttonText, setButtonText] = useState('Add to Queue')
 
   const doorSensorIDRegex = /^[a-f0-9]{2}[,][a-f0-9]{2}[,][a-f0-9]{2}$/
+
+  useEffect(() => {
+    if (device.inPairingList === false) {
+      setButtonStyle('primary')
+      setButtonText('Add to Queue')
+    }
+  })
+
+  if (searchState === 'idle') {
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>
+  }
+
+  if (searchState === 'error') {
+    return <h4>Device Not Found</h4>
+  }
 
   return (
     <Card style={{ padding: '10px' }} key={`${device.dateStamp}${device.timeStamp}`}>
@@ -52,6 +67,7 @@ function DoorSensorEntryCard(props) {
 DoorSensorEntryCard.propTypes = {
   device: PropTypes.instanceOf(ActivatedDevice),
   submitDeviceHandler: PropTypes.func,
+  searchState: PropTypes.string.isRequired,
 }
 
 DoorSensorEntryCard.defaultProps = {
