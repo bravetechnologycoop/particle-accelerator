@@ -67,6 +67,10 @@ const styles = {
   child: {
     padding: 10,
   },
+  dropdown: {
+    paddingTop: '5px',
+    paddingBottom: '5px',
+  },
 }
 
 /**
@@ -537,13 +541,6 @@ function ClickupConfiguration(props) {
 
   function changeFormerSensorNumberCustomField(newID) {
     modifyCustomFieldsConfig('formerSensorNumber', newID)
-  }
-
-  const styles = {
-    dropdown: {
-      paddingTop: '5px',
-      paddingBottom: '5px',
-    },
   }
 
   if (!status) {
