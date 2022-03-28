@@ -101,7 +101,7 @@ function ActivatorView(props) {
   const [statusView, setStatusView] = useState(false)
   const [formLock, setFormLock] = useState(false)
 
-  const [clickupCheck, setClickupCheck] = useState(false)
+  const [clickupCheck, setClickupCheck] = useState(true)
   const [clickupTaskStatus, setClickupTaskStatus] = useState('')
   const [clickupCustomFieldsConfig, setClickupCustomFieldsConfig] = useState({})
 
@@ -336,7 +336,19 @@ function ActivatorView(props) {
             <Form.Group className="mb-3" controlId="formDeviceID">
               <Form.Label>Device Serial Number</Form.Label>
               <Form.Control
-                disabled={formLock || country === '' || productID === 'null' || newDeviceName === ''}
+                disabled={
+                  formLock ||
+                  country === '' ||
+                  productID === 'null' ||
+                  newDeviceName === '' ||
+                  (clickupCheck &&
+                    (clickupCustomFieldsConfig.deviceID === null ||
+                      clickupCustomFieldsConfig.serialNumber === null ||
+                      clickupCustomFieldsConfig.formerSensorNumber === null ||
+                      clickupCustomFieldsConfig.deviceID === '' ||
+                      clickupCustomFieldsConfig.serialNumber === '' ||
+                      clickupCustomFieldsConfig.formerSensorNumber === ''))
+                }
                 placeholder="Enter ID"
                 value={serialNumber}
                 maxLength="15"
