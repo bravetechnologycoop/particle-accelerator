@@ -10,7 +10,7 @@ import ParticleSettings from '../utilities/ParticleSettings'
 
 function DoorSensorView(props) {
   // eslint-disable-next-line no-unused-vars
-  const { activatedDevices, changeActivatedDevices, particleToken, particleSettings } = props
+  const { activatedDevices, changeActivatedDevices, particleToken, particleSettings, clickupToken, clickupListID } = props
 
   const DEFAULT_TIMEOUT_INTERVAL = 10000
   const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', null, null, '', false, '')
@@ -83,7 +83,15 @@ function DoorSensorView(props) {
       }
     }
     addNewPairingStatus(targetDevice.deviceName)
-    targetDevice.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice)
+    targetDevice.pairDoorSensor(
+      particleToken,
+      doorSensorID,
+      updateInterval,
+      changeDevicePairingState,
+      modifyActivatedDevice,
+      clickupToken,
+      clickupListID,
+    )
   }
 
   function handleToggle(x) {
@@ -223,6 +231,8 @@ DoorSensorView.propTypes = {
   changeActivatedDevices: PropTypes.func,
   particleToken: PropTypes.string.isRequired,
   particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
+  clickupToken: PropTypes.string.isRequired,
+  clickupListID: PropTypes.string.isRequired,
 }
 
 DoorSensorView.defaultProps = {

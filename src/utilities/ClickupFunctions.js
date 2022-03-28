@@ -213,3 +213,55 @@ export async function createTaskInSensorTracker(token, sensorName, listID, devic
     return false
   }
 }
+
+export async function getClickupTasksInList(listID, token) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/task`
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer: ${token}`,
+      },
+    })
+    return response.data.tasks
+  } catch (err) {
+    console.error(err)
+    return null
+  }
+}
+
+export async function getClickupTaskIDByName(listID, taskName, token) {
+  const tasks = await getClickupTasksInList(listID, token)
+  const matchingTasks = tasks.filter(task => {
+    return task.name === taskName
+  })
+  if (matchingTasks.length === 1) {
+    return matchingTasks[0].id
+  }
+  if (matchingTasks.length > 1) {
+    console.error(`Error at getClickupTaskByName: Multiple Tasks Found Named ${taskName} in list with ID: ${listID}`)
+    return null
+  }
+  if (matchingTasks.length === 0) {
+    console.error(`Error at getClickupTaskByName: No tasks named ${taskName} found in list with ID: ${listID}`)
+    return null
+  }
+  console.error(`Unknown error finding tasks in ${listID} with the name: ${taskName}`)
+}
+
+export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, token) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}/field/${fieldID}`
+  const data = {
+    value,
+  }
+  try {
+    const response = await axios.post(url, data, {
+      headers: {
+        Authorization: `Bearer: ${token}`,
+      },
+    })
+    return response.status === 200
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}

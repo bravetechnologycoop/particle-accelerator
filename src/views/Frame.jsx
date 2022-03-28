@@ -123,6 +123,7 @@ function Frame(props) {
           particleToken={token}
           changeActivatedDevices={changeActivatedDevices}
           particleSettings={particleSettings}
+          clickupToken={clickupToken}
         />
       </div>
     )

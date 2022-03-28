@@ -1,4 +1,5 @@
 import { getCurrentFirmwareVersion, getDeviceDetails, pairDoorSensor } from './ParticleFunctions'
+import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue } from './ClickupFunctions'
 
 export default class ActivatedDevice {
   constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp, doorSensorID, inPairingList, intervalID) {
@@ -31,24 +32,28 @@ export default class ActivatedDevice {
     this.intervalID = intervalID
   }
 
-  pairDoorSensor(token, doorSensorID, interval, changeCheckState, reactStateHandler) {
+  pairDoorSensor(particleToken, doorSensorID, interval, changeCheckState, reactStateHandler, clickupToken, clickupListID) {
     changeCheckState(this.deviceID, 'idle')
     reactStateHandler(this.deviceID, 'inPairingList', true)
     this.intervalID = setInterval(async () => {
       reactStateHandler(this.deviceID, 'inPairingList', true)
       console.log('interval')
       changeCheckState(this.deviceID, 'firmwareCheck')
-      const targetFirmwareVersion = await getCurrentFirmwareVersion(this.productID, token)
-      const deviceDetails = await getDeviceDetails(this.serialNumber, this.productID, token)
+      const targetFirmwareVersion = await getCurrentFirmwareVersion(this.productID, particleToken)
+      const deviceDetails = await getDeviceDetails(this.serialNumber, this.productID, particleToken)
       if (deviceDetails.firmware_version === targetFirmwareVersion) {
         changeCheckState(this.deviceID, 'attemptingPairing')
         console.log('attempting to pair')
-        const pairing = await pairDoorSensor(this.deviceID, doorSensorID, this.productID, token)
+        const pairing = await pairDoorSensor(this.deviceID, doorSensorID, this.productID, particleToken)
         console.log('pairing request finished', pairing)
         if (pairing) {
           reactStateHandler(this.deviceID, 'inPairingList', false)
           reactStateHandler(this.deviceID, 'doorSensorID', doorSensorID)
           clearInterval(this.intervalID)
+          const taskID = await getClickupTaskIDByName(clickupListID, this.deviceName, clickupToken)
+          if (taskID !== null) {
+            await modifyClickupTaskCustomFieldValue(taskID, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID, doorSensorID, clickupToken)
+          }
         } else {
           changeCheckState(this.deviceID, 'idleNoPair')
         }
