@@ -195,7 +195,7 @@ function DoorSensorView(props) {
         <hr />
         {activatedDevices
           .filter(device => {
-            return device.inPairingList
+            return device.inPairingList && (device.doorSensorID === '' || device.doorSensorID === undefined || device.doorSensorID === null)
           })
           .map(device => {
             return (
