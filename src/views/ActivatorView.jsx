@@ -507,6 +507,10 @@ function ClickupConfiguration(props) {
       setLocalListID(clickupListID)
       loadFields(clickupToken, clickupListID)
     }
+
+    console.log('customfields', customFields)
+    console.log('fieldsconfig', customFieldsConfig)
+    console.log('statuses', taskStatuses)
   })
 
   function changeDeviceIDCustomField(newID) {

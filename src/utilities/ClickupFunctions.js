@@ -152,10 +152,13 @@ export async function getClickupStatusesInList(token, listID) {
     })
   } catch (err) {
     console.error(err)
+    return []
   }
 }
 
 export async function getClickupCustomFieldsInList(token, listID) {
+  console.log('token', token)
+  console.log('listID', listID)
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/field`
   try {
     const response = await axios.get(url, {
@@ -168,6 +171,7 @@ export async function getClickupCustomFieldsInList(token, listID) {
     })
   } catch (err) {
     console.error(err)
+    return []
   }
 }
 
