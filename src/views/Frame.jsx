@@ -124,6 +124,7 @@ function Frame(props) {
           changeActivatedDevices={changeActivatedDevices}
           particleSettings={particleSettings}
           clickupToken={clickupToken}
+          clickupListID={clickupListID}
         />
       </div>
     )
