@@ -500,6 +500,7 @@ function ClickupConfiguration(props) {
     if (!listInit && status) {
       setLocalListID(clickupListID)
       loadFields(clickupToken, clickupListID)
+      setListInit(true)
     }
 
     if (localListID !== clickupListID && status) {
