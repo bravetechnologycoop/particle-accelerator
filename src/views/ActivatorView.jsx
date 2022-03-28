@@ -109,6 +109,12 @@ function ActivatorView(props) {
   const [clickupTaskStatus, setClickupTaskStatus] = useState('')
   const [clickupCustomFieldsConfig, setClickupCustomFieldsConfig] = useState({})
 
+  useEffect(() => {
+    console.log('config deviceid', clickupCustomFieldsConfig.deviceID)
+    console.log('config serialnumber', clickupCustomFieldsConfig.serialNumber)
+    console.log('config former', clickupCustomFieldsConfig.formerSensorNumber)
+  })
+
   function changeClickupTaskStatus(newStatus) {
     setClickupTaskStatus(newStatus)
   }
