@@ -25,6 +25,12 @@ function StatusBadge(props) {
   if (status === 'true') {
     return <Badge bg="success">Success</Badge>
   }
+  if (status === 'notSelected') {
+    return <Badge bg="secondary">Not Selected</Badge>
+  }
+  if (status === 'fail') {
+    return <Badge bg="danger">Failed</Badge>
+  }
   return <Badge bg="danger">Error</Badge>
 }
 

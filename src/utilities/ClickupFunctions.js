@@ -175,7 +175,7 @@ export async function getClickupCustomFieldsInList(token, listID) {
   }
 }
 
-export async function createTaskInSensorTracker(token, sensorName, listID, deviceID, serialNumber, statusID) {
+export async function createTaskInSensorTracker(token, sensorName, listID, deviceID, serialNumber, statusID, customFields) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/task`
   const config = {
     headers: {
@@ -188,18 +188,18 @@ export async function createTaskInSensorTracker(token, sensorName, listID, devic
     status: statusID,
     custom_fields: [
       {
-        // Former Sensor Name
-        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_NAME,
+        // Former Sensor Number
+        id: customFields.formerSensorNumber,
         value: sensorName,
       },
       {
         // Device ID
-        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_ID,
+        id: customFields.deviceID,
         value: deviceID,
       },
       {
         // Serial Number
-        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SERIAL_NUMBER,
+        id: customFields.serialNumber,
         value: serialNumber,
       },
     ],
@@ -207,7 +207,9 @@ export async function createTaskInSensorTracker(token, sensorName, listID, devic
   try {
     const response = await axios.post(url, data, config)
     console.log(response)
+    return true
   } catch (err) {
     console.error(err)
+    return false
   }
 }

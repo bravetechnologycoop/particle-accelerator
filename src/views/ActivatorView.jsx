@@ -13,7 +13,7 @@ import ICCIDStatus from '../components/ICCIDStatus'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import ParticleSettings from '../utilities/ParticleSettings'
 import DropdownList from '../components/DropdownList'
-import { getClickupCustomFieldsInList, getClickupStatusesInList } from '../utilities/ClickupFunctions'
+import { createTaskInSensorTracker, getClickupCustomFieldsInList, getClickupStatusesInList } from '../utilities/ClickupFunctions'
 import ClickupLogin from './ClickupLogin'
 
 const { getDeviceInfo } = require('../utilities/ParticleFunctions')
@@ -104,6 +104,7 @@ function ActivatorView(props) {
   const [totalStatus, setTotalStatus] = useState('idle')
   const [statusView, setStatusView] = useState(false)
   const [formLock, setFormLock] = useState(false)
+  const [clickupStatus, setClickupStatus] = useState('idle')
 
   const [clickupCheck, setClickupCheck] = useState(true)
   const [clickupTaskStatus, setClickupTaskStatus] = useState('')
@@ -157,6 +158,7 @@ function ActivatorView(props) {
     setTotalStatus('idle')
     setStatusView(false)
     setFormLock(false)
+    setClickupStatus('idle')
   }
 
   async function handleSubmit(event) {
@@ -236,6 +238,26 @@ function ActivatorView(props) {
       } else {
         setTotalStatus('false')
         totalStatusCopy = 'false'
+      }
+
+      if (!clickupCheck) {
+        setClickupStatus('waiting')
+        const clickup = await createTaskInSensorTracker(
+          clickupToken,
+          newDeviceName,
+          clickupListID,
+          deviceIDCopy,
+          serialNumber,
+          clickupTaskStatus,
+          clickupCustomFieldsConfig,
+        )
+        if (clickup) {
+          setClickupStatus('true')
+        } else {
+          setClickupStatus('fail')
+        }
+      } else {
+        setClickupStatus('n/a')
       }
 
       pushAttempt(
@@ -330,7 +352,14 @@ function ActivatorView(props) {
             </Form.Group>
 
             <Form.Group>
-              <Form.Check type="checkbox" id="default-checkbox" label="Create Clickup Task" checked={!clickupCheck} onChange={toggleClickupCheck} />
+              <Form.Check
+                type="checkbox"
+                id="default-checkbox"
+                label="Create Clickup Task"
+                checked={!clickupCheck}
+                onChange={toggleClickupCheck}
+                disabled={clickupListID === ''}
+              />
             </Form.Group>
 
             <ClickupConfiguration
@@ -413,6 +442,11 @@ function ActivatorView(props) {
           <div style={styles.child}>
             <h5>Activation Verification:</h5>
             Status: <StatusBadge status={totalStatus} />
+          </div>
+
+          <div style={styles.child}>
+            <h5>Clickup Task Creation</h5>
+            Status: <StatusBadge status={clickupStatus} />
           </div>
 
           <div style={styles.child}>
