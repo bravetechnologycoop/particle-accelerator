@@ -215,6 +215,8 @@ export async function createTaskInSensorTracker(token, sensorName, listID, devic
 }
 
 export async function getClickupTasksInList(listID, token) {
+  console.log('searching listid', listID)
+  console.log('searching token', token)
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/task`
   try {
     const response = await axios.get(url, {
@@ -222,6 +224,7 @@ export async function getClickupTasksInList(listID, token) {
         Authorization: `Bearer: ${token}`,
       },
     })
+    console.log(response)
     return response.data.tasks
   } catch (err) {
     console.error(err)
