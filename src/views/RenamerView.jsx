@@ -9,9 +9,10 @@ import ActivatedDevice from '../utilities/ActivatedDevice'
 import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
+import { modifyClickupTaskName } from '../utilities/ClickupFunctions'
 
 function RenamerView(props) {
-  const { particleSettings, activatedDevices, token } = props
+  const { particleSettings, activatedDevices, particleToken, clickupToken } = props
 
   const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', '', '', '', null, null)
 
@@ -30,7 +31,7 @@ function RenamerView(props) {
   const [dashboardCheck, setDashboardCheck] = useState(false)
 
   const [particleStatus, setParticleStatus] = useState('idle')
-  const [clickupStatus, setClickupStatus] = useState('')
+  const [clickupStatus, setClickupStatus] = useState('idle')
   const [twilioStatus, setTwilioStatus] = useState('')
   const [dashboardStatus, setDashboardStatus] = useState('')
 
@@ -97,7 +98,7 @@ function RenamerView(props) {
     event.preventDefault()
     if (particleCheck) {
       setParticleStatus('waiting')
-      const rename = await changeDeviceName(selectedDevice.deviceID, selectedDevice.productID, locationID, token)
+      const rename = await changeDeviceName(selectedDevice.deviceID, selectedDevice.productID, locationID, particleToken)
       if (rename) {
         setParticleStatus('true')
       } else {
@@ -106,8 +107,16 @@ function RenamerView(props) {
     } else {
       setParticleStatus('notChecked')
     }
-    if (!clickupCheck) {
-      setClickupStatus('notChecked')
+    if (clickupCheck) {
+      setClickupStatus('waiting')
+      const rename = await modifyClickupTaskName(selectedDevice.deviceName, locationID, clickupToken)
+      if (rename) {
+        setClickupStatus('true')
+      } else {
+        setParticleStatus('error')
+      }
+    } else {
+      setParticleStatus('notChecked')
     }
     if (!twilioCheck) {
       setTwilioStatus('notChecked')
@@ -157,6 +166,7 @@ function RenamerView(props) {
     setTwilioCheck(false)
     setDashboardCheck(false)
     setParticleStatus('idle')
+    setClickupStatus('idle')
   }
 
   return (
@@ -216,7 +226,7 @@ function RenamerView(props) {
             changeSerialNumber={changeSerialNumber}
             changeSelectedDevice={changeSelectedDevice}
             changeProductID={changeProductID}
-            token={token}
+            token={particleToken}
             foundDevice={foundDevice}
             changeFoundDevice={changeFoundDevice}
             searchState={searchState}
@@ -289,7 +299,9 @@ function RenamerView(props) {
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
                   <div style={{ paddingRight: '10px' }}>Renaming Device on Particle:</div> <StatusBadge status={particleStatus} />{' '}
                 </div>
-                <div>Renaming Device on Clickup:</div>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                  <div style={{ paddingRight: '10px' }}>Renaming Task on ClickUp:</div> <StatusBadge status={clickupStatus} />{' '}
+                </div>
                 <div>Purchasing Twilio Number:</div>
                 <div>Registering to Dashboard:</div>
               </Card.Body>
@@ -312,11 +324,8 @@ function RenamerView(props) {
 RenamerView.propTypes = {
   particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
-  token: PropTypes.string,
-}
-
-RenamerView.defaultProps = {
-  token: '',
+  particleToken: PropTypes.string.isRequired,
+  clickupToken: PropTypes.string.isRequired,
 }
 
 function DeviceSelector(props) {

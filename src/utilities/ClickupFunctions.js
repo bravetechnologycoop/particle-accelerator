@@ -233,10 +233,6 @@ export async function getClickupTasksInList(listID, token) {
 }
 
 export async function getClickupTaskIDByName(listID, taskName, token) {
-  console.log('getclickuptaskIDbyname')
-  console.log('listid', listID)
-  console.log('taskname', taskName)
-  console.log('token', token)
   const tasks = await getClickupTasksInList(listID, token)
   const matchingTasks = tasks.filter(task => {
     return task.name === taskName
@@ -255,10 +251,48 @@ export async function getClickupTaskIDByName(listID, taskName, token) {
   console.error(`Unknown error finding tasks in ${listID} with the name: ${taskName}`)
 }
 
+export async function getClickupTaskDataByName(listID, taskName, token) {
+  const tasks = await getClickupTasksInList(listID, token)
+  const matchingTasks = tasks.filter(task => {
+    return task.name === taskName
+  })
+  if (matchingTasks.length === 1) {
+    return matchingTasks[0]
+  }
+  if (matchingTasks.length > 1) {
+    console.error(`Error at getClickupTaskByName: Multiple Tasks Found Named ${taskName} in list with ID: ${listID}`)
+    return null
+  }
+  if (matchingTasks.length === 0) {
+    console.error(`Error at getClickupTaskByName: No tasks named ${taskName} found in list with ID: ${listID}`)
+    return null
+  }
+  console.error(`Unknown error finding tasks in ${listID} with the name: ${taskName}`)
+}
+
 export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, token) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}/field/${fieldID}`
   const data = {
     value,
+  }
+  try {
+    const response = await axios.post(url, data, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    return response.status === 200
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
+export async function modifyClickupTaskName(oldName, newName, listID, token) {
+  const taskID = getClickupTaskIDByName(listID, oldName, token)
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}`
+  const data = {
+    name: newName,
   }
   try {
     const response = await axios.post(url, data, {
