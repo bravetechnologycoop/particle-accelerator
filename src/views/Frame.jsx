@@ -61,6 +61,7 @@ function Frame(props) {
           safeModeState={safeModeState}
           particleSettings={particleSettings}
           clickupToken={clickupToken}
+          clickupListID={clickupListID}
         />
       </div>
     )

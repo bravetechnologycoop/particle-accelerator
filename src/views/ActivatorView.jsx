@@ -527,7 +527,7 @@ function ClickupConfiguration(props) {
     modifyCustomFieldsConfig('formerSensorNumber', newID)
   }
 
-  if (status) {
+  if (!status) {
     return (
       <>
         <DropdownList itemList={taskStatuses} loading={loading} title="Task Status" changeItem={changeTaskStatus} item={taskStatus} />
