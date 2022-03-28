@@ -341,7 +341,7 @@ function ActivatorView(props) {
                   country === '' ||
                   productID === 'null' ||
                   newDeviceName === '' ||
-                  (clickupCheck &&
+                  (!clickupCheck &&
                     (clickupCustomFieldsConfig.deviceID === null ||
                       clickupCustomFieldsConfig.serialNumber === null ||
                       clickupCustomFieldsConfig.formerSensorNumber === null ||
@@ -539,31 +539,51 @@ function ClickupConfiguration(props) {
     modifyCustomFieldsConfig('formerSensorNumber', newID)
   }
 
+  const styles = {
+    dropdown: {
+      paddingTop: '5px',
+      paddingBottom: '5px',
+    },
+  }
+
   if (!status) {
     return (
       <>
-        <DropdownList itemList={taskStatuses} loading={loading} title="Task Status" changeItem={changeTaskStatus} item={taskStatus} />
-        <DropdownList
-          itemList={customFields}
-          changeItem={changeDeviceIDCustomField}
-          item={customFieldsConfig.deviceID}
-          loading={loading}
-          title="Device ID Custom Field"
-        />
-        <DropdownList
-          itemList={customFields}
-          changeItem={changeSerialNumberCustomField}
-          item={customFieldsConfig.serialNumber}
-          loading={loading}
-          title="Serial Number Custom Field"
-        />
-        <DropdownList
-          itemList={customFields}
-          changeItem={changeFormerSensorNumberCustomField}
-          item={customFieldsConfig.formerSensorNumber}
-          loading={loading}
-          title="Former Sensor Number Custom Field"
-        />
+        Clickup Configuration
+        <div style={styles.dropdown}>
+          Set Task Status
+          <DropdownList itemList={taskStatuses} loading={loading} title="Task Status" changeItem={changeTaskStatus} item={taskStatus} />
+        </div>
+        <div style={styles.dropdown}>
+          Set Device ID Custom Field
+          <DropdownList
+            itemList={customFields}
+            changeItem={changeDeviceIDCustomField}
+            item={customFieldsConfig.deviceID}
+            loading={loading}
+            title="Device ID Custom Field"
+          />
+        </div>
+        <div style={styles.dropdown}>
+          Set Serial Number Custom Field
+          <DropdownList
+            itemList={customFields}
+            changeItem={changeSerialNumberCustomField}
+            item={customFieldsConfig.serialNumber}
+            loading={loading}
+            title="Serial Number Custom Field"
+          />
+        </div>
+        <div style={styles.dropdown}>
+          Set Former Sensor Number Custom Field
+          <DropdownList
+            itemList={customFields}
+            changeItem={changeFormerSensorNumberCustomField}
+            item={customFieldsConfig.formerSensorNumber}
+            loading={loading}
+            title="Former Sensor Number Custom Field"
+          />
+        </div>
       </>
     )
   }
