@@ -13,6 +13,9 @@ export default function DropdownList(props) {
       </Form.Control>
     )
   }
+  if (loading === 'true') {
+    return <Spinner animation="border" variant="primary" />
+  }
   if (itemList.length === 0) {
     return (
       <Form.Control disabled as="select">
@@ -21,9 +24,6 @@ export default function DropdownList(props) {
         </option>
       </Form.Control>
     )
-  }
-  if (loading === 'true') {
-    return <Spinner animation="border" variant="primary" />
   }
   return (
     <Form.Control

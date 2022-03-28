@@ -320,11 +320,11 @@ function ActivatorView(props) {
             </Form.Group>
 
             <Form.Group>
-              <Form.Check type="checkbox" id="default-checkbox" label="Create Clickup Task" checked={clickupCheck} onChange={toggleClickupCheck} />
+              <Form.Check type="checkbox" id="default-checkbox" label="Create Clickup Task" checked={!clickupCheck} onChange={toggleClickupCheck} />
             </Form.Group>
 
             <ClickupConfiguration
-              status={clickupCheck}
+              status={!clickupCheck}
               customFieldsConfig={clickupCustomFieldsConfig}
               modifyCustomFieldsConfig={modifyClickupCustomFieldsConfig}
               taskStatus={clickupTaskStatus}
@@ -497,6 +497,8 @@ function ClickupConfiguration(props) {
       setTaskStatuses(localTaskStatuses)
       setLoading('false')
     }
+    console.log('listinit', listInit)
+    console.log('status', status)
     if (!listInit && status) {
       setLocalListID(clickupListID)
       loadFields(clickupToken, clickupListID)
