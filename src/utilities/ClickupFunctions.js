@@ -221,7 +221,7 @@ export async function getClickupTasksInList(listID, token) {
   try {
     const response = await axios.get(url, {
       headers: {
-        Authorization: `Bearer: ${token}`,
+        Authorization: token,
       },
     })
     console.log(response)
