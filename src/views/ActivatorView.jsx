@@ -352,9 +352,9 @@ function ActivatorView(props) {
                   productID === 'null' ||
                   newDeviceName === '' ||
                   (!clickupCheck &&
-                    (clickupCustomFieldsConfig.deviceID === null ||
-                      clickupCustomFieldsConfig.serialNumber === null ||
-                      clickupCustomFieldsConfig.formerSensorNumber === null ||
+                    (clickupCustomFieldsConfig.deviceID === undefined ||
+                      clickupCustomFieldsConfig.serialNumber === undefined ||
+                      clickupCustomFieldsConfig.formerSensorNumber === undefined ||
                       clickupCustomFieldsConfig.deviceID === '' ||
                       clickupCustomFieldsConfig.serialNumber === '' ||
                       clickupCustomFieldsConfig.formerSensorNumber === ''))
