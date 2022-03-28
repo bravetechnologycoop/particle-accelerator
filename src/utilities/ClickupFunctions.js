@@ -263,7 +263,7 @@ export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, 
   try {
     const response = await axios.post(url, data, {
       headers: {
-        Authorization: `Bearer: ${token}`,
+        Authorization: token,
       },
     })
     return response.status === 200
