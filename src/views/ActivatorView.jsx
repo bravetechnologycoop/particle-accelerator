@@ -324,7 +324,7 @@ function ActivatorView(props) {
             </Form.Group>
 
             <ClickupConfiguration
-              status={!clickupCheck}
+              status={clickupCheck}
               customFieldsConfig={clickupCustomFieldsConfig}
               modifyCustomFieldsConfig={modifyClickupCustomFieldsConfig}
               taskStatus={clickupTaskStatus}
