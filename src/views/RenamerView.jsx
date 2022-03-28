@@ -341,9 +341,7 @@ function DeviceSelector(props) {
     event.preventDefault()
     const data = await getDeviceDetails(serialNumber, productID, token)
     if (data !== null) {
-      changeFoundDevice(
-        new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null),
-      )
+      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null))
       changeSearchState('found')
     } else {
       changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null))

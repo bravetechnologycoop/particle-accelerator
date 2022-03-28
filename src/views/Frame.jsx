@@ -60,6 +60,7 @@ function Frame(props) {
           changeActivatedDevices={changeActivatedDevices}
           safeModeState={safeModeState}
           particleSettings={particleSettings}
+          clickupToken={clickupToken}
         />
       </div>
     )
