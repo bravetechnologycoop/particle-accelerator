@@ -230,6 +230,10 @@ export async function getClickupTasksInList(listID, token) {
 }
 
 export async function getClickupTaskIDByName(listID, taskName, token) {
+  console.log('getclickuptaskIDbyname')
+  console.log('listid', listID)
+  console.log('taskname', taskName)
+  console.log('token', token)
   const tasks = await getClickupTasksInList(listID, token)
   const matchingTasks = tasks.filter(task => {
     return task.name === taskName
