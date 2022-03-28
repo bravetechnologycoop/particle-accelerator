@@ -195,7 +195,7 @@ function DoorSensorView(props) {
         <hr />
         {activatedDevices
           .filter(device => {
-            return device.inPairingList && (device.doorSensorID === '' || device.doorSensorID === undefined || device.doorSensorID === null)
+            return device.inPairingList
           })
           .map(device => {
             return (
@@ -360,18 +360,22 @@ function DeviceSelector(props) {
           <hr />
         </div>
         <div style={{ overflowY: 'auto' }}>
-          {activatedDevices.map(device => {
-            return (
-              <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                <DoorSensorEntryCard
-                  searchState={searchState}
-                  submitDeviceHandler={submitDeviceHandler}
-                  device={device}
-                  selectorState={selectorState}
-                />
-              </li>
-            )
-          })}
+          {activatedDevices
+            .filter(device => {
+              return device.doorSensorID === '' || device.doorSensorID === undefined || device.doorSensorID === null
+            })
+            .map(device => {
+              return (
+                <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
+                  <DoorSensorEntryCard
+                    searchState={searchState}
+                    submitDeviceHandler={submitDeviceHandler}
+                    device={device}
+                    selectorState={selectorState}
+                  />
+                </li>
+              )
+            })}
         </div>
       </>
     )
