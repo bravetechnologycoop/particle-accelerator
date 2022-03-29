@@ -113,7 +113,7 @@ function RenamerView(props) {
       if (rename) {
         setClickupStatus('true')
       } else {
-        setParticleStatus('error')
+        setClickupStatus('error')
       }
     } else {
       setParticleStatus('notChecked')
