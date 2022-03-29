@@ -132,7 +132,13 @@ function Frame(props) {
   if (viewState === 'Renamer') {
     return (
       <div style={styles.main}>
-        <RenamerView particleSettings={particleSettings} activatedDevices={activatedDevices} particleToken={token} clickupToken={clickupToken} />
+        <RenamerView
+          particleSettings={particleSettings}
+          activatedDevices={activatedDevices}
+          particleToken={token}
+          clickupToken={clickupToken}
+          clickupListID={clickupListID}
+        />
       </div>
     )
   }

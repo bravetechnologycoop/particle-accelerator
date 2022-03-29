@@ -12,7 +12,7 @@ import StatusBadge from '../components/StatusBadge'
 import { modifyClickupTaskName } from '../utilities/ClickupFunctions'
 
 function RenamerView(props) {
-  const { particleSettings, activatedDevices, particleToken, clickupToken } = props
+  const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
 
   const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', '', '', '', null, null)
 
@@ -109,7 +109,7 @@ function RenamerView(props) {
     }
     if (clickupCheck) {
       setClickupStatus('waiting')
-      const rename = await modifyClickupTaskName(selectedDevice.deviceName, locationID, clickupToken)
+      const rename = await modifyClickupTaskName(selectedDevice.deviceName, locationID, clickupListID, clickupToken)
       if (rename) {
         setClickupStatus('true')
       } else {
@@ -326,6 +326,7 @@ RenamerView.propTypes = {
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
   particleToken: PropTypes.string.isRequired,
   clickupToken: PropTypes.string.isRequired,
+  clickupListID: PropTypes.string.isRequired,
 }
 
 function DeviceSelector(props) {
