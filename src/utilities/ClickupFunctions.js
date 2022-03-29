@@ -295,7 +295,7 @@ export async function modifyClickupTaskName(oldName, newName, listID, token) {
     name: newName,
   }
   try {
-    const response = await axios.post(url, data, {
+    const response = await axios.put(url, data, {
       headers: {
         Authorization: token,
       },
