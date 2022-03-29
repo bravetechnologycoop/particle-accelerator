@@ -42,28 +42,20 @@ function Frame(props) {
     storeActivatedDevices(newActivatedDevices)
   }
 
-  const styles = {
-    main: {
-      height: '100vh',
-    },
-  }
-
   if (viewState === 'Activator') {
     return (
-      <div style={styles.main}>
-        <ActivatorView
-          token={token}
-          changeToken={changeToken}
-          activationHistory={activationHistory}
-          activatedDevices={activatedDevices}
-          changeActivationHistory={changeActivationHistory}
-          changeActivatedDevices={changeActivatedDevices}
-          safeModeState={safeModeState}
-          particleSettings={particleSettings}
-          clickupToken={clickupToken}
-          clickupListID={clickupListID}
-        />
-      </div>
+      <ActivatorView
+        token={token}
+        changeToken={changeToken}
+        activationHistory={activationHistory}
+        activatedDevices={activatedDevices}
+        changeActivationHistory={changeActivationHistory}
+        changeActivatedDevices={changeActivatedDevices}
+        safeModeState={safeModeState}
+        particleSettings={particleSettings}
+        clickupToken={clickupToken}
+        clickupListID={clickupListID}
+      />
     )
   }
   if (viewState === 'Validator') {
@@ -75,78 +67,58 @@ function Frame(props) {
   }
   if (viewState === 'Particle') {
     return (
-      <div style={styles.main}>
-        <LoginView
-          loginState={loginState}
-          changeLoginState={changeLoginState}
-          changeToken={changeToken}
-          token={token}
-          particleSettings={particleSettings}
-          changeParticleSettings={changeParticleSettings}
-        />
-      </div>
+      <LoginView
+        loginState={loginState}
+        changeLoginState={changeLoginState}
+        changeToken={changeToken}
+        token={token}
+        particleSettings={particleSettings}
+        changeParticleSettings={changeParticleSettings}
+      />
     )
   }
   if (viewState === 'ClickUp') {
     return (
-      <div style={styles.main}>
-        <ClickupLogin
-          clickupToken={clickupToken}
-          changeClickupToken={changeClickupToken}
-          clickupListID={clickupListID}
-          changeClickupListID={changeClickupListID}
-          clickupUserName={clickupUserName}
-          changeClickupUserName={changeClickupUserName}
-        />
-      </div>
+      <ClickupLogin
+        clickupToken={clickupToken}
+        changeClickupToken={changeClickupToken}
+        clickupListID={clickupListID}
+        changeClickupListID={changeClickupListID}
+        clickupUserName={clickupUserName}
+        changeClickupUserName={changeClickupUserName}
+      />
     )
   }
   if (viewState === 'Activation History') {
-    return (
-      <div style={styles.main}>
-        <ActivationHistory activationHistory={activationHistory} />
-      </div>
-    )
+    return <ActivationHistory activationHistory={activationHistory} />
   }
   if (viewState === 'Activated Devices') {
-    return (
-      <div style={styles.main}>
-        <ActivatedDevices activatedDeviceList={activatedDevices} />
-      </div>
-    )
+    return <ActivatedDevices activatedDeviceList={activatedDevices} />
   }
   if (viewState === 'Door Sensor Pairing') {
     return (
-      <div style={styles.main}>
-        <DoorSensorView
-          activatedDevices={activatedDevices}
-          particleToken={token}
-          changeActivatedDevices={changeActivatedDevices}
-          particleSettings={particleSettings}
-          clickupToken={clickupToken}
-          clickupListID={clickupListID}
-        />
-      </div>
+      <DoorSensorView
+        activatedDevices={activatedDevices}
+        particleToken={token}
+        changeActivatedDevices={changeActivatedDevices}
+        particleSettings={particleSettings}
+        clickupToken={clickupToken}
+        clickupListID={clickupListID}
+      />
     )
   }
   if (viewState === 'Renamer') {
     return (
-      <div style={styles.main}>
-        <RenamerView
-          particleSettings={particleSettings}
-          activatedDevices={activatedDevices}
-          particleToken={token}
-          clickupToken={clickupToken}
-          clickupListID={clickupListID}
-        />
-      </div>
+      <RenamerView
+        particleSettings={particleSettings}
+        activatedDevices={activatedDevices}
+        particleToken={token}
+        clickupToken={clickupToken}
+        clickupListID={clickupListID}
+      />
     )
   }
-  return (
-    <div style={styles.main}>
-      <h1>home</h1>
-    </div>
-  )
+  return <h1>home</h1>
 }
 
 Frame.propTypes = {
