@@ -258,7 +258,7 @@ function RenamerView(props) {
                   label="Rename on Particle"
                   checked={particleCheck}
                   onChange={toggleParticleCheck}
-                  disabled={locationID === ''}
+                  disabled={locationID === '' || particleToken === ''}
                 />
                 <Form.Check
                   type="checkbox"
@@ -266,7 +266,7 @@ function RenamerView(props) {
                   label="Rename on ClickUp"
                   checked={clickupCheck}
                   onChange={toggleClickupCheck}
-                  disabled={locationID === ''}
+                  disabled={locationID === '' || clickupToken === ''}
                 />
                 <Form.Check
                   type="checkbox"

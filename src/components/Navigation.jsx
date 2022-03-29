@@ -76,11 +76,11 @@ function Navigation(props) {
             userName={clickupUserName}
           />
           <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
-          <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory() !== []} />
+          <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory().length !== 0} />
           <RowButton label="Activated Devices" handler={changeViewState} state={viewState} />
           <RowButton label="Validator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
           <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
-          <RowButton label="Renamer" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
+          <RowButton label="Renamer" handler={changeViewState} state={viewState} />
           <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
         </ButtonGroup>
       </div>

@@ -59,7 +59,7 @@ const styles = {
     flexDirection: 'column',
   },
   scrollView: {
-    overflow: 'auto',
+    overflowY: 'scroll',
     paddingRight: '5px',
     paddingLeft: '5px',
     paddingBottom: '5px',

@@ -121,7 +121,7 @@ function DoorSensorView(props) {
       flex: '1 1 75vh',
     },
     scrollView: {
-      overflowY: 'auto',
+      overflowY: 'scroll',
     },
     toggleButton: {
       fontSize: 'small',
@@ -193,33 +193,37 @@ function DoorSensorView(props) {
       <div style={styles.column}>
         <h3>Queue</h3>
         <hr />
-        {activatedDevices
-          .filter(device => {
-            return device.inPairingList
-          })
-          .map(device => {
-            return (
-              <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                <DoorSensorQueueCard device={device} status={pairingStatuses[device.deviceID]} reactStateHandler={modifyActivatedDevice} />
-              </li>
-            )
-          })}
+        <div style={styles.scrollView}>
+          {activatedDevices
+            .filter(device => {
+              return device.inPairingList
+            })
+            .map(device => {
+              return (
+                <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
+                  <DoorSensorQueueCard device={device} status={pairingStatuses[device.deviceID]} reactStateHandler={modifyActivatedDevice} />
+                </li>
+              )
+            })}
+        </div>
       </div>
       <div style={styles.column}>
         <div>
           <h3>Successful Pairings</h3>
           <hr />
-          {activatedDevices
-            .filter(device => {
-              return device.doorSensorID !== '' && device.doorSensorID !== null
-            })
-            .map(device => {
-              return (
-                <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                  <DoorSensorQueueCard device={device} status="paired" />
-                </li>
-              )
-            })}
+          <div style={styles.scrollView}>
+            {activatedDevices
+              .filter(device => {
+                return device.doorSensorID !== '' && device.doorSensorID !== null
+              })
+              .map(device => {
+                return (
+                  <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
+                    <DoorSensorQueueCard device={device} status="paired" />
+                  </li>
+                )
+              })}
+          </div>
         </div>
       </div>
     </div>
@@ -352,6 +356,12 @@ function DeviceSelector(props) {
     }
   }
 
+  const styles = {
+    scrollView: {
+      overflowY: 'scroll',
+    },
+  }
+
   if (selectorState === 'select') {
     return (
       <>
@@ -359,7 +369,7 @@ function DeviceSelector(props) {
           <h3>Activated Devices</h3>
           <hr />
         </div>
-        <div style={{ overflowY: 'auto' }}>
+        <div style={styles.scrollView}>
           {activatedDevices
             .filter(device => {
               return device.doorSensorID === '' || device.doorSensorID === undefined || device.doorSensorID === null
