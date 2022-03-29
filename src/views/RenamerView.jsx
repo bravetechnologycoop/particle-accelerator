@@ -410,7 +410,7 @@ function DeviceSelector(props) {
     return (
       <>
         <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
-        <div style={{ overflowY: 'scroll' }}>
+        <div style={{ overflowY: 'scroll', height: '100%' }}>
           {activatedDevices.map(device => {
             return (
               <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>

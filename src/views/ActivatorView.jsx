@@ -63,6 +63,7 @@ const styles = {
     paddingRight: '5px',
     paddingLeft: '5px',
     paddingBottom: '5px',
+    height: '100%',
   },
   child: {
     padding: 10,

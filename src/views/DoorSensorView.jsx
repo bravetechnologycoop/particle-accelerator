@@ -359,6 +359,7 @@ function DeviceSelector(props) {
   const styles = {
     scrollView: {
       overflowY: 'scroll',
+      height: '100%',
     },
   }
 

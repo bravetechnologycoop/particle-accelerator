@@ -59,11 +59,7 @@ function Frame(props) {
     )
   }
   if (viewState === 'Validator') {
-    return (
-      <div style={styles.main}>
-        <Validator token={token} changeToken={changeToken} particleSettings={particleSettings} />
-      </div>
-    )
+    return <Validator token={token} changeToken={changeToken} particleSettings={particleSettings} />
   }
   if (viewState === 'Particle') {
     return (
