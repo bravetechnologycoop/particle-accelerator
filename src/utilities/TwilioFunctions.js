@@ -3,6 +3,6 @@ const twilioToken = process.env.REACT_APP_TWILIO_AUTH_TOKEN
 
 const twilioClient = require('twilio')(accountSID, twilioToken)
 
-export async function getTwilioNumbersInLocale(countryCode, areaCode) {
+async function getTwilioNumbersInLocale(countryCode, areaCode) {
   const response = await twilioClient.availablePhoneNumbers(countryCode)
 }
