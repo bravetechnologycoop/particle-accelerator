@@ -10,6 +10,10 @@ import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
 import { modifyClickupTaskName } from '../utilities/ClickupFunctions'
+import { purchaseTwilioNumberByLocality } from '../utilities/TwilioFunctions'
+
+import countries from '../utilities/ISO3116Alpha2Codes.json'
+import DropdownList from '../components/DropdownList'
 
 function RenamerView(props) {
   const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
@@ -24,6 +28,8 @@ function RenamerView(props) {
   const [sensorNumber, setSensorNumber] = useState('')
   const [foundDevice, setFoundDevice] = useState(blankActivatedDevice)
   const [searchState, setSearchState] = useState('waiting')
+  const [twilioCountryCode, setTwilioCountryCode] = useState('')
+  const [twilioCityName, setTwilioCityName] = useState('')
 
   const [particleCheck, setParticleCheck] = useState(false)
   const [clickupCheck, setClickupCheck] = useState(false)
@@ -34,6 +40,14 @@ function RenamerView(props) {
   const [clickupStatus, setClickupStatus] = useState('idle')
   const [twilioStatus, setTwilioStatus] = useState('')
   const [dashboardStatus, setDashboardStatus] = useState('')
+
+  function changeTwilioCountryCode(code) {
+    setTwilioCountryCode(code)
+  }
+
+  function changeTwilioCityName(city) {
+    setTwilioCityName(city)
+  }
 
   function toggleParticleCheck() {
     if (particleCheck) {
@@ -96,6 +110,9 @@ function RenamerView(props) {
 
   async function handleRenameSubmit(event) {
     event.preventDefault()
+
+    let twilioPhoneNumber
+
     if (particleCheck) {
       setParticleStatus('waiting')
       const rename = await changeDeviceName(selectedDevice.deviceID, selectedDevice.productID, locationID, particleToken)
@@ -118,7 +135,16 @@ function RenamerView(props) {
     } else {
       setParticleStatus('notChecked')
     }
-    if (!twilioCheck) {
+    if (twilioCheck) {
+      setTwilioStatus('waiting')
+      const twilioResponse = await purchaseTwilioNumberByLocality(twilioCountryCode, twilioCityName, locationID)
+      if (twilioResponse !== null) {
+        setTwilioStatus(twilioResponse.readableNumber)
+        twilioPhoneNumber = twilioResponse.phoneNumber
+      } else {
+        setTwilioStatus('error')
+      }
+    } else {
       setTwilioStatus('notChecked')
     }
     if (!dashboardCheck) {
@@ -291,7 +317,13 @@ function RenamerView(props) {
             </Card.Body>
           </Card>
           <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-            <TwilioConfiguration twilioCheck={twilioCheck} />
+            <TwilioConfiguration
+              twilioCheck={twilioCheck}
+              twilioCityName={twilioCityName}
+              changeTwilioCityName={changeTwilioCityName}
+              twilioCountryCode={twilioCountryCode}
+              changeTwilioCountryCode={changeTwilioCountryCode}
+            />
             <DashboardConfiguration dashboardCheck={dashboardCheck} />
             <Card>
               <Card.Header>Device Rename Status</Card.Header>
@@ -495,12 +527,18 @@ SearchResult.defaultProps = {
 }
 
 function TwilioConfiguration(props) {
-  const { twilioCheck } = props
+  const { twilioCheck, twilioCountryCode, changeTwilioCountryCode, twilioCityName, changeTwilioCityName } = props
   if (twilioCheck) {
     return (
       <Card>
         <Card.Header>Twilio Configuration</Card.Header>
         <Card.Body style={{ height: '50px' }} />
+        <DropdownList itemList={countries} changeItem={changeTwilioCountryCode} item={twilioCountryCode} title="Country Code" />
+        <Form.Group>
+          <Form.Label>Phone Number Locality</Form.Label>
+          <Form.Control placeholder="Serial Number" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
+          <Form.Text className="text-muted">Case Sensitive</Form.Text>
+        </Form.Group>
       </Card>
     )
   }
@@ -510,6 +548,10 @@ function TwilioConfiguration(props) {
 
 TwilioConfiguration.propTypes = {
   twilioCheck: PropTypes.bool.isRequired,
+  twilioCountryCode: PropTypes.string.isRequired,
+  changeTwilioCountryCode: PropTypes.func.isRequired,
+  twilioCityName: PropTypes.string.isRequired,
+  changeTwilioCityName: PropTypes.func.isRequired,
 }
 
 function DashboardConfiguration(props) {
