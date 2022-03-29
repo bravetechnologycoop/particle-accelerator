@@ -357,9 +357,14 @@ function DeviceSelector(props) {
   }
 
   const styles = {
+    column: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
     scrollView: {
       overflowY: 'scroll',
       height: '100%',
+      flex: '1 1',
     },
   }
 

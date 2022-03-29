@@ -408,9 +408,9 @@ function DeviceSelector(props) {
   }
   if (selectorState === 'select') {
     return (
-      <>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
-        <div style={{ overflowY: 'scroll', height: '100%' }}>
+        <div style={{ overflowY: 'auto', height: '100%', flex: '1 1' }}>
           {activatedDevices.map(device => {
             return (
               <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
@@ -419,7 +419,7 @@ function DeviceSelector(props) {
             )
           })}
         </div>
-      </>
+      </div>
     )
   }
   if (selectorState === 'searchSensor') {
