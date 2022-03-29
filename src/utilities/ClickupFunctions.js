@@ -289,7 +289,7 @@ export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, 
 }
 
 export async function modifyClickupTaskName(oldName, newName, listID, token) {
-  const taskID = getClickupTaskIDByName(listID, oldName, token)
+  const taskID = await getClickupTaskIDByName(listID, oldName, token)
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}`
   const data = {
     name: newName,
