@@ -22,17 +22,22 @@ function ActivatedDevices(props) {
   }
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <h1>Activated Devices</h1>
       <hr />
-      {activatedDeviceList.map(device => {
-        return (
-          <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
-            <DeviceRow device={device} />
-          </li>
-        )
-      })}
-    </>
+      <div style={{ overflow: 'auto', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+        {activatedDeviceList.map(device => {
+          return (
+            <li
+              key={`${device.timeStamp}${device.dateStamp}`}
+              style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em', flex: '0 1 30ch' }}
+            >
+              <DeviceRow device={device} />
+            </li>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 

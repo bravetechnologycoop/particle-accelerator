@@ -108,6 +108,7 @@ function RouterInterface(props) {
       alignItems: 'top',
       display: 'flex',
       flexDirection: 'column',
+      overflow: 'hidden',
     },
     navbar: {
       flex: '1 1 15%',

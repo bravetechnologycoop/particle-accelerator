@@ -33,6 +33,7 @@ const styles = {
   parent: {
     display: 'flex',
     flexDirection: 'row',
+    height: '100vh',
   },
   form: {
     flex: '0 0 33%',
@@ -59,11 +60,11 @@ const styles = {
     flexDirection: 'column',
   },
   scrollView: {
-    overflowY: 'auto',
+    flexBasis: 'auto',
+    overflow: 'auto',
     paddingRight: '5px',
     paddingLeft: '5px',
     paddingBottom: '5px',
-    flex: '1 1',
   },
   child: {
     padding: 10,

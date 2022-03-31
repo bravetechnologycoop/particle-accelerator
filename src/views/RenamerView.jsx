@@ -10,7 +10,7 @@ import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
 import { modifyClickupTaskName } from '../utilities/ClickupFunctions'
-import { purchaseTwilioNumberByLocality } from '../utilities/TwilioFunctions'
+// import { purchaseTwilioNumberByLocality } from '../utilities/TwilioFunctions'
 
 import countries from '../utilities/ISO3116Alpha2Codes.json'
 import DropdownList from '../components/DropdownList'
@@ -137,13 +137,13 @@ function RenamerView(props) {
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
-      const twilioResponse = await purchaseTwilioNumberByLocality(twilioCountryCode, twilioCityName, locationID)
-      if (twilioResponse !== null) {
+      // const twilioResponse = await purchaseTwilioNumberByLocality(twilioCountryCode, twilioCityName, locationID)
+      /* if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.readableNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
       } else {
         setTwilioStatus('error')
-      }
+      } */
     } else {
       setTwilioStatus('notChecked')
     }
@@ -156,6 +156,7 @@ function RenamerView(props) {
     parent: {
       display: 'flex',
       flexDirection: 'row',
+      height: '100vh',
     },
     column: {
       flex: '1 1 33%',
@@ -440,9 +441,9 @@ function DeviceSelector(props) {
   }
   if (selectorState === 'select') {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
-        <div style={{ overflowY: 'auto', height: '100%', flex: '1 1' }}>
+        <div style={{ overflow: 'auto', height: '40em' }}>
           {activatedDevices.map(device => {
             return (
               <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>

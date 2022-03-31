@@ -8,6 +8,7 @@ import LoginRowButton from './LoginRowButton'
 import { getActivationHistory, getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 import RowToggler from './RowToggler'
 import ParticleSettings from '../utilities/ParticleSettings'
+import BraveLogoWhite from '../pdf/BraveLogoWhite.svg'
 
 function Navigation(props) {
   const {
@@ -55,7 +56,7 @@ function Navigation(props) {
   return (
     <div style={styles.parent}>
       <div style={styles.header}>
-        <h1>Particle Accelerator</h1>
+        <img src={BraveLogoWhite} alt="Brave Logo" height="100px" />
       </div>
       <div style={styles.navi}>
         <ButtonGroup vertical>

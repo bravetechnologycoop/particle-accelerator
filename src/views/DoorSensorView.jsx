@@ -106,6 +106,7 @@ function DoorSensorView(props) {
     parent: {
       display: 'flex',
       flexDirection: 'row',
+      height: '100vh',
     },
     column: {
       flex: '1 1 33%',
