@@ -10,6 +10,7 @@ import ActivatedDevices from './ActivatedDevices'
 import DoorSensorView from './DoorSensorView'
 import RenamerView from './RenamerView'
 import ParticleSettings from '../utilities/ParticleSettings'
+import ButtonRegistrationView from './ButtonRegistrationView'
 
 function Frame(props) {
   const {
@@ -113,6 +114,9 @@ function Frame(props) {
         clickupListID={clickupListID}
       />
     )
+  }
+  if (viewState === 'Button Registration') {
+    return <ButtonRegistrationView />
   }
   return <h1>home</h1>
 }

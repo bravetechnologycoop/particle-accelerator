@@ -82,6 +82,7 @@ function Navigation(props) {
           <RowButton label="Validator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
           <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
           <RowButton label="Renamer" handler={changeViewState} state={viewState} />
+          <RowButton label="Button Registration" handler={changeViewState} state={viewState} />
           <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
         </ButtonGroup>
       </div>
