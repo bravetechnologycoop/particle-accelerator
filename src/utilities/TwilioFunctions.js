@@ -13,6 +13,8 @@ export async function getTwilioNumbersByAreaCode(countryCode, areaCode, searchLe
       auth: { username: accountSID, password: twilioToken },
     })
 
+    console.log('available phone numbers', response)
+
     if (response.data.length === 0) {
       console.log(`No numbers found for the area code: ${areaCode}`)
       return null
@@ -50,7 +52,9 @@ export async function purchaseTwilioNumber(phoneNumber, locationID) {
   }
 
   try {
-    const phoneNumberResponse = (await axios.post(registerPhoneNumberURL, registerPhoneNumberData, authConfig)).data
+    const phoneNumberResponse = await axios.post(registerPhoneNumberURL, registerPhoneNumberData, authConfig)
+
+    console.log('phoneNumberResponse', phoneNumberResponse)
 
     const messagingServiceURL = `https://messaging.twilio.com/v1/Services/${allSensorMessagesSID}/PhoneNumbers`
     const messagingServiceData = { PhoneNumberSid: phoneNumberResponse.sid }

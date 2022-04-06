@@ -318,13 +318,15 @@ function RenamerView(props) {
             </Card.Body>
           </Card>
           <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-            <TwilioConfiguration
-              twilioCheck={twilioCheck}
-              twilioCityName={twilioAreaCode}
-              changeTwilioCityName={changeTwilioAreaCode}
-              twilioCountryCode={twilioCountryCode}
-              changeTwilioCountryCode={changeTwilioCountryCode}
-            />
+            <div style={{ paddingBottom: '10px' }}>
+              <TwilioConfiguration
+                twilioCheck={twilioCheck}
+                twilioCityName={twilioAreaCode}
+                changeTwilioCityName={changeTwilioAreaCode}
+                twilioCountryCode={twilioCountryCode}
+                changeTwilioCountryCode={changeTwilioCountryCode}
+              />
+            </div>
             <DashboardConfiguration dashboardCheck={dashboardCheck} />
             <Card>
               <Card.Header>Device Rename Status</Card.Header>
@@ -537,7 +539,7 @@ function TwilioConfiguration(props) {
           <Form.Group>
             <Form.Label>Phone Number Country</Form.Label>
             <DropdownList itemList={countries} changeItem={changeTwilioCountryCode} item={twilioCountryCode} title="Country" />
-            <Form.Label>Phone Number Area Code</Form.Label>
+            <Form.Label style={{ paddingTop: '10px' }}>Phone Number Area Code</Form.Label>
             <Form.Control placeholder="Area Code" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
             <Form.Text className="text-muted">Case Sensitive</Form.Text>
           </Form.Group>
