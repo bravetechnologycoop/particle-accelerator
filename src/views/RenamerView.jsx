@@ -137,6 +137,7 @@ function RenamerView(props) {
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
+      console.log('twilioResponse')
       const twilioResponse = await purchaseTwilioNumberByAreaCode(twilioCountryCode, twilioAreaCode, locationID)
       if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.readableNumber)
