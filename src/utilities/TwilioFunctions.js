@@ -6,20 +6,22 @@ const messagingWebhook = process.env.REACT_APP_TWILIO_BRAVE_WEBHOOK_URL
 const allSensorMessagesSID = process.env.REACT_APP_TWILIO_ALL_SENSOR_MESSAGES_SID
 
 export async function getTwilioNumbersByAreaCode(countryCode, areaCode, searchLength) {
-  const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSID}/AvailablePhoneNumbers/${countryCode}/Local.json?AreaCode=#${areaCode}&PageSize=${searchLength}`
+  const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSID}/AvailablePhoneNumbers/${countryCode}/Local.json?AreaCode=${areaCode}&PageSize=${searchLength}`
 
   try {
-    const response = await axios.get(url, {
-      auth: { username: accountSID, password: twilioToken },
-    })
+    const response = (
+      await axios.get(url, {
+        auth: { username: accountSID, password: twilioToken },
+      })
+    ).data.available_phone_numbers
 
     console.log('available phone numbers', response)
 
-    if (response.data.length === 0) {
+    if (response.length === 0) {
       console.log(`No numbers found for the area code: ${areaCode}`)
       return null
     }
-    const numberList = response.data
+    const numberList = response
       .filter(number => {
         return number.capabilities.voice
       })
