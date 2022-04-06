@@ -26,7 +26,7 @@ export async function getTwilioNumbersByAreaCode(countryCode, areaCode, searchLe
         return number.capabilities.voice
       })
       .map(number => {
-        return { readableName: number.friendlyName, phoneNumber: number.phone_number, locality: number.locality }
+        return { readableName: number.friendly_name, phoneNumber: number.phone_number, locality: number.locality }
       })
     return numberList
   } catch (err) {
@@ -79,6 +79,7 @@ export async function purchaseTwilioNumberByAreaCode(countryCode, areaCode, loca
   console.log('countryCode', countryCode, 'areaCode', areaCode, 'locationID', locationID)
   const twilioNumbers = getTwilioNumbersByAreaCode(countryCode, areaCode, 1)
   if (twilioNumbers !== null) {
+    console.log(twilioNumbers)
     const twilioNumber = twilioNumbers[0].phoneNumber
     const twilioNumberRegistration = await purchaseTwilioNumber(twilioNumber, locationID)
     if (twilioNumberRegistration) {
