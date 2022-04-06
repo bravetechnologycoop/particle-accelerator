@@ -10,7 +10,7 @@ import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
 import { modifyClickupTaskName } from '../utilities/ClickupFunctions'
-// import { purchaseTwilioNumberByLocality } from '../utilities/TwilioFunctions'
+import { purchaseTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
 import countries from '../utilities/ISO3116Alpha2Codes.json'
 import DropdownList from '../components/DropdownList'
@@ -29,7 +29,7 @@ function RenamerView(props) {
   const [foundDevice, setFoundDevice] = useState(blankActivatedDevice)
   const [searchState, setSearchState] = useState('waiting')
   const [twilioCountryCode, setTwilioCountryCode] = useState('')
-  const [twilioCityName, setTwilioCityName] = useState('')
+  const [twilioAreaCode, setTwilioAreaCode] = useState('')
 
   const [particleCheck, setParticleCheck] = useState(false)
   const [clickupCheck, setClickupCheck] = useState(false)
@@ -45,8 +45,8 @@ function RenamerView(props) {
     setTwilioCountryCode(code)
   }
 
-  function changeTwilioCityName(city) {
-    setTwilioCityName(city)
+  function changeTwilioAreaCode(city) {
+    setTwilioAreaCode(city)
   }
 
   function toggleParticleCheck() {
@@ -137,13 +137,13 @@ function RenamerView(props) {
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
-      // const twilioResponse = await purchaseTwilioNumberByLocality(twilioCountryCode, twilioCityName, locationID)
-      /* if (twilioResponse !== null) {
+      const twilioResponse = await purchaseTwilioNumberByAreaCode(twilioCountryCode, twilioAreaCode, locationID)
+      if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.readableNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
       } else {
         setTwilioStatus('error')
-      } */
+      }
     } else {
       setTwilioStatus('notChecked')
     }
@@ -320,8 +320,8 @@ function RenamerView(props) {
           <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
             <TwilioConfiguration
               twilioCheck={twilioCheck}
-              twilioCityName={twilioCityName}
-              changeTwilioCityName={changeTwilioCityName}
+              twilioCityName={twilioAreaCode}
+              changeTwilioCityName={changeTwilioAreaCode}
               twilioCountryCode={twilioCountryCode}
               changeTwilioCountryCode={changeTwilioCountryCode}
             />
@@ -533,13 +533,15 @@ function TwilioConfiguration(props) {
     return (
       <Card>
         <Card.Header>Twilio Configuration</Card.Header>
-        <Card.Body style={{ height: '50px' }} />
-        <DropdownList itemList={countries} changeItem={changeTwilioCountryCode} item={twilioCountryCode} title="Country Code" />
-        <Form.Group>
-          <Form.Label>Phone Number Locality</Form.Label>
-          <Form.Control placeholder="Serial Number" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
-          <Form.Text className="text-muted">Case Sensitive</Form.Text>
-        </Form.Group>
+        <div style={{ padding: '10px' }}>
+          <Form.Group>
+            <Form.Label>Phone Number Country</Form.Label>
+            <DropdownList itemList={countries} changeItem={changeTwilioCountryCode} item={twilioCountryCode} title="Country" />
+            <Form.Label>Phone Number Area Code</Form.Label>
+            <Form.Control placeholder="Area Code" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
+            <Form.Text className="text-muted">Case Sensitive</Form.Text>
+          </Form.Group>
+        </div>
       </Card>
     )
   }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { aws4Interceptor } from 'aws4-axios'
+// import { aws4Interceptor } from 'aws4-axios'
 
 const awsRegion = process.env.REACT_APP_AWS_REGION
 const awsService = 'iotwireless'
@@ -15,7 +15,7 @@ const awsServiceProfileID = process.env.REACT_APP_AWS_SERVICE_PROFILE_ID_DEV
 
 // eslint-disable-next-line import/prefer-default-export
 export function registerLoraButton(deviceEUI, targetName) {
-  const awsInterceptor = aws4Interceptor(
+  /* const awsInterceptor = aws4Interceptor(
     {
       region: awsRegion,
       service: awsService,
@@ -24,10 +24,10 @@ export function registerLoraButton(deviceEUI, targetName) {
       accessKeyId: awsAccessKeyID,
       secretAccessKey: awsSecretKey,
     },
-  )
+  ) */
   const awsClient = axios.create()
 
-  awsClient.interceptors.request.use(awsInterceptor)
+  // awsClient.interceptors.request.use(awsInterceptor)
 
   const url = 'https://api.iotwireless.us-east-1.amazonaws.com/wireless-devices'
 
