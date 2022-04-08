@@ -39,7 +39,7 @@ export async function purchaseTwilioNumber(phoneNumber, locationID) {
   const registerPhoneNumberURL = `https://api.twilio.com/2010-04-01/Accounts/${accountSID}/IncomingPhoneNumbers.json`
 
   const registerPhoneNumberData = {
-    phoneNumber,
+    PhoneNumber: phoneNumber,
     smsUrl: messagingWebhook,
     voiceUrl: 'https://demo.twilio.com/welcome/voice/',
     friendlyName: locationID,
