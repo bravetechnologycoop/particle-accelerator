@@ -24,7 +24,7 @@ export default function ButtonRegistrationView(props) {
       setRegistrationStatus(awsRegistration)
     }
 
-    setDeviceName('')
+    setDeviceEUI('')
     setFormLock(false)
   }
 
