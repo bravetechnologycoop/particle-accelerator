@@ -116,7 +116,7 @@ function Frame(props) {
     )
   }
   if (viewState === 'Button Registration') {
-    return <ButtonRegistrationView />
+    return <ButtonRegistrationView clickupToken={clickupToken} />
   }
   return <h1>home</h1>
 }
