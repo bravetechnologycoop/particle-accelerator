@@ -77,7 +77,7 @@ export async function purchaseTwilioNumber(phoneNumber, locationID) {
 export async function purchaseTwilioNumberByAreaCode(countryCode, areaCode, locationID) {
   console.log('beginning of purchasetwilionumberbyareacode')
   console.log('countryCode', countryCode, 'areaCode', areaCode, 'locationID', locationID)
-  const twilioNumbers = getTwilioNumbersByAreaCode(countryCode, areaCode, 1)
+  const twilioNumbers = await getTwilioNumbersByAreaCode(countryCode, areaCode, 1)
   if (twilioNumbers !== null) {
     console.log(twilioNumbers)
     const twilioNumber = twilioNumbers[0].phoneNumber
