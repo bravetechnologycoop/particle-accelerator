@@ -41,7 +41,9 @@ export default function ButtonRegistrationView(props) {
       <div style={{ paddingTop: '10px' }}>
         <Button type="submit">Submit</Button>
       </div>
-      <RegistrationIcon status={registrationStatus} />
+      <div style={{ paddingTop: '10px' }}>
+        <RegistrationIcon status={registrationStatus} />
+      </div>
     </Form>
   )
 }

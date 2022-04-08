@@ -15,7 +15,7 @@ export async function registerLoraButton(deviceEUI, targetName, clickupToken) {
   }
 
   try {
-    const response = await axios.post(url, data)
+    await axios.post(url, data)
     return 'success'
   } catch (err) {
     console.error(err)
