@@ -138,9 +138,9 @@ function RenamerView(props) {
     if (twilioCheck) {
       setTwilioStatus('waiting')
       console.log('twilioResponse')
-      const twilioResponse = await purchaseTwilioNumberByAreaCode(twilioCountryCode, twilioAreaCode, locationID)
+      const twilioResponse = await purchaseTwilioNumberByAreaCode(twilioAreaCode, locationID, clickupToken)
       if (twilioResponse !== null) {
-        setTwilioStatus(twilioResponse.readableNumber)
+        setTwilioStatus(twilioResponse.phoneNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
       } else {
         setTwilioStatus('error')
@@ -338,7 +338,9 @@ function RenamerView(props) {
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
                   <div style={{ paddingRight: '10px' }}>Renaming Task on ClickUp:</div> <StatusBadge status={clickupStatus} />{' '}
                 </div>
-                <div>Purchasing Twilio Number:</div>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                  <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div> <StatusBadge status={twilioStatus} />{' '}
+                </div>
                 <div>Registering to Dashboard:</div>
               </Card.Body>
             </Card>
