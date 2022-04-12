@@ -584,4 +584,29 @@ DashboardConfiguration.propTypes = {
   dashboardCheck: PropTypes.bool.isRequired,
 }
 
+function PhoneNumberStatus(props) {
+  function checkValidPhoneNumber(phoneNumber) {
+    const regex = /^\+[0-9]{11}$/
+    return regex.test(phoneNumber)
+  }
+
+  const { phoneNumber } = props
+  if (phoneNumber === 'idle') {
+    return <Badge bg="secondary">Waiting</Badge>
+  }
+  if (phoneNumber === 'waiting') {
+    return <Badge bg="warning">In Progress</Badge>
+  }
+  if (checkValidPhoneNumber(phoneNumber)) {
+    const phoneNumberBlockRegex = /^(\+[0-9])([0-9]{3})([0-9]{3})([0-9]{4})$/
+    const phoneNumberBlocks = phoneNumber.match(phoneNumberBlockRegex)
+    return <Badge bg="success">{`${phoneNumberBlocks[0]} ${phoneNumberBlocks[1]} ${phoneNumberBlocks[2]} ${phoneNumberBlocks[3]}`}</Badge>
+  }
+  return <Badge bg="danger">Error</Badge>
+}
+
+PhoneNumberStatus.propTypes = {
+  phoneNumber: PropTypes.string.isRequired,
+}
+
 export default RenamerView
