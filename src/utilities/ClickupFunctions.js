@@ -206,11 +206,10 @@ export async function createTaskInSensorTracker(token, sensorName, listID, devic
   }
   try {
     const response = await axios.post(url, data, config)
-    console.log(response)
-    return true
+    return response.data.id
   } catch (err) {
     console.error(err)
-    return false
+    return null
   }
 }
 

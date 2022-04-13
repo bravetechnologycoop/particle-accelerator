@@ -9,7 +9,7 @@ import ActivatedDevice from '../utilities/ActivatedDevice'
 import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
-import { modifyClickupTaskName } from '../utilities/ClickupFunctions'
+import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue, modifyClickupTaskName } from '../utilities/ClickupFunctions'
 import { purchaseTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
 import countries from '../utilities/ISO3116Alpha2Codes.json'
@@ -38,7 +38,7 @@ function RenamerView(props) {
 
   const [particleStatus, setParticleStatus] = useState('idle')
   const [clickupStatus, setClickupStatus] = useState('idle')
-  const [twilioStatus, setTwilioStatus] = useState('')
+  const [twilioStatus, setTwilioStatus] = useState('idle')
   const [dashboardStatus, setDashboardStatus] = useState('')
 
   function changeTwilioCountryCode(code) {
@@ -142,6 +142,8 @@ function RenamerView(props) {
       if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.phoneNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
+        /* const clickupTaskID = await getClickupTaskIDByName(clickupListID, selectedDevice.deviceName, clickupToken)
+        await modifyClickupTaskCustomFieldValue(clickupTaskID, process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID, twilioPhoneNumber, clickupToken) */
       } else {
         setTwilioStatus('error')
       }
@@ -389,10 +391,10 @@ function DeviceSelector(props) {
     event.preventDefault()
     const data = await getDeviceDetails(serialNumber, productID, token)
     if (data !== null) {
-      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null))
+      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null, ''))
       changeSearchState('found')
     } else {
-      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null))
+      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null, ''))
       changeSearchState('error')
     }
   }

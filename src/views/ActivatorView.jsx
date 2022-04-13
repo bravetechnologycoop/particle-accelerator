@@ -242,6 +242,8 @@ function ActivatorView(props) {
         totalStatusCopy = 'false'
       }
 
+      let clickupTaskID
+
       if (!clickupCheck) {
         setClickupStatus('waiting')
         const clickup = await createTaskInSensorTracker(
@@ -253,7 +255,8 @@ function ActivatorView(props) {
           clickupTaskStatus,
           clickupCustomFieldsConfig,
         )
-        if (clickup) {
+        if (clickup !== null) {
+          clickupTaskID = clickup
           setClickupStatus('true')
         } else {
           setClickupStatus('fail')
@@ -279,7 +282,7 @@ function ActivatorView(props) {
       )
 
       if (totalStatusCopy === 'true') {
-        pushDevice(new ActivatedDevice(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, null, null, null, false, null))
+        pushDevice(new ActivatedDevice(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, null, null, null, false, null, clickupTaskID))
       }
     } else {
       setFormLock(false)

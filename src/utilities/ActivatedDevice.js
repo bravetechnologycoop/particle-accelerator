@@ -2,7 +2,7 @@ import { getCurrentFirmwareVersion, getDeviceDetails, pairDoorSensor } from './P
 import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue } from './ClickupFunctions'
 
 export default class ActivatedDevice {
-  constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp, doorSensorID, inPairingList, intervalID) {
+  constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp, doorSensorID, inPairingList, intervalID, clickupTaskID) {
     this.deviceName = deviceName
     this.serialNumber = serialNumber
     this.productID = productID
@@ -30,6 +30,7 @@ export default class ActivatedDevice {
     }
 
     this.intervalID = intervalID
+    this.clickupTaskID = clickupTaskID
   }
 
   pairDoorSensor(particleToken, doorSensorID, interval, changeCheckState, reactStateHandler, clickupToken, clickupListID) {
@@ -70,6 +71,6 @@ export default class ActivatedDevice {
   }
 
   static blankDevice() {
-    return new ActivatedDevice('', '', '', '', '', null, null, '', false, '')
+    return new ActivatedDevice('', '', '', '', '', null, null, '', false, '', '')
   }
 }

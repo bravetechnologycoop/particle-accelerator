@@ -13,7 +13,7 @@ function DoorSensorView(props) {
   const { activatedDevices, changeActivatedDevices, particleToken, particleSettings, clickupToken, clickupListID } = props
 
   const DEFAULT_TIMEOUT_INTERVAL = 10000
-  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', null, null, '', false, '')
+  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', null, null, '', false, '', '')
 
   const [updateInterval, setUpdateInterval] = useState(DEFAULT_TIMEOUT_INTERVAL)
   const [pairingStatuses, setPairingStatuses] = useState({})
@@ -349,10 +349,10 @@ function DeviceSelector(props) {
     event.preventDefault()
     const data = await getDeviceDetails(serialNumber, productID, particleToken)
     if (data !== null) {
-      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null))
+      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null, ''))
       changeSearchState('found')
     } else {
-      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null))
+      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null, ''))
       changeSearchState('error')
     }
   }

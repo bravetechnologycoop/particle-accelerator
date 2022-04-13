@@ -91,6 +91,7 @@ export function getActivatedDevices() {
         device.doorSensorID,
         device.inPairingList,
         device.intervalID,
+        device.clickupTaskID,
       ),
   )
 }
@@ -265,6 +266,7 @@ export function copyActivatedDevices(activatedDevices) {
         device.doorSensorID,
         device.inPairingList,
         device.intervalID,
+        device.clickupTaskID,
       ),
   )
 }
