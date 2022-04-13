@@ -17,9 +17,7 @@ function PhoneNumberStatus(props) {
     return <Spinner animation="border" />
   }
   if (checkValidPhoneNumber(status)) {
-    const phoneNumberBlockRegex = /^(\+[0-9])([0-9]{3})([0-9]{3})([0-9]{4})$/
-    const phoneNumberBlocks = status.match(phoneNumberBlockRegex)
-    return <Badge bg="success">{`${phoneNumberBlocks[0]} ${phoneNumberBlocks[1]} ${phoneNumberBlocks[2]} ${phoneNumberBlocks[3]}`}</Badge>
+    return <Badge bg="success">{status}</Badge>
   }
   return <Badge bg="danger">Error</Badge>
 }
