@@ -10,10 +10,11 @@ import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
 import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue, modifyClickupTaskName } from '../utilities/ClickupFunctions'
-import { purchaseTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
+import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
 import countries from '../utilities/ISO3116Alpha2Codes.json'
 import DropdownList from '../components/DropdownList'
+import PhoneNumberStatus from '../components/PhoneNumberStatus'
 
 function RenamerView(props) {
   const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
@@ -138,7 +139,7 @@ function RenamerView(props) {
     if (twilioCheck) {
       setTwilioStatus('waiting')
       console.log('twilioResponse')
-      const twilioResponse = await purchaseTwilioNumberByAreaCode(twilioAreaCode, locationID, clickupToken)
+      const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, clickupToken)
       if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.phoneNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
@@ -341,7 +342,7 @@ function RenamerView(props) {
                   <div style={{ paddingRight: '10px' }}>Renaming Task on ClickUp:</div> <StatusBadge status={clickupStatus} />{' '}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                  <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div> <StatusBadge status={twilioStatus} />{' '}
+                  <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div> <PhoneNumberStatus status={twilioStatus} />{' '}
                 </div>
                 <div>Registering to Dashboard:</div>
               </Card.Body>
@@ -584,31 +585,6 @@ function DashboardConfiguration(props) {
 
 DashboardConfiguration.propTypes = {
   dashboardCheck: PropTypes.bool.isRequired,
-}
-
-function PhoneNumberStatus(props) {
-  function checkValidPhoneNumber(phoneNumber) {
-    const regex = /^\+[0-9]{11}$/
-    return regex.test(phoneNumber)
-  }
-
-  const { phoneNumber } = props
-  if (phoneNumber === 'idle') {
-    return <Badge bg="secondary">Waiting</Badge>
-  }
-  if (phoneNumber === 'waiting') {
-    return <Badge bg="warning">In Progress</Badge>
-  }
-  if (checkValidPhoneNumber(phoneNumber)) {
-    const phoneNumberBlockRegex = /^(\+[0-9])([0-9]{3})([0-9]{3})([0-9]{4})$/
-    const phoneNumberBlocks = phoneNumber.match(phoneNumberBlockRegex)
-    return <Badge bg="success">{`${phoneNumberBlocks[0]} ${phoneNumberBlocks[1]} ${phoneNumberBlocks[2]} ${phoneNumberBlocks[3]}`}</Badge>
-  }
-  return <Badge bg="danger">Error</Badge>
-}
-
-PhoneNumberStatus.propTypes = {
-  phoneNumber: PropTypes.string.isRequired,
 }
 
 export default RenamerView

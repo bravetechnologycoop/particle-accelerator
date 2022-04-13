@@ -28,6 +28,10 @@ function App() {
         <Route path="/door-sensor-pairing" element={<RouterInterface viewState="Door Sensor Pairing" changeViewState={changeViewState} />} />
         <Route path="/renamer" element={<RouterInterface viewState="Renamer" changeViewState={changeViewState} />} />
         <Route path="/button-registration" element={<RouterInterface viewState="Button Registration" changeViewState={changeViewState} />} />
+        <Route
+          path="/twilio-number-purchasing"
+          element={<RouterInterface viewState="Twilio Number Purchasing" changeViewState={changeViewState} />}
+        />
       </Routes>
     </BrowserRouter>
   )

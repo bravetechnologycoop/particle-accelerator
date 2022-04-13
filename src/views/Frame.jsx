@@ -11,6 +11,7 @@ import DoorSensorView from './DoorSensorView'
 import RenamerView from './RenamerView'
 import ParticleSettings from '../utilities/ParticleSettings'
 import ButtonRegistrationView from './ButtonRegistrationView'
+import TwilioPurchaseView from './TwilioPurchaseView'
 
 function Frame(props) {
   const {
@@ -114,6 +115,9 @@ function Frame(props) {
         clickupListID={clickupListID}
       />
     )
+  }
+  if (viewState === 'Twilio Number Purchasing') {
+    return <TwilioPurchaseView clickupToken={clickupToken} />
   }
   if (viewState === 'Button Registration') {
     return <ButtonRegistrationView clickupToken={clickupToken} />
