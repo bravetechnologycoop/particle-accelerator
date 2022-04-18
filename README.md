@@ -43,6 +43,7 @@ if (viewState === 'View State Name No Kebab Case') {
 - Better file structure
 - More explanatory home page
 - Better 'blocking' mechanisms based on authentication
+- Changelog
 
 ### Tier 1
 - [moderate] Allow for new devices to be added to the `activated devices` list without having to be activated
