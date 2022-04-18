@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+# The Particle Accelerator or Whatever
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Adding a New Page
+1. Create a component in the `views` folder.
+2. Name the `ViewState` with a name of your choice.
+3. Make the `path` a kebab-cased version of the `ViewState` name (important).
+4. Add an `if` statement in `Frame.jsx` following the format: 
+```jsx
+if (viewState === 'View State Name No Kebab Case') {
+  return <ComponentNameInViews />
+} 
+```
+5. Create a `RowButton` in `components/Navigation.jsx`, with care to the order that you would like the page to appear in the navigation.
 
-## Available Scripts
+## Principles of the Program
 
-In the project directory, you can run:
+### Prop Tree
+- The props in the Accelerator are passed on the following hierarchy:
+  1. `App.js`
+  2. `RouterInterface.jsx`
+  3. `Navigation.jsx` or `Frame.jsx`
+  4. (from `Frame.jsx`) -> `views`
+  5. (from `Frame.jsx` and `views`) -> other individual components
 
-### `npm start`
+- Passing props between all of the various levels is somewhat tedious.
+- I enclosed every `setState` within an arbitrary `changeState` function. I'm unsure how necessary this was but various guides have advised for this approach. (https://webomnizz.com/change-parent-component-state-from-child-using-hooks-in-react/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### File Organization
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Files and components are organized in four main folders.
+  - `components` - Every subcomponent (although some are stored inside the views themselves if they are specific)
+  - `utilities` - Every 'middle-end' function that assists the accelerator
+  - `views` - Every view seen by `Frame.jsx`
+  - `pdf` - Components that produce the button labels
 
-### `npm test`
+## Roadmap
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Immediate Cleanup
+- Refactor various files to allow for future developers to understand the code better
+- Document _everything_
+- Add a better encryption mechanism for the entire site (Google OAuth?)
+- Give the site a domain
+- Better file structure
+- More explanatory home page
+- Better 'blocking' mechanisms based on authentication
 
-### `npm run build`
+### Tier 1
+- [moderate] Allow for new devices to be added to the `activated devices` list without having to be activated
+- [easy win] Remove the ability to add new devices in the `Renamer` and `Door Sensor Pairer`
+- [semi-easy] Remove the decision-making in the ClickUp stuff
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Tier 2
+- [moderate] Verify the AWS and database adding and switch the variables to prod
+- [unsure] Move endpoints that are in the `chatbot-dev` server to a `sensor` server (dev/prod)
+- [semi-easy] Add logs to the Twilio Number and Button Registration Views
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### Tier 3
+- [good cost-benefit] Synthesize the database inserts, AWS functionality, and phone number adding into one cohesive tool to register buttons.
+- [large endeavour] Automated sensor testing with the `getEventStream` function in Particle and `Chart.js`
+  - https://docs.particle.io/reference/SDKs/javascript/#geteventstream-1
+  - https://www.chartjs.org/
+- [good cost-benefit] More streamlined sensor activation, less configuration, automatic sensor_XX incrementing, essentially just using the scanner and the return character to do everything
+- [moderate] Make the validator look nice again
+- [moderate] Make the renamer look nice
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Tier 4
+- [large endeavour] Back the application with a database
+- [decent cost-benefit] Create a python serial tool that interfaces with an accelerator endpoint to automatically register every button
