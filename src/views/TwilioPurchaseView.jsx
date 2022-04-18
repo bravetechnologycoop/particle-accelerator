@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import { registerLoraButton } from '../utilities/AWSFunctions'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
 import { purchaseButtonTwilioNumberByAreaCode, purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
@@ -40,35 +39,37 @@ function TwilioPurchaseView(props) {
   }
 
   return (
-    <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
-      <Form.Group>
-        <Form.Label style={{ paddingTop: '10px' }}>Select Device Type</Form.Label>
-        <Form.Control value={deviceType} onChange={x => setDeviceType(x.target.value)} as="select">
-          <option id="sensor" key="sensor" value="sensor">
-            Sensor
-          </option>
-          <option id="buttons" key="buttons" value="buttons">
-            Buttons
-          </option>
-        </Form.Control>
-      </Form.Group>
-      <Form.Group>
-        <Form.Label style={{ paddingTop: '10px' }}>Area Code</Form.Label>
-        <Form.Control value={areaCode} onChange={x => setAreaCode(x.target.value)} disabled={formLock} maxLength="3" />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label style={{ paddingTop: '10px' }}>Location Name</Form.Label>
-        <Form.Control value={locationID} onChange={x => setLocationID(x.target.value)} disabled={formLock} />
-      </Form.Group>
-      <div style={{ paddingTop: '10px' }}>
-        <Button type="submit">Submit</Button>
-      </div>
-      <div style={{ paddingTop: '10px' }}>
-        <h4>
-          <PhoneNumberStatus status={registrationStatus} />
-        </h4>
-      </div>
-    </Form>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
+        <Form.Group>
+          <Form.Label style={{ paddingTop: '10px' }}>Select Device Type</Form.Label>
+          <Form.Control value={deviceType} onChange={x => setDeviceType(x.target.value)} as="select">
+            <option id="sensor" key="sensor" value="sensor">
+              Sensor
+            </option>
+            <option id="buttons" key="buttons" value="buttons">
+              Buttons
+            </option>
+          </Form.Control>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label style={{ paddingTop: '10px' }}>Area Code</Form.Label>
+          <Form.Control value={areaCode} onChange={x => setAreaCode(x.target.value)} disabled={formLock} maxLength="3" />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label style={{ paddingTop: '10px' }}>Location Name</Form.Label>
+          <Form.Control value={locationID} onChange={x => setLocationID(x.target.value)} disabled={formLock} />
+        </Form.Group>
+        <div style={{ paddingTop: '10px' }}>
+          <Button type="submit">Submit</Button>
+        </div>
+        <div style={{ paddingTop: '10px' }}>
+          <h4>
+            <PhoneNumberStatus status={registrationStatus} />
+          </h4>
+        </div>
+      </Form>
+    </div>
   )
 }
 

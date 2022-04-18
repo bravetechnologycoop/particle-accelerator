@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Badge, ButtonGroup, Card, Form, ToggleButton } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import PropTypes from 'prop-types'
+import PropTypes, { any } from 'prop-types'
 import ParticleSettings from '../utilities/ParticleSettings'
 import DoorSensorLabel from '../pdf/DoorSensorLabel'
 import MainSensorLabel from '../pdf/MainSensorLabel'
@@ -15,6 +15,7 @@ import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctio
 import countries from '../utilities/ISO3116Alpha2Codes.json'
 import DropdownList from '../components/DropdownList'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
+import { getSensorClients } from '../utilities/DatabaseFunctions'
 
 function RenamerView(props) {
   const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
@@ -40,7 +41,28 @@ function RenamerView(props) {
   const [particleStatus, setParticleStatus] = useState('idle')
   const [clickupStatus, setClickupStatus] = useState('idle')
   const [twilioStatus, setTwilioStatus] = useState('idle')
-  const [dashboardStatus, setDashboardStatus] = useState('')
+  const [dashboardStatus, setDashboardStatus] = useState('idle')
+
+  const [client, setClient] = useState('')
+  const [stateMachine, setStateMachine] = useState(true)
+  const [displayName, setDisplayName] = useState('')
+  const [radarType, setRadarType] = useState('')
+
+  function changeClient(newClient) {
+    setClient(newClient)
+  }
+
+  function changeStateMachine(newState) {
+    setStateMachine(newState)
+  }
+
+  function changeDisplayName(newName) {
+    setDisplayName(newName)
+  }
+
+  function changeRadarType(newRadar) {
+    setRadarType(newRadar)
+  }
 
   function changeTwilioCountryCode(code) {
     setTwilioCountryCode(code)
@@ -267,86 +289,99 @@ function RenamerView(props) {
         <div style={styles.expandedColumn}>
           <h3>In Progress</h3>
           <hr />
-          <Card>
-            <Card.Header>Device Rename Configuration</Card.Header>
-            <Card.Body>
-              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <h6>Current Device Name: </h6>{' '}
-                <h6 style={{ paddingLeft: '5px' }}>
-                  <Badge bg="success">{selectedDevice.deviceName}</Badge>
-                </h6>
-              </div>
-              <Form onSubmit={handleRenameSubmit}>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                  <h6 style={{ paddingRight: '5px' }}>New Device Name (Location ID): </h6>
-                  <Form.Group>
-                    <Form.Control value={locationID} onChange={x => changeLocationID(x.target.value)} disabled={selectedDevice.deviceName === ''} />
-                  </Form.Group>
-                </div>
-                <Form.Check
-                  type="checkbox"
-                  id="default-checkbox"
-                  label="Rename on Particle"
-                  checked={particleCheck}
-                  onChange={toggleParticleCheck}
-                  disabled={locationID === '' || particleToken === ''}
-                />
-                <Form.Check
-                  type="checkbox"
-                  id="default-checkbox"
-                  label="Rename on ClickUp"
-                  checked={clickupCheck}
-                  onChange={toggleClickupCheck}
-                  disabled={locationID === '' || clickupToken === ''}
-                />
-                <Form.Check
-                  type="checkbox"
-                  id="default-checkbox"
-                  label="Purchase Twilio Number"
-                  checked={twilioCheck}
-                  onChange={toggleTwilioCheck}
-                  disabled={locationID === ''}
-                />
-                <Form.Check
-                  type="checkbox"
-                  id="default-checkbox"
-                  label="Register to Dashboard"
-                  checked={dashboardCheck}
-                  onChange={toggleDashboardCheck}
-                  disabled={locationID === ''}
-                />
-                <div style={{ paddingTop: '10px' }}>
-                  <Button type="submit">Rename Device</Button>
-                </div>
-              </Form>
-            </Card.Body>
-          </Card>
-          <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-            <div style={{ paddingBottom: '10px' }}>
-              <TwilioConfiguration
-                twilioCheck={twilioCheck}
-                twilioCityName={twilioAreaCode}
-                changeTwilioCityName={changeTwilioAreaCode}
-                twilioCountryCode={twilioCountryCode}
-                changeTwilioCountryCode={changeTwilioCountryCode}
-              />
-            </div>
-            <DashboardConfiguration dashboardCheck={dashboardCheck} />
+          <div style={{ overflowY: 'auto' }}>
             <Card>
-              <Card.Header>Device Rename Status</Card.Header>
+              <Card.Header>Device Rename Configuration</Card.Header>
               <Card.Body>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                  <div style={{ paddingRight: '10px' }}>Renaming Device on Particle:</div> <StatusBadge status={particleStatus} />{' '}
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                  <h6>Current Device Name: </h6>{' '}
+                  <h6 style={{ paddingLeft: '5px' }}>
+                    <Badge bg="success">{selectedDevice.deviceName}</Badge>
+                  </h6>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                  <div style={{ paddingRight: '10px' }}>Renaming Task on ClickUp:</div> <StatusBadge status={clickupStatus} />{' '}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                  <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div> <PhoneNumberStatus status={twilioStatus} />{' '}
-                </div>
-                <div>Registering to Dashboard:</div>
+                <Form onSubmit={handleRenameSubmit}>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                    <h6 style={{ paddingRight: '5px' }}>New Device Name (Location ID): </h6>
+                    <Form.Group>
+                      <Form.Control value={locationID} onChange={x => changeLocationID(x.target.value)} disabled={selectedDevice.deviceName === ''} />
+                    </Form.Group>
+                  </div>
+                  <Form.Check
+                    type="checkbox"
+                    id="default-checkbox"
+                    label="Rename on Particle"
+                    checked={particleCheck}
+                    onChange={toggleParticleCheck}
+                    disabled={locationID === '' || particleToken === ''}
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    id="default-checkbox"
+                    label="Rename on ClickUp"
+                    checked={clickupCheck}
+                    onChange={toggleClickupCheck}
+                    disabled={locationID === '' || clickupToken === ''}
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    id="default-checkbox"
+                    label="Purchase Twilio Number"
+                    checked={twilioCheck}
+                    onChange={toggleTwilioCheck}
+                    disabled={locationID === ''}
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    id="default-checkbox"
+                    label="Register to Dashboard"
+                    checked={dashboardCheck}
+                    onChange={toggleDashboardCheck}
+                    disabled={locationID === ''}
+                  />
+                  <div style={{ paddingTop: '10px' }}>
+                    <Button type="submit">Rename Device</Button>
+                  </div>
+                </Form>
               </Card.Body>
             </Card>
+            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+              <div style={{ paddingBottom: '10px' }}>
+                <TwilioConfiguration
+                  twilioCheck={twilioCheck}
+                  twilioCityName={twilioAreaCode}
+                  changeTwilioCityName={changeTwilioAreaCode}
+                  twilioCountryCode={twilioCountryCode}
+                  changeTwilioCountryCode={changeTwilioCountryCode}
+                />
+              </div>
+              <DashboardConfiguration
+                dashboardCheck={dashboardCheck}
+                radarType={radarType}
+                changeRadarType={changeRadarType}
+                client={client}
+                changeClient={changeClient}
+                clickupToken={clickupToken}
+                stateMachine={stateMachine}
+                changeStateMachine={changeStateMachine}
+                displayName={displayName}
+                changeDisplayName={changeDisplayName}
+              />
+              <Card>
+                <Card.Header>Device Rename Status</Card.Header>
+                <Card.Body>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                    <div style={{ paddingRight: '10px' }}>Renaming Device on Particle:</div> <StatusBadge status={particleStatus} />{' '}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                    <div style={{ paddingRight: '10px' }}>Renaming Task on ClickUp:</div> <StatusBadge status={clickupStatus} />{' '}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                    <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div> <PhoneNumberStatus status={twilioStatus} />{' '}
+                  </div>
+                  <div>Registering to Dashboard:</div>
+                </Card.Body>
+              </Card>
+            </div>
           </div>
         </div>
         <div style={styles.column}>
@@ -566,15 +601,78 @@ TwilioConfiguration.propTypes = {
 }
 
 function DashboardConfiguration(props) {
-  const { dashboardCheck } = props
+  const {
+    dashboardCheck,
+    displayName,
+    changeDisplayName,
+    radarType,
+    changeRadarType,
+    client,
+    changeClient,
+    clickupToken,
+    stateMachine,
+    changeStateMachine,
+  } = props
+
+  const [clientList, setClientList] = useState([])
+  const [clientLoading, setClientLoading] = useState('idle')
+  const [initialized, setInitialized] = useState(false)
+
+  useEffect(() => {
+    async function retrieveClients() {
+      console.log('function called')
+      const clients = await getSensorClients(clickupToken)
+      setClientList(clients)
+    }
+
+    if (!initialized) {
+      setClientLoading('true')
+      retrieveClients()
+      setClientLoading('')
+      setInitialized(true)
+    }
+  })
+
   if (dashboardCheck) {
     return (
       <Card>
         <Card.Header>Dashboard Configuration</Card.Header>
         <Card.Body>
-          <div>Display Name: </div>
-          <div>Radar Type: </div>
-          <div>Firmware State Machine: </div>
+          <Form>
+            <Form.Group>
+              <Form.Label>Display Name</Form.Label>
+              <Form.Control value={displayName} onChange={x => changeDisplayName(x.target.value)} />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Radar Type</Form.Label>
+              <Form.Control value={radarType} onChange={x => changeRadarType(x.target.value)} as="select">
+                <option id="Innosent" value="Innosent" key="Innosent">
+                  Innosent
+                </option>
+                <option id="XeThru" value="XeThru" key="XeThru">
+                  XeThru
+                </option>
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Select Client</Form.Label>
+              <DropdownList itemList={clientList} item={client} changeItem={changeClient} loading={clientLoading} title="Client" />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>State Machine</Form.Label>
+              <Form.Control as="select" value={stateMachine} onChange={x => changeStateMachine(JSON.parse(x.target.value))}>
+                <option id="true" key="true" value="true">
+                  True
+                </option>
+                <option id="false" key="false" value="false">
+                  False
+                </option>
+              </Form.Control>
+            </Form.Group>
+          </Form>
         </Card.Body>
       </Card>
     )
@@ -585,6 +683,15 @@ function DashboardConfiguration(props) {
 
 DashboardConfiguration.propTypes = {
   dashboardCheck: PropTypes.bool.isRequired,
+  radarType: PropTypes.string.isRequired,
+  changeRadarType: PropTypes.func.isRequired,
+  client: PropTypes.string.isRequired,
+  changeClient: PropTypes.func.isRequired,
+  clickupToken: PropTypes.string.isRequired,
+  stateMachine: PropTypes.bool.isRequired,
+  changeStateMachine: PropTypes.func.isRequired,
+  displayName: PropTypes.string.isRequired,
+  changeDisplayName: PropTypes.func.isRequired,
 }
 
 export default RenamerView
