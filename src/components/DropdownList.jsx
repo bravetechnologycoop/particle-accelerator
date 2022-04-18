@@ -4,10 +4,6 @@ import React, { useEffect } from 'react'
 
 export default function DropdownList(props) {
   const { loading, item, changeItem, itemList, title } = props
-  useEffect(() => {
-    console.log('loading', loading)
-    console.log('itemList', itemList)
-  })
 
   if ((loading === 'idle' && itemList.length === 0) || loading === 'locked') {
     return (

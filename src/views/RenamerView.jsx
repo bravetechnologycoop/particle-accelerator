@@ -15,7 +15,7 @@ import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctio
 import countries from '../utilities/ISO3116Alpha2Codes.json'
 import DropdownList from '../components/DropdownList'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
-import { getSensorClients } from '../utilities/DatabaseFunctions'
+import { getSensorClients, insertSensorLocation } from '../utilities/DatabaseFunctions'
 
 function RenamerView(props) {
   const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
@@ -47,6 +47,11 @@ function RenamerView(props) {
   const [stateMachine, setStateMachine] = useState(true)
   const [displayName, setDisplayName] = useState('')
   const [radarType, setRadarType] = useState('')
+  const [password, setPassword] = useState('')
+
+  function changePassword(newPassword) {
+    setPassword(newPassword)
+  }
 
   function changeClient(newClient) {
     setClient(newClient)
@@ -160,21 +165,40 @@ function RenamerView(props) {
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
-      console.log('twilioResponse')
       const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, clickupToken)
       if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.phoneNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
-        /* const clickupTaskID = await getClickupTaskIDByName(clickupListID, selectedDevice.deviceName, clickupToken)
-        await modifyClickupTaskCustomFieldValue(clickupTaskID, process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID, twilioPhoneNumber, clickupToken) */
+        await modifyClickupTaskCustomFieldValue(
+          selectedDevice.clickupTaskID,
+          process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID,
+          twilioPhoneNumber,
+          clickupToken,
+        )
       } else {
         setTwilioStatus('error')
       }
     } else {
       setTwilioStatus('notChecked')
     }
-    if (!dashboardCheck) {
-      setDashboardStatus('notChecked')
+    if (dashboardCheck) {
+      setDashboardStatus('waiting')
+      const databaseInsert = await insertSensorLocation(
+        clickupToken,
+        password,
+        locationID,
+        displayName,
+        selectedDevice.deviceID,
+        twilioPhoneNumber,
+        stateMachine,
+        client,
+        radarType,
+      )
+      if (databaseInsert) {
+        setDashboardStatus('true')
+      } else {
+        setDashboardStatus('error')
+      }
     }
   }
 
@@ -365,6 +389,8 @@ function RenamerView(props) {
                 changeStateMachine={changeStateMachine}
                 displayName={displayName}
                 changeDisplayName={changeDisplayName}
+                password={password}
+                changePassword={changePassword}
               />
               <Card>
                 <Card.Header>Device Rename Status</Card.Header>
@@ -612,6 +638,8 @@ function DashboardConfiguration(props) {
     clickupToken,
     stateMachine,
     changeStateMachine,
+    password,
+    changePassword,
   } = props
 
   const [clientList, setClientList] = useState([])
@@ -620,7 +648,6 @@ function DashboardConfiguration(props) {
 
   useEffect(() => {
     async function retrieveClients() {
-      console.log('function called')
       const clients = await getSensorClients(clickupToken)
       setClientList(clients)
     }
@@ -672,6 +699,11 @@ function DashboardConfiguration(props) {
                 </option>
               </Form.Control>
             </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Password</Form.Label>
+              <Form.Control value={password} onChange={x => changePassword(x.target.value)} type="password" placeholder="Password" />
+            </Form.Group>
           </Form>
         </Card.Body>
       </Card>
@@ -692,6 +724,8 @@ DashboardConfiguration.propTypes = {
   changeStateMachine: PropTypes.func.isRequired,
   displayName: PropTypes.string.isRequired,
   changeDisplayName: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  changePassword: PropTypes.func.isRequired,
 }
 
 export default RenamerView
