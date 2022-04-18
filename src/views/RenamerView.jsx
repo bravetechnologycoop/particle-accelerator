@@ -9,7 +9,7 @@ import ActivatedDevice from '../utilities/ActivatedDevice'
 import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
-import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue, modifyClickupTaskName } from '../utilities/ClickupFunctions'
+import { modifyClickupTaskCustomFieldValue, modifyClickupTaskName } from '../utilities/ClickupFunctions'
 import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
 import countries from '../utilities/ISO3116Alpha2Codes.json'
@@ -404,7 +404,9 @@ function RenamerView(props) {
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
                     <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div> <PhoneNumberStatus status={twilioStatus} />{' '}
                   </div>
-                  <div>Registering to Dashboard:</div>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                    <div style={{ paddingRight: '10px' }}>Registering to Dashboard:</div> <StatusBadge status={dashboardStatus} />{' '}
+                  </div>
                 </Card.Body>
               </Card>
             </div>
