@@ -76,14 +76,14 @@ function Navigation(props) {
             loginState={`${clickupToken !== ''}`}
             userName={clickupUserName}
           />
-          <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
+          <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory().length !== 0} />
           <RowButton label="Activated Devices" handler={changeViewState} state={viewState} />
-          <RowButton label="Validator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
-          <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} />
+          <RowButton label="Validator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
+          <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Renamer" handler={changeViewState} state={viewState} />
-          <RowButton label="Button Registration" handler={changeViewState} state={viewState} />
-          <RowButton label="Twilio Number Purchasing" handler={changeViewState} state={viewState} />
+          <RowButton label="Button Registration" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
+          <RowButton label="Twilio Number Purchasing" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
           <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
         </ButtonGroup>
       </div>

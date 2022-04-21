@@ -2,7 +2,7 @@
 
 ## Adding a New Page
 1. Create a component in the `views` folder.
-2. Name the `ViewState` with a name of your choice.
+2. In `App.js`, name the `ViewState` with a name of your choice.
 3. Make the `path` a kebab-cased version of the `ViewState` name (important).
 4. Add an `if` statement in `Frame.jsx` following the format: 
 ```jsx
@@ -33,17 +33,23 @@ if (viewState === 'View State Name No Kebab Case') {
   - `views` - Every view seen by `Frame.jsx`
   - `pdf` - Components that produce the button labels
 
+### Environment Variables
+Environment Variables in the PA are done in DigitalOcean. Each environment variable must be preceeded by `REACT_APP_`, for example: `REACT_APP_TWILIO_MESSAGING_SID`. Environment variables are to be added at the component level, not the app level.
+
 ## Roadmap
 
 ### Immediate Cleanup
 - Refactor various files to allow for future developers to understand the code better
 - Document _everything_
-- Add a better encryption mechanism for the entire site (Google OAuth?)
 - Give the site a domain
 - Better file structure
 - More explanatory home page
 - Better 'blocking' mechanisms based on authentication
 - Changelog
+- Rename endpoints (/pa) (grouping)
+
+### Tier 0
+- Add a better encryption mechanism for the entire site (Google OAuth?) (needs domain)
 
 ### Tier 1
 - [moderate] Allow for new devices to be added to the `activated devices` list without having to be activated
@@ -55,8 +61,6 @@ if (viewState === 'View State Name No Kebab Case') {
 - [unsure] Move endpoints that are in the `chatbot-dev` server to a `sensor` server (dev/prod)
 - [semi-easy] Add logs to the Twilio Number and Button Registration Views
 
-
-
 ### Tier 3
 - [good cost-benefit] Synthesize the database inserts, AWS functionality, and phone number adding into one cohesive tool to register buttons.
 - [large endeavour] Automated sensor testing with the `getEventStream` function in Particle and `Chart.js`
@@ -65,7 +69,13 @@ if (viewState === 'View State Name No Kebab Case') {
 - [good cost-benefit] More streamlined sensor activation, less configuration, automatic sensor_XX incrementing, essentially just using the scanner and the return character to do everything
 - [moderate] Make the validator look nice again
 - [moderate] Make the renamer look nice
+- [moderate] Toggle between Dev/Prod/Staging modes, etc.
 
 ### Tier 4
 - [large endeavour] Back the application with a database
-- [decent cost-benefit] Create a python serial tool that interfaces with an accelerator endpoint to automatically register every button
+- [decent cost-benefit] Create a (desktop application) serial tool that interfaces with an accelerator endpoint to automatically register every button
+
+
+Other: 
+- Validator says door sensorID
+- 
