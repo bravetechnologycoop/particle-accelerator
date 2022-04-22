@@ -22,7 +22,7 @@ function App() {
         <Route path="/particle" element={<RouterInterface viewState="Particle" changeViewState={changeViewState} />} />
         <Route path="/clickup" element={<RouterInterface viewState="ClickUp" changeViewState={changeViewState} />} />
         <Route path="/activator" element={<RouterInterface viewState="Activator" changeViewState={changeViewState} />} />
-        <Route path="/validator" element={<RouterInterface viewState="Validator" changeViewState={changeViewState} />} />
+        <Route path="/device-lookup" element={<RouterInterface viewState="Device Lookup" changeViewState={changeViewState} />} />
         <Route path="/activation-history" element={<RouterInterface viewState="Activation History" changeViewState={changeViewState} />} />
         <Route path="/activated-devices" element={<RouterInterface viewState="Activated Devices" changeViewState={changeViewState} />} />
         <Route path="/door-sensor-pairing" element={<RouterInterface viewState="Door Sensor Pairing" changeViewState={changeViewState} />} />

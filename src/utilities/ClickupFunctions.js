@@ -6,7 +6,6 @@ export async function getClickupAccessToken(code) {
   try {
     console.log(`POST to ${url}`)
     const response = await axios.post(url)
-    console.log(response.data.access_token)
     return response.data.access_token
   } catch (err) {
     console.log(err)

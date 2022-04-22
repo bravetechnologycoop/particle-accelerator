@@ -12,6 +12,7 @@ import RenamerView from './RenamerView'
 import ParticleSettings from '../utilities/ParticleSettings'
 import ButtonRegistrationView from './ButtonRegistrationView'
 import TwilioPurchaseView from './TwilioPurchaseView'
+import HomeView from './HomeView'
 
 function Frame(props) {
   const {
@@ -60,7 +61,7 @@ function Frame(props) {
       />
     )
   }
-  if (viewState === 'Validator') {
+  if (viewState === 'Device Lookup') {
     return <Validator token={token} changeToken={changeToken} particleSettings={particleSettings} />
   }
   if (viewState === 'Particle') {
@@ -122,7 +123,7 @@ function Frame(props) {
   if (viewState === 'Button Registration') {
     return <ButtonRegistrationView clickupToken={clickupToken} />
   }
-  return <h1>home</h1>
+  return <HomeView />
 }
 
 Frame.propTypes = {

@@ -79,7 +79,7 @@ function Navigation(props) {
           <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory().length !== 0} />
           <RowButton label="Activated Devices" handler={changeViewState} state={viewState} />
-          <RowButton label="Validator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
+          <RowButton label="Device Lookup" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Renamer" handler={changeViewState} state={viewState} />
           <RowButton label="Button Registration" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />

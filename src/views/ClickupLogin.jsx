@@ -108,7 +108,6 @@ function ClickupLogin(props) {
       const retrievedWorkspaces = await getClickupWorkspaces(tempClickupToken)
       changeWorkspaces(retrievedWorkspaces)
     }
-    console.log('clickup token: ', clickupToken)
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
     }
