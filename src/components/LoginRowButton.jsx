@@ -4,6 +4,15 @@ import { Link } from 'react-router-dom'
 import React from 'react'
 import LoginStatus from './LoginStatus'
 
+/**
+ * LoginRowButton
+ *
+ * React Component for
+ *
+ * @param props
+ * @return {JSX.Element}
+ * @constructor
+ */
 function LoginRowButton(props) {
   const { label, state, enabled, loginState, userName } = props
 

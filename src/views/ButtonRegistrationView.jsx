@@ -11,11 +11,29 @@ export default function ButtonRegistrationView(props) {
   const [deviceName, setDeviceName] = useState('')
   const [formLock, setFormLock] = useState(false)
   const [registrationStatus, setRegistrationStatus] = useState('idle')
+  const [environment, setEnvironment] = useState('dev')
 
   async function handleSubmit(event) {
     event.preventDefault()
     setRegistrationStatus('waiting')
     setFormLock(true)
+
+    /*
+    If statement for production/development would go here.
+
+    for example:
+
+    let awsRegistration
+
+    if (environment === 'dev') {
+      awsRegistration = await registerLoraButton(environment/url, deviceEUI, deviceName, clickupToken)
+    } else if (environment === 'prod') {
+      awsRegistration = await registerLoraButton(environment/url, deviceEUI, deviceName, clickupToken)
+    } else {
+      setRegistrationStatus('error')
+    }
+     */
+
     const awsRegistration = await registerLoraButton(deviceEUI, deviceName, clickupToken)
 
     if (awsRegistration === 'success') {
@@ -31,7 +49,18 @@ export default function ButtonRegistrationView(props) {
   return (
     <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
       <Form.Group>
-        <Form.Label>Device Name</Form.Label>
+        <Form.Label>Select Environment</Form.Label>
+        <Form.Control as="select" value={environment} onChange={x => setEnvironment(x.target.value)}>
+          <option id="dev" key="dev" value="dev">
+            Development
+          </option>
+          <option id="prod" key="prod" value="prod">
+            Production
+          </option>
+        </Form.Control>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label style={{ paddingTop: '10px' }}>Device Name</Form.Label>
         <Form.Control value={deviceName} onChange={x => setDeviceName(x.target.value)} disabled={formLock} />
       </Form.Group>
       <Form.Group>

@@ -4,6 +4,17 @@ import PropTypes from 'prop-types'
 import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 
+/**
+ * DoorSensorEntryCard
+ *
+ * React Component for allowing a user to input an IM21 Door ID and submit it to the queue in the DoorSensorView.jsx view.
+ *
+ * @param {ActivatedDevice} props.device Device that the card represents
+ * @param {function} props.submitDeviceHandler Function that submits the device to the queue
+ * @param {string} props.searchState current state of searching for the said device that the component is in (soon to be deprecated)
+ * @param {string} props.selectorState current state of the radio button that controls which method to obtain a device by (soon to be deprecated)
+ * @return {JSX.Element}
+ */
 function DoorSensorEntryCard(props) {
   const { device, submitDeviceHandler, searchState, selectorState } = props
 

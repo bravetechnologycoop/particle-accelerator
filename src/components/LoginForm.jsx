@@ -7,10 +7,15 @@ import { getDisplayName, getProducts } from '../utilities/ParticleFunctions'
 const { login } = require('../utilities/ParticleFunctions')
 
 /**
- * LoginForm:
- * A React component which allows a user to log into an account using their
- * username and email and acquires a token if the login is successful.
- * @modifies the global token variable and the global loginState variable.
+ * LoginForm
+ *
+ * React Component which allows a user to log into their Particle account
+ *
+ * @param {function} props.changeToken handler function for changing the global Particle Token
+ * @param {function} props.changeLoginState handler function for changing the global Particle login state
+ * @param {function} props.changeParticleSettings handler function for changing the global Particle settings
+ * @return {JSX.Element}
+ * @constructor
  */
 function LoginForm(props) {
   const { changeToken, changeLoginState, changeParticleSettings } = props

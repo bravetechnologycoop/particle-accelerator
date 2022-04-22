@@ -23,9 +23,18 @@ function checkValidICCID(iccid) {
  * React component for displaying the current status of acquiring
  * an iccid. Outputs a badge with either the current status of iccid acquisition
  * or a badge with the iccid if a valid iccid is returned.
- * @param props
- * iccid (string): the current state or iccid of the current activating
- *                    device.
+ *
+ * States:
+ *
+ * props.iccid = 'idle' -> grey badge with text 'Waiting'
+ *
+ * props.iccid = 'waiting' -> yellow badge with text 'In Progress'
+ *
+ * props.iccid = Valid ICCID -> green badge with ICCID as text
+ *
+ * props.iccid = else -> red badge with text 'Error in Acquiring ICCID'
+ *
+ * @param {string} props.iccid the current state or iccid of the current activating device.
  */
 function ICCIDStatus(props) {
   const { iccid } = props
