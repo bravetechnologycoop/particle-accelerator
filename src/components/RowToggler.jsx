@@ -1,5 +1,5 @@
 import React from 'react'
-import './Navigation.css'
+import '../views/Navigation.css'
 import PropTypes from 'prop-types'
 import { Badge } from 'react-bootstrap'
 

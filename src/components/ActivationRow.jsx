@@ -4,6 +4,14 @@ import PropTypes from 'prop-types'
 import ActivationAttempt from '../utilities/ActivationAttempt'
 import StatusBadge from './StatusBadge'
 
+/**
+ * ActivationRow: React component to be used in the Activation History view. Migration to ActivationHistory.js is to be considered.
+ *
+ * Props:
+ *
+ * attempt: instance of ActivationAttempt
+ * @return {JSX.Element} Card with details from an ActivationAttempt
+ */
 function ActivationRow(props) {
   const { attempt } = props
 

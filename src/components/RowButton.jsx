@@ -1,4 +1,4 @@
-import './Navigation.css'
+import '../views/Navigation.css'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import React, { useState } from 'react'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Navigation from './components/Navigation'
+import Navigation from './views/Navigation'
 import Frame from './views/Frame'
 import {
   getClickupToken,
