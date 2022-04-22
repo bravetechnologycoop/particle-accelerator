@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-const chatbotDevURL = process.env.REACT_APP_CHATBOT_DEV_URL
+const BUTTONS_DEV_URL = process.env.REACT_APP_BUTTONS_DEV_URL
 const braveAPIKey = process.env.REACT_APP_BRAVE_API_KEY
 
 // eslint-disable-next-line import/prefer-default-export
 export async function registerLoraButton(deviceEUI, targetName, clickupToken) {
-  const url = `${chatbotDevURL}/aws-device-registration`
+  const url = `${BUTTONS_DEV_URL}/pa/aws-device-registration`
 
   const data = {
     deviceEUI,

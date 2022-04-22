@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const CHATBOT_DEV_ENDPOINT = process.env.REACT_APP_CHATBOT_DEV_URL
+const SENSOR_DEV_URL = process.env.REACT_APP_SENSOR_DEV_URL
 
 // eslint-disable-next-line import/prefer-default-export
 export async function getSensorClients(clickupToken) {
@@ -10,7 +10,7 @@ export async function getSensorClients(clickupToken) {
   }
 
   try {
-    const response = await axios.post(`${CHATBOT_DEV_ENDPOINT}/get-sensor-clients`, data)
+    const response = await axios.post(`${SENSOR_DEV_URL}/pa/get-sensor-clients`, data)
     const resultArray = []
     response.data.clients.forEach(client => resultArray.push(client))
     return resultArray
@@ -44,7 +44,7 @@ export async function insertSensorLocation(
   }
 
   try {
-    const response = await axios.post(`${CHATBOT_DEV_ENDPOINT}/create-sensor-location`, data)
+    const response = await axios.post(`${SENSOR_DEV_URL}/pa/create-sensor-location`, data)
     return response.data.message === 'success'
   } catch (err) {
     console.error(err)
