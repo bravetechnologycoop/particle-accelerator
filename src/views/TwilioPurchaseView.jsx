@@ -85,7 +85,8 @@ function TwilioPurchaseView(props) {
       <div style={{ maxWidth: '30ch', overflowY: 'auto' }}>
         {history.map((attempt, index) => {
           return (
-            <li style={{ listStyleType: 'none' }} key={index}>
+            // eslint-disable-next-line react/no-array-index-key
+            <li style={{ listStyleType: 'none' }} key={`${index}${attempt.phoneNumber}`}>
               <Card>
                 <Card.Body>
                   <h4>{attempt.friendlyName}</h4>
