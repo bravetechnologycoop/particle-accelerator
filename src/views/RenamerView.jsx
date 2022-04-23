@@ -616,7 +616,6 @@ function TwilioConfiguration(props) {
         <div style={{ padding: '10px' }}>
           <Form.Group>
             <Form.Label>Phone Number Country</Form.Label>
-            <DropdownList itemList={countries} changeItem={changeTwilioCountryCode} item={twilioCountryCode} title="Country" />
             <Form.Label style={{ paddingTop: '10px' }}>Phone Number Area Code</Form.Label>
             <Form.Control placeholder="Area Code" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
             <Form.Text className="text-muted">Case Sensitive</Form.Text>
