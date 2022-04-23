@@ -270,3 +270,16 @@ export function copyActivatedDevices(activatedDevices) {
       ),
   )
 }
+
+export function storeTwilioHistory(twilioHistory) {
+  const stringedData = JSON.stringify(twilioHistory)
+  localStorage.setItem('twilioHistory', stringedData)
+}
+
+export function retTwilioHistory() {
+  const result = localStorage.getItem('twilioHistory')
+  if (result === null) {
+    return []
+  }
+  return JSON.parse(result)
+}

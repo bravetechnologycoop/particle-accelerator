@@ -4,6 +4,7 @@ import { Card, Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
 import { purchaseButtonTwilioNumberByAreaCode, purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
+import { retTwilioHistory, storeTwilioHistory } from "../utilities/StorageFunctions";
 
 function TwilioPurchaseView(props) {
   const { clickupToken } = props
@@ -13,10 +14,12 @@ function TwilioPurchaseView(props) {
   const [locationID, setLocationID] = useState('')
   const [formLock, setFormLock] = useState(false)
   const [registrationStatus, setRegistrationStatus] = useState('idle')
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState(retTwilioHistory())
 
   function pushHistory(newAttempt) {
-    setHistory(history.concat(newAttempt))
+    const newHistory = history.concat(newAttempt)
+    setHistory(newHistory)
+    storeTwilioHistory(newHistory)
   }
 
   async function handleSubmit(event) {
@@ -46,7 +49,7 @@ function TwilioPurchaseView(props) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
           <Form.Group>
@@ -83,8 +86,10 @@ function TwilioPurchaseView(props) {
           return (
             <li style={{ listStyleType: 'none' }} key={attempt.phoneNumber}>
               <Card>
-                <Card.Title>{attempt.friendlyName}</Card.Title>
-                <Card.Body>{attempt.phoneNumber}</Card.Body>
+                <Card.Body>
+                  <h4>{attempt.friendlyName}</h4>
+                  {attempt.phoneNumber}
+                </Card.Body>
               </Card>
             </li>
           )
