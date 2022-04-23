@@ -4,7 +4,7 @@ import { Card, Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
 import { purchaseButtonTwilioNumberByAreaCode, purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
-import { retTwilioHistory, storeTwilioHistory } from "../utilities/StorageFunctions";
+import { retTwilioHistory, storeTwilioHistory } from '../utilities/StorageFunctions'
 
 function TwilioPurchaseView(props) {
   const { clickupToken } = props
