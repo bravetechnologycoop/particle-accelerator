@@ -42,7 +42,7 @@ function TwilioPurchaseView(props) {
       setRegistrationStatus('error')
     }
 
-    pushHistory({ friendlyName: twilioNumber.friendlyName, phoneNumber: twilioNumber.phoneNumber })
+    pushHistory({ friendlyName: twilioNumber.friendlyName, phoneNumber: twilioNumber.phoneNumber, deviceType })
 
     setLocationID(locationID.replace(/[0-9]/g, ''))
 
@@ -90,6 +90,8 @@ function TwilioPurchaseView(props) {
                 <Card.Body>
                   <h4>{attempt.friendlyName}</h4>
                   {attempt.phoneNumber}
+                  <br />
+                  {attempt.deviceType}
                 </Card.Body>
               </Card>
             </li>
