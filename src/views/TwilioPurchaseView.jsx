@@ -86,7 +86,7 @@ function TwilioPurchaseView(props) {
           </div>
         </Form>
       </div>
-      <div style={{ maxWidth: '30ch', overflowY: 'auto' }}>
+      <div style={{ maxWidth: '30ch', overflowY: 'auto', paddingLeft: '20px', height: '95vh' }}>
         {history.map((attempt, index) => {
           return (
             // eslint-disable-next-line react/no-array-index-key
