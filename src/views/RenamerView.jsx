@@ -12,7 +12,6 @@ import StatusBadge from '../components/StatusBadge'
 import { modifyClickupTaskCustomFieldValue, modifyClickupTaskName } from '../utilities/ClickupFunctions'
 import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
-import countries from '../utilities/ISO3116Alpha2Codes.json'
 import DropdownList from '../components/DropdownList'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
 import { getSensorClients, insertSensorLocation } from '../utilities/DatabaseFunctions'
@@ -48,6 +47,11 @@ function RenamerView(props) {
   const [displayName, setDisplayName] = useState('')
   const [radarType, setRadarType] = useState('')
   const [password, setPassword] = useState('')
+  const [environment, setEnvironment] = useState('dev')
+
+  function changeEnvironment(newEnviroment) {
+    setEnvironment(newEnviroment)
+  }
 
   function changePassword(newPassword) {
     setPassword(newPassword)
@@ -183,6 +187,9 @@ function RenamerView(props) {
     }
     if (dashboardCheck) {
       setDashboardStatus('waiting')
+
+      // If statement would go here for environment selection. See ButtonRegistrationView.jsx for example code
+
       const databaseInsert = await insertSensorLocation(
         clickupToken,
         password,
@@ -391,6 +398,8 @@ function RenamerView(props) {
                 changeDisplayName={changeDisplayName}
                 password={password}
                 changePassword={changePassword}
+                environment={environment}
+                changeEnvironment={changeEnvironment}
               />
               <Card>
                 <Card.Header>Device Rename Status</Card.Header>
@@ -642,6 +651,8 @@ function DashboardConfiguration(props) {
     changeStateMachine,
     password,
     changePassword,
+    environment,
+    changeEnvironment,
   } = props
 
   const [clientList, setClientList] = useState([])
@@ -703,6 +714,18 @@ function DashboardConfiguration(props) {
             </Form.Group>
 
             <Form.Group>
+              <Form.Label>Select Environment</Form.Label>
+              <Form.Control as="select" value={environment} onChange={x => changeEnvironment(x.target.value)}>
+                <option id="dev" key="dev" value="dev">
+                  Development
+                </option>
+                <option id="prod" key="prod" value="prod">
+                  Production
+                </option>
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group>
               <Form.Label>Password</Form.Label>
               <Form.Control value={password} onChange={x => changePassword(x.target.value)} type="password" placeholder="Password" />
             </Form.Group>
@@ -728,6 +751,8 @@ DashboardConfiguration.propTypes = {
   changeDisplayName: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,
   changePassword: PropTypes.func.isRequired,
+  environment: PropTypes.string.isRequired,
+  changeEnvironment: PropTypes.func.isRequired,
 }
 
 export default RenamerView

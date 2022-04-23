@@ -47,33 +47,35 @@ export default function ButtonRegistrationView(props) {
   }
 
   return (
-    <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
-      <Form.Group>
-        <Form.Label>Select Environment</Form.Label>
-        <Form.Control as="select" value={environment} onChange={x => setEnvironment(x.target.value)}>
-          <option id="dev" key="dev" value="dev">
-            Development
-          </option>
-          <option id="prod" key="prod" value="prod">
-            Production
-          </option>
-        </Form.Control>
-      </Form.Group>
-      <Form.Group>
-        <Form.Label style={{ paddingTop: '10px' }}>Device Name</Form.Label>
-        <Form.Control value={deviceName} onChange={x => setDeviceName(x.target.value)} disabled={formLock} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label style={{ paddingTop: '10px' }}>Device EUI</Form.Label>
-        <Form.Control value={deviceEUI} onChange={x => setDeviceEUI(x.target.value)} disabled={formLock} />
-      </Form.Group>
-      <div style={{ paddingTop: '10px' }}>
-        <Button type="submit">Submit</Button>
-      </div>
-      <div style={{ paddingTop: '10px' }}>
-        <RegistrationIcon status={registrationStatus} />
-      </div>
-    </Form>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
+        <Form.Group>
+          <Form.Label>Select Environment</Form.Label>
+          <Form.Control as="select" value={environment} onChange={x => setEnvironment(x.target.value)}>
+            <option id="dev" key="dev" value="dev">
+              Development
+            </option>
+            <option id="prod" key="prod" value="prod">
+              Production
+            </option>
+          </Form.Control>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label style={{ paddingTop: '10px' }}>Device Name</Form.Label>
+          <Form.Control value={deviceName} onChange={x => setDeviceName(x.target.value)} disabled={formLock} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label style={{ paddingTop: '10px' }}>Device EUI</Form.Label>
+          <Form.Control value={deviceEUI} onChange={x => setDeviceEUI(x.target.value)} disabled={formLock} />
+        </Form.Group>
+        <div style={{ paddingTop: '10px' }}>
+          <Button type="submit">Submit</Button>
+        </div>
+        <div style={{ paddingTop: '10px' }}>
+          <RegistrationIcon status={registrationStatus} />
+        </div>
+      </Form>
+    </div>
   )
 }
 
