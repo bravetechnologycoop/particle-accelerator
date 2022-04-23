@@ -83,9 +83,9 @@ function TwilioPurchaseView(props) {
         </Form>
       </div>
       <div style={{ maxWidth: '30ch', overflowY: 'auto' }}>
-        {history.map(attempt => {
+        {history.map((attempt, index) => {
           return (
-            <li style={{ listStyleType: 'none' }} key={attempt.phoneNumber}>
+            <li style={{ listStyleType: 'none' }} key={index}>
               <Card>
                 <Card.Body>
                   <h4>{attempt.friendlyName}</h4>
