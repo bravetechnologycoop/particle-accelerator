@@ -17,7 +17,8 @@ function TwilioPurchaseView(props) {
   const [history, setHistory] = useState(retTwilioHistory())
 
   function pushHistory(newAttempt) {
-    const newHistory = history.concat(newAttempt)
+    const attemptArray = [newAttempt]
+    const newHistory = [attemptArray].concat(history)
     setHistory(newHistory)
     storeTwilioHistory(newHistory)
   }
