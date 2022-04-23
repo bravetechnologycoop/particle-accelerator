@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Card, Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
@@ -16,9 +16,13 @@ function TwilioPurchaseView(props) {
   const [registrationStatus, setRegistrationStatus] = useState('idle')
   const [history, setHistory] = useState(retTwilioHistory())
 
+  useEffect(() => {
+    console.log(history)
+  })
+
   function pushHistory(newAttempt) {
     const attemptArray = [newAttempt]
-    const newHistory = [attemptArray].concat(history)
+    const newHistory = attemptArray.concat(history)
     setHistory(newHistory)
     storeTwilioHistory(newHistory)
   }
