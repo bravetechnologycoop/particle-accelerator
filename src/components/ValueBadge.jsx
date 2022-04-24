@@ -2,6 +2,22 @@ import { Badge } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+/**
+ * ValueBadge: Generic badge for displaying states and values
+ *
+ * States:
+ *  - value === 'idle' -> Colour: yellow | Text: 'Waiting'
+ *  - value === '' -> Colour: red | Text: 'Error'
+ *  - value === 'false' -> Colour: red | Text: 'False'
+ *  - value === 'never online' -> Colour: red | Text: 'Never Online'
+ *  - value === 'none' -> Colour: red | Text: 'None'
+ *  - value === 'not found' -> Colour: red | Text: 'Device Not Found'
+ *  - value === else -> Colour: (bg === 'true' || else -> green, bg === 'false' -> red) Text: {props.value}
+ *
+ * @param {string} props.value value or state to display
+ * @param {string} props.bg forced background style for values not recognized in props.value
+ * @return {JSX.Element}
+ */
 function ValueBadge(props) {
   const { value, bg } = props
   let localStyle = bg

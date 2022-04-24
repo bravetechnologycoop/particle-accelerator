@@ -1,6 +1,10 @@
 const axios = require('axios')
 
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * getClickupAccessToken: attempts to retrieve an authentication from ClickUp
+ * @param {string} code the OAuth2 code supplied by the ClickUp OAuth redirect.
+ * @return {Promise<null|*>} Access token if successful, null if unsuccessful
+ */
 export async function getClickupAccessToken(code) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/oauth/token?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&client_secret=${process.env.REACT_APP_CLICKUP_CLIENT_SECRET}&code=${code}`
   try {
@@ -13,6 +17,11 @@ export async function getClickupAccessToken(code) {
   }
 }
 
+/**
+ * getClickupUserName: retrieve a user's name from ClickUp
+ * @param {string} token ClickUp token
+ * @return {Promise<string|*>} username if successful, empty string if not.
+ */
 export async function getClickupUserName(token) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/user`
   try {
@@ -29,6 +38,11 @@ export async function getClickupUserName(token) {
   }
 }
 
+/**
+ * getClickupWorkspaces: retrieves all of the clickup workspaces that a user is signed in with.
+ * @param {string} token clickup token
+ * @return {Promise<[{name: string, id: string}]>} returns a list of workspaces and IDs if successful, empty array if not.
+ */
 export async function getClickupWorkspaces(token) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/team`
   try {
@@ -47,6 +61,12 @@ export async function getClickupWorkspaces(token) {
   }
 }
 
+/**
+ * getClickupSpaces: retrieves all of the spaces inside of a clickup workspace
+ * @param {string} token        clickup token
+ * @param {string} workspaceID  ID of workspace to search for spaces in
+ * @return {Promise<[{name: string, id: string}]>} list of spaces and names if successful, empty array if not.
+ */
 export async function getClickupSpaces(token, workspaceID) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/team/${workspaceID}/space`
   try {
@@ -65,6 +85,12 @@ export async function getClickupSpaces(token, workspaceID) {
   }
 }
 
+/**
+ * getClickupSpaceFolders: retrieves all of the folders inside of a Clickup space.
+ * @param {string} token    clickup token
+ * @param {string} spaceID  ID of the space to search for folders in
+ * @return {Promise<[{name: string, id: string}]>} list of folders and their IDs if successful, empty array if not.
+ */
 export async function getClickupSpaceFolders(token, spaceID) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/space/${spaceID}/folder`
   try {
@@ -83,6 +109,12 @@ export async function getClickupSpaceFolders(token, spaceID) {
   }
 }
 
+/**
+ * getClickupListsInFolders: retrieves all of the lists in a clickup folder
+ * @param {string} token     clickup token
+ * @param {string} folderID  ID of the folder to search for lists in
+ * @return {Promise<[{name: string, id: string}]>} a list of list names and IDs if successful, empty array if not
+ */
 export async function getClickupListsInFolders(token, folderID) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/folder/${folderID}/list`
   try {
@@ -101,6 +133,12 @@ export async function getClickupListsInFolders(token, folderID) {
   }
 }
 
+/**
+ * getClickupListsWithoutFolders: retrieves all of the clickup lists in a clickup space
+ * @param {string} token     clickup token
+ * @param {string} spaceID   ID of the space to search for lists in
+ * @return {Promise<[{name: string, id: string}]>} a list of list names and IDs if successful, empty array if not
+ */
 export async function getClickupListsWithoutFolders(token, spaceID) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/space/${spaceID}/list`
   try {
@@ -119,6 +157,12 @@ export async function getClickupListsWithoutFolders(token, spaceID) {
   }
 }
 
+/**
+ * getAllClickupListsInSpace: retrieves all of the clickup lists in a clickup space
+ * @param {string} token     clickup token
+ * @param {string} spaceID   ID of the space to search for lists in
+ * @return {Promise<{name: *, folderName: string, id: *}[]>}
+ */
 export async function getAllClickupListsInSpace(token, spaceID) {
   async function getTaggedListsInFolders(localToken, folderObject) {
     const listsInFolder = await getClickupListsInFolders(localToken, folderObject.id)
@@ -138,6 +182,12 @@ export async function getAllClickupListsInSpace(token, spaceID) {
   return taggedListsWithoutFolders.concat(folderLists)
 }
 
+/**
+ * getClickupStatusesInList: retrieves all of the statuses in a clickup list
+ * @param {string} token   clickup token
+ * @param {string} listID  ID of the list to search for statuses in
+ * @return {Promise<{name: string, id: string}[]>} list of status names and ids if successful, empty array if not.
+ */
 export async function getClickupStatusesInList(token, listID) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}`
   try {
@@ -155,6 +205,12 @@ export async function getClickupStatusesInList(token, listID) {
   }
 }
 
+/**
+ * getClickupCustomFieldsInList: retrieves all of the custom fields in a clickup list
+ * @param {string} token   clickup token
+ * @param {string} listID  ID of the list to search for custom fields in
+ * @return {Promise<{name: string, id: string}[]>} array of custom field names and ids if successful, empty array if not
+ */
 export async function getClickupCustomFieldsInList(token, listID) {
   console.log('token', token)
   console.log('listID', listID)
@@ -174,6 +230,17 @@ export async function getClickupCustomFieldsInList(token, listID) {
   }
 }
 
+/**
+ * createTaskInSensorTracker: creates a task in Brave's sensor tracker corresponding to the supplied device information.
+ * @param {string} token                 clickup token
+ * @param {string} sensorName            name of the sensor in Particle, which will become the name of the task in clickup
+ * @param {string} listID                ID of the list to place the task in
+ * @param {string} deviceID              Particle device ID of the sensor/Boron
+ * @param {string} serialNumber          Particle serial number of the sensor/Boron
+ * @param {string} statusID              ID of the clickup status for the clickup task to bear
+ * @param {{formerSensorNumber: string, deviceID: string, serialNumber: string}} customFields ids of the custom fields
+ * @return {Promise<null|string>}             the ID of the created clickup task if successful, null if unsuccessful
+ */
 export async function createTaskInSensorTracker(token, sensorName, listID, deviceID, serialNumber, statusID, customFields) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/task`
   const config = {
@@ -212,6 +279,12 @@ export async function createTaskInSensorTracker(token, sensorName, listID, devic
   }
 }
 
+/**
+ * getClickupTasksInList: retrieves all of the tasks in a clickup list
+ * @param {string} listID    ID of the list to search for tasks in
+ * @param {string} token     clickup token
+ * @return {Promise<{}|null>}   the tasks in a list if successful, null if not.
+ */
 export async function getClickupTasksInList(listID, token) {
   console.log('searching listid', listID)
   console.log('searching token', token)
@@ -230,6 +303,13 @@ export async function getClickupTasksInList(listID, token) {
   }
 }
 
+/**
+ * getClickupTaskIDByName: retrieves the clickup task id matching exactly the supplied name to a task name in ClickUp
+ * @param {string} listID         the ID of the list to search for the task in
+ * @param {string} taskName       the name of the task to search for
+ * @param {string} token          clickup token
+ * @return {Promise<string|null>} the taskID if successful, null if not
+ */
 export async function getClickupTaskIDByName(listID, taskName, token) {
   const tasks = await getClickupTasksInList(listID, token)
   const matchingTasks = tasks.filter(task => {
@@ -249,6 +329,13 @@ export async function getClickupTaskIDByName(listID, taskName, token) {
   console.error(`Unknown error finding tasks in ${listID} with the name: ${taskName}`)
 }
 
+/**
+ * getClickupTaskDataByName: retrieves data of a task in a clickupList matching the supplied task name
+ * @param {string} listID              ID of the list where the task is situated
+ * @param {string} taskName            The name of the task to get data for
+ * @param {string} token               clickup token
+ * @return {Promise<null|*>}  Data from the task if successful, null if unsuccessful
+ */
 export async function getClickupTaskDataByName(listID, taskName, token) {
   const tasks = await getClickupTasksInList(listID, token)
   const matchingTasks = tasks.filter(task => {
@@ -268,6 +355,14 @@ export async function getClickupTaskDataByName(listID, taskName, token) {
   console.error(`Unknown error finding tasks in ${listID} with the name: ${taskName}`)
 }
 
+/**
+ * modifyClickupTaskCustomFieldValue: modifies a custom field value of a clickup task
+ * @param {string} taskID                the ID of the clickup task to modify
+ * @param {string} fieldID               the field ID to modify
+ * @param {string} value                 the new value for the clickup task
+ * @param {string} token                 clickup token
+ * @return {Promise<boolean>}   true if successful, false if not
+ */
 export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, token) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}/field/${fieldID}`
   const data = {
@@ -286,6 +381,14 @@ export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, 
   }
 }
 
+/**
+ * modifyClickupTaskName: modifies the name of a clickup task
+ * @param {string} oldName             the former name of the clickup task
+ * @param {string} newName             the desired new name for the clickup task
+ * @param {string} listID              the ID of the list that the task resides in
+ * @param {string} token               clickup token
+ * @return {Promise<boolean>} true if successful, false if not
+ */
 export async function modifyClickupTaskName(oldName, newName, listID, token) {
   const taskID = await getClickupTaskIDByName(listID, oldName, token)
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}`

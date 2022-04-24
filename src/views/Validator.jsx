@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 import ValidationAttempt from '../utilities/ValidationAttempt'
-import ValueBadge from './ValueBadge'
-import DeviceIDStatus from './DeviceIDStatus'
-import ICCIDStatus from './ICCIDStatus'
+import ValueBadge from '../components/ValueBadge'
+import DeviceIDStatus from '../components/DeviceIDStatus'
+import ICCIDStatus from '../components/ICCIDStatus'
 import { getParticleToken } from '../utilities/StorageFunctions'
 import ParticleSettings from '../utilities/ParticleSettings'
 
@@ -26,6 +26,14 @@ const styles = {
     paddingBottom: '5px',
   },
 }
+
+/**
+ * Validator:
+ *
+ * @param props
+ * @return {JSX.Element}
+ * @constructor
+ */
 function Validator(props) {
   const { token, changeToken, particleSettings } = props
 

@@ -2,7 +2,11 @@ const axios = require('axios')
 
 const SENSOR_DEV_URL = process.env.REACT_APP_SENSOR_DEV_URL
 
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * getSensorClients: retrieves the list of clients in the Brave sensor DB, uses the sensors backend.
+ * @param clickupToken      clickup token
+ * @return {Promise<{name: string, id: string}[]>}   array of client names and ids if successful, empty if not.
+ */
 export async function getSensorClients(clickupToken) {
   const data = {
     clickupToken,
@@ -19,6 +23,19 @@ export async function getSensorClients(clickupToken) {
   }
 }
 
+/**
+ *
+ * @param clickupToken
+ * @param password
+ * @param locationID
+ * @param displayName
+ * @param particleDeviceID
+ * @param twilioNumber
+ * @param stateMachineBool
+ * @param clientID
+ * @param radarType
+ * @return {Promise<boolean>}
+ */
 export async function insertSensorLocation(
   clickupToken,
   password,

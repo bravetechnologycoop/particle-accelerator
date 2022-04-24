@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import ActivatorView from './ActivatorView'
-import Validator from '../components/Validator'
+import Validator from './Validator'
 import LoginView from './LoginView'
 import ClickupLogin from './ClickupLogin'
 import ActivationHistory from './ActivationHistory'

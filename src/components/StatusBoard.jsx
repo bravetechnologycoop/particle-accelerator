@@ -24,28 +24,18 @@ const styles = {
 }
 
 /**
- * StatusBoard: React Component for displaying all of the statuses of the
- * current stages of the activation process.
- * @param props
- *    status (boolean): boolean for whether a first activation has taken place
- *                      yet or not.
- *    deviceID (string): the current state of deviceID acquisition or the actual
- *                       deviceID.
- *    iccid (string): the current state of iccid acquisition or the actual iccid
- *    activationStatus (string): the current state of SIM activation status
- *    renameStatus (string): the current status of renaming the Particle device
- *    totalStatus (string): the current status of the device activation
- *                          validation process.
- *    handleSubmit (any): function for handling the form submission process
- *    resetDefaults (any): function for resetting the form to a default state
- *    serialNumber (string): the user-inputted device serial number
- *    newDeviceName (string): the user-inputted name for the device
- * @effects
- * All of the string/boolean fields in props during when the
- * "next device" button is pressed (clears all fields)
+ * StatusBoard: React Component for displaying all of the statuses of the current stages of the activation process.
  *
- * The list of ActivationAttempts when the "try again" button is pressed
- * (creates a new attempt)
+ * @param {boolean} props.status boolean for whether a first activation has taken place yet or not.
+ * @param {string} props.deviceID the current state of deviceID acquisition or the actual deviceID.
+ * @param {string} props.iccid the current state of iccid acquisition or the actual iccid
+ * @param {string} props.activationStatus the current state of SIM activation status
+ * @param {string} props.renameStatus the current status of renaming the Particle device
+ * @param {string} props.totalStatus the current status of the device activation validation process.
+ * @param {function} props.handleSubmit handler function for handling the form submission process
+ * @param {function} props.resetDefaults function for resetting the form to a default state
+ * @param {string} props.serialNumber the user-inputted device serial number
+ * @param {string} props.newDeviceName the user-inputted name for the device
  */
 function StatusBoard(props) {
   // eslint-disable-next-line react/destructuring-assignment,react/prop-types

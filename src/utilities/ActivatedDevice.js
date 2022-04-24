@@ -1,6 +1,25 @@
 import { getCurrentFirmwareVersion, getDeviceDetails, pairDoorSensor } from './ParticleFunctions'
 import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue } from './ClickupFunctions'
 
+/**
+ * ActivatedDevice
+ *
+ * Class for representing a successfully activated Particle Boron device.
+ *
+ * Fields:
+ *
+ *  - deviceName: Device name of the Boron
+ *  - serialNumber: Boron serial number
+ *  - productID: Particle product family ID assigned to the Boron
+ *  - deviceID: device ID of the Boron
+ *  - iccid: ICCID of the boron
+ *  - timeStamp: timestamp of the boron's activation
+ *  - dateStamp: datestamp of the boron's activation
+ *  - doorSensorID: hex ID of the IM21 door sensor which is currently paired to the device
+ *  - inPairingList: whether the device is currently in the process of being paired to a door sensor or not
+ *  - intervalID: the setInterval ID of the device in pairing
+ *  - clickupTaskID: the clickup Task ID of the device
+ */
 export default class ActivatedDevice {
   constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp, doorSensorID, inPairingList, intervalID, clickupTaskID) {
     this.deviceName = deviceName
