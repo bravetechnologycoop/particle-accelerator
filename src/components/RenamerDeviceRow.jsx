@@ -4,6 +4,14 @@ import { Card } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 
+/**
+ * RenamerDeviceRow: React Component for selecting a device in the Renamer View (should probably be migrated to Renamer)
+ *
+ * @param {ActivatedDevice} props.device an entry from the list of ActivaatedDevices
+ * @param {function} props.changeCurrentDevice handler function to change top-level currentDevice
+ * @param {ActivatedDevice} props.currentDevice the current device that is being managed in the renamer (hook)
+ * @return {JSX.Element}
+ */
 function RenamerDeviceRow(props) {
   const { device, changeCurrentDevice, currentDevice } = props
 

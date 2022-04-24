@@ -2,6 +2,22 @@ import { Badge, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+/**
+ * PhoneNumberStatus: React Component similar to StatusBadge. Returns a badge based on state to indicate status of Twilio phone number acquisition.
+ *
+ * States:
+ *
+ *  - status === 'idle' returns nothing
+ *
+ *  - status === 'waiting' returns loading spinner
+ *
+ *  - status === (valid phone number) returns green badge with phone number as text
+ *
+ *  - status === else returns red badge with 'Error' as text
+ *
+ * @param {string} props.status the current status of phone number acquisition. Also is the phone number itself on successful acquiring.
+ * @return {JSX.Element}
+ */
 function PhoneNumberStatus(props) {
   function checkValidPhoneNumber(phoneNumber) {
     const regex = /^\+[0-9]{11}$/

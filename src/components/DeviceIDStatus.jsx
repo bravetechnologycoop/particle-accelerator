@@ -18,20 +18,17 @@ function checkValidDeviceID(deviceID) {
  * a DeviceID. Outputs a badge with either the current status of ID acquisition
  * or a badge with the DeviceID if a valid DeviceID is returned.
  *
- * Props:
- *
- * deviceID (string): the current state or deviceID of the current activating
- *                    device.
- *
  * Possible States:
  *
- * 'idle': Returns a grey badge with text 'Waiting'
+ *  - 'idle': Returns a grey badge with text 'Waiting'
  *
- * 'waiting': Returns a yellow badge with text 'In Progress'
+ *  - 'waiting': Returns a yellow badge with text 'In Progress'
  *
- * Valid DeviceID: Returns a green badge with the DeviceID
+ *  - Valid DeviceID: Returns a green badge with the DeviceID
  *
- * else: Returns a red badge with text 'Error in Acquiring DeviceID'
+ *  - else: Returns a red badge with text 'Error in Acquiring DeviceID'
+ *
+ *  @param {string} props.deviceID the current state or deviceID of the current activating device.
  */
 function DeviceIDStatus(props) {
   const { deviceID } = props

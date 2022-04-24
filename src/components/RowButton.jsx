@@ -7,6 +7,19 @@ import LoginStatus from './LoginStatus'
 import ClickupLogo from './clickupLogo.svg'
 import ParticleLogo from './particleLogo.svg'
 
+/**
+ * RowButton: React component for the Navigation Bar which shows a page in the PA and links to it. Changes styling based
+ * on current page. If the link is disabled, the component can display a clickup or particle logo to indicate why the
+ * page is disabled.
+ *
+ * @param {string} props.label (required) Corresponding page title based on congruency with kebab-cased site url
+ * @param {string} props.state (required) The current state of the app which the Frame is in.
+ * @param {boolean} props.enabled Whether the link is enabled or not (default true)
+ * @param {boolean} props.clickup Whether the ClickUp logo should be displayed when disabled. (default false)
+ * @param {boolean} props.particle Whether the Particle logo should be displayed when disabled. (default false)
+ *
+ * @return {JSX.Element}
+ */
 function RowButton(props) {
   const { label, state, enabled, clickup, particle } = props
 
@@ -80,16 +93,14 @@ function RowButton(props) {
 }
 
 RowButton.propTypes = {
-  label: PropTypes.string,
-  state: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  state: PropTypes.string.isRequired,
   enabled: PropTypes.bool,
   clickup: PropTypes.bool,
   particle: PropTypes.bool,
 }
 
 RowButton.defaultProps = {
-  label: '',
-  state: '',
   enabled: true,
   clickup: false,
   particle: false,

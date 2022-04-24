@@ -7,11 +7,17 @@ import LoginStatus from './LoginStatus'
 /**
  * LoginRowButton
  *
- * React Component for
+ * React component designed for the navigation bar to allow for page navigation, but also displays a login status.
+ * Shows the user's username/workspace name on successful login. Uses the "StatusBadge.jsx" component.
  *
- * @param props
+ * Use Examples: ClickUp//Particle
+ *
+ * @param {string} props.label Text to display on the button in the Navigation Bar, must be congruent with the kebab-case url.
+ * @param {string} props.state Selection state of the NavBar
+ * @param {boolean} props.enabled Whether the button is active (clickable) or not.
+ * @param {string} props.loginState State of login for the desired service
+ * @param {string} props.userName The username to display on successful login (usually a hook that changes once a username is acquired from an external resource)
  * @return {JSX.Element}
- * @constructor
  */
 function LoginRowButton(props) {
   const { label, state, enabled, loginState, userName } = props

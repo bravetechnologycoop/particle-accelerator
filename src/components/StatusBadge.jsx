@@ -5,8 +5,8 @@ import React from 'react'
 /**
  * StatusBadge: React component for displaying the current status of a process.
  * Outputs a badge based on the state of the status inputted.
- * @param props
- * status (string): current status of a process
+ *
+ * @param {string} props.status current status of a process
  *
  * Supported Statuses and Corresponding Badges:
  *    - 'idle' -> Grey "Waiting"

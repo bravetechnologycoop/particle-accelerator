@@ -3,9 +3,13 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 /**
- * LogoutButton: React component (button) for resetting the token and loginState
- * to default/null values.
- * @effects the global token variable and the global loginState variable
+ * LogoutButton: React component that logs a user out of an Account
+ *
+ * @param {string} props.token The current access token for the account
+ * @param {function} props.changeToken Handler function to change the access token value.
+ * @param {function} props.changeLoginState Handler function to change the login state.
+ * @param {function} props.changeLoginState Handler function to change the global ParticleSettings object
+ * @return {JSX.Element}
  */
 function LogoutButton(props) {
   const { token, changeToken, changeLoginState, changeParticleSettings } = props

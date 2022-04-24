@@ -26,13 +26,13 @@ function checkValidICCID(iccid) {
  *
  * States:
  *
- * props.iccid = 'idle' -> grey badge with text 'Waiting'
+ *  - props.iccid = 'idle' -> grey badge with text 'Waiting'
  *
- * props.iccid = 'waiting' -> yellow badge with text 'In Progress'
+ *  - props.iccid = 'waiting' -> yellow badge with text 'In Progress'
  *
- * props.iccid = Valid ICCID -> green badge with ICCID as text
+ *  - props.iccid = Valid ICCID -> green badge with ICCID as text
  *
- * props.iccid = else -> red badge with text 'Error in Acquiring ICCID'
+ *  - props.iccid = else -> red badge with text 'Error in Acquiring ICCID'
  *
  * @param {string} props.iccid the current state or iccid of the current activating device.
  */

@@ -3,6 +3,15 @@ import '../views/Navigation.css'
 import PropTypes from 'prop-types'
 import { Badge } from 'react-bootstrap'
 
+/**
+ * RowToggler: Toggle button for the Navigation Bar to toggle a state in the PA application.
+ *
+ * @param {string} props.label label for the button
+ * @param {boolean} props.toggleState current state of toggle (hook)
+ * @param {function} props.changeToggleState handler function for changing toggle state
+ * @return {JSX.Element}
+ * @constructor
+ */
 function RowToggler(props) {
   const { label, toggleState, changeToggleState } = props
 
@@ -48,15 +57,9 @@ function RowToggler(props) {
 }
 
 RowToggler.propTypes = {
-  label: PropTypes.string,
-  toggleState: PropTypes.bool,
-  changeToggleState: PropTypes.func,
-}
-
-RowToggler.defaultProps = {
-  label: '',
-  toggleState: true,
-  changeToggleState: () => {},
+  label: PropTypes.string.isRequired,
+  toggleState: PropTypes.bool.isRequired,
+  changeToggleState: PropTypes.func.isRequired,
 }
 
 export default RowToggler
