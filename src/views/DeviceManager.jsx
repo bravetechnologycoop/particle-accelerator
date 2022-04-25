@@ -56,7 +56,9 @@ function DeviceManager(props) {
     <div style={styles.parent}>
       <div style={styles.column}>
         <h3>Add a Device From ClickUp</h3>
-        <ClickupTasksView clickupTasks={clickupTasks} pushDevice={pushDevice} status={clickupTaskLoadStatus} />
+        <div style={{ height: '75vh', overflowY: 'auto' }}>
+          <ClickupTasksView clickupTasks={clickupTasks} pushDevice={pushDevice} status={clickupTaskLoadStatus} />
+        </div>
       </div>
       <div style={styles.column} />
     </div>
