@@ -455,7 +455,7 @@ function getCustomFieldValue(customFieldObject, customFieldID) {
   })
   console.log(desiredField)
   if (desiredField.length === 1) {
-    return desiredField.value
+    return desiredField.flat.value
   }
   return ''
 }
