@@ -4,6 +4,15 @@ const BUTTONS_DEV_URL = process.env.REACT_APP_BUTTONS_DEV_URL
 const SENSOR_DEV_URL = process.env.REACT_APP_SENSOR_DEV_URL
 const braveAPIKey = process.env.REACT_APP_BRAVE_API_KEY
 
+/**
+ * purchaseTwilioNumberByAreaCode: helper function for purchaseSensorTwilioNumberByAreaCode and purchaseButtonTwilioNumberByAreaCode.
+ * purchases a twilio number using the Brave backend as a middle person.
+ * @param {string} url      the endpoint to contact for the http request
+ * @param {string} areaCode          the area code to purchase a phone number in
+ * @param {string} locationID        the friendly name to assign to the phone number
+ * @param {string} clickupToken      clickup auth token
+ * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
+ */
 async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, clickupToken) {
   const data = {
     areaCode,
@@ -21,10 +30,24 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, clickup
   }
 }
 
+/**
+ * **purchaseSensorTwilioNumberByAreaCode**: purchases a twilio number with production configurations for a sensor
+ * @param {string} areaCode      the area code to purchase a phone number in
+ * @param {string} locationID    the location ID of the sensor
+ * @param {string} clickupToken  clickup auth token
+ * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
+ */
 export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, clickupToken) {
   return purchaseTwilioNumberByAreaCode(`${SENSOR_DEV_URL}/pa/sensor-twilio-number`, areaCode, locationID, clickupToken)
 }
 
+/**
+ * **purchaseButtonTwilioNumberByAreaCode**: purchases a twilio number with production configurations for a button
+ * @param {string} areaCode      the area code to purchase a phone number in
+ * @param {string} locationID    the friendly name for the twilio number
+ * @param {string} clickupToken  clickup auth token
+ * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
+ */
 export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, clickupToken) {
   return purchaseTwilioNumberByAreaCode(`${BUTTONS_DEV_URL}/pa/buttons-twilio-number`, areaCode, locationID, clickupToken)
 }

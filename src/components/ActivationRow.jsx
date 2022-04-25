@@ -57,6 +57,12 @@ function ActivationRow(props) {
               </td>
             </tr>
             <tr>
+              <td>Clickup Status</td>
+              <td>
+                <StatusBadge status={attempt.clickupStatus} />
+              </td>
+            </tr>
+            <tr>
               <td>Attempt Date</td>
               <td>{attempt.dateStamp}</td>
             </tr>

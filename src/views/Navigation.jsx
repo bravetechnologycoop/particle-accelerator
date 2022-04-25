@@ -76,6 +76,7 @@ function Navigation(props) {
             loginState={`${clickupToken !== ''}`}
             userName={clickupUserName}
           />
+          <RowButton label="Device Manager" handler={changeViewState} state={viewState} />
           <RowButton label="Activator" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory().length !== 0} />
           <RowButton label="Activated Devices" handler={changeViewState} state={viewState} />

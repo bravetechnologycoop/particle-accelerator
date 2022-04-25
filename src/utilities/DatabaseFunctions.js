@@ -4,7 +4,7 @@ const SENSOR_DEV_URL = process.env.REACT_APP_SENSOR_DEV_URL
 
 /**
  * getSensorClients: retrieves the list of clients in the Brave sensor DB, uses the sensors backend.
- * @param clickupToken      clickup token
+ * @param {string} clickupToken      clickup token
  * @return {Promise<{name: string, id: string}[]>}   array of client names and ids if successful, empty if not.
  */
 export async function getSensorClients(clickupToken) {
@@ -24,17 +24,17 @@ export async function getSensorClients(clickupToken) {
 }
 
 /**
- *
- * @param clickupToken
- * @param password
- * @param locationID
- * @param displayName
- * @param particleDeviceID
- * @param twilioNumber
- * @param stateMachineBool
- * @param clientID
- * @param radarType
- * @return {Promise<boolean>}
+ * insertSensorLocation: inserts a location into the brave sensor DB
+ * @param {string} clickupToken       clickup token
+ * @param {string} password           front-end database password
+ * @param {string} locationID         new locationID for the DB
+ * @param {string} displayName        display name on dashboard
+ * @param {string} particleDeviceID   Particle deviceID of location's sensor
+ * @param {string} twilioNumber       Twilio number for the location
+ * @param {boolean} stateMachineBool  whether the location uses a state machine or not
+ * @param {string} clientID           Unique clientID for location
+ * @param {string} radarType          Innosent or XeThru radar type ('innosent' or 'xethru')
+ * @return {Promise<boolean>}         true if successful, false if not
  */
 export async function insertSensorLocation(
   clickupToken,

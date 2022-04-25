@@ -11,9 +11,9 @@ const particle = new Particle()
 /**
  * login: attempts an asynchronous login to a user's Particle account.
  * @async
- * @param username the user's username/email.
- * @param password the user's respective password.
- * @returns {Promise} a token in the event of a successful login or null in the
+ * @param {string} username the user's username/email.
+ * @param {string} password the user's respective password.
+ * @returns {Promise<string|null>} a token in the event of a successful login or null in the
  * event of an unsuccessful login (technically a promise)
  */
 export async function login(username, password) {
@@ -32,7 +32,7 @@ export async function login(username, password) {
  * getDisplayName: Retrieves a user's name or company name based on a Particle
  * access token.
  * @async
- * @param token Particle access token.
+ * @param {string} token Particle access token.
  * @returns {Promise<string>} user's name if successful on a personal account,
  * business's name if successful on a business account, error message if
  * unsuccessful.
@@ -57,8 +57,8 @@ export async function getDisplayName(token) {
  * getProducts: retrieves a list of the current product families in a Particle
  * account based on the provided token.
  * @async
- * @param token Particle access token.
- * @returns {Promise} a list of the current products associated with the token
+ * @param {string} token Particle access token.
+ * @returns {Promise<*[]|null>} a list of the current products associated with the token
  * user account if successful, null if unsuccessful.
  */
 export async function getProducts(token) {
@@ -81,9 +81,9 @@ export async function getProducts(token) {
  * getDeviceInfo: makes a GET request to the Particle server to get a device's
  * deviceID and ICCID.
  * @async
- * @param serialNum The current device's serial number.
- * @param token     Particle access token of the account to register to.
- * @returns {Promise} an Object containing the device's deviceID and iccid
+ * @param {string} serialNum The current device's serial number.
+ * @param {string} token     Particle access token of the account to register to.
+ * @returns {Promise<{deviceID: string, iccid: string}|string>} an Object containing the device's deviceID and iccid
  * (fields named respectively) if successful, 'Error' if unsuccessful.
  */
 export async function getDeviceInfo(serialNum, token) {
@@ -128,11 +128,11 @@ export async function activateDeviceSIM(iccid, country, product, token) {
 /**
  * changeDeviceName: change's a device's name on the Particle console.
  * @async
- * @param deviceID  the device id of the target Particle device.
- * @param product   the product family ID of the target Particle device.
- * @param newName   the desired name for the target device.
- * @param token     a Particle access token for the account that the target
- *                  device is registered to.
+ * @param {string} deviceID  the device id of the target Particle device.
+ * @param {string} product   the product family ID of the target Particle device.
+ * @param {string} newName   the desired name for the target device.
+ * @param {string} token     a Particle access token for the account that the target
+ *                           device is registered to.
  * @returns {Promise<boolean>} true if the rename is successful, false if
  *                             unsuccessful.
  */
@@ -156,14 +156,14 @@ export async function changeDeviceName(deviceID, product, newName, token) {
  * Particle account and has the correct: deviceID, name, product family, iccid,
  * and serial number.
  * @async
- * @param deviceID      the hypothesised device id of the target device.
- * @param name          the hypothesised name of the target device.
- * @param product       the hypothesised Particle product family of the target
- *                      device.
- * @param iccid         the hypothesised iccid of the target device.
- * @param serialNumber  the hypothesised serial number of the target device.
- * @param token         a Particle access token for the target device's
- *                      registration account.
+ * @param {string} deviceID      the hypothesised device id of the target device.
+ * @param {string }name          the hypothesised name of the target device.
+ * @param {string} product       the hypothesised Particle product family of the target
+ *                               device.
+ * @param {string} iccid         the hypothesised iccid of the target device.
+ * @param {string} serialNumber  the hypothesised serial number of the target device.
+ * @param {string} token         a Particle access token for the target device's
+ *                               registration account.
  * @returns {Promise<boolean>} true if all of the conditions are met, false if
  *                             conditions fail or errors are returned.
  */
@@ -188,6 +188,13 @@ export async function verifyDeviceRegistration(deviceID, name, product, iccid, s
   }
 }
 
+/**
+ * getDeviceDetails: retrieves various details on a device from particle
+ * @param {string} serialNumber     serial number of the device to lookup
+ * @param {string} product          the ID of the particle product family to search for the device in
+ * @param {string} token            particle auth token
+ * @return {Promise<null|Object>}   an object containing data on the device if successful, null if not
+ */
 export async function getDeviceDetails(serialNumber, product, token) {
   try {
     const response = await particle.lookupSerialNumber({ serialNumber, auth: token })
@@ -199,6 +206,13 @@ export async function getDeviceDetails(serialNumber, product, token) {
   }
 }
 
+/**
+ * searchDeviceByName: retrieves data on a particle device based on its name
+ * @param {string} deviceName   the name of the device to search for
+ * @param {string} token        particle auth token
+ * @param {string} productID    the ID of the particle product family to search for the device in
+ * @return {Promise<null|*>}    data on the device if successful, null if unsuccessful
+ */
 export async function searchDeviceByName(deviceName, token, productID) {
   try {
     const response = await particle.listDevices({ product: productID, auth: token, perPage: Number.MAX_SAFE_INTEGER })
@@ -219,6 +233,12 @@ export async function searchDeviceByName(deviceName, token, productID) {
   }
 }
 
+/**
+ * getCurrentFirmwareVersion: retrieves the current firmware version of a particle product family
+ * @param {string} productID  the ID of the product family to find the current firmware version of
+ * @param {string} token      particle auth token
+ * @return {Promise<null|string>} the current firmware version of the product family if successful, null if not.
+ */
 export async function getCurrentFirmwareVersion(productID, token) {
   try {
     const response = await particle.listProductFirmware({ product: productID, auth: token })
@@ -235,6 +255,14 @@ export async function getCurrentFirmwareVersion(productID, token) {
   }
 }
 
+/**
+ * pairDoorSensor: pairs a door sensor to a Particle Boron with the current Brave sensor firmware on it
+ * @param {string} deviceID       the deviceID of the Boron device to pair with
+ * @param {string} doorSensorID   the hex ID of the IM21 door sensor to pair with, formatted a1,b2,c3
+ * @param {string} productID      the ID of the product family which the Boron device is in
+ * @param {string} token          particle auth token
+ * @return {Promise<boolean>}     true if successful, false if not
+ */
 export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
   try {
     const response = await particle.callFunction({

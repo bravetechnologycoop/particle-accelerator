@@ -1,3 +1,5 @@
+import ClickupTask from './ClickupTask'
+
 const axios = require('axios')
 
 /**
@@ -241,7 +243,7 @@ export async function getClickupCustomFieldsInList(token, listID) {
  * @param {{formerSensorNumber: string, deviceID: string, serialNumber: string}} customFields ids of the custom fields
  * @return {Promise<null|string>}             the ID of the created clickup task if successful, null if unsuccessful
  */
-export async function createTaskInSensorTracker(token, sensorName, listID, deviceID, serialNumber, statusID, customFields) {
+export async function createTaskInClickup(token, sensorName, listID, deviceID, serialNumber, statusID, customFields) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/task`
   const config = {
     headers: {
@@ -266,6 +268,44 @@ export async function createTaskInSensorTracker(token, sensorName, listID, devic
       {
         // Serial Number
         id: customFields.serialNumber,
+        value: serialNumber,
+      },
+    ],
+  }
+  try {
+    const response = await axios.post(url, data, config)
+    return response.data.id
+  } catch (err) {
+    console.error(err)
+    return null
+  }
+}
+
+export async function createTaskInSensorTracker(token, sensorName, deviceID, serialNumber) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}/task`
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  }
+  const data = {
+    name: sensorName,
+    status: process.env.REACT_APP_CLICKUP_PA_TRACKER_DEFAULT_STATUS,
+    custom_fields: [
+      {
+        // Former Sensor Number
+        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_NAME,
+        value: sensorName,
+      },
+      {
+        // Device ID
+        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_DEVICE_ID,
+        value: deviceID,
+      },
+      {
+        // Serial Number
+        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SERIAL_NUMBER,
         value: serialNumber,
       },
     ],
@@ -405,5 +445,42 @@ export async function modifyClickupTaskName(oldName, newName, listID, token) {
   } catch (err) {
     console.error(err)
     return false
+  }
+}
+
+function getCustomFieldValue(customFieldObject, customFieldID) {
+  const desiredField = customFieldObject.filter(field => {
+    return field.id === customFieldID
+  })
+  if (desiredField.length === 1) {
+    return desiredField.value
+  }
+  return ''
+}
+
+export async function getAllTasksInPATracker(token) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}/task`
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    return response.data.tasks.map(task => {
+      return new ClickupTask(
+        task.name,
+        task.id,
+        task.status.status,
+        task.status.color,
+        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_DEVICE_ID),
+        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SERIAL_NUMBER),
+        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_NAME),
+        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID),
+        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID),
+      )
+    })
+  } catch (err) {
+    console.error(err)
+    return []
   }
 }

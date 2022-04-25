@@ -13,6 +13,7 @@ import ParticleSettings from '../utilities/ParticleSettings'
 import ButtonRegistrationView from './ButtonRegistrationView'
 import TwilioPurchaseView from './TwilioPurchaseView'
 import HomeView from './HomeView'
+import DeviceManager from './DeviceManager'
 
 function Frame(props) {
   const {
@@ -122,6 +123,9 @@ function Frame(props) {
   }
   if (viewState === 'Button Registration') {
     return <ButtonRegistrationView clickupToken={clickupToken} />
+  }
+  if (viewState === 'Device Manager') {
+    return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
   }
   return <HomeView />
 }

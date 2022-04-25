@@ -16,10 +16,24 @@ class ActivationAttempt {
    * @param {string} SIMActivationStatus status of SIM activation
    * @param {string} namingStatus status of renaming on particle console
    * @param {string} totalStatus status of full registration
-   * @param {string} timeStamp time of attempt
-   * @param {string} dateStamp date of attempt
+   * @param {string|null} timeStamp time of attempt
+   * @param {string|null} dateStamp date of attempt
+   * @param {string} clickupStatus status of clickup attempt
    */
-  constructor(serialNumber, deviceName, productID, deviceID, iccid, country, SIMActivationStatus, namingStatus, totalStatus, timeStamp, dateStamp) {
+  constructor(
+    serialNumber,
+    deviceName,
+    productID,
+    deviceID,
+    iccid,
+    country,
+    SIMActivationStatus,
+    namingStatus,
+    totalStatus,
+    timeStamp,
+    dateStamp,
+    clickupStatus,
+  ) {
     this.serialNumber = serialNumber
     this.deviceName = deviceName
     this.deviceID = deviceID
@@ -41,6 +55,8 @@ class ActivationAttempt {
     } else {
       this.timeStamp = timeStamp
     }
+
+    this.clickupStatus = clickupStatus
   }
 }
 

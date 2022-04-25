@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { Badge, Card, Dropdown } from 'react-bootstrap'
+import { Badge, Card } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 import { Link } from 'react-router-dom'
@@ -9,24 +9,17 @@ import ActivationAttempt from '../utilities/ActivationAttempt'
 import StatusBadge from '../components/StatusBadge'
 import DeviceIDStatus from '../components/DeviceIDStatus'
 import ICCIDStatus from '../components/ICCIDStatus'
-// import { getActivatedDevices, getActivationHistory } from '../utilities/StorageFunctions'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import ParticleSettings from '../utilities/ParticleSettings'
-import DropdownList from '../components/DropdownList'
-import { createTaskInSensorTracker, getClickupCustomFieldsInList, getClickupStatusesInList } from '../utilities/ClickupFunctions'
-import ClickupLogin from './ClickupLogin'
+import { createTaskInSensorTracker } from '../utilities/ClickupFunctions'
 
 const { getDeviceInfo } = require('../utilities/ParticleFunctions')
-
-// const { getProducts } = require('../utilities/ParticleFunctions')
 
 const { activateDeviceSIM } = require('../utilities/ParticleFunctions')
 
 const { changeDeviceName } = require('../utilities/ParticleFunctions')
 
 const { verifyDeviceRegistration } = require('../utilities/ParticleFunctions')
-
-// const { getParticleToken } = require('../utilities/StorageFunctions')
 
 // CSS Styles
 const styles = {
@@ -107,34 +100,6 @@ function ActivatorView(props) {
   const [statusView, setStatusView] = useState(false)
   const [formLock, setFormLock] = useState(false)
   const [clickupStatus, setClickupStatus] = useState('idle')
-
-  const [clickupCheck, setClickupCheck] = useState(true)
-  const [clickupTaskStatus, setClickupTaskStatus] = useState('')
-  const [clickupCustomFieldsConfig, setClickupCustomFieldsConfig] = useState({})
-
-  useEffect(() => {
-    console.log('config deviceid', clickupCustomFieldsConfig.deviceID)
-    console.log('config serialnumber', clickupCustomFieldsConfig.serialNumber)
-    console.log('config former', clickupCustomFieldsConfig.formerSensorNumber)
-  })
-
-  function changeClickupTaskStatus(newStatus) {
-    setClickupTaskStatus(newStatus)
-  }
-
-  function modifyClickupCustomFieldsConfig(field, value) {
-    const configCopy = JSON.parse(JSON.stringify(clickupCustomFieldsConfig))
-    configCopy[field] = value
-    setClickupCustomFieldsConfig(configCopy)
-  }
-
-  function toggleClickupCheck() {
-    if (clickupCheck) {
-      setClickupCheck(false)
-    } else {
-      setClickupCheck(true)
-    }
-  }
 
   function pushAttempt(newAttempt) {
     const newAttemptArray = [newAttempt]
@@ -244,25 +209,13 @@ function ActivatorView(props) {
 
       let clickupTaskID
 
-      if (!clickupCheck) {
-        setClickupStatus('waiting')
-        const clickup = await createTaskInSensorTracker(
-          clickupToken,
-          newDeviceName,
-          clickupListID,
-          deviceIDCopy,
-          serialNumber,
-          clickupTaskStatus,
-          clickupCustomFieldsConfig,
-        )
-        if (clickup !== null) {
-          clickupTaskID = clickup
-          setClickupStatus('true')
-        } else {
-          setClickupStatus('fail')
-        }
+      setClickupStatus('waiting')
+      const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber)
+      if (clickup !== null) {
+        clickupTaskID = clickup
+        setClickupStatus('true')
       } else {
-        setClickupStatus('n/a')
+        setClickupStatus('fail')
       }
 
       pushAttempt(
@@ -278,6 +231,7 @@ function ActivatorView(props) {
           totalStatusCopy,
           null,
           null,
+          clickupStatus,
         ),
       )
 
@@ -288,13 +242,25 @@ function ActivatorView(props) {
       setFormLock(false)
       setStatusView(false)
       pushAttempt(
-        new ActivationAttempt('null', `${newDeviceName} already registered.`, 'null', 'null', 'null', 'null', 'false', 'false', 'false', null, null),
+        new ActivationAttempt(
+          'null',
+          `${newDeviceName} already registered.`,
+          'null',
+          'null',
+          'null',
+          'null',
+          'false',
+          'false',
+          'false',
+          null,
+          null,
+          'false',
+        ),
       )
     }
   }
 
   // eslint-disable-next-line
-  // @ts-ignore
   return (
     <div style={styles.parent}>
       <div style={styles.form}>
@@ -356,43 +322,10 @@ function ActivatorView(props) {
               </Form.Control>
             </Form.Group>
 
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                id="default-checkbox"
-                label="Create Clickup Task"
-                checked={!clickupCheck}
-                onChange={toggleClickupCheck}
-                disabled={clickupListID === ''}
-              />
-            </Form.Group>
-
-            <ClickupConfiguration
-              status={clickupCheck}
-              customFieldsConfig={clickupCustomFieldsConfig}
-              modifyCustomFieldsConfig={modifyClickupCustomFieldsConfig}
-              taskStatus={clickupTaskStatus}
-              changeTaskStatus={changeClickupTaskStatus}
-              clickupToken={clickupToken}
-              clickupListID={clickupListID}
-            />
-
             <Form.Group className="mb-3" controlId="formDeviceID">
               <Form.Label>Device Serial Number</Form.Label>
               <Form.Control
-                disabled={
-                  formLock ||
-                  country === '' ||
-                  productID === 'null' ||
-                  newDeviceName === '' ||
-                  (!clickupCheck &&
-                    (clickupCustomFieldsConfig.deviceID === undefined ||
-                      clickupCustomFieldsConfig.serialNumber === undefined ||
-                      clickupCustomFieldsConfig.formerSensorNumber === undefined ||
-                      clickupCustomFieldsConfig.deviceID === '' ||
-                      clickupCustomFieldsConfig.serialNumber === '' ||
-                      clickupCustomFieldsConfig.formerSensorNumber === ''))
-                }
+                disabled={formLock || country === '' || productID === 'null' || newDeviceName === ''}
                 placeholder="Enter ID"
                 value={serialNumber}
                 maxLength="15"
@@ -503,6 +436,8 @@ function ActivatorView(props) {
                   SIM Activation Status: <StatusBadge status={attempt.SIMActivationStatus} />
                   <br />
                   Rename Status: <StatusBadge status={attempt.namingStatus} />
+                  <br />
+                  Clickup Status: <StatusBadge status={attempt.clickupStatus} />
                 </Card.Body>
               </Card>
             )
@@ -535,114 +470,6 @@ ActivatorView.defaultProps = {
   particleSettings: new ParticleSettings(),
   clickupToken: '',
   clickupListID: '',
-}
-
-function ClickupConfiguration(props) {
-  const { status, customFieldsConfig, modifyCustomFieldsConfig, taskStatus, changeTaskStatus, clickupToken, clickupListID } = props
-
-  const [listInit, setListInit] = useState(false)
-  const [customFields, setCustomFields] = useState([])
-  const [taskStatuses, setTaskStatuses] = useState([])
-  const [localListID, setLocalListID] = useState(clickupListID)
-  const [loading, setLoading] = useState('idle')
-
-  useEffect(() => {
-    async function loadFields(token, listID) {
-      console.log('effected')
-      setLoading('true')
-      const [localCustomFields, localTaskStatuses] = await Promise.all([
-        getClickupCustomFieldsInList(token, listID),
-        getClickupStatusesInList(token, listID),
-      ])
-      setCustomFields(localCustomFields)
-      setTaskStatuses(localTaskStatuses)
-      setLoading('false')
-    }
-    console.log('listinit', listInit)
-    console.log('status', status)
-    if (!listInit && status) {
-      setLocalListID(clickupListID)
-      loadFields(clickupToken, clickupListID)
-      setListInit(true)
-    }
-
-    if (localListID !== clickupListID && status) {
-      setLocalListID(clickupListID)
-      loadFields(clickupToken, clickupListID)
-    }
-
-    console.log('customfields', customFields)
-    console.log('fieldsconfig', customFieldsConfig)
-    console.log('statuses', taskStatuses)
-  })
-
-  function changeDeviceIDCustomField(newID) {
-    modifyCustomFieldsConfig('deviceID', newID)
-  }
-
-  function changeSerialNumberCustomField(newID) {
-    modifyCustomFieldsConfig('serialNumber', newID)
-  }
-
-  function changeFormerSensorNumberCustomField(newID) {
-    modifyCustomFieldsConfig('formerSensorNumber', newID)
-  }
-
-  if (!status) {
-    return (
-      <>
-        Clickup Configuration
-        <div style={styles.dropdown}>
-          Set Task Status
-          <DropdownList itemList={taskStatuses} loading={loading} title="Task Status" changeItem={changeTaskStatus} item={taskStatus} />
-        </div>
-        <div style={styles.dropdown}>
-          Set Device ID Custom Field
-          <DropdownList
-            itemList={customFields}
-            changeItem={changeDeviceIDCustomField}
-            item={customFieldsConfig.deviceID}
-            loading={loading}
-            title="Device ID Custom Field"
-          />
-        </div>
-        <div style={styles.dropdown}>
-          Set Serial Number Custom Field
-          <DropdownList
-            itemList={customFields}
-            changeItem={changeSerialNumberCustomField}
-            item={customFieldsConfig.serialNumber}
-            loading={loading}
-            title="Serial Number Custom Field"
-          />
-        </div>
-        <div style={styles.dropdown}>
-          Set Former Sensor Number Custom Field
-          <DropdownList
-            itemList={customFields}
-            changeItem={changeFormerSensorNumberCustomField}
-            item={customFieldsConfig.formerSensorNumber}
-            loading={loading}
-            title="Former Sensor Number Custom Field"
-          />
-        </div>
-      </>
-    )
-  }
-
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-ClickupConfiguration.propTypes = {
-  status: PropTypes.bool.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  customFieldsConfig: PropTypes.object.isRequired,
-  modifyCustomFieldsConfig: PropTypes.func.isRequired,
-  taskStatus: PropTypes.string.isRequired,
-  changeTaskStatus: PropTypes.func.isRequired,
-  clickupToken: PropTypes.string.isRequired,
-  clickupListID: PropTypes.string.isRequired,
 }
 
 export default ActivatorView

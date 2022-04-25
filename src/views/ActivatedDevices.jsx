@@ -79,12 +79,16 @@ function DeviceRow(props) {
               <td>{device.deviceID}</td>
             </tr>
             <tr>
-              <td>Attempt Date</td>
+              <td>Activation Date</td>
               <td>{device.dateStamp}</td>
             </tr>
             <tr>
-              <td>Attempt Time</td>
+              <td>Activation Time</td>
               <td>{device.timeStamp}</td>
+            </tr>
+            <tr>
+              <td>Clickup Task ID</td>
+              <td>{device.clickupTaskID}</td>
             </tr>
           </tbody>
         </Table>

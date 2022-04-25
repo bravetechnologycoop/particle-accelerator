@@ -3,6 +3,11 @@ import ActivatedDevice from './ActivatedDevice'
 import ParticleSettings from './ParticleSettings'
 import Product from './Product'
 
+/*
+Library of storage functions used for interacting with localStorage and sessionStorage in the browser.
+Each function either gets/retrieves from the browser storage, or stores.
+ */
+
 export function getParticleToken() {
   const result = sessionStorage.getItem('particleToken')
 

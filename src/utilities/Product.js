@@ -5,6 +5,12 @@
  * https://github.com/particle-iot/device-os/blob/develop/hal/shared/platforms.h
  */
 export default class Product {
+  /**
+   * Product: class for defining Product objects retrieved from the Particle API
+   * @param {string} name         the name of the product family
+   * @param {string} id           the id of the product family
+   * @param {string} platform_id  the platform_id of the product family (device type)
+   */
   constructor(name, id, platform_id) {
     this.name = name
     this.id = id
