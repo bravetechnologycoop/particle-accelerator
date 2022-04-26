@@ -136,7 +136,7 @@ export default class ActivatedDevice {
   static FromClickupTask(task) {
     return new ActivatedDevice(
       task.name,
-      task.deviceID,
+      task.serialNumber,
       process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID,
       task.deviceID,
       task.iccid,
@@ -147,7 +147,7 @@ export default class ActivatedDevice {
       '',
       task.id,
       task.status,
-      task.clickupStatusColour,
+      task.statusColour,
       task.twilioNumber,
       task.formerSensorName,
     )

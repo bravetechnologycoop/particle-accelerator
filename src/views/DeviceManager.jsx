@@ -54,7 +54,7 @@ function DeviceManager(props) {
   }
 
   function pushTaskToDevices(existingTask) {
-    const newDeviceArray = [ActivatedDevice.FromActivation(existingTask)]
+    const newDeviceArray = [ActivatedDevice.FromClickupTask(existingTask)]
     const updatedList = newDeviceArray.concat(activatedDevices)
     changeActivatedDevices(updatedList)
   }
@@ -186,8 +186,8 @@ function ClickupTaskDisplay(props) {
           <div>{task.deviceID}</div>
           <div>{task.serialNumber}</div>
           <div>{task.formerSensorName}</div>
-          <div>{doorSensorID}</div>
-          <div>{twilioNumber}</div>
+          <div>{task.doorSensorID}</div>
+          <div>{task.twilioNumber}</div>
         </div>
         <div
           style={{
