@@ -97,6 +97,10 @@ export function getActivatedDevices() {
         device.inPairingList,
         device.intervalID,
         device.clickupTaskID,
+        device.clickupStatus,
+        device.clickupStatusColour,
+        device.twilioNumber,
+        device.formerSensorNumber,
       ),
   )
 }
@@ -272,6 +276,10 @@ export function copyActivatedDevices(activatedDevices) {
         device.inPairingList,
         device.intervalID,
         device.clickupTaskID,
+        device.clickupStatus,
+        device.clickupStatusColour,
+        device.twilioNumber,
+        device.formerSensorNumber,
       ),
   )
 }

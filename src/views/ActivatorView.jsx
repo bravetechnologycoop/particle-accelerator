@@ -236,7 +236,7 @@ function ActivatorView(props) {
       )
 
       if (totalStatusCopy === 'true') {
-        pushDevice(new ActivatedDevice(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, null, null, null, false, null, clickupTaskID))
+        pushDevice(new ActivatedDevice.FromActivation(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, clickupTaskID))
       }
     } else {
       setFormLock(false)
@@ -452,7 +452,7 @@ ActivatorView.propTypes = {
   token: PropTypes.string,
   activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)),
   changeActivationHistory: PropTypes.func,
-  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
+  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
   changeActivatedDevices: PropTypes.func,
   safeModeState: PropTypes.bool,
   particleSettings: PropTypes.instanceOf(ParticleSettings),
@@ -464,7 +464,6 @@ ActivatorView.defaultProps = {
   token: '',
   activationHistory: [],
   changeActivationHistory: () => {},
-  activatedDevices: [new ActivatedDevice()],
   changeActivatedDevices: () => {},
   safeModeState: false,
   particleSettings: new ParticleSettings(),

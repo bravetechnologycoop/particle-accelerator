@@ -13,7 +13,7 @@ function DoorSensorView(props) {
   const { activatedDevices, changeActivatedDevices, particleToken, particleSettings, clickupToken, clickupListID } = props
 
   const DEFAULT_TIMEOUT_INTERVAL = 10000
-  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', null, null, '', false, '', '')
+  const blankActivatedDevice = ActivatedDevice.BlankDevice()
 
   const [updateInterval, setUpdateInterval] = useState(DEFAULT_TIMEOUT_INTERVAL)
   const [pairingStatuses, setPairingStatuses] = useState({})
@@ -232,17 +232,12 @@ function DoorSensorView(props) {
 }
 
 DoorSensorView.propTypes = {
-  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
-  changeActivatedDevices: PropTypes.func,
+  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
+  changeActivatedDevices: PropTypes.func.isRequired,
   particleToken: PropTypes.string.isRequired,
   particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
   clickupToken: PropTypes.string.isRequired,
   clickupListID: PropTypes.string.isRequired,
-}
-
-DoorSensorView.defaultProps = {
-  activatedDevices: new ActivatedDevice(),
-  changeActivatedDevices: () => {},
 }
 
 function DoorSensorQueueCard(props) {

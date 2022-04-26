@@ -76,15 +76,10 @@ function DoorSensorEntryCard(props) {
 }
 
 DoorSensorEntryCard.propTypes = {
-  device: PropTypes.instanceOf(ActivatedDevice),
-  submitDeviceHandler: PropTypes.func,
+  device: PropTypes.instanceOf(ActivatedDevice).isRequired,
+  submitDeviceHandler: PropTypes.func.isRequired,
   searchState: PropTypes.string.isRequired,
   selectorState: PropTypes.string.isRequired,
-}
-
-DoorSensorEntryCard.defaultProps = {
-  device: new ActivatedDevice(),
-  submitDeviceHandler: () => {},
 }
 
 export default DoorSensorEntryCard

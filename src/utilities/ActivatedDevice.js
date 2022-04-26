@@ -21,7 +21,23 @@ import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue } from './Cli
  *  - clickupTaskID: the clickup Task ID of the device
  */
 export default class ActivatedDevice {
-  constructor(deviceName, serialNumber, productID, deviceID, iccid, timeStamp, dateStamp, doorSensorID, inPairingList, intervalID, clickupTaskID) {
+  constructor(
+    deviceName,
+    serialNumber,
+    productID,
+    deviceID,
+    iccid,
+    timeStamp,
+    dateStamp,
+    doorSensorID,
+    inPairingList,
+    intervalID,
+    clickupTaskID,
+    clickupStatus,
+    clickupStatusColour,
+    twilioNumber,
+    formerSensorNumber,
+  ) {
     this.deviceName = deviceName
     this.serialNumber = serialNumber
     this.productID = productID
@@ -50,6 +66,10 @@ export default class ActivatedDevice {
 
     this.intervalID = intervalID
     this.clickupTaskID = clickupTaskID
+    this.clickupStatus = clickupStatus
+    this.clickupStatusColour = clickupStatusColour
+    this.twilioNumber = twilioNumber
+    this.formerSensorNumber = formerSensorNumber
   }
 
   pairDoorSensor(particleToken, doorSensorID, interval, changeCheckState, reactStateHandler, clickupToken, clickupListID) {
@@ -89,7 +109,27 @@ export default class ActivatedDevice {
     reactStateHandler(this.deviceID, 'inPairingList', false)
   }
 
-  static blankDevice() {
-    return new ActivatedDevice('', '', '', '', '', null, null, '', false, '', '')
+  static BlankDevice() {
+    return new ActivatedDevice('', '', '', '', '', null, null, '', false, '', '', '', '', '', '')
+  }
+
+  static FromActivation(deviceName, serialNumber, productID, deviceID, iccid, clickupTaskID) {
+    return new ActivatedDevice(
+      deviceName,
+      serialNumber,
+      productID,
+      deviceID,
+      iccid,
+      null,
+      null,
+      '',
+      false,
+      null,
+      clickupTaskID,
+      process.env.REACT_APP_CLICKUP_PA_TRACKER_DEFAULT_STATUS,
+      '#f9d900',
+      '',
+      deviceName,
+    )
   }
 }

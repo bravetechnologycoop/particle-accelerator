@@ -19,7 +19,7 @@ import { getSensorClients, insertSensorLocation } from '../utilities/DatabaseFun
 function RenamerView(props) {
   const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
 
-  const blankActivatedDevice = new ActivatedDevice('', '', '', '', '', '', '', '', null, null)
+  const blankActivatedDevice = ActivatedDevice.BlankDevice()
 
   const [productID, setProductID] = useState('')
   const [serialNumber, setSerialNumber] = useState('')

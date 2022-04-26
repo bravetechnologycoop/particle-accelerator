@@ -42,13 +42,8 @@ function ActivatedDevices(props) {
 }
 
 ActivatedDevices.propTypes = {
-  activatedDeviceList: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
-  changeActivatedDeviceList: PropTypes.func,
-}
-
-ActivatedDevices.defaultProps = {
-  activatedDeviceList: [new ActivatedDevice()],
-  changeActivatedDeviceList: () => {},
+  activatedDeviceList: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
+  changeActivatedDeviceList: PropTypes.func.isRequired,
 }
 
 function DeviceRow(props) {
@@ -98,11 +93,7 @@ function DeviceRow(props) {
 }
 
 DeviceRow.propTypes = {
-  device: PropTypes.instanceOf(ActivatedDevice),
-}
-
-DeviceRow.defaultProps = {
-  device: new ActivatedDevice(),
+  device: PropTypes.instanceOf(ActivatedDevice).isRequired,
 }
 
 export default ActivatedDevices
