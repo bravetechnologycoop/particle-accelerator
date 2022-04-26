@@ -7,6 +7,7 @@ import DoorSensorEntryCard from '../components/DoorSensorEntryCard'
 import { copyActivatedDevices } from '../utilities/StorageFunctions'
 import { getDeviceDetails } from '../utilities/ParticleFunctions'
 import ParticleSettings from '../utilities/ParticleSettings'
+import ClickupStatuses from '../utilities/ClickupStatuses'
 
 function DoorSensorView(props) {
   // eslint-disable-next-line no-unused-vars
@@ -134,62 +135,23 @@ function DoorSensorView(props) {
       <div style={styles.column}>
         <h3>Select Device</h3>
         <hr />
-        <ButtonGroup style={{ paddingBottom: '15px' }}>
-          <ToggleButton
-            value="searchSerial"
-            id="searchSerial"
-            type="radio"
-            key={0}
-            variant="outline-secondary"
-            checked={selectorState === 'searchSerial'}
-            onChange={x => {
-              handleToggle(x)
-            }}
-            style={styles.toggleButton}
-          >
-            Find by Serial Number
-          </ToggleButton>
-          {/* <ToggleButton
-            value="searchSensor"
-            id="searchSensor"
-            key={2}
-            type="radio"
-            variant="outline-secondary"
-            checked={selectorState === 'searchSensor'}
-            onChange={x => handleToggle(x)}
-            style={styles.toggleButton}
-          >
-            Find by Sensor Number
-          </ToggleButton> */}
-          <ToggleButton
-            value="select"
-            id="select"
-            key={1}
-            type="radio"
-            variant="outline-secondary"
-            checked={selectorState === 'select'}
-            onChange={x => handleToggle(x)}
-            style={styles.toggleButton}
-            disabled={activatedDevices.length === 0}
-          >
-            Select from Activated Devices
-          </ToggleButton>
-        </ButtonGroup>
-        <DeviceSelector
-          foundDevice={foundDevice}
-          changeFoundDevice={changeFoundDevice}
-          selectorState={selectorState}
-          activatedDevices={activatedDevices}
-          particleSettings={particleSettings}
-          searchState={searchState}
-          changeSearchState={changeSearchState}
-          particleToken={particleToken}
-          productID={productID}
-          changeProductID={changeProductID}
-          serialNumber={serialNumber}
-          changeSerialNumber={changeSerialNumber}
-          submitDeviceHandler={submitDeviceHandler}
-        />
+        <div style={styles.scrollView}>
+          {activatedDevices
+            .filter(device => {
+              return device.clickupStatus === ClickupStatuses.activation.name
+            })
+            .map(device => {
+              return (
+                <DoorSensorEntryCard
+                  searchState={searchState}
+                  submitDeviceHandler={submitDeviceHandler}
+                  device={device}
+                  selectorState={selectorState}
+                  key={device.clickupTaskID}
+                />
+              )
+            })}
+        </div>
       </div>
       <div style={styles.column}>
         <h3>Queue</h3>
@@ -215,7 +177,7 @@ function DoorSensorView(props) {
           <div style={styles.scrollView}>
             {activatedDevices
               .filter(device => {
-                return device.doorSensorID !== '' && device.doorSensorID !== null
+                return device.doorSensorID !== '' && device.doorSensorID !== null && device.doorSensorID !== undefined
               })
               .map(device => {
                 return (
@@ -321,151 +283,6 @@ function QueueStatusBadge(props) {
 
 QueueStatusBadge.propTypes = {
   status: PropTypes.string.isRequired,
-}
-
-function DeviceSelector(props) {
-  const {
-    foundDevice,
-    changeFoundDevice,
-    selectorState,
-    submitDeviceHandler,
-    activatedDevices,
-    particleSettings,
-    particleToken,
-    searchState,
-    changeSearchState,
-    productID,
-    changeProductID,
-    serialNumber,
-    changeSerialNumber,
-  } = props
-
-  async function handleSearchSerialSubmit(event) {
-    event.preventDefault()
-    const data = await getDeviceDetails(serialNumber, productID, particleToken)
-    if (data !== null) {
-      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null, ''))
-      changeSearchState('found')
-    } else {
-      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null, ''))
-      changeSearchState('error')
-    }
-  }
-
-  const styles = {
-    column: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    scrollView: {
-      overflowY: 'scroll',
-      height: '100%',
-      flex: '1 1',
-    },
-  }
-
-  if (selectorState === 'select') {
-    return (
-      <>
-        <div>
-          <h3>Activated Devices</h3>
-          <hr />
-        </div>
-        <div style={styles.scrollView}>
-          {activatedDevices
-            .filter(device => {
-              return device.doorSensorID === '' || device.doorSensorID === undefined || device.doorSensorID === null
-            })
-            .map(device => {
-              return (
-                <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                  <DoorSensorEntryCard
-                    searchState={searchState}
-                    submitDeviceHandler={submitDeviceHandler}
-                    device={device}
-                    selectorState={selectorState}
-                  />
-                </li>
-              )
-            })}
-        </div>
-      </>
-    )
-  }
-
-  if (selectorState === 'searchSerial') {
-    return (
-      <>
-        <h4>Search Device</h4>
-        <Form onSubmit={handleSearchSerialSubmit}>
-          <Form.Group className="mb-3" controlId="formProductSelect">
-            <Form.Label>Select Device Product Family</Form.Label>
-            <Form.Control
-              as="select"
-              value={productID}
-              onChange={x => {
-                changeProductID(x.target.value)
-              }}
-            >
-              <option id="">No Product Family</option>
-              {/* eslint-disable-next-line react/prop-types */}
-              {particleSettings.productList.map(product => {
-                return (
-                  <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
-                    {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
-                  </option>
-                )
-              })}
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formDeviceID">
-            <Form.Label>Device Serial Number</Form.Label>
-            <Form.Control placeholder="Serial Number" value={serialNumber} maxLength="15" onChange={x => changeSerialNumber(x.target.value)} />
-            <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
-          </Form.Group>
-
-          <Button variant="outline-primary" type="submit">
-            Search
-          </Button>
-        </Form>
-        <div style={{ paddingTop: '15px' }}>
-          <DoorSensorEntryCard
-            device={foundDevice}
-            submitDeviceHandler={submitDeviceHandler}
-            searchState={searchState}
-            selectorState={selectorState}
-          />
-        </div>
-      </>
-    )
-  }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-DeviceSelector.propTypes = {
-  foundDevice: PropTypes.instanceOf(ActivatedDevice).isRequired,
-  changeFoundDevice: PropTypes.func,
-  selectorState: PropTypes.string.isRequired,
-  submitDeviceHandler: PropTypes.func,
-  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
-  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
-  searchState: PropTypes.string.isRequired,
-  changeSearchState: PropTypes.func,
-  particleToken: PropTypes.string.isRequired,
-  productID: PropTypes.string.isRequired,
-  changeProductID: PropTypes.func,
-  serialNumber: PropTypes.string.isRequired,
-  changeSerialNumber: PropTypes.func,
-}
-
-DeviceSelector.defaultProps = {
-  submitDeviceHandler: () => {},
-  changeFoundDevice: () => {},
-  changeSearchState: () => {},
-  changeProductID: () => {},
-  changeSerialNumber: () => {},
 }
 
 export default DoorSensorView

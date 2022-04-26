@@ -31,15 +31,6 @@ function DoorSensorEntryCard(props) {
     }
   })
 
-  if (searchState === 'idle' && selectorState !== 'select') {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>
-  }
-
-  if (searchState === 'error' && selectorState !== 'select') {
-    return <h4>Device Not Found</h4>
-  }
-
   return (
     <Card style={{ padding: '10px' }} key={`${device.dateStamp}${device.timeStamp}`}>
       <h4>{device.deviceName}</h4>
