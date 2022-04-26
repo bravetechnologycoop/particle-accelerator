@@ -5,11 +5,7 @@ import ActivatedDevice from '../utilities/ActivatedDevice'
 import { getActivatedDevices } from '../utilities/StorageFunctions'
 
 function ActivatedDevices(props) {
-  const { activatedDeviceList, changeActivatedDeviceList } = props
-
-  useEffect(() => {
-    changeActivatedDeviceList(getActivatedDevices())
-  })
+  const { activatedDeviceList } = props
 
   if (activatedDeviceList.length === 0) {
     return (
@@ -43,7 +39,6 @@ function ActivatedDevices(props) {
 
 ActivatedDevices.propTypes = {
   activatedDeviceList: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
-  changeActivatedDeviceList: PropTypes.func.isRequired,
 }
 
 function DeviceRow(props) {
