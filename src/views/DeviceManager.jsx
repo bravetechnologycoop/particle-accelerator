@@ -44,6 +44,8 @@ function DeviceManager(props) {
       getTasks()
       setInitialized(true)
     }
+
+    console.log('activatedDevices', activatedDevices)
   })
 
   function pushDevice(newDevice) {
