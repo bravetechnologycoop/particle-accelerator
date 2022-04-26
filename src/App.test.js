@@ -19,3 +19,89 @@ test('creates a blank activated device', () => {
   expect(device.deviceName).toEqual('')
   expect(device.serialNumber).toEqual('')
 })
+
+test('value equality checker between blank devices', () => {
+  const device1 = ActivatedDevice.BlankDevice()
+  const device2 = ActivatedDevice.BlankDevice()
+  expect(device1.compareDevices(device2)).toBeTruthy()
+})
+
+test('value equality checker between two devices', () => {
+  const device1 = new ActivatedDevice(
+    'device name',
+    'serial number',
+    'product id',
+    'device id',
+    'iccid',
+    'time stamp',
+    'date stamp',
+    null,
+    false,
+    30,
+    'clickup task id',
+    'clickup status',
+    'clickup status colour',
+    'twilio number',
+    'former sensor number',
+  )
+  const device2 = new ActivatedDevice(
+    'device name',
+    'serial number',
+    'product id',
+    'device id',
+    'iccid',
+    'time stamp',
+    'date stamp',
+    null,
+    false,
+    30,
+    'clickup task id',
+    'clickup status',
+    'clickup status colour',
+    'twilio number',
+    'former sensor number',
+  )
+  expect(device1 === device2).toBeFalsy()
+  expect(device1.compareDevices(device2)).toBeTruthy()
+  expect(device2.compareDevices(device1)).toBeTruthy()
+})
+
+test('two devices are that not the same returns false', () => {
+  const device1 = new ActivatedDevice(
+    'device name',
+    'serial number',
+    'product id',
+    'device id',
+    'iccid',
+    'time stamp',
+    'date stamp',
+    null,
+    false,
+    30,
+    'clickup task id',
+    'clickup status',
+    'clickup status colour',
+    'twilio number',
+    'former sensor number',
+  )
+  const device2 = new ActivatedDevice(
+    'wrong name',
+    'serial number',
+    'product id',
+    'device id',
+    'iccid',
+    'time stamp',
+    'date stamp',
+    null,
+    false,
+    30,
+    'clickup task id',
+    'clickup status',
+    'clickup status colour',
+    'twilio number',
+    'former sensor number',
+  )
+  expect(device1 === device2).toBeFalsy()
+  expect(!device1.compareDevices(device2)).toBeTruthy()
+  expect(device2.compareDevices(device1)).toBeFalsy()
+})

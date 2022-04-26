@@ -52,19 +52,32 @@ function DeviceManager(props) {
     changeActivatedDevices(updatedList)
   }
 
+  function pushTaskToDevices(existingTask) {
+    const newDeviceArray = [ActivatedDevice.FromActivation(existingTask)]
+    const updatedList = newDeviceArray.concat(activatedDevices)
+    changeActivatedDevices(updatedList)
+  }
+
+  function deleteDevice(deviceToDelete) {
+    const modifiedDeviceList = activatedDevices.filter(device => {
+      return !deviceToDelete.compareDevices(device)
+    })
+    changeActivatedDevices(modifiedDeviceList)
+  }
+
   return (
     <div style={styles.parent}>
       <div style={styles.column}>
         <h3>Add a Device From ClickUp</h3>
         <div style={{ height: '75vh', overflowY: 'auto' }}>
-          <ClickupTasksView clickupTasks={clickupTasks} pushDevice={pushDevice} status={clickupTaskLoadStatus} />
+          <ClickupTasksView clickupTasks={clickupTasks} pushDevice={pushTaskToDevices} status={clickupTaskLoadStatus} />
         </div>
       </div>
       <div style={styles.column}>
         <h3>Devices in Memory</h3>
         <div style={{ height: '98vh', overflowY: 'auto' }}>
           {activatedDevices.map(device => {
-            return <ActivatedDeviceDisplay deleteDevice={() => {}} device={device} />
+            return <ActivatedDeviceDisplay deleteDevice={deleteDevice} device={device} />
           })}
         </div>
       </div>
@@ -183,7 +196,14 @@ function ClickupTaskDisplay(props) {
             padding: '10px',
           }}
         >
-          <Button type="button" onClick={() => {}} variant="outline-dark" size="sm">
+          <Button
+            type="button"
+            onClick={() => {
+              pushDevice(task)
+            }}
+            variant="outline-dark"
+            size="sm"
+          >
             Add
             <br />
             to
@@ -224,7 +244,7 @@ function ActivatedDeviceDisplay(props) {
       <div
         style={{
           borderRadius: '5px',
-          width: '100%',
+          maxWidth: '100%',
           border: '2px solid black',
           display: 'flex',
           flexDirection: 'row',
@@ -235,7 +255,7 @@ function ActivatedDeviceDisplay(props) {
         <div
           style={{
             flex: '1 1',
-            backgroundColor: device.statusColour,
+            backgroundColor: device.clickupStatusColour,
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
@@ -254,7 +274,7 @@ function ActivatedDeviceDisplay(props) {
           <b>{device.deviceName}</b>
           <div>{device.deviceID}</div>
           <div>{device.serialNumber}</div>
-          <div>{device.formerSensorName}</div>
+          <div>{device.formerSensorNumber}</div>
           <div>{doorSensorID}</div>
           <div>{twilioNumber}</div>
         </div>
@@ -267,7 +287,7 @@ function ActivatedDeviceDisplay(props) {
             padding: '10px',
           }}
         >
-          <Button type="button" onClick={() => {}} variant="outline-danger" size="sm">
+          <Button type="button" onClick={deleteDevice(device)} variant="outline-danger" size="sm">
             Remove
             <br />
             Device

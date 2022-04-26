@@ -233,7 +233,7 @@ export async function getClickupCustomFieldsInList(token, listID) {
 }
 
 /**
- * createTaskInSensorTracker: creates a task in Brave's sensor tracker corresponding to the supplied device information.
+ * createTaskInClickup: creates a task in Brave's sensor tracker corresponding to the supplied device information.
  * @param {string} token                 clickup token
  * @param {string} sensorName            name of the sensor in Particle, which will become the name of the task in clickup
  * @param {string} listID                ID of the list to place the task in
@@ -281,7 +281,7 @@ export async function createTaskInClickup(token, sensorName, listID, deviceID, s
   }
 }
 
-export async function createTaskInSensorTracker(token, sensorName, deviceID, serialNumber) {
+export async function createTaskInSensorTracker(token, sensorName, deviceID, serialNumber, iccid) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}/task`
   const config = {
     headers: {
@@ -307,6 +307,11 @@ export async function createTaskInSensorTracker(token, sensorName, deviceID, ser
         // Serial Number
         id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SERIAL_NUMBER,
         value: serialNumber,
+      },
+      {
+        // ICCID
+        id: process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_ICCID,
+        value: iccid,
       },
     ],
   }
@@ -476,6 +481,7 @@ export async function getAllTasksInPATracker(token) {
         task.status.color,
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_DEVICE_ID),
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SERIAL_NUMBER),
+        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_ICCID),
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_NAME),
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID),
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID),

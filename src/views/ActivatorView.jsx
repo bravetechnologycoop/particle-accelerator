@@ -210,7 +210,7 @@ function ActivatorView(props) {
       let clickupTaskID
 
       setClickupStatus('waiting')
-      const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber)
+      const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy)
       if (clickup !== null) {
         clickupTaskID = clickup
         setClickupStatus('true')

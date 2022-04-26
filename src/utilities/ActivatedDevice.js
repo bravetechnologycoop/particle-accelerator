@@ -132,4 +132,43 @@ export default class ActivatedDevice {
       deviceName,
     )
   }
+
+  static FromClickupTask(task) {
+    return new ActivatedDevice(
+      task.name,
+      task.deviceID,
+      process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID,
+      task.deviceID,
+      task.iccid,
+      null,
+      null,
+      task.doorSensorID,
+      false,
+      '',
+      task.id,
+      task.status,
+      task.clickupStatusColour,
+      task.twilioNumber,
+      task.formerSensorName,
+    )
+  }
+
+  compareDevices(other) {
+    return (
+      this.deviceName === other.deviceName &&
+      this.serialNumber === other.serialNumber &&
+      this.productID === other.productID &&
+      this.iccid === other.iccid &&
+      this.timeStamp === other.timeStamp &&
+      this.dateStamp === other.dateStamp &&
+      this.doorSensorID === other.doorSensorID &&
+      this.inPairingList === other.inPairingList &&
+      this.intervalID === other.intervalID &&
+      this.clickupTaskID === other.clickupTaskID &&
+      this.clickupStatus === other.clickupStatus &&
+      this.clickupStatusColour === other.clickupStatusColour &&
+      this.twilioNumber === other.twilioNumber &&
+      this.formerSensorNumber === other.formerSensorNumber
+    )
+  }
 }
