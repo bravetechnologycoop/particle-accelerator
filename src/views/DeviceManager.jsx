@@ -77,7 +77,7 @@ function DeviceManager(props) {
         <h3>Devices in Memory</h3>
         <div style={{ height: '98vh', overflowY: 'auto' }}>
           {activatedDevices.map(device => {
-            return <ActivatedDeviceDisplay deleteDevice={deleteDevice} device={device} />
+            return <ActivatedDeviceDisplay deleteDevice={deleteDevice} device={device} key={device.clickupTaskID} />
           })}
         </div>
       </div>
@@ -112,7 +112,7 @@ function ClickupTasksView(props) {
     return (
       <>
         {clickupTasks.map(task => {
-          return <ClickupTaskDisplay task={task} pushDevice={pushDevice} key={task.deviceID} />
+          return <ClickupTaskDisplay task={task} pushDevice={pushDevice} key={task.id} />
         })}
       </>
     )

@@ -153,6 +153,26 @@ export default class ActivatedDevice {
     )
   }
 
+  static FromObject(object) {
+    return new ActivatedDevice(
+      object.name,
+      object.deviceID,
+      object.productID,
+      object.deviceID,
+      object.iccid,
+      object.timeStamp,
+      object.dateStamp,
+      object.doorSensorID,
+      object.inPairingList,
+      object.productID,
+      object.id,
+      object.status,
+      object.clickupStatusColour,
+      object.twilioNumber,
+      object.formerSensorName,
+    )
+  }
+
   compareDevices(other) {
     return (
       this.deviceName === other.deviceName &&
