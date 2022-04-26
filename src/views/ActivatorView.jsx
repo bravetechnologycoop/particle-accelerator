@@ -237,6 +237,7 @@ function ActivatorView(props) {
 
       if (totalStatusCopy === 'true') {
         pushDevice(ActivatedDevice.FromActivation(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, clickupTaskID))
+        console.log('activated devices', activatedDevices)
       }
     } else {
       setFormLock(false)

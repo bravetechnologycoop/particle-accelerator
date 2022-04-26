@@ -39,7 +39,6 @@ function DeviceManager(props) {
       }
     }
 
-    console.log(initialized)
     if (!initialized) {
       getTasks()
       setInitialized(true)
@@ -61,6 +60,7 @@ function DeviceManager(props) {
   }
 
   function deleteDevice(deviceToDelete) {
+    console.log('device deleted')
     const modifiedDeviceList = activatedDevices.filter(device => {
       return !deviceToDelete.compareDevices(device)
     })
