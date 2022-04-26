@@ -289,7 +289,14 @@ function ActivatedDeviceDisplay(props) {
             padding: '10px',
           }}
         >
-          <Button type="button" onClick={deleteDevice(device)} variant="outline-danger" size="sm">
+          <Button
+            type="button"
+            onClick={() => {
+              deleteDevice(device)
+            }}
+            variant="outline-danger"
+            size="sm"
+          >
             Remove
             <br />
             Device
