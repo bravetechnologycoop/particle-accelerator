@@ -28,7 +28,6 @@ function DeviceManager(props) {
 
   useEffect(() => {
     async function getTasks() {
-      console.log('get tasks')
       setClickupTaskLoadStatus('true')
       const tasks = await getAllTasksInPATracker(clickupToken)
       if (tasks.length !== 0) {
@@ -43,8 +42,6 @@ function DeviceManager(props) {
       getTasks()
       setInitialized(true)
     }
-
-    console.log('activatedDevices', activatedDevices)
   })
 
   function pushDevice(newDevice) {

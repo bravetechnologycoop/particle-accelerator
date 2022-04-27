@@ -296,3 +296,16 @@ export function retTwilioHistory() {
   }
   return JSON.parse(result)
 }
+
+export function storePairingList(newList) {
+  const stringedData = JSON.stringify(newList)
+  localStorage.setItem('pairingList', stringedData)
+}
+
+export function retPairingList() {
+  const result = localStorage.getItem('pairingList')
+  if (result === null) {
+    return {}
+  }
+  return JSON.parse(result)
+}

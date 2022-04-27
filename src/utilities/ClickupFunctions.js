@@ -454,11 +454,9 @@ export async function modifyClickupTaskName(oldName, newName, listID, token) {
 }
 
 function getCustomFieldValue(customFieldObject, customFieldID) {
-  console.log(customFieldObject)
   const desiredField = customFieldObject.filter(field => {
     return field.id === customFieldID
   })
-  console.log(desiredField)
   if (desiredField.length === 1) {
     return desiredField[0].value
   }
@@ -490,5 +488,23 @@ export async function getAllTasksInPATracker(token) {
   } catch (err) {
     console.error(err)
     return []
+  }
+}
+
+export async function modifyClickupTaskStatus(taskID, newStatus, token) {
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}`
+  const data = {
+    status: newStatus,
+  }
+  try {
+    await axios.put(url, data, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
   }
 }

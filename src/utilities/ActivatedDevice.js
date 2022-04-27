@@ -1,5 +1,6 @@
 import { getCurrentFirmwareVersion, getDeviceDetails, pairDoorSensor } from './ParticleFunctions'
-import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue } from './ClickupFunctions'
+import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue, modifyClickupTaskStatus } from './ClickupFunctions'
+import ClickupStatuses from './ClickupStatuses'
 
 /**
  * ActivatedDevice
@@ -73,32 +74,39 @@ export default class ActivatedDevice {
   }
 
   pairDoorSensor(particleToken, doorSensorID, interval, changeCheckState, reactStateHandler, clickupToken, clickupListID) {
-    changeCheckState(this.deviceID, 'idle')
-    reactStateHandler(this.deviceID, 'inPairingList', true)
+    changeCheckState(this.clickupTaskID, 'idle')
+    reactStateHandler(this.clickupTaskID, 'inPairingList', true)
     this.intervalID = setInterval(async () => {
-      reactStateHandler(this.deviceID, 'inPairingList', true)
+      reactStateHandler(this.clickupTaskID, 'inPairingList', true)
       console.log('interval')
-      changeCheckState(this.deviceID, 'firmwareCheck')
+      changeCheckState(this.clickupTaskID, 'firmwareCheck')
       const targetFirmwareVersion = await getCurrentFirmwareVersion(this.productID, particleToken)
+      console.log('target firmware version', targetFirmwareVersion)
       const deviceDetails = await getDeviceDetails(this.serialNumber, this.productID, particleToken)
       if (deviceDetails.firmware_version === targetFirmwareVersion) {
-        changeCheckState(this.deviceID, 'attemptingPairing')
+        changeCheckState(this.clickupTaskID, 'attemptingPairing')
         console.log('attempting to pair')
         const pairing = await pairDoorSensor(this.deviceID, doorSensorID, this.productID, particleToken)
         console.log('pairing request finished', pairing)
         if (pairing) {
-          reactStateHandler(this.deviceID, 'inPairingList', false)
-          reactStateHandler(this.deviceID, 'doorSensorID', doorSensorID)
+          reactStateHandler(
+            this.clickupTaskID,
+            ['inPairingList', 'doorSensorID', 'clickupStatus', 'clickupStatusColour'],
+            [false, doorSensorID, ClickupStatuses.pairedDoorSensor.name, ClickupStatuses.pairedDoorSensor.color],
+          )
           clearInterval(this.intervalID)
-          const taskID = await getClickupTaskIDByName(clickupListID, this.deviceName, clickupToken)
-          if (taskID !== null) {
-            await modifyClickupTaskCustomFieldValue(taskID, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID, doorSensorID, clickupToken)
-          }
+          await modifyClickupTaskCustomFieldValue(
+            this.clickupTaskID,
+            process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID,
+            doorSensorID,
+            clickupToken,
+          )
+          await modifyClickupTaskStatus(this.clickupTaskID, ClickupStatuses.pairedDoorSensor.name, clickupToken)
         } else {
-          changeCheckState(this.deviceID, 'idleNoPair')
+          changeCheckState(this.clickupTaskID, 'idleNoPair')
         }
       } else {
-        changeCheckState(this.deviceID, 'idleNoFirmware')
+        changeCheckState(this.clickupTaskID, 'idleNoFirmware')
       }
     }, interval)
   }
@@ -106,7 +114,7 @@ export default class ActivatedDevice {
   stopPairing(reactStateHandler) {
     console.log('interval id', this.intervalID)
     clearInterval(this.intervalID)
-    reactStateHandler(this.deviceID, 'inPairingList', false)
+    reactStateHandler(this.clickupTaskID, 'inPairingList', false)
   }
 
   static BlankDevice() {

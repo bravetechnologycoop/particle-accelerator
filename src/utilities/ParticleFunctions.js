@@ -240,10 +240,11 @@ export async function searchDeviceByName(deviceName, token, productID) {
  * @return {Promise<null|string>} the current firmware version of the product family if successful, null if not.
  */
 export async function getCurrentFirmwareVersion(productID, token) {
+  console.log('productID', productID)
   try {
     const response = await particle.listProductFirmware({ product: productID, auth: token })
     const firmwareVersion = response.body[0].version
-
+    console.log(response)
     if (response.body.length !== 1) {
       return null
     }

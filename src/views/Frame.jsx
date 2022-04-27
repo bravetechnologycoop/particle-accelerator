@@ -5,7 +5,13 @@ import Validator from './Validator'
 import LoginView from './LoginView'
 import ClickupLogin from './ClickupLogin'
 import ActivationHistory from './ActivationHistory'
-import { getActivatedDevices, getActivationHistory, storeActivatedDevices, storeActivationHistory } from '../utilities/StorageFunctions'
+import {
+  copyActivatedDevices,
+  getActivatedDevices,
+  getActivationHistory,
+  storeActivatedDevices,
+  storeActivationHistory,
+} from '../utilities/StorageFunctions'
 import ActivatedDevices from './ActivatedDevices'
 import DoorSensorView from './DoorSensorView'
 import RenamerView from './RenamerView'
@@ -44,6 +50,37 @@ function Frame(props) {
   function changeActivatedDevices(newActivatedDevices) {
     setActivatedDevices(newActivatedDevices)
     storeActivatedDevices(newActivatedDevices)
+  }
+
+  function modifyActivatedDevice(clickupTaskID, fields, newValues) {
+    console.log('fields: ', fields, 'new values: ', newValues)
+
+    if (Array.isArray(fields) && Array.isArray(newValues)) {
+      console.log('is array')
+      if (fields.length !== newValues.length) {
+        return false
+      }
+      console.log('same length')
+      const copyOfActivatedDevices = copyActivatedDevices(activatedDevices)
+      const targetIndex = copyOfActivatedDevices.findIndex(device => device.clickupTaskID === clickupTaskID)
+      console.log('target index', targetIndex)
+
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < fields.length; i++) {
+        copyOfActivatedDevices[targetIndex][fields[i]] = newValues[i]
+        console.log(copyOfActivatedDevices)
+      }
+      changeActivatedDevices(copyOfActivatedDevices)
+      return true
+    }
+
+    const copyOfActivatedDevices = copyActivatedDevices(activatedDevices)
+    const targetIndex = copyOfActivatedDevices.findIndex(device => device.clickupTaskID === clickupTaskID)
+    console.log('target index', targetIndex)
+
+    copyOfActivatedDevices[targetIndex][fields] = newValues
+    changeActivatedDevices(copyOfActivatedDevices)
+    return true
   }
 
   if (viewState === 'Activator') {
@@ -104,6 +141,7 @@ function Frame(props) {
         particleSettings={particleSettings}
         clickupToken={clickupToken}
         clickupListID={clickupListID}
+        modifyActivatedDevice={modifyActivatedDevice}
       />
     )
   }

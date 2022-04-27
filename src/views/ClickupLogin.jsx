@@ -149,7 +149,7 @@ function ClickupLogin(props) {
   if (clickupToken === '') {
     return (
       <Button
-        href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=https://${process.env.REACT_APP_DOMAIN}/clickup`}
+        href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_DOMAIN}/clickup`}
       >
         Log in to ClickUp
       </Button>

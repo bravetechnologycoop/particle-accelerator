@@ -9,12 +9,14 @@ import ActivatedDevice from '../utilities/ActivatedDevice'
 import RenamerDeviceRow from '../components/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/StatusBadge'
-import { modifyClickupTaskCustomFieldValue, modifyClickupTaskName } from '../utilities/ClickupFunctions'
+import { modifyClickupTaskCustomFieldValue, modifyClickupTaskName, modifyClickupTaskStatus } from '../utilities/ClickupFunctions'
 import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
 import DropdownList from '../components/DropdownList'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
 import { getSensorClients, insertSensorLocation } from '../utilities/DatabaseFunctions'
+import ClickupStatuses from '../utilities/ClickupStatuses'
+import { copyActivatedDevices } from '../utilities/StorageFunctions'
 
 function RenamerView(props) {
   const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
@@ -159,7 +161,8 @@ function RenamerView(props) {
     if (clickupCheck) {
       setClickupStatus('waiting')
       const rename = await modifyClickupTaskName(selectedDevice.deviceName, locationID, clickupListID, clickupToken)
-      if (rename) {
+      const statusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.registeredToClient.name, clickupToken)
+      if (rename && statusChange) {
         setClickupStatus('true')
       } else {
         setClickupStatus('error')
@@ -260,62 +263,18 @@ function RenamerView(props) {
         <div style={styles.column}>
           <h3>Select Device</h3>
           <hr />
-          <ButtonGroup style={{ paddingBottom: '15px' }}>
-            <ToggleButton
-              value="searchSerial"
-              id="searchSerial"
-              type="radio"
-              key={0}
-              variant="outline-secondary"
-              checked={selectorState === 'searchSerial'}
-              onChange={x => {
-                handleToggle(x)
-              }}
-              style={styles.toggleButton}
-            >
-              Find by Serial Number
-            </ToggleButton>
-            <ToggleButton
-              value="searchSensor"
-              id="searchSensor"
-              key={2}
-              type="radio"
-              variant="outline-secondary"
-              checked={selectorState === 'searchSensor'}
-              onChange={x => handleToggle(x)}
-              style={styles.toggleButton}
-            >
-              Find by Sensor Number
-            </ToggleButton>
-            <ToggleButton
-              value="select"
-              id="select"
-              key={1}
-              type="radio"
-              variant="outline-secondary"
-              checked={selectorState === 'select'}
-              onChange={x => handleToggle(x)}
-              style={styles.toggleButton}
-            >
-              Select from Activated Devices
-            </ToggleButton>
-          </ButtonGroup>
-          <DeviceSelector
-            selectorState={selectorState}
-            selectedDevice={selectedDevice}
-            serialNumber={serialNumber}
-            productID={productID}
-            particleSettings={particleSettings}
-            activatedDevices={activatedDevices}
-            changeSerialNumber={changeSerialNumber}
-            changeSelectedDevice={changeSelectedDevice}
-            changeProductID={changeProductID}
-            token={particleToken}
-            foundDevice={foundDevice}
-            changeFoundDevice={changeFoundDevice}
-            searchState={searchState}
-            changeSearchState={changeSearchState}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
+            <div style={{ overflow: 'auto', height: '40em' }}>
+              {activatedDevices.map(device => {
+                return (
+                  <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
+                    <RenamerDeviceRow device={device} currentDevice={selectedDevice} changeCurrentDevice={changeSelectedDevice} />
+                  </li>
+                )
+              })}
+            </div>
+          </div>
         </div>
         <div style={styles.expandedColumn}>
           <h3>In Progress</h3>
@@ -367,7 +326,7 @@ function RenamerView(props) {
                     label="Register to Dashboard"
                     checked={dashboardCheck}
                     onChange={toggleDashboardCheck}
-                    disabled={locationID === ''}
+                    disabled={locationID === '' || !twilioCheck}
                   />
                   <div style={{ paddingTop: '10px' }}>
                     <Button type="submit">Rename Device</Button>
@@ -440,134 +399,6 @@ RenamerView.propTypes = {
   particleToken: PropTypes.string.isRequired,
   clickupToken: PropTypes.string.isRequired,
   clickupListID: PropTypes.string.isRequired,
-}
-
-function DeviceSelector(props) {
-  const {
-    selectorState,
-    selectedDevice,
-    changeSelectedDevice,
-    serialNumber,
-    changeSerialNumber,
-    productID,
-    changeProductID,
-    particleSettings,
-    activatedDevices,
-    token,
-    foundDevice,
-    changeFoundDevice,
-    searchState,
-    changeSearchState,
-  } = props
-
-  async function handleSearchSerialSubmit(event) {
-    event.preventDefault()
-    const data = await getDeviceDetails(serialNumber, productID, token)
-    if (data !== null) {
-      changeFoundDevice(new ActivatedDevice(data.name, data.serial_number, `${data.product_id}`, data.id, data.iccid, null, null, '', null, null, ''))
-      changeSearchState('found')
-    } else {
-      changeFoundDevice(new ActivatedDevice('Device Not Found', '', '', '', '', '', '', '', null, null, ''))
-      changeSearchState('error')
-    }
-  }
-
-  if (selectorState === 'searchSerial') {
-    return (
-      <>
-        <h4>Search Device</h4>
-        <Form onSubmit={handleSearchSerialSubmit}>
-          <Form.Group className="mb-3" controlId="formProductSelect">
-            <Form.Label>Select Device Product Family</Form.Label>
-            <Form.Control
-              as="select"
-              value={productID}
-              onChange={x => {
-                changeProductID(x.target.value)
-              }}
-            >
-              <option id="">No Product Family</option>
-              {/* eslint-disable-next-line react/prop-types */}
-              {particleSettings.productList.map(product => {
-                return (
-                  <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
-                    {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
-                  </option>
-                )
-              })}
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formDeviceID">
-            <Form.Label>Device Serial Number</Form.Label>
-            <Form.Control placeholder="Serial Number" value={serialNumber} maxLength="15" onChange={x => changeSerialNumber(x.target.value)} />
-            <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
-          </Form.Group>
-
-          <Button variant="outline-primary" type="submit">
-            Search
-          </Button>
-        </Form>
-        <div style={{ paddingTop: '20px' }}>
-          <SearchResult
-            searchResult={foundDevice}
-            currentDevice={selectedDevice}
-            searchState={searchState}
-            changeCurrentDevice={changeSelectedDevice}
-          />
-        </div>
-      </>
-    )
-  }
-  if (selectorState === 'select') {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
-        <div style={{ overflow: 'auto', height: '40em' }}>
-          {activatedDevices.map(device => {
-            return (
-              <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
-                <RenamerDeviceRow device={device} currentDevice={selectedDevice} changeCurrentDevice={changeSelectedDevice} />
-              </li>
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
-  if (selectorState === 'searchSensor') {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>
-  }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-DeviceSelector.propTypes = {
-  selectorState: PropTypes.string.isRequired,
-  selectedDevice: PropTypes.instanceOf(ActivatedDevice).isRequired,
-  changeSelectedDevice: PropTypes.func,
-  serialNumber: PropTypes.string.isRequired,
-  changeSerialNumber: PropTypes.func,
-  productID: PropTypes.string.isRequired,
-  changeProductID: PropTypes.func,
-  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
-  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
-  token: PropTypes.string,
-  foundDevice: PropTypes.instanceOf(ActivatedDevice).isRequired,
-  changeFoundDevice: PropTypes.func,
-  searchState: PropTypes.string,
-  changeSearchState: PropTypes.func,
-}
-
-DeviceSelector.defaultProps = {
-  changeSelectedDevice: () => {},
-  changeSerialNumber: () => {},
-  changeProductID: () => {},
-  token: '',
-  changeFoundDevice: () => {},
-  searchState: '',
-  changeSearchState: () => {},
 }
 
 function SearchResult(props) {

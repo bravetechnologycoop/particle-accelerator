@@ -207,17 +207,26 @@ function ActivatorView(props) {
         totalStatusCopy = 'false'
       }
 
-      let clickupTaskID
+      let clickupStatusCopy
 
-      setClickupStatus('waiting')
-      const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy)
-      if (clickup !== null) {
-        clickupTaskID = clickup
-        setClickupStatus('true')
+      if (totalStatusCopy === 'true') {
+        let clickupTaskID
+
+        const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy)
+        if (clickup !== null) {
+          clickupTaskID = clickup
+          setClickupStatus('true')
+          clickupStatusCopy = 'true'
+        } else {
+          setClickupStatus('fail')
+          clickupStatusCopy = 'fail'
+        }
+        pushDevice(ActivatedDevice.FromActivation(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, clickupTaskID))
+        console.log('activated devices', activatedDevices)
       } else {
         setClickupStatus('fail')
+        clickupStatusCopy = 'fail'
       }
-
       pushAttempt(
         new ActivationAttempt(
           serialNumber,
@@ -231,14 +240,9 @@ function ActivatorView(props) {
           totalStatusCopy,
           null,
           null,
-          clickupStatus,
+          clickupStatusCopy,
         ),
       )
-
-      if (totalStatusCopy === 'true') {
-        pushDevice(ActivatedDevice.FromActivation(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, clickupTaskID))
-        console.log('activated devices', activatedDevices)
-      }
     } else {
       setFormLock(false)
       setStatusView(false)
