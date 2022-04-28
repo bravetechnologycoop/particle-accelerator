@@ -508,3 +508,31 @@ export async function modifyClickupTaskStatus(taskID, newStatus, token) {
     return false
   }
 }
+
+export async function getClickupTaskFromID(taskID, token) {
+  console.log('fetching task')
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}`
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    const rawTask = response.data
+    return new ClickupTask(
+      rawTask.name,
+      rawTask.id,
+      rawTask.status.status,
+      rawTask.status.color,
+      getCustomFieldValue(rawTask.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_DEVICE_ID),
+      getCustomFieldValue(rawTask.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SERIAL_NUMBER),
+      getCustomFieldValue(rawTask.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_ICCID),
+      getCustomFieldValue(rawTask.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_NAME),
+      getCustomFieldValue(rawTask.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID),
+      getCustomFieldValue(rawTask.custom_fields, process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID),
+    )
+  } catch (err) {
+    console.error(err)
+    return null
+  }
+}

@@ -222,7 +222,6 @@ function ActivatorView(props) {
           clickupStatusCopy = 'fail'
         }
         pushDevice(ActivatedDevice.FromActivation(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, clickupTaskID))
-        console.log('activated devices', activatedDevices)
       } else {
         setClickupStatus('fail')
         clickupStatusCopy = 'fail'

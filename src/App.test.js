@@ -9,6 +9,7 @@ import {
 } from "./utilities/ClickupFunctions";
 import ClickupStatuses from "./utilities/ClickupStatuses";
 import { getCurrentFirmwareVersion } from "./utilities/ParticleFunctions";
+import { getActivatedDevices } from "./utilities/StorageFunctions";
 
 test('creates a new activated device from secondary constructor', () => {
   const device = ActivatedDevice.FromActivation('testDevice', 'B40TAB', '15479', 'abc123', '999', '123af')

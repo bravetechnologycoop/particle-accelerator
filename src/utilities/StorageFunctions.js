@@ -2,6 +2,7 @@ import ActivationAttempt from './ActivationAttempt'
 import ActivatedDevice from './ActivatedDevice'
 import ParticleSettings from './ParticleSettings'
 import Product from './Product'
+import { getClickupTaskFromID } from './ClickupFunctions'
 
 /*
 Library of storage functions used for interacting with localStorage and sessionStorage in the browser.
@@ -76,14 +77,21 @@ export function getActivationHistory() {
   )
 }
 
-export function getActivatedDevices() {
+export async function getActivatedDevices(token) {
+  if (token === '') {
+    return []
+  }
+  console.log('token valid')
+
   const stringedData = localStorage.getItem('activatedDevices')
   if (stringedData === null) {
     return []
   }
   const parsedData = JSON.parse(stringedData)
 
-  return parsedData.map(
+  console.log('fetched from local')
+
+  const localDevices = parsedData.map(
     device =>
       new ActivatedDevice(
         device.deviceName,
@@ -102,6 +110,18 @@ export function getActivatedDevices() {
         device.twilioNumber,
         device.formerSensorNumber,
       ),
+  )
+
+  console.log('created local device classes')
+
+  return Promise.all(
+    localDevices.map(device => {
+      const task = getClickupTaskFromID(device.clickupTaskID, token)
+      if (task === null) {
+        return device
+      }
+      return ActivatedDevice.FromClickupTask(task)
+    }),
   )
 }
 

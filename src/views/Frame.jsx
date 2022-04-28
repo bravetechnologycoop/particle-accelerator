@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Spinner } from 'react-bootstrap'
 import ActivatorView from './ActivatorView'
 import Validator from './Validator'
 import LoginView from './LoginView'
@@ -39,8 +40,14 @@ function Frame(props) {
     changeClickupListID,
   } = props
 
+  const [devicesLoadingState, setDevicesLoadingState] = useState('idle')
+
+  function changeDevicesLoadingState(newState) {
+    setDevicesLoadingState(newState)
+  }
+
   const [activationHistory, setActivationHistory] = useState(getActivationHistory())
-  const [activatedDevices, setActivatedDevices] = useState(getActivatedDevices())
+  const [activatedDevices, setActivatedDevices] = useState([])
 
   function changeActivationHistory(newHistory) {
     setActivationHistory(newHistory)
@@ -83,21 +90,38 @@ function Frame(props) {
     return true
   }
 
+  const [initialized, setInitialized] = useState(false)
+
+  useEffect(async () => {
+    console.log('effect')
+    console.log(devicesLoadingState)
+    if (devicesLoadingState !== 'success') {
+      console.log('fetch mater')
+      setDevicesLoadingState('true')
+      changeActivatedDevices(await getActivatedDevices(clickupToken))
+      setDevicesLoadingState('success')
+    }
+  }, [activatedDevices])
+
   if (viewState === 'Activator') {
-    return (
-      <ActivatorView
-        token={token}
-        changeToken={changeToken}
-        activationHistory={activationHistory}
-        activatedDevices={activatedDevices}
-        changeActivationHistory={changeActivationHistory}
-        changeActivatedDevices={changeActivatedDevices}
-        safeModeState={safeModeState}
-        particleSettings={particleSettings}
-        clickupToken={clickupToken}
-        clickupListID={clickupListID}
-      />
-    )
+    if (devicesLoadingState === 'success') {
+      return (
+        <ActivatorView
+          token={token}
+          changeToken={changeToken}
+          activationHistory={activationHistory}
+          activatedDevices={activatedDevices}
+          devicesLoadingState={devicesLoadingState}
+          changeActivationHistory={changeActivationHistory}
+          changeActivatedDevices={changeActivatedDevices}
+          safeModeState={safeModeState}
+          particleSettings={particleSettings}
+          clickupToken={clickupToken}
+          clickupListID={clickupListID}
+        />
+      )
+    }
+    return <LoadingScreen clickupToken={clickupToken} />
   }
   if (viewState === 'Device Lookup') {
     return <Validator token={token} changeToken={changeToken} particleSettings={particleSettings} />
@@ -130,31 +154,42 @@ function Frame(props) {
     return <ActivationHistory activationHistory={activationHistory} />
   }
   if (viewState === 'Activated Devices') {
-    return <ActivatedDevices activatedDeviceList={activatedDevices} />
+    if (devicesLoadingState === 'success') {
+      return <ActivatedDevices activatedDeviceList={activatedDevices} />
+    }
+    return <LoadingScreen clickupToken={clickupToken} />
   }
   if (viewState === 'Door Sensor Pairing') {
-    return (
-      <DoorSensorView
-        activatedDevices={activatedDevices}
-        particleToken={token}
-        changeActivatedDevices={changeActivatedDevices}
-        particleSettings={particleSettings}
-        clickupToken={clickupToken}
-        clickupListID={clickupListID}
-        modifyActivatedDevice={modifyActivatedDevice}
-      />
-    )
+    if (devicesLoadingState === 'success') {
+      return (
+        <DoorSensorView
+          activatedDevices={activatedDevices}
+          devicesLoadingState={activatedDevices}
+          particleToken={token}
+          changeActivatedDevices={changeActivatedDevices}
+          particleSettings={particleSettings}
+          clickupToken={clickupToken}
+          clickupListID={clickupListID}
+          modifyActivatedDevice={modifyActivatedDevice}
+        />
+      )
+    }
+    return <LoadingScreen clickupToken={clickupToken} />
   }
   if (viewState === 'Renamer') {
-    return (
-      <RenamerView
-        particleSettings={particleSettings}
-        activatedDevices={activatedDevices}
-        particleToken={token}
-        clickupToken={clickupToken}
-        clickupListID={clickupListID}
-      />
-    )
+    if (devicesLoadingState === 'success') {
+      return (
+        <RenamerView
+          particleSettings={particleSettings}
+          activatedDevices={activatedDevices}
+          devicesLoadingState={devicesLoadingState}
+          particleToken={token}
+          clickupToken={clickupToken}
+          clickupListID={clickupListID}
+        />
+      )
+    }
+    return <LoadingScreen clickupToken={clickupToken} />
   }
   if (viewState === 'Twilio Number Purchasing') {
     return <TwilioPurchaseView clickupToken={clickupToken} />
@@ -163,7 +198,17 @@ function Frame(props) {
     return <ButtonRegistrationView clickupToken={clickupToken} />
   }
   if (viewState === 'Device Manager') {
-    return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
+    if (devicesLoadingState === 'success') {
+      return (
+        <DeviceManager
+          activatedDevices={activatedDevices}
+          changeActivatedDevices={changeActivatedDevices}
+          devicesLoadingState={devicesLoadingState}
+          clickupToken={clickupToken}
+        />
+      )
+    }
+    return <LoadingScreen clickupToken={clickupToken} />
   }
   return <HomeView />
 }
@@ -200,6 +245,29 @@ Frame.defaultProps = {
   changeClickupUserName: () => {},
   clickupListID: '',
   changeClickupListID: () => {},
+}
+
+function LoadingScreen(props) {
+  const { clickupToken } = props
+
+  if (clickupToken === '') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <h3>Clickup Token Necessary for Loading Devices</h3>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <Spinner animation="border" />
+      <h3>Loading Devices</h3>
+    </div>
+  )
+}
+
+LoadingScreen.propTypes = {
+  clickupToken: PropTypes.string.isRequired,
 }
 
 export default Frame
