@@ -62,15 +62,9 @@ function LoginForm(props) {
 }
 
 LoginForm.propTypes = {
-  changeToken: PropTypes.func,
-  changeLoginState: PropTypes.func,
-  changeParticleSettings: PropTypes.func,
-}
-
-LoginForm.defaultProps = {
-  changeToken: () => {},
-  changeLoginState: () => {},
-  changeParticleSettings: () => {},
+  changeToken: PropTypes.func.isRequired,
+  changeLoginState: PropTypes.func.isRequired,
+  changeParticleSettings: PropTypes.func.isRequired,
 }
 
 export default LoginForm

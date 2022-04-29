@@ -65,17 +65,10 @@ export default function DropdownList(props) {
 }
 
 DropdownList.propTypes = {
-  loading: PropTypes.string,
-  item: PropTypes.string,
-  changeItem: PropTypes.func,
+  loading: PropTypes.string.isRequired,
+  item: PropTypes.string.isRequired,
+  changeItem: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   itemList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  title: PropTypes.string,
-}
-
-DropdownList.defaultProps = {
-  loading: 'idle',
-  item: '',
-  changeItem: () => {},
-  title: '',
+  title: PropTypes.string.isRequired,
 }

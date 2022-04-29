@@ -32,10 +32,25 @@ Environment Variables in the PA are done in DigitalOcean. Each environment varia
 
 ---
 
+### Strange Artefacts
+
+---
+- `token` generally means `particleToken`
 
 ### Styling and CSS
 
 ### History
+
+### General Format
+
+---
+Nearly all of the tools in the PA work on the following basis:
+1. User inputs information
+2. User clicks 'submit'
+3. A react hook containing the status of the request is set to `loading` or something of the like, which updates a badge/spinner to indicate loading to the user.
+4. A request for the data/operation/etc is handled with `async/await` while the user waits
+5. Based on the response from the operation in step 4, the hook containing the status is updated to show the user the result of their input.
+6. Whatever data is returned is supplied to a hook/function/variable, etc.
 
 ## How-Tos
 

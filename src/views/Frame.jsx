@@ -88,7 +88,7 @@ function Frame(props) {
   if (viewState === 'Activator') {
     return (
       <Activator
-        token={token}
+        particleToken={token}
         changeToken={changeToken}
         activationHistory={activationHistory}
         activatedDevices={activatedDevices}
@@ -150,7 +150,6 @@ function Frame(props) {
   if (viewState === 'Renamer') {
     return (
       <Renamer
-        particleSettings={particleSettings}
         activatedDevices={activatedDevices}
         particleToken={token}
         clickupToken={clickupToken}

@@ -43,7 +43,11 @@ function DoorSensorQueueCard(props) {
 DoorSensorQueueCard.propTypes = {
   device: PropTypes.instanceOf(ActivatedDevice).isRequired,
   status: PropTypes.string.isRequired,
-  reactStateHandler: PropTypes.func.isRequired,
+  reactStateHandler: PropTypes.func,
+}
+
+DoorSensorQueueCard.defaultProps = {
+  reactStateHandler: () => {},
 }
 
 export default DoorSensorQueueCard

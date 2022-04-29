@@ -32,6 +32,7 @@ function ClickupTasksView(props) {
 }
 
 ClickupTasksView.propTypes = {
+  // Could make ClickupTask class
   // eslint-disable-next-line react/forbid-prop-types
   clickupTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   status: PropTypes.string.isRequired,

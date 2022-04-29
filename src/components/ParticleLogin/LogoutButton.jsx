@@ -35,17 +35,10 @@ function LogoutButton(props) {
 }
 
 LogoutButton.propTypes = {
-  token: PropTypes.string,
-  changeToken: PropTypes.func,
-  changeLoginState: PropTypes.func,
-  changeParticleSettings: PropTypes.func,
-}
-
-LogoutButton.defaultProps = {
-  token: '',
-  changeToken: () => {},
-  changeLoginState: () => {},
-  changeParticleSettings: () => {},
+  token: PropTypes.string.isRequired,
+  changeToken: PropTypes.func.isRequired,
+  changeLoginState: PropTypes.func.isRequired,
+  changeParticleSettings: PropTypes.func.isRequired,
 }
 
 export default LogoutButton

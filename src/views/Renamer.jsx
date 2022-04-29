@@ -1,39 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { Badge, ButtonGroup, Card, Form, ToggleButton } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Badge, Card, Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import PropTypes, { any } from 'prop-types'
-import ParticleSettings from '../utilities/ParticleSettings'
+import PropTypes from 'prop-types'
 import DoorSensorLabel from '../pdf/DoorSensorLabel'
 import MainSensorLabel from '../pdf/MainSensorLabel'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import RenamerDeviceRow from '../components/Renamer/RenamerDeviceRow'
-import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
+import { changeDeviceName } from '../utilities/ParticleFunctions'
 import StatusBadge from '../components/general/StatusBadge'
 import { modifyClickupTaskCustomFieldValue, modifyClickupTaskName, modifyClickupTaskStatus } from '../utilities/ClickupFunctions'
 import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
-import DropdownList from '../components/general/DropdownList'
 import PhoneNumberStatus from '../components/general/PhoneNumberStatus'
-import { getSensorClients, insertSensorLocation } from '../utilities/DatabaseFunctions'
+import { insertSensorLocation } from '../utilities/DatabaseFunctions'
 import { ClickupStatuses } from '../utilities/Constants'
-import { copyActivatedDevices } from '../utilities/StorageFunctions'
 import DashboardConfiguration from '../components/Renamer/DashboardConfiguration'
 import TwilioConfiguration from '../components/Renamer/TwilioConfiguration'
 
 function Renamer(props) {
-  const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID, environment } = props
+  // eslint-disable-next-line no-unused-vars
+  const { activatedDevices, particleToken, clickupToken, clickupListID, environment } = props
 
   const blankActivatedDevice = ActivatedDevice.BlankDevice()
 
-  const [productID, setProductID] = useState('')
-  const [serialNumber, setSerialNumber] = useState('')
   const [selectedDevice, setSelectedDevice] = useState(blankActivatedDevice)
   const [locationID, setLocationID] = useState('')
-  const [selectorState, setSelectorState] = useState('searchSerial')
   const [sensorNumber, setSensorNumber] = useState('')
-  const [foundDevice, setFoundDevice] = useState(blankActivatedDevice)
-  const [searchState, setSearchState] = useState('waiting')
-  const [twilioCountryCode, setTwilioCountryCode] = useState('')
   const [twilioAreaCode, setTwilioAreaCode] = useState('')
 
   const [particleCheck, setParticleCheck] = useState(false)
@@ -70,10 +62,6 @@ function Renamer(props) {
 
   function changeRadarType(newRadar) {
     setRadarType(newRadar)
-  }
-
-  function changeTwilioCountryCode(code) {
-    setTwilioCountryCode(code)
   }
 
   function changeTwilioAreaCode(city) {
@@ -118,8 +106,6 @@ function Renamer(props) {
 
   function changeSelectedDevice(newDevice) {
     setSelectedDevice(newDevice)
-    setProductID(newDevice.productID)
-    setSerialNumber(newDevice.serialNumber)
     setSensorNumber(newDevice.deviceName.replace(/[^0-9]*/, ''))
   }
 
@@ -220,23 +206,6 @@ function Renamer(props) {
     },
   }
 
-  function handleToggle(x) {
-    setSelectorState(x.target.value)
-    setProductID('')
-    setSerialNumber('')
-    setSelectedDevice(blankActivatedDevice)
-    setSensorNumber('')
-    setFoundDevice(blankActivatedDevice)
-    setSearchState('waiting')
-    setLocationID('')
-    setParticleCheck(false)
-    setClickupCheck(false)
-    setTwilioCheck(false)
-    setDashboardCheck(false)
-    setParticleStatus('idle')
-    setClickupStatus('idle')
-  }
-
   return (
     <div style={styles.parent}>
       <div style={styles.column}>
@@ -312,13 +281,7 @@ function Renamer(props) {
           </Card>
           <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
             <div style={{ paddingBottom: '10px' }}>
-              <TwilioConfiguration
-                twilioCheck={twilioCheck}
-                twilioCityName={twilioAreaCode}
-                changeTwilioCityName={changeTwilioAreaCode}
-                twilioCountryCode={twilioCountryCode}
-                changeTwilioCountryCode={changeTwilioCountryCode}
-              />
+              <TwilioConfiguration twilioCheck={twilioCheck} twilioAreaCode={twilioAreaCode} changeTwilioAreaCode={changeTwilioAreaCode} />
             </div>
             <DashboardConfiguration
               dashboardCheck={dashboardCheck}
@@ -371,7 +334,6 @@ function Renamer(props) {
 }
 
 Renamer.propTypes = {
-  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
   particleToken: PropTypes.string.isRequired,
   clickupToken: PropTypes.string.isRequired,

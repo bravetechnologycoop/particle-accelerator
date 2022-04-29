@@ -45,11 +45,7 @@ function DeviceIDStatus(props) {
 }
 
 DeviceIDStatus.propTypes = {
-  deviceID: PropTypes.string,
-}
-
-DeviceIDStatus.defaultProps = {
-  deviceID: '',
+  deviceID: PropTypes.string.isRequired,
 }
 
 export default DeviceIDStatus

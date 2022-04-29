@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Badge, Form, Spinner } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 import { registerLoraButton } from '../utilities/AWSFunctions'
 import RegistrationIcon from '../components/ButtonRegistration/RegistrationIcon'
 
 export default function ButtonRegistration(props) {
+  // eslint-disable-next-line no-unused-vars
   const { clickupToken, environment } = props
 
   const [deviceEUI, setDeviceEUI] = useState('')
@@ -25,9 +26,9 @@ export default function ButtonRegistration(props) {
 
     let awsRegistration
 
-    if (environment === 'dev') {
+    if (environment === Environments.dev.name) {
       awsRegistration = await registerLoraButton(environment/url, deviceEUI, deviceName, clickupToken)
-    } else if (environment === 'prod') {
+    } else if (environment === Environments.prod.name) {
       awsRegistration = await registerLoraButton(environment/url, deviceEUI, deviceName, clickupToken)
     } else {
       setRegistrationStatus('error')

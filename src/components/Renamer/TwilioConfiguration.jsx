@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 function TwilioConfiguration(props) {
-  const { twilioCheck, twilioCountryCode, changeTwilioCountryCode, twilioCityName, changeTwilioCityName } = props
+  const { twilioCheck, twilioAreaCode, changeTwilioAreaCode } = props
   if (twilioCheck) {
     return (
       <Card>
@@ -11,7 +11,7 @@ function TwilioConfiguration(props) {
         <div style={{ padding: '10px' }}>
           <Form.Group>
             <Form.Label style={{ paddingTop: '10px' }}>Phone Number Area Code</Form.Label>
-            <Form.Control placeholder="Area Code" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
+            <Form.Control placeholder="Area Code" value={twilioAreaCode} onChange={x => changeTwilioAreaCode(x.target.value)} />
           </Form.Group>
         </div>
       </Card>
@@ -23,10 +23,8 @@ function TwilioConfiguration(props) {
 
 TwilioConfiguration.propTypes = {
   twilioCheck: PropTypes.bool.isRequired,
-  twilioCountryCode: PropTypes.string.isRequired,
-  changeTwilioCountryCode: PropTypes.func.isRequired,
-  twilioCityName: PropTypes.string.isRequired,
-  changeTwilioCityName: PropTypes.func.isRequired,
+  twilioAreaCode: PropTypes.string.isRequired,
+  changeTwilioAreaCode: PropTypes.func.isRequired,
 }
 
 export default TwilioConfiguration

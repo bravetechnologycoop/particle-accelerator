@@ -7,6 +7,7 @@ import { purchaseButtonTwilioNumberByAreaCode, purchaseSensorTwilioNumberByAreaC
 import { retTwilioHistory, storeTwilioHistory } from '../utilities/StorageFunctions'
 
 function TwilioPurchasing(props) {
+  // eslint-disable-next-line no-unused-vars
   const { clickupToken, environment } = props
 
   const [deviceType, setDeviceType] = useState('sensor')
@@ -59,6 +60,17 @@ function TwilioPurchasing(props) {
     <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
+          <Form.Group>
+            <Form.Label>Device Type</Form.Label>
+            <Form.Control as="select" value={deviceType} onChange={x => setDeviceType(x.target.value)}>
+              <option key="sensor" value="sensor">
+                Sensor
+              </option>
+              <option key="buttons" value="buttons">
+                Buttons
+              </option>
+            </Form.Control>
+          </Form.Group>
           <Form.Group>
             <Form.Label style={{ paddingTop: '10px' }}>Area Code</Form.Label>
             <Form.Control value={areaCode} onChange={x => setAreaCode(x.target.value)} disabled={formLock} maxLength="3" />

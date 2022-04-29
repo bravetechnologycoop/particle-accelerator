@@ -77,7 +77,7 @@ const styles = {
 function Activator(props) {
   // eslint-disable-next-line no-unused-vars
   const {
-    token,
+    particleToken,
     activationHistory,
     changeActivationHistory,
     activatedDevices,
@@ -85,7 +85,6 @@ function Activator(props) {
     safeModeState,
     particleSettings,
     clickupToken,
-    clickupListID,
   } = props
 
   const [serialNumber, setSerialNumber] = useState('')
@@ -129,33 +128,39 @@ function Activator(props) {
   }
 
   async function handleSubmit(event) {
+    // Don't know why this is needed, but it will stop the page from resetting every click.
     event.preventDefault()
 
+    // Locks out the form from edits (concurrent modifications)
     setFormLock(true)
     setStatusView(true)
 
     let deviceMatches = []
 
+    // If safe mode is on, searches for a device that already has the name of the submitted name.
     if (safeModeState) {
       deviceMatches = activatedDevices.filter(device => {
         return device.deviceName === newDeviceName
       })
     }
 
-    console.log('devicematches', deviceMatches.length)
-
+    // enters the submit handler if the name is unique or if safe mode is off.
     if (!safeModeState || deviceMatches.length === 0) {
+      // the copied local variables (not hooks) are utilized because react states don't update instantaneously.
       let totalStatusCopy = 'idle'
       let deviceIDCopy = 'idle'
       let iccidCopy = 'idle'
       let activationStatusCopy = 'idle'
       let renameStatusCopy = 'idle'
 
+      // Search for the device on particle, retrieve deviceID and ICCID.
       setDeviceID('waiting')
       deviceIDCopy = 'waiting'
       setICCID('waiting')
       iccidCopy = 'waiting'
-      const deviceInfo = await getDeviceInfo(serialNumber, token)
+      const deviceInfo = await getDeviceInfo(serialNumber, particleToken)
+
+      // Change badge state on failure/success
       setDeviceID(deviceInfo.deviceID)
       deviceIDCopy = deviceInfo.deviceID
       setICCID(deviceInfo.iccid)
@@ -169,9 +174,10 @@ function Activator(props) {
         deviceIDCopy = 'error'
       }
 
+      // Activate SIM, change variables
       setActivationStatus('waiting')
       activationStatusCopy = 'waiting'
-      const SIMStatus = await activateDeviceSIM(deviceInfo.iccid, country, `${productID}`, token)
+      const SIMStatus = await activateDeviceSIM(deviceInfo.iccid, country, `${productID}`, particleToken)
       if (SIMStatus) {
         setActivationStatus('true')
         activationStatusCopy = 'true'
@@ -183,8 +189,9 @@ function Activator(props) {
       setRenameStatus('waiting')
       renameStatusCopy = 'waiting'
 
+      // change device ID
       setDeviceID(deviceInfo.deviceID)
-      const rename = await changeDeviceName(deviceInfo.deviceID, productID, newDeviceName, token)
+      const rename = await changeDeviceName(deviceInfo.deviceID, productID, newDeviceName, particleToken)
 
       if (rename) {
         setRenameStatus('true')
@@ -197,7 +204,15 @@ function Activator(props) {
       setTotalStatus('waiting')
       totalStatusCopy = 'waiting'
 
-      const finalVerification = await verifyDeviceRegistration(deviceInfo.deviceID, newDeviceName, productID, deviceInfo.iccid, serialNumber, token)
+      // check that the device is present in the Particle account.
+      const finalVerification = await verifyDeviceRegistration(
+        deviceInfo.deviceID,
+        newDeviceName,
+        productID,
+        deviceInfo.iccid,
+        serialNumber,
+        particleToken,
+      )
 
       if (finalVerification) {
         setTotalStatus('true')
@@ -211,7 +226,7 @@ function Activator(props) {
 
       if (totalStatusCopy === 'true') {
         let clickupTaskID
-
+        // create a task in the sensor tracker for the device
         const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy)
         if (clickup !== null) {
           clickupTaskID = clickup
@@ -221,12 +236,14 @@ function Activator(props) {
           setClickupStatus('fail')
           clickupStatusCopy = 'fail'
         }
+        // add the device to activatedDevices
         pushDevice(ActivatedDevice.FromActivation(newDeviceName, serialNumber, productID, deviceIDCopy, iccidCopy, clickupTaskID))
         console.log('activated devices', activatedDevices)
       } else {
         setClickupStatus('fail')
         clickupStatusCopy = 'fail'
       }
+      // add the attempt to activationHistory
       pushAttempt(
         new ActivationAttempt(
           serialNumber,
@@ -246,6 +263,7 @@ function Activator(props) {
     } else {
       setFormLock(false)
       setStatusView(false)
+      // add an unsuccessful attempt to the history
       pushAttempt(
         new ActivationAttempt(
           'null',
@@ -456,26 +474,14 @@ function Activator(props) {
 }
 
 Activator.propTypes = {
-  token: PropTypes.string,
-  activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)),
-  changeActivationHistory: PropTypes.func,
+  particleToken: PropTypes.string.isRequired,
+  activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)).isRequired,
+  changeActivationHistory: PropTypes.func.isRequired,
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
-  changeActivatedDevices: PropTypes.func,
-  safeModeState: PropTypes.bool,
-  particleSettings: PropTypes.instanceOf(ParticleSettings),
-  clickupToken: PropTypes.string,
-  clickupListID: PropTypes.string,
-}
-
-Activator.defaultProps = {
-  token: '',
-  activationHistory: [],
-  changeActivationHistory: () => {},
-  changeActivatedDevices: () => {},
-  safeModeState: false,
-  particleSettings: new ParticleSettings(),
-  clickupToken: '',
-  clickupListID: '',
+  changeActivatedDevices: PropTypes.func.isRequired,
+  safeModeState: PropTypes.bool.isRequired,
+  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
+  clickupToken: PropTypes.string.isRequired,
 }
 
 export default Activator

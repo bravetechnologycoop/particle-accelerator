@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, Table } from 'react-bootstrap'
 import ActivatedDevice from '../utilities/ActivatedDevice'
-import { getActivatedDevices } from '../utilities/StorageFunctions'
 
 function ActivatedDevices(props) {
   const { activatedDeviceList } = props

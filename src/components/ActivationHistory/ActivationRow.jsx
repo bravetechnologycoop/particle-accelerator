@@ -78,11 +78,7 @@ function ActivationRow(props) {
 }
 
 ActivationRow.propTypes = {
-  attempt: PropTypes.instanceOf(ActivationAttempt),
-}
-
-ActivationRow.defaultProps = {
-  attempt: new ActivationAttempt(),
+  attempt: PropTypes.instanceOf(ActivationAttempt).isRequired,
 }
 
 export default ActivationRow

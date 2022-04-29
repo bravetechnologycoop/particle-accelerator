@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Badge, ButtonGroup, Card, Form, ToggleButton } from 'react-bootstrap'
-import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import DoorSensorEntryCard from '../components/DoorSensorPairing/DoorSensorEntryCard'
-import { copyActivatedDevices, retPairingList, storePairingList } from '../utilities/StorageFunctions'
-import { getDeviceDetails } from '../utilities/ParticleFunctions'
+import { retPairingList, storePairingList } from '../utilities/StorageFunctions'
 import ParticleSettings from '../utilities/ParticleSettings'
 import { ClickupStatuses } from '../utilities/Constants'
 import DoorSensorQueueCard from '../components/DoorSensorPairing/DoorSensorQueueCard'
@@ -15,16 +12,12 @@ function DoorSensorPairing(props) {
   const { activatedDevices, changeActivatedDevices, particleToken, particleSettings, clickupToken, clickupListID, modifyActivatedDevice } = props
 
   const DEFAULT_TIMEOUT_INTERVAL = 10000
-  const blankActivatedDevice = ActivatedDevice.BlankDevice()
 
+  // The updateInterval is for the setInterval in the pairDoorSensor function of ActivatedDevice.
+  // A future project could be to have a field to customize this value.
+  // eslint-disable-next-line no-unused-vars
   const [updateInterval, setUpdateInterval] = useState(DEFAULT_TIMEOUT_INTERVAL)
   const [pairingStatuses, setPairingStatuses] = useState(retPairingList())
-
-  const [selectorState, setSelectorState] = useState('searchSerial')
-  const [foundDevice, setFoundDevice] = useState(blankActivatedDevice)
-  const [searchState, setSearchState] = useState('idle')
-  const [productID, setProductID] = useState('')
-  const [serialNumber, setSerialNumber] = useState('')
 
   function addNewPairingStatus(clickupTaskID) {
     const copyOfPairingStatuses = JSON.parse(JSON.stringify(pairingStatuses))
@@ -43,14 +36,6 @@ function DoorSensorPairing(props) {
   function submitDeviceHandler(device, doorSensorID) {
     addNewPairingStatus(device.doorSensorID)
     device.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice, clickupToken, clickupListID)
-  }
-
-  function handleToggle(x) {
-    setSelectorState(x.target.value)
-    setProductID('')
-    setSerialNumber('')
-    setFoundDevice(blankActivatedDevice)
-    setSearchState('idle')
   }
 
   const styles = {
@@ -89,15 +74,7 @@ function DoorSensorPairing(props) {
               return device.clickupStatus === ClickupStatuses.activation.name
             })
             .map(device => {
-              return (
-                <DoorSensorEntryCard
-                  searchState={searchState}
-                  submitDeviceHandler={submitDeviceHandler}
-                  device={device}
-                  selectorState={selectorState}
-                  key={device.clickupTaskID}
-                />
-              )
+              return <DoorSensorEntryCard submitDeviceHandler={submitDeviceHandler} device={device} key={device.clickupTaskID} />
             })}
         </div>
       </div>

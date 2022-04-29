@@ -53,13 +53,8 @@ function LoginStatus(props) {
 }
 
 LoginStatus.propTypes = {
-  loginState: PropTypes.string,
-  userName: PropTypes.string,
-}
-
-LoginStatus.defaultProps = {
-  loginState: '',
-  userName: '',
+  loginState: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
 }
 
 export default LoginStatus

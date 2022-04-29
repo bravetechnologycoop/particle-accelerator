@@ -2,6 +2,8 @@ import { Badge } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+// TODO: Create an object for the statuses.
+
 /**
  * StatusBadge: React component for displaying the current status of a process.
  * Outputs a badge based on the state of the status inputted.
@@ -35,11 +37,7 @@ function StatusBadge(props) {
 }
 
 StatusBadge.propTypes = {
-  status: PropTypes.string,
-}
-
-StatusBadge.defaultProps = {
-  status: '',
+  status: PropTypes.string.isRequired,
 }
 
 export default StatusBadge

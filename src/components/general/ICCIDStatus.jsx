@@ -51,11 +51,7 @@ function ICCIDStatus(props) {
 }
 
 ICCIDStatus.propTypes = {
-  iccid: PropTypes.string,
-}
-
-ICCIDStatus.defaultProps = {
-  iccid: '',
+  iccid: PropTypes.string.isRequired,
 }
 
 export default ICCIDStatus

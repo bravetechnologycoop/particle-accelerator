@@ -4,7 +4,6 @@ import ActivationAttempt from '../utilities/ActivationAttempt'
 import ActivationRow from '../components/ActivationHistory/ActivationRow'
 
 function ActivationHistory(props) {
-  // eslint-disable-next-line no-unused-vars
   const { activationHistory } = props
 
   if (activationHistory.length === 0) {
@@ -35,11 +34,7 @@ function ActivationHistory(props) {
 }
 
 ActivationHistory.propTypes = {
-  activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)),
-}
-
-ActivationHistory.defaultProps = {
-  activationHistory: [],
+  activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)).isRequired,
 }
 
 export default ActivationHistory

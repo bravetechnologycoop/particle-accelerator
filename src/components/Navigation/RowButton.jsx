@@ -1,9 +1,7 @@
 import '../../stylesheets/Navigation.css'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import React, { useState } from 'react'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
-import LoginStatus from '../ParticleLogin/LoginStatus'
+import React from 'react'
 import ClickupLogo from '../../graphics/clickupLogo.svg'
 import ParticleLogo from '../../graphics/particleLogo.svg'
 

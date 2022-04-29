@@ -2,7 +2,7 @@ import '../../stylesheets/Navigation.css'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import React from 'react'
-import LoginStatus from '../ParticleLogin/LoginStatus'
+import LoginStatus from '../general/LoginStatus'
 
 /**
  * LoginRowButton
@@ -57,22 +57,18 @@ function LoginRowButton(props) {
 }
 
 LoginRowButton.propTypes = {
-  label: PropTypes.string,
-  state: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  state: PropTypes.string.isRequired,
   enabled: PropTypes.bool,
-  loginState: PropTypes.string,
+  loginState: PropTypes.string.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   changeToken: PropTypes.func,
-  userName: PropTypes.string,
+  userName: PropTypes.string.isRequired,
 }
 
 LoginRowButton.defaultProps = {
-  label: '',
-  state: '',
   enabled: true,
-  loginState: 'false',
   changeToken: () => {},
-  userName: '',
 }
 
 export default LoginRowButton

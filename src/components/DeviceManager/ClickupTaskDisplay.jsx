@@ -13,13 +13,13 @@ function ClickupTaskDisplay(props) {
   let twilioNumber
   let doorSensorID
 
-  if (task.doorSensorID === '') {
+  if (task.doorSensorID === '' || task.doorSensorID === undefined) {
     doorSensorID = 'No Door Sensor ID'
   } else {
     doorSensorID = task.doorSensorID
   }
 
-  if (task.twilioNumber === '') {
+  if (task.twilioNumber === '' || task.twilioNumber === undefined) {
     twilioNumber = 'No Twilio Number'
   } else {
     twilioNumber = task.twilioNumber
@@ -61,8 +61,8 @@ function ClickupTaskDisplay(props) {
           <div>{task.deviceID}</div>
           <div>{task.serialNumber}</div>
           <div>{task.formerSensorName}</div>
-          <div>{task.doorSensorID}</div>
-          <div>{task.twilioNumber}</div>
+          <div>{doorSensorID}</div>
+          <div>{twilioNumber}</div>
         </div>
         <div
           style={{

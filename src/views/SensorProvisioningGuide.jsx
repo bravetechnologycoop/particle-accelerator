@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardGroup } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 import Step1 from '../graphics/sensor-provisioning-guide/step1.svg'
 import Step2 from '../graphics/sensor-provisioning-guide/Step2.svg'
 import Step3 from '../graphics/sensor-provisioning-guide/Step3.svg'

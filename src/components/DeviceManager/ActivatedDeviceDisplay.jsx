@@ -13,13 +13,13 @@ function ActivatedDeviceDisplay(props) {
   let twilioNumber
   let doorSensorID
 
-  if (device.doorSensorID === '') {
+  if (device.doorSensorID === '' || device.doorSensorID === undefined) {
     doorSensorID = 'No Door Sensor ID'
   } else {
     doorSensorID = device.doorSensorID
   }
 
-  if (device.twilioNumber === '') {
+  if (device.twilioNumber === '' || device.twilioNumber === undefined) {
     twilioNumber = 'No Twilio Number'
   } else {
     twilioNumber = device.twilioNumber

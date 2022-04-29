@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Badge, Spinner } from 'react-bootstrap'
-import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import { getAllTasksInPATracker } from '../utilities/ClickupFunctions'
-import ClickupTask from '../utilities/ClickupTask'
 import ActivatedDeviceDisplay from '../components/DeviceManager/ActivatedDeviceDisplay'
 import ClickupTasksView from '../components/DeviceManager/ClickupTasksView'
 
@@ -53,12 +50,6 @@ function DeviceManager(props) {
     }
   })
 
-  function pushDevice(newDevice) {
-    const newDeviceArray = [newDevice]
-    const updatedList = newDeviceArray.concat(activatedDevices)
-    changeActivatedDevices(updatedList)
-  }
-
   function pushTaskToDevices(existingTask) {
     const newDeviceArray = [ActivatedDevice.FromClickupTask(existingTask)]
     const updatedList = newDeviceArray.concat(activatedDevices)
@@ -66,7 +57,6 @@ function DeviceManager(props) {
   }
 
   function deleteDevice(deviceToDelete) {
-    console.log('device deleted')
     const modifiedDeviceList = activatedDevices.filter(device => {
       return !deviceToDelete.compareDevices(device)
     })

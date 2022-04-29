@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import LoginStatus from '../components/ParticleLogin/LoginStatus'
+import LoginStatus from '../components/general/LoginStatus'
 import LoginForm from '../components/ParticleLogin/LoginForm'
 import LogoutButton from '../components/ParticleLogin/LogoutButton'
 import ParticleSettings from '../utilities/ParticleSettings'
-// import { getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 
 /**
  * ParticleLogin: React Component that provides a login form for a user to login
@@ -33,21 +32,12 @@ function ParticleLogin(props) {
 }
 
 ParticleLogin.propTypes = {
-  changeToken: PropTypes.func,
-  loginState: PropTypes.string,
-  changeLoginState: PropTypes.func,
-  token: PropTypes.string,
-  particleSettings: PropTypes.instanceOf(ParticleSettings),
-  changeParticleSettings: PropTypes.func,
-}
-
-ParticleLogin.defaultProps = {
-  changeToken: () => {},
-  loginState: '',
-  changeLoginState: () => {},
-  token: '',
-  particleSettings: new ParticleSettings(),
-  changeParticleSettings: () => {},
+  token: PropTypes.string.isRequired,
+  changeToken: PropTypes.func.isRequired,
+  loginState: PropTypes.string.isRequired,
+  changeLoginState: PropTypes.func.isRequired,
+  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
+  changeParticleSettings: PropTypes.func.isRequired,
 }
 
 export default ParticleLogin

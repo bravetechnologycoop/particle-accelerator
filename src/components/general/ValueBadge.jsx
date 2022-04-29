@@ -2,6 +2,8 @@ import { Badge } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+// TODO: harmonize StatusBadge and ValueBadge
+
 /**
  * ValueBadge: Generic badge for displaying states and values
  *
@@ -56,12 +58,11 @@ function ValueBadge(props) {
 }
 
 ValueBadge.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
   bg: PropTypes.string,
 }
 
 ValueBadge.defaultProps = {
-  value: '',
   bg: '',
 }
 
