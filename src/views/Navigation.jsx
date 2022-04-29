@@ -1,11 +1,11 @@
-import { ButtonGroup, Form } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 
 import '../stylesheets/Navigation.css'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import RowButton from '../components/Navigation/RowButton'
 import LoginRowButton from '../components/Navigation/LoginRowButton'
-import { getActivationHistory, getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
+import { getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 import RowToggler from '../components/Navigation/RowToggler'
 import ParticleSettings from '../utilities/ParticleSettings'
 import BraveLogoWhite from '../pdf/BraveLogoWhite.svg'
@@ -14,7 +14,6 @@ import { Environments } from '../utilities/Constants'
 function Navigation(props) {
   const {
     viewState,
-    changeViewState,
     loginStatus,
     changeToken,
     changeLoginState,
@@ -70,37 +69,17 @@ function Navigation(props) {
         <img src={BraveLogoWhite} alt="Brave Logo" height="100px" />
       </div>
       <div style={styles.navi}>
-        <RowButton label="Home" handler={changeViewState} state={viewState} />
-        <LoginRowButton
-          label="Particle"
-          handler={changeViewState}
-          state={viewState}
-          loginState={loginStatus}
-          changeToken={changeToken}
-          userName={particleSettings.userName}
-        />
-        <LoginRowButton
-          label="ClickUp"
-          handler={changeViewState}
-          state={viewState}
-          loginState={`${clickupToken !== ''}`}
-          userName={clickupUserName}
-        />
-        <RowButton label="Device Manager" handler={changeViewState} state={viewState} />
-        <RowButton
-          label="Activator"
-          handler={changeViewState}
-          state={viewState}
-          enabled={loginStatus === 'true' && clickupToken !== ''}
-          particle
-          clickup
-        />
-        <RowButton label="Device Lookup" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
-        <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
-        <RowButton label="Renamer" handler={changeViewState} state={viewState} enabled={loginStatus === 'true' && clickupToken !== ''} />
-        <RowButton label="Sensor Provisioning Guide" handler={changeViewState} state={viewState} />
-        <RowButton label="Button Registration" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
-        <RowButton label="Twilio Number Purchasing" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
+        <RowButton label="Home" state={viewState} />
+        <LoginRowButton label="Particle" state={viewState} loginState={loginStatus} changeToken={changeToken} userName={particleSettings.userName} />
+        <LoginRowButton label="ClickUp" state={viewState} loginState={`${clickupToken !== ''}`} userName={clickupUserName} />
+        <RowButton label="Device Manager" state={viewState} />
+        <RowButton label="Activator" state={viewState} enabled={loginStatus === 'true' && clickupToken !== ''} particle clickup />
+        <RowButton label="Device Lookup" state={viewState} enabled={loginStatus === 'true'} particle />
+        <RowButton label="Door Sensor Pairing" state={viewState} enabled={loginStatus === 'true'} particle />
+        <RowButton label="Renamer" state={viewState} enabled={loginStatus === 'true' && clickupToken !== ''} />
+        <RowButton label="Sensor Provisioning Guide" state={viewState} />
+        <RowButton label="Button Registration" state={viewState} enabled={clickupToken !== ''} clickup />
+        <RowButton label="Twilio Number Purchasing" state={viewState} enabled={clickupToken !== ''} clickup />
       </div>
       <div style={styles.buttonGroup}>
         <Form>
@@ -124,7 +103,6 @@ function Navigation(props) {
 
 Navigation.propTypes = {
   viewState: PropTypes.string.isRequired,
-  changeViewState: PropTypes.func.isRequired,
   loginStatus: PropTypes.string.isRequired,
   changeToken: PropTypes.func.isRequired,
   changeLoginState: PropTypes.func.isRequired,

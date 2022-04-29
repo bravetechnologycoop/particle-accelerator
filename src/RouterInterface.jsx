@@ -23,7 +23,7 @@ import {
 import ParticleSettings from './utilities/ParticleSettings'
 
 function RouterInterface(props) {
-  const { viewState, changeViewState } = props
+  const { viewState } = props
 
   const [token, setToken] = useState(getParticleToken())
   const [loginState, setLoginState] = useState(getParticleLoginState())
@@ -135,7 +135,6 @@ function RouterInterface(props) {
       <div style={styles.navbar}>
         <Navigation
           viewState={viewState}
-          changeViewState={changeViewState}
           loginStatus={loginState}
           token={token}
           changeToken={changeToken}
@@ -174,13 +173,7 @@ function RouterInterface(props) {
 }
 
 RouterInterface.propTypes = {
-  viewState: PropTypes.string,
-  changeViewState: PropTypes.func,
-}
-
-RouterInterface.defaultProps = {
-  viewState: '',
-  changeViewState: () => {},
+  viewState: PropTypes.string.isRequired,
 }
 
 export default RouterInterface
