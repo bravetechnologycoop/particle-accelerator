@@ -7,7 +7,7 @@ import DoorSensorEntryCard from '../components/DoorSensorEntryCard'
 import { copyActivatedDevices, retPairingList, storePairingList } from '../utilities/StorageFunctions'
 import { getDeviceDetails } from '../utilities/ParticleFunctions'
 import ParticleSettings from '../utilities/ParticleSettings'
-import ClickupStatuses from '../utilities/ClickupStatuses'
+import { ClickupStatuses } from '../utilities/Constants'
 
 function DoorSensorView(props) {
   // eslint-disable-next-line no-unused-vars

@@ -10,9 +10,11 @@ import {
   getSafeModeState,
   retClickupListID,
   retClickupUserName,
+  retEnvironment,
   storeClickupListID,
   storeClickupToken,
   storeClickupUserName,
+  storeEnvironment,
   storeParticleLoginState,
   storeParticleSettings,
   storeParticleToken,
@@ -30,6 +32,12 @@ function RouterInterface(props) {
   const [clickupToken, setClickupToken] = useState(getClickupToken())
   const [clickupUserName, setClickupUserName] = useState(retClickupUserName())
   const [clickupListID, setClickupListID] = useState(retClickupListID())
+  const [environment, setEnvironment] = useState(retEnvironment())
+
+  function changeEnvironment(newEnvironment) {
+    storeEnvironment(newEnvironment)
+    setEnvironment(newEnvironment)
+  }
 
   function changeClickupListID(newClickupListID) {
     storeClickupListID(newClickupListID)
@@ -136,6 +144,8 @@ function RouterInterface(props) {
           particleSettings={particleSettings}
           clickupToken={clickupToken}
           clickupUserName={clickupUserName}
+          environment={environment}
+          changeEnvironment={changeEnvironment}
         />
       </div>
       <div style={styles.main}>
@@ -155,6 +165,7 @@ function RouterInterface(props) {
           changeClickupUserName={changeClickupUserName}
           clickupListID={clickupListID}
           changeClickupListID={changeClickupListID}
+          environment={environment}
         />
       </div>
     </div>

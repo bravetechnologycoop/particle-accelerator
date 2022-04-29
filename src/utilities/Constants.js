@@ -1,4 +1,4 @@
-const ClickupStatuses = {
+export const ClickupStatuses = {
   activation: {
     name: 'provisioned boron',
     displayName: 'Provisioned Boron',
@@ -26,4 +26,21 @@ const ClickupStatuses = {
   },
 }
 
-export default ClickupStatuses
+export const Environments = {
+  prod: {
+    name: 'production',
+    displayName: 'Production',
+  },
+  dev: {
+    name: 'development',
+    displayName: 'Development',
+  },
+  staging: {
+    name: 'staging',
+    displayName: 'Staging',
+  },
+  default: {
+    name: 'development',
+    displayName: 'Development',
+  },
+}

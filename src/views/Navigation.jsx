@@ -1,4 +1,4 @@
-import { ButtonGroup } from 'react-bootstrap'
+import { ButtonGroup, Form } from 'react-bootstrap'
 
 import './Navigation.css'
 import PropTypes from 'prop-types'
@@ -9,6 +9,7 @@ import { getActivationHistory, getParticleLoginState, getParticleToken } from '.
 import RowToggler from '../components/RowToggler'
 import ParticleSettings from '../utilities/ParticleSettings'
 import BraveLogoWhite from '../pdf/BraveLogoWhite.svg'
+import { Environments } from '../utilities/Constants'
 
 function Navigation(props) {
   const {
@@ -22,6 +23,8 @@ function Navigation(props) {
     particleSettings,
     clickupUserName,
     clickupToken,
+    environment,
+    changeEnvironment,
   } = props
 
   useEffect(() => {
@@ -34,9 +37,10 @@ function Navigation(props) {
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
+      background: '#042857',
+      justifyContent: 'space-between',
     },
     header: {
-      flex: '1 0 15%',
       justifyContent: 'center',
       background: '#042857',
       color: 'white',
@@ -45,10 +49,17 @@ function Navigation(props) {
       alignContent: 'center',
       paddingLeft: '1em',
       paddingRight: '1em',
+      paddingTop: '2vh',
+      paddingBottom: '2vh',
     },
     navi: {
-      flex: '10 0 85%',
       background: '#042857',
+      flexGrow: '1',
+      display: 'flex',
+      flexDirection: 'column',
+      overflowY: 'auto',
+    },
+    buttonGroup: {
       display: 'flex',
       flexDirection: 'column',
     },
@@ -59,71 +70,71 @@ function Navigation(props) {
         <img src={BraveLogoWhite} alt="Brave Logo" height="100px" />
       </div>
       <div style={styles.navi}>
-        <ButtonGroup vertical>
-          <RowButton label="Home" handler={changeViewState} state={viewState} />
-          <LoginRowButton
-            label="Particle"
-            handler={changeViewState}
-            state={viewState}
-            loginState={loginStatus}
-            changeToken={changeToken}
-            userName={particleSettings.userName}
-          />
-          <LoginRowButton
-            label="ClickUp"
-            handler={changeViewState}
-            state={viewState}
-            loginState={`${clickupToken !== ''}`}
-            userName={clickupUserName}
-          />
-          <RowButton label="Device Manager" handler={changeViewState} state={viewState} />
-          <RowButton
-            label="Activator"
-            handler={changeViewState}
-            state={viewState}
-            enabled={loginStatus === 'true' && clickupToken !== ''}
-            particle
-            clickup
-          />
-          <RowButton label="Activation History" handler={changeViewState} state={viewState} enabled={getActivationHistory().length !== 0} />
-          <RowButton label="Activated Devices" handler={changeViewState} state={viewState} />
-          <RowButton label="Device Lookup" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
-          <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
-          <RowButton label="Renamer" handler={changeViewState} state={viewState} />
-          <RowButton label="Sensor Provisioning Guide" handler={changeViewState} state={viewState} />
-          <RowButton label="Button Registration" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
-          <RowButton label="Twilio Number Purchasing" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
-          <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
-        </ButtonGroup>
+        <RowButton label="Home" handler={changeViewState} state={viewState} />
+        <LoginRowButton
+          label="Particle"
+          handler={changeViewState}
+          state={viewState}
+          loginState={loginStatus}
+          changeToken={changeToken}
+          userName={particleSettings.userName}
+        />
+        <LoginRowButton
+          label="ClickUp"
+          handler={changeViewState}
+          state={viewState}
+          loginState={`${clickupToken !== ''}`}
+          userName={clickupUserName}
+        />
+        <RowButton label="Device Manager" handler={changeViewState} state={viewState} />
+        <RowButton
+          label="Activator"
+          handler={changeViewState}
+          state={viewState}
+          enabled={loginStatus === 'true' && clickupToken !== ''}
+          particle
+          clickup
+        />
+        <RowButton label="Device Lookup" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
+        <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
+        <RowButton label="Renamer" handler={changeViewState} state={viewState} enabled={loginStatus === 'true' && clickupToken !== ''} />
+        <RowButton label="Sensor Provisioning Guide" handler={changeViewState} state={viewState} />
+        <RowButton label="Button Registration" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
+        <RowButton label="Twilio Number Purchasing" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
+      </div>
+      <div style={styles.buttonGroup}>
+        <Form>
+          <Form.Control as="select" className="modeSelector" value={environment} onChange={x => changeEnvironment(x.target.value)}>
+            <option key={Environments.prod.name} id={Environments.prod.name} value={Environments.prod.name}>
+              {Environments.prod.displayName}
+            </option>
+            <option key={Environments.dev.name} id={Environments.dev.name} value={Environments.dev.name}>
+              {Environments.dev.displayName}
+            </option>
+            <option key={Environments.staging.name} id={Environments.staging.name} value={Environments.staging.name}>
+              {Environments.staging.displayName}
+            </option>
+          </Form.Control>
+        </Form>
+        <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
       </div>
     </div>
   )
 }
 
 Navigation.propTypes = {
-  viewState: PropTypes.string,
-  changeViewState: PropTypes.func,
-  loginStatus: PropTypes.string,
-  changeToken: PropTypes.func,
-  changeLoginState: PropTypes.func,
-  safeModeState: PropTypes.bool,
-  changeSafeModeState: PropTypes.func,
-  particleSettings: PropTypes.instanceOf(ParticleSettings),
-  clickupToken: PropTypes.string,
-  clickupUserName: PropTypes.string,
-}
-
-Navigation.defaultProps = {
-  viewState: 'Home',
-  changeViewState: () => {},
-  loginStatus: '',
-  changeToken: () => {},
-  changeLoginState: PropTypes.func,
-  safeModeState: true,
-  changeSafeModeState: () => {},
-  particleSettings: new ParticleSettings(),
-  clickupToken: '',
-  clickupUserName: '',
+  viewState: PropTypes.string.isRequired,
+  changeViewState: PropTypes.func.isRequired,
+  loginStatus: PropTypes.string.isRequired,
+  changeToken: PropTypes.func.isRequired,
+  changeLoginState: PropTypes.func.isRequired,
+  safeModeState: PropTypes.bool.isRequired,
+  changeSafeModeState: PropTypes.func.isRequired,
+  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
+  clickupToken: PropTypes.string.isRequired,
+  clickupUserName: PropTypes.string.isRequired,
+  environment: PropTypes.string.isRequired,
+  changeEnvironment: PropTypes.func.isRequired,
 }
 
 export default Navigation

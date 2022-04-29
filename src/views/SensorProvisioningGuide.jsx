@@ -13,7 +13,7 @@ import Step11 from '../graphics/Step11.svg'
 import Step11_2 from '../graphics/Step11-2.svg'
 import Step12 from '../graphics/Step12.svg'
 import './SensorProvisioningGuide.css'
-import ClickupStatuses from '../utilities/ClickupStatuses'
+import { ClickupStatuses } from '../utilities/Constants'
 
 function SensorProvisioningGuide() {
   const styles = {

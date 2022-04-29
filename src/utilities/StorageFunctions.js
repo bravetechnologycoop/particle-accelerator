@@ -2,6 +2,7 @@ import ActivationAttempt from './ActivationAttempt'
 import ActivatedDevice from './ActivatedDevice'
 import ParticleSettings from './ParticleSettings'
 import Product from './Product'
+import { Environments } from './Constants'
 
 /*
 Library of storage functions used for interacting with localStorage and sessionStorage in the browser.
@@ -299,13 +300,26 @@ export function retTwilioHistory() {
 
 export function storePairingList(newList) {
   const stringedData = JSON.stringify(newList)
-  localStorage.setItem('pairingList', stringedData)
+  sessionStorage.setItem('pairingList', stringedData)
 }
 
 export function retPairingList() {
-  const result = localStorage.getItem('pairingList')
+  const result = sessionStorage.getItem('pairingList')
   if (result === null) {
     return {}
   }
   return JSON.parse(result)
+}
+
+export function storeEnvironment(newEnv) {
+  const stringedData = JSON.stringify(newEnv)
+  localStorage.setItem('environment', stringedData)
+}
+
+export function retEnvironment() {
+  const result = localStorage.getItem('environment')
+  if (result === null) {
+    return Environments.default.name
+  }
+  return result
 }

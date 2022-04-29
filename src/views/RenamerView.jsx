@@ -15,11 +15,11 @@ import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctio
 import DropdownList from '../components/DropdownList'
 import PhoneNumberStatus from '../components/PhoneNumberStatus'
 import { getSensorClients, insertSensorLocation } from '../utilities/DatabaseFunctions'
-import ClickupStatuses from '../utilities/ClickupStatuses'
+import { ClickupStatuses } from '../utilities/Constants'
 import { copyActivatedDevices } from '../utilities/StorageFunctions'
 
 function RenamerView(props) {
-  const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID } = props
+  const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID, environment } = props
 
   const blankActivatedDevice = ActivatedDevice.BlankDevice()
 
@@ -49,11 +49,6 @@ function RenamerView(props) {
   const [displayName, setDisplayName] = useState('')
   const [radarType, setRadarType] = useState('')
   const [password, setPassword] = useState('')
-  const [environment, setEnvironment] = useState('dev')
-
-  function changeEnvironment(newEnviroment) {
-    setEnvironment(newEnviroment)
-  }
 
   function changePassword(newPassword) {
     setPassword(newPassword)
@@ -115,14 +110,6 @@ function RenamerView(props) {
     }
   }
 
-  function changeSearchState(newState) {
-    setSearchState(newState)
-  }
-
-  function changeFoundDevice(newDevice) {
-    setFoundDevice(newDevice)
-  }
-
   function changeLocationID(newLocationID) {
     setLocationID(newLocationID)
   }
@@ -132,14 +119,6 @@ function RenamerView(props) {
     setProductID(newDevice.productID)
     setSerialNumber(newDevice.serialNumber)
     setSensorNumber(newDevice.deviceName.replace(/[^0-9]*/, ''))
-  }
-
-  function changeProductID(newProductID) {
-    setProductID(newProductID)
-  }
-
-  function changeSerialNumber(newSerialNumber) {
-    setSerialNumber(newSerialNumber)
   }
 
   async function handleRenameSubmit(event) {
@@ -357,23 +336,25 @@ function RenamerView(props) {
                 changeDisplayName={changeDisplayName}
                 password={password}
                 changePassword={changePassword}
-                environment={environment}
-                changeEnvironment={changeEnvironment}
               />
               <Card>
                 <Card.Header>Device Rename Status</Card.Header>
                 <Card.Body>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                    <div style={{ paddingRight: '10px' }}>Renaming Device on Particle:</div> <StatusBadge status={particleStatus} />{' '}
+                    <div style={{ paddingRight: '10px' }}>Renaming Device on Particle:</div>
+                    <StatusBadge status={particleStatus} />{' '}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                    <div style={{ paddingRight: '10px' }}>Renaming Task on ClickUp:</div> <StatusBadge status={clickupStatus} />{' '}
+                    <div style={{ paddingRight: '10px' }}>Renaming Task on ClickUp:</div>
+                    <StatusBadge status={clickupStatus} />{' '}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                    <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div> <PhoneNumberStatus status={twilioStatus} />{' '}
+                    <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div>
+                    <PhoneNumberStatus status={twilioStatus} />{' '}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                    <div style={{ paddingRight: '10px' }}>Registering to Dashboard:</div> <StatusBadge status={dashboardStatus} />{' '}
+                    <div style={{ paddingRight: '10px' }}>Registering to Dashboard:</div>
+                    <StatusBadge status={dashboardStatus} />{' '}
                   </div>
                 </Card.Body>
               </Card>
@@ -399,6 +380,7 @@ RenamerView.propTypes = {
   particleToken: PropTypes.string.isRequired,
   clickupToken: PropTypes.string.isRequired,
   clickupListID: PropTypes.string.isRequired,
+  environment: PropTypes.string.isRequired,
 }
 
 function SearchResult(props) {
@@ -479,8 +461,6 @@ function DashboardConfiguration(props) {
     changeStateMachine,
     password,
     changePassword,
-    environment,
-    changeEnvironment,
   } = props
 
   const [clientList, setClientList] = useState([])
@@ -567,8 +547,6 @@ DashboardConfiguration.propTypes = {
   changeDisplayName: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,
   changePassword: PropTypes.func.isRequired,
-  environment: PropTypes.string.isRequired,
-  changeEnvironment: PropTypes.func.isRequired,
 }
 
 export default RenamerView

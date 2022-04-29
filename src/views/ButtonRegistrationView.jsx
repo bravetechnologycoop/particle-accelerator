@@ -5,13 +5,12 @@ import PropTypes from 'prop-types'
 import { registerLoraButton } from '../utilities/AWSFunctions'
 
 export default function ButtonRegistrationView(props) {
-  const { clickupToken } = props
+  const { clickupToken, environment } = props
 
   const [deviceEUI, setDeviceEUI] = useState('')
   const [deviceName, setDeviceName] = useState('')
   const [formLock, setFormLock] = useState(false)
   const [registrationStatus, setRegistrationStatus] = useState('idle')
-  const [environment, setEnvironment] = useState('dev')
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -50,17 +49,6 @@ export default function ButtonRegistrationView(props) {
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
         <Form.Group>
-          <Form.Label>Select Environment</Form.Label>
-          <Form.Control as="select" value={environment} onChange={x => setEnvironment(x.target.value)}>
-            <option id="dev" key="dev" value="dev">
-              Development
-            </option>
-            <option id="prod" key="prod" value="prod">
-              Production
-            </option>
-          </Form.Control>
-        </Form.Group>
-        <Form.Group>
           <Form.Label style={{ paddingTop: '10px' }}>Device Name</Form.Label>
           <Form.Control value={deviceName} onChange={x => setDeviceName(x.target.value)} disabled={formLock} />
         </Form.Group>
@@ -81,6 +69,7 @@ export default function ButtonRegistrationView(props) {
 
 ButtonRegistrationView.propTypes = {
   clickupToken: PropTypes.string.isRequired,
+  environment: PropTypes.string.isRequired,
 }
 
 function RegistrationIcon(props) {

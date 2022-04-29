@@ -75,7 +75,3 @@ Environment Variables in the PA are done in DigitalOcean. Each environment varia
 - [large endeavour] Back the application with a database
 - [decent cost-benefit] Create a (desktop application) serial tool that interfaces with an accelerator endpoint to automatically register every button
 
-
-Other: 
-- Validator says door sensorID
-- 

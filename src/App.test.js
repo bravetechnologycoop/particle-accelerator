@@ -2,13 +2,6 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import App from './App'
 import ActivatedDevice from './utilities/ActivatedDevice'
-import {
-  createTaskInSensorTracker,
-  getClickupTaskIDByName,
-  modifyClickupTaskStatus
-} from "./utilities/ClickupFunctions";
-import ClickupStatuses from "./utilities/ClickupStatuses";
-import { getCurrentFirmwareVersion } from "./utilities/ParticleFunctions";
 
 test('creates a new activated device from secondary constructor', () => {
   const device = ActivatedDevice.FromActivation('testDevice', 'B40TAB', '15479', 'abc123', '999', '123af')

@@ -38,6 +38,7 @@ function Frame(props) {
     changeClickupUserName,
     clickupListID,
     changeClickupListID,
+    environment,
   } = props
 
   const [activationHistory, setActivationHistory] = useState(getActivationHistory())
@@ -154,14 +155,15 @@ function Frame(props) {
         particleToken={token}
         clickupToken={clickupToken}
         clickupListID={clickupListID}
+        environment={environment}
       />
     )
   }
   if (viewState === 'Twilio Number Purchasing') {
-    return <TwilioPurchaseView clickupToken={clickupToken} />
+    return <TwilioPurchaseView clickupToken={clickupToken} environment={environment} />
   }
   if (viewState === 'Button Registration') {
-    return <ButtonRegistrationView clickupToken={clickupToken} />
+    return <ButtonRegistrationView clickupToken={clickupToken} environment={environment} />
   }
   if (viewState === 'Device Manager') {
     return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
@@ -173,37 +175,21 @@ function Frame(props) {
 }
 
 Frame.propTypes = {
-  token: PropTypes.string,
-  changeToken: PropTypes.func,
-  loginState: PropTypes.string,
-  changeLoginState: PropTypes.func,
-  viewState: PropTypes.string,
-  safeModeState: PropTypes.bool,
-  particleSettings: PropTypes.instanceOf(ParticleSettings),
-  changeParticleSettings: PropTypes.func,
-  clickupToken: PropTypes.string,
-  changeClickupToken: PropTypes.func,
-  clickupUserName: PropTypes.string,
-  changeClickupUserName: PropTypes.func,
-  clickupListID: PropTypes.string,
-  changeClickupListID: PropTypes.func,
-}
-
-Frame.defaultProps = {
-  token: '',
-  changeToken: () => {},
-  loginState: 'false',
-  changeLoginState: () => {},
-  viewState: 'Home',
-  safeModeState: false,
-  particleSettings: new ParticleSettings(),
-  changeParticleSettings: () => {},
-  clickupToken: '',
-  changeClickupToken: () => {},
-  clickupUserName: '',
-  changeClickupUserName: () => {},
-  clickupListID: '',
-  changeClickupListID: () => {},
+  token: PropTypes.string.isRequired,
+  changeToken: PropTypes.func.isRequired,
+  loginState: PropTypes.string.isRequired,
+  changeLoginState: PropTypes.func.isRequired,
+  viewState: PropTypes.string.isRequired,
+  safeModeState: PropTypes.bool.isRequired,
+  particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
+  changeParticleSettings: PropTypes.func.isRequired,
+  clickupToken: PropTypes.string.isRequired,
+  changeClickupToken: PropTypes.func.isRequired,
+  clickupUserName: PropTypes.string.isRequired,
+  changeClickupUserName: PropTypes.func.isRequired,
+  clickupListID: PropTypes.string.isRequired,
+  changeClickupListID: PropTypes.func.isRequired,
+  environment: PropTypes.string.isRequired,
 }
 
 export default Frame

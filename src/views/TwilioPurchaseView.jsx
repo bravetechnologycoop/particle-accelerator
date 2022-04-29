@@ -7,7 +7,7 @@ import { purchaseButtonTwilioNumberByAreaCode, purchaseSensorTwilioNumberByAreaC
 import { retTwilioHistory, storeTwilioHistory } from '../utilities/StorageFunctions'
 
 function TwilioPurchaseView(props) {
-  const { clickupToken } = props
+  const { clickupToken, environment } = props
 
   const [deviceType, setDeviceType] = useState('sensor')
   const [areaCode, setAreaCode] = useState('')
@@ -34,6 +34,8 @@ function TwilioPurchaseView(props) {
 
     let twilioNumber
 
+    // If statement would go here for environment selection. See ButtonRegistrationView.jsx for example code
+
     if (deviceType === 'sensor') {
       twilioNumber = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, clickupToken)
     } else if (deviceType === 'buttons') {
@@ -57,17 +59,6 @@ function TwilioPurchaseView(props) {
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
-          <Form.Group>
-            <Form.Label style={{ paddingTop: '10px' }}>Select Device Type</Form.Label>
-            <Form.Control value={deviceType} onChange={x => setDeviceType(x.target.value)} as="select">
-              <option id="sensor" key="sensor" value="sensor">
-                Sensor
-              </option>
-              <option id="buttons" key="buttons" value="buttons">
-                Buttons
-              </option>
-            </Form.Control>
-          </Form.Group>
           <Form.Group>
             <Form.Label style={{ paddingTop: '10px' }}>Area Code</Form.Label>
             <Form.Control value={areaCode} onChange={x => setAreaCode(x.target.value)} disabled={formLock} maxLength="3" />
@@ -109,6 +100,7 @@ function TwilioPurchaseView(props) {
 
 TwilioPurchaseView.propTypes = {
   clickupToken: PropTypes.string.isRequired,
+  environment: PropTypes.string.isRequired,
 }
 
 export default TwilioPurchaseView

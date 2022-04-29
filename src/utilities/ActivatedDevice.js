@@ -1,6 +1,6 @@
 import { getCurrentFirmwareVersion, getDeviceDetails, pairDoorSensor } from './ParticleFunctions'
 import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue, modifyClickupTaskStatus } from './ClickupFunctions'
-import ClickupStatuses from './ClickupStatuses'
+import { ClickupStatuses } from './Constants'
 
 /**
  * ActivatedDevice
