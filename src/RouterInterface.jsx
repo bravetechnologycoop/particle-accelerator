@@ -108,15 +108,16 @@ function RouterInterface(props) {
       height: '100vh',
       width: '100vw',
       justifyContent: 'center',
+      flexDirection: 'row',
     },
     main: {
       flex: '8 8 85%',
       order: 2,
-      padding: 20,
       alignItems: 'top',
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
+      height: '100vh',
     },
     navbar: {
       flex: '1 1 15%',

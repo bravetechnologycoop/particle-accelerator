@@ -8,14 +8,21 @@ import ClickupTask from '../utilities/ClickupTask'
 
 const styles = {
   parent: {
+    flex: '1 1',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    height: 'inherit',
+    padding: 20,
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
-    flex: 1,
+    flex: '1 1',
+  },
+  scrollableColumn: {
+    flex: '1 1',
+    overflowY: 'auto',
   },
 }
 
@@ -68,13 +75,13 @@ function DeviceManager(props) {
     <div style={styles.parent}>
       <div style={styles.column}>
         <h3>Add a Device From ClickUp</h3>
-        <div style={{ height: '75vh', overflowY: 'auto' }}>
+        <div style={styles.scrollableColumn}>
           <ClickupTasksView clickupTasks={clickupTasks} pushDevice={pushTaskToDevices} status={clickupTaskLoadStatus} />
         </div>
       </div>
-      <div style={styles.column}>
+      <div style={styles.scrollableColumn}>
         <h3>Devices in Memory</h3>
-        <div style={{ height: '98vh', overflowY: 'auto' }}>
+        <div style={{ flex: '1 1', overflowY: 'auto' }}>
           {activatedDevices.map(device => {
             return <ActivatedDeviceDisplay deleteDevice={deleteDevice} device={device} key={device.clickupTaskID} />
           })}

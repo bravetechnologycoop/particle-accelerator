@@ -54,25 +54,23 @@ function DoorSensorView(props) {
 
   const styles = {
     parent: {
+      flex: '1 1',
       display: 'flex',
       flexDirection: 'row',
-      height: '100vh',
+      justifyContent: 'space-evenly',
+      height: 'inherit',
+      padding: 20,
     },
     column: {
-      flex: '1 1 33%',
       display: 'flex',
       flexDirection: 'column',
-      paddingLeft: '20px',
-      paddingRight: '20px',
-    },
-    checkerBox: {
-      flex: '1 1 25vh',
-    },
-    queueBox: {
-      flex: '1 1 75vh',
+      flex: '1 1',
     },
     scrollView: {
-      overflowY: 'scroll',
+      flex: '1 1',
+      overflowY: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
     },
     toggleButton: {
       fontSize: 'small',
@@ -120,22 +118,20 @@ function DoorSensorView(props) {
         </div>
       </div>
       <div style={styles.column}>
-        <div>
-          <h3>Successful Pairings</h3>
-          <hr />
-          <div style={styles.scrollView}>
-            {activatedDevices
-              .filter(device => {
-                return device.doorSensorID !== '' && device.doorSensorID !== null && device.doorSensorID !== undefined
-              })
-              .map(device => {
-                return (
-                  <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
-                    <DoorSensorQueueCard device={device} status="paired" />
-                  </li>
-                )
-              })}
-          </div>
+        <h3>Successful Pairings</h3>
+        <hr />
+        <div style={styles.scrollView}>
+          {activatedDevices
+            .filter(device => {
+              return device.doorSensorID !== '' && device.doorSensorID !== null && device.doorSensorID !== undefined
+            })
+            .map(device => {
+              return (
+                <li style={{ paddingTop: '0.1ch', paddingBottom: '0.2ch', listStyle: 'none' }} key={`${device.dateStamp}${device.timeStamp}`}>
+                  <DoorSensorQueueCard device={device} status="paired" />
+                </li>
+              )
+            })}
         </div>
       </div>
     </div>
