@@ -1,3 +1,6 @@
+// File for all constants/enumerations, etc.
+
+// Use 'name' for all official purposes (kind of like an id)
 export const ClickupStatuses = {
   activation: {
     name: 'provisioned boron',

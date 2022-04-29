@@ -1,4 +1,5 @@
 import ClickupTask from './ClickupTask'
+import { ClickupStatuses } from "./Constants";
 
 const axios = require('axios')
 
@@ -291,7 +292,7 @@ export async function createTaskInSensorTracker(token, sensorName, deviceID, ser
   }
   const data = {
     name: sensorName,
-    status: process.env.REACT_APP_CLICKUP_PA_TRACKER_DEFAULT_STATUS,
+    status: ClickupStatuses.activation.name,
     custom_fields: [
       {
         // Former Sensor Number
@@ -482,7 +483,7 @@ export async function getAllTasksInPATracker(token) {
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_ICCID),
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_SENSOR_NAME),
         getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID),
-        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID),
+        getCustomFieldValue(task.custom_fields, process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO),
       )
     })
   } catch (err) {

@@ -145,7 +145,7 @@ function Renamer(props) {
         twilioPhoneNumber = twilioResponse.phoneNumber
         await modifyClickupTaskCustomFieldValue(
           selectedDevice.clickupTaskID,
-          process.env.REACT_APP_TWILIO_CUSTOM_FIELD_ID,
+          process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
           twilioPhoneNumber,
           clickupToken,
         )

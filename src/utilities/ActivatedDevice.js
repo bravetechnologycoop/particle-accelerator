@@ -134,7 +134,7 @@ export default class ActivatedDevice {
       false,
       null,
       clickupTaskID,
-      process.env.REACT_APP_CLICKUP_PA_TRACKER_DEFAULT_STATUS,
+      ClickupStatuses.activation.name,
       '#f9d900',
       '',
       deviceName,
