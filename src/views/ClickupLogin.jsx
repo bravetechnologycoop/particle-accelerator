@@ -115,9 +115,14 @@ function ClickupLogin(props) {
 
   if (clickupToken !== '') {
     return (
-      <>
+      <div style={{ padding: 20 }}>
         <h1>Logged in as: {clickupUserName}</h1>
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '15px' }}>
+        <div>
+          <Button variant="danger" onClick={() => changeClickupToken('')}>
+            Log Out of Clickup
+          </Button>
+        </div>
+        {/* <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '15px' }}>
           <Card style={{ flex: '0 1 30ch' }}>
             <h4 style={{ paddingLeft: '15px', paddingTop: '15px', paddingRight: '15px' }}>Clickup List Configuration</h4>
             <Form>
@@ -141,18 +146,20 @@ function ClickupLogin(props) {
               </div>
             </Form>
           </Card>
-        </div>
-      </>
+        </div> */}
+      </div>
     )
   }
 
   if (clickupToken === '') {
     return (
-      <Button
-        href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_DOMAIN}/clickup`}
-      >
-        Log in to ClickUp
-      </Button>
+      <div style={{ padding: 20 }}>
+        <Button
+          href={`https://app.clickup.com/api?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_DOMAIN}/clickup`}
+        >
+          Log in to ClickUp
+        </Button>
+      </div>
     )
   }
 }

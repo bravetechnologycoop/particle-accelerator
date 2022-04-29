@@ -28,13 +28,14 @@ function SensorProvisioningGuide() {
     cardInterior: {
       padding: '10px',
       flex: '1 1',
-      maxWidth: '55vw',
+      maxWidth: '900px',
     },
     centerParent: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       overflowY: 'auto',
+      padding: 20,
     },
     cardTitle: {
       fontSize: '28px',
@@ -71,6 +72,15 @@ function SensorProvisioningGuide() {
                   Write the command <code>particle setup usb-done</code> to a new Particle Boron device.
                 </li>
               </ol>
+              <ul>
+                <li>
+                  You must have the{' '}
+                  <a href="https://docs.particle.io/tutorials/developer-tools/cli/" target="_blank" rel="noreferrer">
+                    Particle CLI
+                  </a>{' '}
+                  installed to do this.
+                </li>
+              </ul>
             </div>
             <div style={styles.stepGraphic}>
               <img src={Step1} alt="Step 1" />
@@ -319,8 +329,9 @@ function SensorProvisioningGuide() {
               <ol start="10">
                 <li style={styles.stepTitle}>
                   Change the ClickUp status of the device from{' '}
-                  <mark style={{ background: ClickupStatuses.pairedDoorSensor.color }}>Paired Door Sensor</mark> to{' '}
-                  <mark style={{ background: ClickupStatuses.tested.colour }}>Tested</mark> in the{' '}
+                  <mark style={{ background: ClickupStatuses.pairedDoorSensor.color }}>Paired Door Sensor</mark>
+                  to <mark style={{ background: ClickupStatuses.tested.colour }}>Tested</mark>
+                  in the{' '}
                   <a
                     href={`https://app.clickup.com/${process.env.REACT_APP_CLICKUP_BRAVE_TEAM_ID}/v/l/li/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}`}
                     target="_blank"

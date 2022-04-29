@@ -56,7 +56,7 @@ function TwilioPurchaseView(props) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
           <Form.Group>

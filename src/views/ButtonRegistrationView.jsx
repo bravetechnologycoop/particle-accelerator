@@ -46,7 +46,7 @@ export default function ButtonRegistrationView(props) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
       <Form onSubmit={handleSubmit} style={{ maxWidth: '30ch' }}>
         <Form.Group>
           <Form.Label style={{ paddingTop: '10px' }}>Device Name</Form.Label>
