@@ -93,6 +93,7 @@ function Navigation(props) {
           <RowButton label="Sensor Provisioning Guide" handler={changeViewState} state={viewState} />
           <RowButton label="Button Registration" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
           <RowButton label="Twilio Number Purchasing" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
+          <RowButton label="Google" handler={changeViewState} state={viewState} />
           <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />
         </ButtonGroup>
       </div>

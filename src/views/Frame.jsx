@@ -21,6 +21,7 @@ import TwilioPurchaseView from './TwilioPurchaseView'
 import HomeView from './HomeView'
 import DeviceManager from './DeviceManager'
 import SensorProvisioningGuide from './SensorProvisioningGuide'
+import GoogleOAuth from './GoogleOAuth'
 
 function Frame(props) {
   const {
@@ -168,6 +169,9 @@ function Frame(props) {
   }
   if (viewState === 'Sensor Provisioning Guide') {
     return <SensorProvisioningGuide />
+  }
+  if (viewState === 'Google') {
+    return <GoogleOAuth />
   }
   return <HomeView />
 }

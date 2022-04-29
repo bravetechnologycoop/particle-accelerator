@@ -37,6 +37,7 @@ function App() {
           path="/sensor-provisioning-guide"
           element={<RouterInterface viewState="Sensor Provisioning Guide" changeViewState={changeViewState} />}
         />
+        <Route path="/google" element={<RouterInterface viewState="Google" changeViewState={changeViewState} />} />
       </Routes>
     </BrowserRouter>
   )
