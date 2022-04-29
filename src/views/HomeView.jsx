@@ -4,11 +4,16 @@ import { Card, CardGroup } from 'react-bootstrap'
 function HomeView() {
   const styles = {
     cardBoundary: {
-      width: '700px',
+      width: '100%',
       paddingTop: '10px',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
     },
     cardInterior: {
       padding: '10px',
+      flex: '1 1 950px',
+      maxWidth: '55vw',
     },
     centerParent: {
       display: 'flex',
@@ -62,9 +67,11 @@ function HomeView() {
             </ul>
           </Card.Text>
         </Card>
+      </div>
 
-        <h3 style={{ paddingTop: '10px', paddingBottom: '10px', textAlign: 'center' }}>Tools</h3>
+      <h3 style={{ paddingTop: '10px', paddingBottom: '10px', textAlign: 'center' }}>Tools</h3>
 
+      <div style={styles.cardBoundary}>
         <Card style={styles.cardInterior}>
           <Card.Title style={styles.cardTitle}>Activator</Card.Title>
           <Card.Text>
