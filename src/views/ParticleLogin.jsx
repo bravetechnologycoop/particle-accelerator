@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import LoginStatus from '../components/LoginStatus'
-import LoginForm from '../components/LoginForm'
-import LogoutButton from '../components/LogoutButton'
+import LoginStatus from '../components/ParticleLogin/LoginStatus'
+import LoginForm from '../components/ParticleLogin/LoginForm'
+import LogoutButton from '../components/ParticleLogin/LogoutButton'
 import ParticleSettings from '../utilities/ParticleSettings'
 // import { getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 
 /**
- * LoginView: React Component that provides a login form for a user to login
- * through to access the ActivatorView.
+ * ParticleLogin: React Component that provides a login form for a user to login
+ * through to access the Activator.
  */
-function LoginView(props) {
+function ParticleLogin(props) {
   const { token, loginState, changeToken, changeLoginState, particleSettings, changeParticleSettings } = props
 
   if (loginState === 'true') {
@@ -32,7 +32,7 @@ function LoginView(props) {
   )
 }
 
-LoginView.propTypes = {
+ParticleLogin.propTypes = {
   changeToken: PropTypes.func,
   loginState: PropTypes.string,
   changeLoginState: PropTypes.func,
@@ -41,7 +41,7 @@ LoginView.propTypes = {
   changeParticleSettings: PropTypes.func,
 }
 
-LoginView.defaultProps = {
+ParticleLogin.defaultProps = {
   changeToken: () => {},
   loginState: '',
   changeLoginState: () => {},
@@ -50,4 +50,4 @@ LoginView.defaultProps = {
   changeParticleSettings: () => {},
 }
 
-export default LoginView
+export default ParticleLogin

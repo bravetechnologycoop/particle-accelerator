@@ -1,11 +1,11 @@
-import '../views/Navigation.css'
+import '../../stylesheets/Navigation.css'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import React, { useState } from 'react'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
-import LoginStatus from './LoginStatus'
-import ClickupLogo from './clickupLogo.svg'
-import ParticleLogo from './particleLogo.svg'
+import LoginStatus from '../ParticleLogin/LoginStatus'
+import ClickupLogo from '../../graphics/clickupLogo.svg'
+import ParticleLogo from '../../graphics/particleLogo.svg'
 
 /**
  * RowButton: React component for the Navigation Bar which shows a page in the PA and links to it. Changes styling based

@@ -1,9 +1,9 @@
 import Button from 'react-bootstrap/Button'
 import { Badge } from 'react-bootstrap'
 import React from 'react'
-import DeviceIDStatus from './DeviceIDStatus'
-import ICCIDStatus from './ICCIDStatus'
-import StatusBadge from './StatusBadge'
+import DeviceIDStatus from '../general/DeviceIDStatus'
+import ICCIDStatus from '../general/ICCIDStatus'
+import StatusBadge from '../general/StatusBadge'
 
 // CSS Styles
 const styles = {

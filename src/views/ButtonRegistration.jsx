@@ -3,8 +3,9 @@ import { Badge, Form, Spinner } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 import { registerLoraButton } from '../utilities/AWSFunctions'
+import RegistrationIcon from '../components/ButtonRegistration/RegistrationIcon'
 
-export default function ButtonRegistrationView(props) {
+export default function ButtonRegistration(props) {
   const { clickupToken, environment } = props
 
   const [deviceEUI, setDeviceEUI] = useState('')
@@ -67,27 +68,7 @@ export default function ButtonRegistrationView(props) {
   )
 }
 
-ButtonRegistrationView.propTypes = {
+ButtonRegistration.propTypes = {
   clickupToken: PropTypes.string.isRequired,
   environment: PropTypes.string.isRequired,
-}
-
-function RegistrationIcon(props) {
-  const { status } = props
-
-  if (status === 'waiting') {
-    return <Spinner animation="border" />
-  }
-  if (status === 'success') {
-    return <Badge bg="success">Success</Badge>
-  }
-  if (status.includes('Error')) {
-    return <Badge bg="danger">{status}</Badge>
-  }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-RegistrationIcon.propTypes = {
-  status: PropTypes.string.isRequired,
 }

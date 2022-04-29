@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Card } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import ActivatedDevice from '../utilities/ActivatedDevice'
+import ActivatedDevice from '../../utilities/ActivatedDevice'
 
 /**
  * RenamerDeviceRow: React Component for selecting a device in the Renamer View (should probably be migrated to Renamer)

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import ActivatorView from './ActivatorView'
+import Activator from './Activator'
 import Validator from './Validator'
-import LoginView from './LoginView'
+import ParticleLogin from './ParticleLogin'
 import ClickupLogin from './ClickupLogin'
 import ActivationHistory from './ActivationHistory'
 import {
@@ -13,11 +13,11 @@ import {
   storeActivationHistory,
 } from '../utilities/StorageFunctions'
 import ActivatedDevices from './ActivatedDevices'
-import DoorSensorView from './DoorSensorView'
-import RenamerView from './RenamerView'
+import DoorSensorPairing from './DoorSensorPairing'
+import Renamer from './Renamer'
 import ParticleSettings from '../utilities/ParticleSettings'
-import ButtonRegistrationView from './ButtonRegistrationView'
-import TwilioPurchaseView from './TwilioPurchaseView'
+import ButtonRegistration from './ButtonRegistration'
+import TwilioPurchasing from './TwilioPurchasing'
 import HomeView from './HomeView'
 import DeviceManager from './DeviceManager'
 import SensorProvisioningGuide from './SensorProvisioningGuide'
@@ -87,7 +87,7 @@ function Frame(props) {
 
   if (viewState === 'Activator') {
     return (
-      <ActivatorView
+      <Activator
         token={token}
         changeToken={changeToken}
         activationHistory={activationHistory}
@@ -106,7 +106,7 @@ function Frame(props) {
   }
   if (viewState === 'Particle') {
     return (
-      <LoginView
+      <ParticleLogin
         loginState={loginState}
         changeLoginState={changeLoginState}
         changeToken={changeToken}
@@ -136,7 +136,7 @@ function Frame(props) {
   }
   if (viewState === 'Door Sensor Pairing') {
     return (
-      <DoorSensorView
+      <DoorSensorPairing
         activatedDevices={activatedDevices}
         particleToken={token}
         changeActivatedDevices={changeActivatedDevices}
@@ -149,7 +149,7 @@ function Frame(props) {
   }
   if (viewState === 'Renamer') {
     return (
-      <RenamerView
+      <Renamer
         particleSettings={particleSettings}
         activatedDevices={activatedDevices}
         particleToken={token}
@@ -160,10 +160,10 @@ function Frame(props) {
     )
   }
   if (viewState === 'Twilio Number Purchasing') {
-    return <TwilioPurchaseView clickupToken={clickupToken} environment={environment} />
+    return <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
   }
   if (viewState === 'Button Registration') {
-    return <ButtonRegistrationView clickupToken={clickupToken} environment={environment} />
+    return <ButtonRegistration clickupToken={clickupToken} environment={environment} />
   }
   if (viewState === 'Device Manager') {
     return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />

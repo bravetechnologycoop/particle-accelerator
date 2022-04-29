@@ -1,20 +1,10 @@
-# The Particle Accelerator or Whatever
-
-## Adding a New Page
-1. Create a component in the `views` folder.
-2. In `App.js`, name the `ViewState` with a name of your choice.
-3. Make the `path` a kebab-cased version of the `ViewState` name (important).
-4. Add an `if` statement in `Frame.jsx` following the format: 
-```jsx
-if (viewState === 'View State Name No Kebab Case') {
-  return <ComponentNameInViews />
-} 
-```
-5. Create a `RowButton` in `components/Navigation.jsx`, with care to the order that you would like the page to appear in the navigation.
+# The PA/Personal Assistant/Particle Accelerator/Papa Alpha...
 
 ## Principles of the Program
 
 ### Prop Tree
+
+---
 - The props in the Accelerator are passed on the following hierarchy:
   1. `App.js`
   2. `RouterInterface.jsx`
@@ -34,7 +24,34 @@ if (viewState === 'View State Name No Kebab Case') {
   - `pdf` - Components that produce the button labels
 
 ### Environment Variables
-Environment Variables in the PA are done in DigitalOcean. Each environment variable must be preceeded by `REACT_APP_`, for example: `REACT_APP_TWILIO_MESSAGING_SID`. Environment variables are to be added at the component level, not the app level.
+
+---
+Environment Variables in the PA are done in DigitalOcean. Each environment variable must be preceded by `REACT_APP_`, for example: `REACT_APP_TWILIO_MESSAGING_SID`. Environment variables are to be added at the component level, not the app level.
+
+### Development Environments
+
+---
+
+
+### Styling and CSS
+
+### History
+
+## How-Tos
+
+### Adding a New Page
+
+---
+1. Create a component in the `views` folder.
+2. In `App.js`, name the `ViewState` with a name of your choice.
+3. Make the `path` a kebab-cased version of the `ViewState` name (important).
+4. Add an `if` statement in `Frame.jsx` following the format:
+```jsx
+if (viewState === 'View State Name No Kebab Case') {
+  return <ComponentNameInViews />
+} 
+```
+5. Create a `RowButton` in `components/Navigation.jsx`, with care to the order that you would like the page to appear in the navigation.
 
 ## Roadmap
 
@@ -75,3 +92,6 @@ Environment Variables in the PA are done in DigitalOcean. Each environment varia
 - [large endeavour] Back the application with a database
 - [decent cost-benefit] Create a (desktop application) serial tool that interfaces with an accelerator endpoint to automatically register every button
 
+### Random Dev Make Work Tasks
+- Remove all instances of inline CSS
+- Make Door Sensor Pairing single-action instead of interval.

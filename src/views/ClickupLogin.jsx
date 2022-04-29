@@ -21,7 +21,7 @@ import {
   storeClickupWorkspaceID,
   storeClickupWorkspaces,
 } from '../utilities/StorageFunctions'
-import DropdownList from '../components/DropdownList'
+import DropdownList from '../components/general/DropdownList'
 
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName, clickupListID, changeClickupListID } = props
@@ -122,6 +122,7 @@ function ClickupLogin(props) {
             Log Out of Clickup
           </Button>
         </div>
+        {/* Old component for customizing clickup list configurations. Deprecated to move towards environment variables. */}
         {/* <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '15px' }}>
           <Card style={{ flex: '0 1 30ch' }}>
             <h4 style={{ paddingLeft: '15px', paddingTop: '15px', paddingRight: '15px' }}>Clickup List Configuration</h4>
@@ -165,21 +166,12 @@ function ClickupLogin(props) {
 }
 
 ClickupLogin.propTypes = {
-  clickupToken: PropTypes.string,
-  changeClickupToken: PropTypes.func,
-  clickupUserName: PropTypes.string,
-  changeClickupUserName: PropTypes.func,
-  clickupListID: PropTypes.string,
-  changeClickupListID: PropTypes.func,
-}
-
-ClickupLogin.defaultProps = {
-  clickupToken: '',
-  changeClickupToken: () => {},
-  clickupUserName: '',
-  changeClickupUserName: () => {},
-  clickupListID: '',
-  changeClickupListID: () => {},
+  clickupToken: PropTypes.string.isRequired,
+  changeClickupToken: PropTypes.func.isRequired,
+  clickupUserName: PropTypes.string.isRequired,
+  changeClickupUserName: PropTypes.func.isRequired,
+  clickupListID: PropTypes.string.isRequired,
+  changeClickupListID: PropTypes.func.isRequired,
 }
 
 export default ClickupLogin

@@ -1,8 +1,8 @@
-import '../views/Navigation.css'
+import '../../stylesheets/Navigation.css'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import React from 'react'
-import LoginStatus from './LoginStatus'
+import LoginStatus from '../ParticleLogin/LoginStatus'
 
 /**
  * LoginRowButton

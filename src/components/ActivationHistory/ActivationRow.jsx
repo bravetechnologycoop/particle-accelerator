@@ -1,8 +1,8 @@
 import React from 'react'
 import { Card, Table } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import ActivationAttempt from '../utilities/ActivationAttempt'
-import StatusBadge from './StatusBadge'
+import ActivationAttempt from '../../utilities/ActivationAttempt'
+import StatusBadge from '../general/StatusBadge'
 
 /**
  * ActivationRow: React component to be used in the Activation History view. Migration to ActivationHistory.js is to be considered.

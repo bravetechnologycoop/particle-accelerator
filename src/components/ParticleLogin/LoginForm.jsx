@@ -2,9 +2,9 @@ import Form from 'react-bootstrap/Form'
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
-import { getDisplayName, getProducts } from '../utilities/ParticleFunctions'
+import { getDisplayName, getProducts } from '../../utilities/ParticleFunctions'
 
-const { login } = require('../utilities/ParticleFunctions')
+const { login } = require('../../utilities/ParticleFunctions')
 
 /**
  * LoginForm

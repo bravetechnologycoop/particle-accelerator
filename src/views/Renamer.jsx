@@ -6,19 +6,21 @@ import ParticleSettings from '../utilities/ParticleSettings'
 import DoorSensorLabel from '../pdf/DoorSensorLabel'
 import MainSensorLabel from '../pdf/MainSensorLabel'
 import ActivatedDevice from '../utilities/ActivatedDevice'
-import RenamerDeviceRow from '../components/RenamerDeviceRow'
+import RenamerDeviceRow from '../components/Renamer/RenamerDeviceRow'
 import { changeDeviceName, getDeviceDetails } from '../utilities/ParticleFunctions'
-import StatusBadge from '../components/StatusBadge'
+import StatusBadge from '../components/general/StatusBadge'
 import { modifyClickupTaskCustomFieldValue, modifyClickupTaskName, modifyClickupTaskStatus } from '../utilities/ClickupFunctions'
 import { purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 
-import DropdownList from '../components/DropdownList'
-import PhoneNumberStatus from '../components/PhoneNumberStatus'
+import DropdownList from '../components/general/DropdownList'
+import PhoneNumberStatus from '../components/general/PhoneNumberStatus'
 import { getSensorClients, insertSensorLocation } from '../utilities/DatabaseFunctions'
 import { ClickupStatuses } from '../utilities/Constants'
 import { copyActivatedDevices } from '../utilities/StorageFunctions'
+import DashboardConfiguration from '../components/Renamer/DashboardConfiguration'
+import TwilioConfiguration from '../components/Renamer/TwilioConfiguration'
 
-function RenamerView(props) {
+function Renamer(props) {
   const { particleSettings, activatedDevices, particleToken, clickupToken, clickupListID, environment } = props
 
   const blankActivatedDevice = ActivatedDevice.BlankDevice()
@@ -170,7 +172,7 @@ function RenamerView(props) {
     if (dashboardCheck) {
       setDashboardStatus('waiting')
 
-      // If statement would go here for environment selection. See ButtonRegistrationView.jsx for example code
+      // If statement would go here for environment selection. See ButtonRegistration.jsx for example code
 
       const databaseInsert = await insertSensorLocation(
         clickupToken,
@@ -368,7 +370,7 @@ function RenamerView(props) {
   )
 }
 
-RenamerView.propTypes = {
+Renamer.propTypes = {
   particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
   particleToken: PropTypes.string.isRequired,
@@ -377,170 +379,4 @@ RenamerView.propTypes = {
   environment: PropTypes.string.isRequired,
 }
 
-function SearchResult(props) {
-  const { searchState, searchResult, currentDevice, changeCurrentDevice } = props
-
-  if (searchState === 'found') {
-    return (
-      <>
-        <h4>Search Result</h4>
-        <RenamerDeviceRow device={searchResult} currentDevice={currentDevice} changeCurrentDevice={changeCurrentDevice} />
-      </>
-    )
-  }
-
-  if (searchState === 'error') {
-    return (
-      <>
-        <h4>Search Result</h4>
-        <h5>Device not found</h5>
-      </>
-    )
-  }
-
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-SearchResult.propTypes = {
-  searchState: PropTypes.string,
-  searchResult: PropTypes.instanceOf(ActivatedDevice).isRequired,
-  currentDevice: PropTypes.instanceOf(ActivatedDevice).isRequired,
-  changeCurrentDevice: PropTypes.func,
-}
-
-SearchResult.defaultProps = {
-  searchState: 'waiting',
-  changeCurrentDevice: () => {},
-}
-
-function TwilioConfiguration(props) {
-  const { twilioCheck, twilioCountryCode, changeTwilioCountryCode, twilioCityName, changeTwilioCityName } = props
-  if (twilioCheck) {
-    return (
-      <Card>
-        <Card.Header>Twilio Configuration</Card.Header>
-        <div style={{ padding: '10px' }}>
-          <Form.Group>
-            <Form.Label style={{ paddingTop: '10px' }}>Phone Number Area Code</Form.Label>
-            <Form.Control placeholder="Area Code" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
-          </Form.Group>
-        </div>
-      </Card>
-    )
-  }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-TwilioConfiguration.propTypes = {
-  twilioCheck: PropTypes.bool.isRequired,
-  twilioCountryCode: PropTypes.string.isRequired,
-  changeTwilioCountryCode: PropTypes.func.isRequired,
-  twilioCityName: PropTypes.string.isRequired,
-  changeTwilioCityName: PropTypes.func.isRequired,
-}
-
-function DashboardConfiguration(props) {
-  const {
-    dashboardCheck,
-    displayName,
-    changeDisplayName,
-    radarType,
-    changeRadarType,
-    client,
-    changeClient,
-    clickupToken,
-    stateMachine,
-    changeStateMachine,
-    password,
-    changePassword,
-  } = props
-
-  const [clientList, setClientList] = useState([])
-  const [clientLoading, setClientLoading] = useState('idle')
-  const [initialized, setInitialized] = useState(false)
-
-  useEffect(() => {
-    async function retrieveClients() {
-      const clients = await getSensorClients(clickupToken)
-      setClientList(clients)
-    }
-
-    if (!initialized) {
-      setClientLoading('true')
-      retrieveClients()
-      setClientLoading('')
-      setInitialized(true)
-    }
-  })
-
-  if (dashboardCheck) {
-    return (
-      <Card>
-        <Card.Header>Dashboard Configuration</Card.Header>
-        <Card.Body>
-          <Form>
-            <Form.Group>
-              <Form.Label>Display Name</Form.Label>
-              <Form.Control value={displayName} onChange={x => changeDisplayName(x.target.value)} />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Radar Type</Form.Label>
-              <Form.Control value={radarType} onChange={x => changeRadarType(x.target.value)} as="select">
-                <option id="Innosent" value="Innosent" key="Innosent">
-                  Innosent
-                </option>
-                <option id="XeThru" value="XeThru" key="XeThru">
-                  XeThru
-                </option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Select Client</Form.Label>
-              <DropdownList itemList={clientList} item={client} changeItem={changeClient} loading={clientLoading} title="Client" />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>State Machine</Form.Label>
-              <Form.Control as="select" value={stateMachine} onChange={x => changeStateMachine(JSON.parse(x.target.value))}>
-                <option id="true" key="true" value="true">
-                  True
-                </option>
-                <option id="false" key="false" value="false">
-                  False
-                </option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Password</Form.Label>
-              <Form.Control value={password} onChange={x => changePassword(x.target.value)} type="password" placeholder="Password" />
-            </Form.Group>
-          </Form>
-        </Card.Body>
-      </Card>
-    )
-  }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-DashboardConfiguration.propTypes = {
-  dashboardCheck: PropTypes.bool.isRequired,
-  radarType: PropTypes.string.isRequired,
-  changeRadarType: PropTypes.func.isRequired,
-  client: PropTypes.string.isRequired,
-  changeClient: PropTypes.func.isRequired,
-  clickupToken: PropTypes.string.isRequired,
-  stateMachine: PropTypes.bool.isRequired,
-  changeStateMachine: PropTypes.func.isRequired,
-  displayName: PropTypes.string.isRequired,
-  changeDisplayName: PropTypes.func.isRequired,
-  password: PropTypes.string.isRequired,
-  changePassword: PropTypes.func.isRequired,
-}
-
-export default RenamerView
+export default Renamer

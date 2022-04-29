@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import { Badge, ButtonGroup, Card, Form, ToggleButton } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import ActivatedDevice from '../utilities/ActivatedDevice'
-import DoorSensorEntryCard from '../components/DoorSensorEntryCard'
+import DoorSensorEntryCard from '../components/DoorSensorPairing/DoorSensorEntryCard'
 import { copyActivatedDevices, retPairingList, storePairingList } from '../utilities/StorageFunctions'
 import { getDeviceDetails } from '../utilities/ParticleFunctions'
 import ParticleSettings from '../utilities/ParticleSettings'
 import { ClickupStatuses } from '../utilities/Constants'
+import DoorSensorQueueCard from '../components/DoorSensorPairing/DoorSensorQueueCard'
 
-function DoorSensorView(props) {
+function DoorSensorPairing(props) {
   // eslint-disable-next-line no-unused-vars
   const { activatedDevices, changeActivatedDevices, particleToken, particleSettings, clickupToken, clickupListID, modifyActivatedDevice } = props
 
@@ -138,7 +139,7 @@ function DoorSensorView(props) {
   )
 }
 
-DoorSensorView.propTypes = {
+DoorSensorPairing.propTypes = {
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
   changeActivatedDevices: PropTypes.func.isRequired,
   particleToken: PropTypes.string.isRequired,
@@ -148,87 +149,4 @@ DoorSensorView.propTypes = {
   modifyActivatedDevice: PropTypes.func.isRequired,
 }
 
-function DoorSensorQueueCard(props) {
-  const { device, status, reactStateHandler } = props
-  if (status === 'paired') {
-    return (
-      <Card key={`${device.dateStamp}${device.timeStamp}`}>
-        <Card.Body>
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <h5 style={{ paddingRight: '10px' }}>{device.deviceName}</h5>
-            <QueueStatusBadge status={status} />
-          </div>
-          {device.doorSensorID}
-        </Card.Body>
-      </Card>
-    )
-  }
-  return (
-    <Card key={`${device.dateStamp}${device.timeStamp}`}>
-      <Card.Body>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <h5 style={{ paddingRight: '10px' }}>{device.deviceName}</h5>
-          <QueueStatusBadge status={status} />
-        </div>
-        <Button
-          onClick={() => device.stopPairing(reactStateHandler)}
-          type="button"
-          variant="danger"
-          style={{ fontSize: 'small', paddingTop: '10px' }}
-        >
-          Stop Pairing
-        </Button>
-      </Card.Body>
-    </Card>
-  )
-}
-
-DoorSensorQueueCard.propTypes = {
-  device: PropTypes.instanceOf(ActivatedDevice).isRequired,
-  status: PropTypes.string.isRequired,
-  reactStateHandler: PropTypes.func,
-}
-
-DoorSensorQueueCard.defaultProps = {
-  reactStateHandler: () => {},
-}
-
-function QueueStatusBadge(props) {
-  const { status } = props
-
-  if (status === 'idle') {
-    return <Badge bg="secondary">Waiting</Badge>
-  }
-  if (status === 'onlineCheck') {
-    return <Badge bg="primary">Checking Connection</Badge>
-  }
-  if (status === 'firmwareCheck') {
-    return <Badge bg="primary">Checking Firmware</Badge>
-  }
-  if (status === 'idleOnline') {
-    return <Badge bg="warning">Waiting For Firmware</Badge>
-  }
-  if (status === 'fail') {
-    return <Badge bg="danger">Pairing Failed</Badge>
-  }
-  if (status === 'paired') {
-    return <Badge bg="success">Successfully Paired</Badge>
-  }
-  if (status === 'attemptingPairing') {
-    return <Badge bg="primary">Attempting to Pair</Badge>
-  }
-  if (status === 'idleNoPair') {
-    return <Badge bg="warning">Idle: Pairing Unsuccessful</Badge>
-  }
-  if (status === 'idleNoFirmware') {
-    return <Badge bg="secondary">Idle: Firmware Not Present</Badge>
-  }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <></>
-}
-
-QueueStatusBadge.propTypes = {
-  status: PropTypes.string.isRequired,
-}
-
-export default DoorSensorView
+export default DoorSensorPairing

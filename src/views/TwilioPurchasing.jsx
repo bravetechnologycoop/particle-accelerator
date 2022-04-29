@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Card, Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import PhoneNumberStatus from '../components/PhoneNumberStatus'
+import PhoneNumberStatus from '../components/general/PhoneNumberStatus'
 import { purchaseButtonTwilioNumberByAreaCode, purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 import { retTwilioHistory, storeTwilioHistory } from '../utilities/StorageFunctions'
 
-function TwilioPurchaseView(props) {
+function TwilioPurchasing(props) {
   const { clickupToken, environment } = props
 
   const [deviceType, setDeviceType] = useState('sensor')
@@ -34,7 +34,7 @@ function TwilioPurchaseView(props) {
 
     let twilioNumber
 
-    // If statement would go here for environment selection. See ButtonRegistrationView.jsx for example code
+    // If statement would go here for environment selection. See ButtonRegistration.jsx for example code
 
     if (deviceType === 'sensor') {
       twilioNumber = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, clickupToken)
@@ -98,9 +98,9 @@ function TwilioPurchaseView(props) {
   )
 }
 
-TwilioPurchaseView.propTypes = {
+TwilioPurchasing.propTypes = {
   clickupToken: PropTypes.string.isRequired,
   environment: PropTypes.string.isRequired,
 }
 
-export default TwilioPurchaseView
+export default TwilioPurchasing

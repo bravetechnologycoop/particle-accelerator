@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Card, Form } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Button from 'react-bootstrap/Button'
-import ActivatedDevice from '../utilities/ActivatedDevice'
+import ActivatedDevice from '../../utilities/ActivatedDevice'
 
 /**
  * DoorSensorEntryCard
  *
- * React Component for allowing a user to input an IM21 Door ID and submit it to the queue in the DoorSensorView.jsx view.
+ * React Component for allowing a user to input an IM21 Door ID and submit it to the queue in the DoorSensorPairing.jsx view.
  *
  * @param {ActivatedDevice} props.device Device that the card represents
  * @param {function} props.submitDeviceHandler Function that submits the device to the queue
@@ -16,7 +16,7 @@ import ActivatedDevice from '../utilities/ActivatedDevice'
  * @return {JSX.Element}
  */
 function DoorSensorEntryCard(props) {
-  const { device, submitDeviceHandler, searchState, selectorState } = props
+  const { device, submitDeviceHandler } = props
 
   const [doorSensorID, setDoorSensorID] = useState('')
   const [buttonStyle, setButtonStyle] = useState('primary')
@@ -69,8 +69,6 @@ function DoorSensorEntryCard(props) {
 DoorSensorEntryCard.propTypes = {
   device: PropTypes.instanceOf(ActivatedDevice).isRequired,
   submitDeviceHandler: PropTypes.func.isRequired,
-  searchState: PropTypes.string.isRequired,
-  selectorState: PropTypes.string.isRequired,
 }
 
 export default DoorSensorEntryCard

@@ -6,9 +6,9 @@ import PropTypes from 'prop-types'
 
 import { Link } from 'react-router-dom'
 import ActivationAttempt from '../utilities/ActivationAttempt'
-import StatusBadge from '../components/StatusBadge'
-import DeviceIDStatus from '../components/DeviceIDStatus'
-import ICCIDStatus from '../components/ICCIDStatus'
+import StatusBadge from '../components/general/StatusBadge'
+import DeviceIDStatus from '../components/general/DeviceIDStatus'
+import ICCIDStatus from '../components/general/ICCIDStatus'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import ParticleSettings from '../utilities/ParticleSettings'
 import { createTaskInSensorTracker } from '../utilities/ClickupFunctions'
@@ -69,12 +69,12 @@ const styles = {
 }
 
 /**
- * ActivatorView: React component that displays:
+ * Activator: React component that displays:
  *                1. The user input form for device activation
  *                2. Device activation statuses
  *                3. Device activation log.
  */
-function ActivatorView(props) {
+function Activator(props) {
   // eslint-disable-next-line no-unused-vars
   const {
     token,
@@ -455,7 +455,7 @@ function ActivatorView(props) {
   )
 }
 
-ActivatorView.propTypes = {
+Activator.propTypes = {
   token: PropTypes.string,
   activationHistory: PropTypes.arrayOf(PropTypes.instanceOf(ActivationAttempt)),
   changeActivationHistory: PropTypes.func,
@@ -467,7 +467,7 @@ ActivatorView.propTypes = {
   clickupListID: PropTypes.string,
 }
 
-ActivatorView.defaultProps = {
+Activator.defaultProps = {
   token: '',
   activationHistory: [],
   changeActivationHistory: () => {},
@@ -478,4 +478,4 @@ ActivatorView.defaultProps = {
   clickupListID: '',
 }
 
-export default ActivatorView
+export default Activator

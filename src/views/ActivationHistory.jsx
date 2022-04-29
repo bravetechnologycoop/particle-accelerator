@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import ActivationAttempt from '../utilities/ActivationAttempt'
-import ActivationRow from '../components/ActivationRow'
+import ActivationRow from '../components/ActivationHistory/ActivationRow'
 
 function ActivationHistory(props) {
   // eslint-disable-next-line no-unused-vars

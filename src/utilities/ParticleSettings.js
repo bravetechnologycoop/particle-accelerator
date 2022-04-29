@@ -1,6 +1,6 @@
 export default class ParticleSettings {
   /**
-   * ParticleSettings: class to store configuration of a user's particle account
+   * ParticleSettings: class to store configuration of a user's particle account. This should probably be deprecated and replaced with a single userName hook.
    * @param {string} userName                 The userName associated with the particle account
    * @param {string} productFirmwareVersion   the most current Brave firmware version associated with a selected product family (not used currently)
    * @param {string} deviceOSVersion          the most current Particle firmware version associated with a selected product family (not used currently)
