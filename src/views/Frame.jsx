@@ -20,6 +20,7 @@ import ButtonRegistrationView from './ButtonRegistrationView'
 import TwilioPurchaseView from './TwilioPurchaseView'
 import HomeView from './HomeView'
 import DeviceManager from './DeviceManager'
+import SensorProvisioningGuide from './SensorProvisioningGuide'
 
 function Frame(props) {
   const {
@@ -164,6 +165,9 @@ function Frame(props) {
   }
   if (viewState === 'Device Manager') {
     return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
+  }
+  if (viewState === 'Sensor Provisioning Guide') {
+    return <SensorProvisioningGuide />
   }
   return <HomeView />
 }

@@ -216,7 +216,7 @@ function RenamerView(props) {
     parent: {
       display: 'flex',
       flexDirection: 'row',
-      height: '100vh',
+      height: '90vh',
     },
     column: {
       flex: '1 1 33%',
@@ -265,7 +265,7 @@ function RenamerView(props) {
           <hr />
           <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <h4 style={{ paddingTop: '20px' }}>Select From Activated Devices</h4>
-            <div style={{ overflow: 'auto', height: '40em' }}>
+            <div style={{ overflow: 'auto', height: '30ch' }}>
               {activatedDevices.map(device => {
                 return (
                   <li key={`${device.timeStamp}${device.dateStamp}`} style={{ listStyle: 'none', paddingTop: '0.3em', paddingBottom: '0.3em' }}>
@@ -446,10 +446,8 @@ function TwilioConfiguration(props) {
         <Card.Header>Twilio Configuration</Card.Header>
         <div style={{ padding: '10px' }}>
           <Form.Group>
-            <Form.Label>Phone Number Country</Form.Label>
             <Form.Label style={{ paddingTop: '10px' }}>Phone Number Area Code</Form.Label>
             <Form.Control placeholder="Area Code" value={twilioCityName} onChange={x => changeTwilioCityName(x.target.value)} />
-            <Form.Text className="text-muted">Case Sensitive</Form.Text>
           </Form.Group>
         </div>
       </Card>
@@ -539,18 +537,6 @@ function DashboardConfiguration(props) {
                 </option>
                 <option id="false" key="false" value="false">
                   False
-                </option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Select Environment</Form.Label>
-              <Form.Control as="select" value={environment} onChange={x => changeEnvironment(x.target.value)}>
-                <option id="dev" key="dev" value="dev">
-                  Development
-                </option>
-                <option id="prod" key="prod" value="prod">
-                  Production
                 </option>
               </Form.Control>
             </Form.Group>

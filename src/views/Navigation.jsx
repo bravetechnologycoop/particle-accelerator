@@ -90,6 +90,7 @@ function Navigation(props) {
           <RowButton label="Device Lookup" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Door Sensor Pairing" handler={changeViewState} state={viewState} enabled={loginStatus === 'true'} particle />
           <RowButton label="Renamer" handler={changeViewState} state={viewState} />
+          <RowButton label="Sensor Provisioning Guide" handler={changeViewState} state={viewState} />
           <RowButton label="Button Registration" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
           <RowButton label="Twilio Number Purchasing" handler={changeViewState} state={viewState} enabled={clickupToken !== ''} clickup />
           <RowToggler label="Safe Mode" toggleState={safeModeState} changeToggleState={changeSafeModeState} />

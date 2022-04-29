@@ -336,7 +336,9 @@ function ActivatorView(props) {
                 maxLength="15"
                 onChange={x => setSerialNumber(x.target.value)}
               />
-              <Form.Text className="text-muted">This is retrieved by scanning the barcode on the particle device.</Form.Text>
+              <Form.Text className="text-muted">
+                This is retrieved by scanning the barcode on the particle device, or by reading the string below the barcode.
+              </Form.Text>
             </Form.Group>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <div>

@@ -33,6 +33,10 @@ function App() {
           element={<RouterInterface viewState="Twilio Number Purchasing" changeViewState={changeViewState} />}
         />
         <Route path="/device-manager" element={<RouterInterface viewState="Device Manager" changeViewState={changeViewState} />} />
+        <Route
+          path="/sensor-provisioning-guide"
+          element={<RouterInterface viewState="Sensor Provisioning Guide" changeViewState={changeViewState} />}
+        />
       </Routes>
     </BrowserRouter>
   )
