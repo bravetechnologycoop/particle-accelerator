@@ -1,5 +1,5 @@
 import { getCurrentFirmwareVersion, getDeviceDetails, pairDoorSensor } from './ParticleFunctions'
-import { getClickupTaskIDByName, modifyClickupTaskCustomFieldValue, modifyClickupTaskStatus } from './ClickupFunctions'
+import { modifyClickupTaskCustomFieldValue, modifyClickupTaskStatus } from './ClickupFunctions'
 import { ClickupStatuses } from './Constants'
 
 /**
@@ -73,7 +73,7 @@ export default class ActivatedDevice {
     this.formerSensorNumber = formerSensorNumber
   }
 
-  pairDoorSensor(particleToken, doorSensorID, interval, changeCheckState, reactStateHandler, clickupToken, clickupListID) {
+  pairDoorSensor(particleToken, doorSensorID, interval, changeCheckState, reactStateHandler, clickupToken) {
     changeCheckState(this.clickupTaskID, 'idle')
     reactStateHandler(this.clickupTaskID, 'inPairingList', true)
     this.intervalID = setInterval(async () => {

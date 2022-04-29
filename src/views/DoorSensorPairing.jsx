@@ -35,7 +35,7 @@ function DoorSensorPairing(props) {
 
   function submitDeviceHandler(device, doorSensorID) {
     addNewPairingStatus(device.doorSensorID)
-    device.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice, clickupToken, clickupListID)
+    device.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice, clickupToken)
   }
 
   const styles = {

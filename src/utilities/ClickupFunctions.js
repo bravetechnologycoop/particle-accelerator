@@ -1,5 +1,5 @@
 import ClickupTask from './ClickupTask'
-import { ClickupStatuses } from "./Constants";
+import { ClickupStatuses } from './Constants'
 
 const axios = require('axios')
 

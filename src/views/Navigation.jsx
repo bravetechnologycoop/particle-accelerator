@@ -72,12 +72,24 @@ function Navigation(props) {
         <RowButton label="Home" state={viewState} />
         <LoginRowButton label="Particle" state={viewState} loginState={loginStatus} changeToken={changeToken} userName={particleSettings.userName} />
         <LoginRowButton label="ClickUp" state={viewState} loginState={`${clickupToken !== ''}`} userName={clickupUserName} />
-        <RowButton label="Device Manager" state={viewState} />
-        <RowButton label="Activator" state={viewState} enabled={loginStatus === 'true' && clickupToken !== ''} particle clickup />
+        <RowButton label="Sensor Provisioning Guide" state={viewState} enabled={clickupToken !== ''} clickup />
+        <RowButton label="Device Manager" state={viewState} enabled={clickupToken !== ''} clickup />
+        <RowButton
+          label="Activator"
+          state={viewState}
+          enabled={loginStatus === 'true' && clickupToken !== ''}
+          particle={loginStatus !== 'true'}
+          clickup={clickupToken === ''}
+        />
         <RowButton label="Device Lookup" state={viewState} enabled={loginStatus === 'true'} particle />
         <RowButton label="Door Sensor Pairing" state={viewState} enabled={loginStatus === 'true'} particle />
-        <RowButton label="Renamer" state={viewState} enabled={loginStatus === 'true' && clickupToken !== ''} />
-        <RowButton label="Sensor Provisioning Guide" state={viewState} />
+        <RowButton
+          label="Renamer"
+          state={viewState}
+          enabled={loginStatus === 'true' && clickupToken !== ''}
+          clickup={clickupToken === ''}
+          particle={loginStatus !== 'true'}
+        />
         <RowButton label="Button Registration" state={viewState} enabled={clickupToken !== ''} clickup />
         <RowButton label="Twilio Number Purchasing" state={viewState} enabled={clickupToken !== ''} clickup />
       </div>

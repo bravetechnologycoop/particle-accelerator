@@ -1,25 +1,54 @@
+import { Environments } from './Constants'
+
 const axios = require('axios')
 
 const SENSOR_DEV_URL = process.env.REACT_APP_SENSOR_DEV_URL
+const SENSOR_PROD_URL = process.env.REACT_APP_SENSOR_PROD_URL
+const SENSOR_STAGING_URL = process.env.REACT_APP_SENSOR_STAGING_URL
 
 /**
  * getSensorClients: retrieves the list of clients in the Brave sensor DB, uses the sensors backend.
+ * @param environment
  * @param {string} clickupToken      clickup token
  * @return {Promise<{name: string, id: string}[]>}   array of client names and ids if successful, empty if not.
  */
-export async function getSensorClients(clickupToken) {
+export async function getSensorClients(environment, clickupToken) {
   const data = {
     clickupToken,
     braveKey: process.env.REACT_APP_BRAVE_API_KEY,
   }
 
-  try {
-    const response = await axios.post(`${SENSOR_DEV_URL}/pa/get-sensor-clients`, data)
-    const resultArray = []
-    response.data.clients.forEach(client => resultArray.push(client))
-    return resultArray
-  } catch (err) {
-    return []
+  if (environment === Environments.dev.name) {
+    try {
+      const response = await axios.post(`${SENSOR_DEV_URL}/pa/get-sensor-clients`, data)
+      const resultArray = []
+      response.data.clients.forEach(client => resultArray.push(client))
+      return resultArray
+    } catch (err) {
+      return []
+    }
+  }
+
+  if (environment === Environments.prod.name) {
+    try {
+      const response = await axios.post(`${SENSOR_PROD_URL}/pa/get-sensor-clients`, data)
+      const resultArray = []
+      response.data.clients.forEach(client => resultArray.push(client))
+      return resultArray
+    } catch (err) {
+      return []
+    }
+  }
+
+  if (environment === Environments.staging.name) {
+    try {
+      const response = await axios.post(`${SENSOR_STAGING_URL}/pa/get-sensor-clients`, data)
+      const resultArray = []
+      response.data.clients.forEach(client => resultArray.push(client))
+      return resultArray
+    } catch (err) {
+      return []
+    }
   }
 }
 
@@ -34,6 +63,7 @@ export async function getSensorClients(clickupToken) {
  * @param {boolean} stateMachineBool  whether the location uses a state machine or not
  * @param {string} clientID           Unique clientID for location
  * @param {string} radarType          Innosent or XeThru radar type ('innosent' or 'xethru')
+ * @param {string} environment        production, development, or staging
  * @return {Promise<boolean>}         true if successful, false if not
  */
 export async function insertSensorLocation(
@@ -46,6 +76,7 @@ export async function insertSensorLocation(
   stateMachineBool,
   clientID,
   radarType,
+  environment,
 ) {
   const data = {
     clickupToken,
@@ -60,11 +91,35 @@ export async function insertSensorLocation(
     radarType,
   }
 
-  try {
-    const response = await axios.post(`${SENSOR_DEV_URL}/pa/create-sensor-location`, data)
-    return response.data.message === 'success'
-  } catch (err) {
-    console.error(err)
-    return false
+  if (environment === Environments.dev.name) {
+    try {
+      const response = await axios.post(`${SENSOR_DEV_URL}/pa/create-sensor-location`, data)
+      return response.data.message === 'success'
+    } catch (err) {
+      console.error(err)
+      return false
+    }
   }
+
+  if (environment === Environments.prod.name) {
+    try {
+      const response = await axios.post(`${SENSOR_PROD_URL}/pa/create-sensor-location`, data)
+      return response.data.message === 'success'
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  }
+
+  if (environment === Environments.staging.name) {
+    try {
+      const response = await axios.post(`${SENSOR_STAGING_URL}/pa/create-sensor-location`, data)
+      return response.data.message === 'success'
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  }
+
+  return false
 }

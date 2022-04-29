@@ -18,6 +18,7 @@ function DashboardConfiguration(props) {
     changeStateMachine,
     password,
     changePassword,
+    environment,
   } = props
 
   const [clientList, setClientList] = useState([])
@@ -26,7 +27,7 @@ function DashboardConfiguration(props) {
 
   useEffect(() => {
     async function retrieveClients() {
-      const clients = await getSensorClients(clickupToken)
+      const clients = await getSensorClients(environment, clickupToken)
       setClientList(clients)
     }
 
@@ -104,6 +105,7 @@ DashboardConfiguration.propTypes = {
   changeDisplayName: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,
   changePassword: PropTypes.func.isRequired,
+  environment: PropTypes.string.isRequired,
 }
 
 export default DashboardConfiguration

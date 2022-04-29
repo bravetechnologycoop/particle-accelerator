@@ -2,8 +2,8 @@ import '../../stylesheets/Navigation.css'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import React from 'react'
-import ClickupLogo from '../../graphics/clickupLogo.svg'
-import ParticleLogo from '../../graphics/particleLogo.svg'
+import ClickupLogo from '../../graphics/ClickupLogo.svg'
+import ParticleLogo from '../../graphics/ParticleLogo.svg'
 
 /**
  * RowButton: React component for the Navigation Bar which shows a page in the PA and links to it. Changes styling based
@@ -49,8 +49,8 @@ function RowButton(props) {
         <div style={styles.parent}>
           {label}{' '}
           <div style={{ paddingLeft: '1ch', display: 'flex', flexDirection: 'row', justifyContent: 'right', alignItems: 'center' }}>
-            <img src={ClickupLogo} alt="Clickup Logo" style={{ height: '1.5em', paddingRight: '1ch' }} />
             <img src={ParticleLogo} alt="Particle Logo" style={{ height: '1.5em', paddingRight: '1ch' }} />
+            <img src={ClickupLogo} alt="Clickup Logo" style={{ height: '1.5em', paddingRight: '1ch' }} />
           </div>
         </div>
       </Link>

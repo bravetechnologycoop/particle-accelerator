@@ -22,6 +22,9 @@ import HomeView from './HomeView'
 import DeviceManager from './DeviceManager'
 import SensorProvisioningGuide from './SensorProvisioningGuide'
 
+import ClickupLogo from '../graphics/ClickupLogo.svg'
+import ParticleLogo from '../graphics/ParticleLogo.svg'
+
 function Frame(props) {
   const {
     particleToken,
@@ -86,20 +89,23 @@ function Frame(props) {
   }
 
   if (viewState === 'Activator') {
-    return (
-      <Activator
-        particleToken={particleToken}
-        changeToken={changeToken}
-        activationHistory={activationHistory}
-        activatedDevices={activatedDevices}
-        changeActivationHistory={changeActivationHistory}
-        changeActivatedDevices={changeActivatedDevices}
-        safeModeState={safeModeState}
-        particleSettings={particleSettings}
-        clickupToken={clickupToken}
-        clickupListID={clickupListID}
-      />
-    )
+    if (particleToken !== '' && clickupToken !== '') {
+      return (
+        <Activator
+          particleToken={particleToken}
+          changeToken={changeToken}
+          activationHistory={activationHistory}
+          activatedDevices={activatedDevices}
+          changeActivationHistory={changeActivationHistory}
+          changeActivatedDevices={changeActivatedDevices}
+          safeModeState={safeModeState}
+          particleSettings={particleSettings}
+          clickupToken={clickupToken}
+          clickupListID={clickupListID}
+        />
+      )
+    }
+    return <NotAuthenticated clickup={clickupToken !== ''} particle={particleToken !== ''} />
   }
   if (viewState === 'Device Lookup') {
     return <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
@@ -135,40 +141,58 @@ function Frame(props) {
     return <ActivatedDevices activatedDeviceList={activatedDevices} />
   }
   if (viewState === 'Door Sensor Pairing') {
-    return (
-      <DoorSensorPairing
-        activatedDevices={activatedDevices}
-        particleToken={particleToken}
-        changeActivatedDevices={changeActivatedDevices}
-        particleSettings={particleSettings}
-        clickupToken={clickupToken}
-        clickupListID={clickupListID}
-        modifyActivatedDevice={modifyActivatedDevice}
-      />
-    )
+    if (particleToken !== '') {
+      return (
+        <DoorSensorPairing
+          activatedDevices={activatedDevices}
+          particleToken={particleToken}
+          changeActivatedDevices={changeActivatedDevices}
+          particleSettings={particleSettings}
+          clickupToken={clickupToken}
+          clickupListID={clickupListID}
+          modifyActivatedDevice={modifyActivatedDevice}
+        />
+      )
+    }
+    return <NotAuthenticated particle={particleToken !== ''} />
   }
   if (viewState === 'Renamer') {
-    return (
-      <Renamer
-        activatedDevices={activatedDevices}
-        particleToken={particleToken}
-        clickupToken={clickupToken}
-        clickupListID={clickupListID}
-        environment={environment}
-      />
-    )
+    if (particleToken !== '' && clickupToken !== '') {
+      return (
+        <Renamer
+          activatedDevices={activatedDevices}
+          particleToken={particleToken}
+          clickupToken={clickupToken}
+          clickupListID={clickupListID}
+          environment={environment}
+        />
+      )
+    }
+    return <NotAuthenticated clickup={clickupToken !== ''} particle={particleToken !== ''} />
   }
   if (viewState === 'Twilio Number Purchasing') {
-    return <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
+    if (clickupToken !== '') {
+      return <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
+    }
+    return <NotAuthenticated clickup={clickupToken !== ''} />
   }
   if (viewState === 'Button Registration') {
-    return <ButtonRegistration clickupToken={clickupToken} environment={environment} />
+    if (clickupToken !== '') {
+      return <ButtonRegistration clickupToken={clickupToken} environment={environment} />
+    }
+    return <NotAuthenticated clickup={clickupToken !== ''} />
   }
   if (viewState === 'Device Manager') {
-    return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
+    if (clickupToken !== '') {
+      return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
+    }
+    return <NotAuthenticated clickup={clickupToken !== ''} />
   }
   if (viewState === 'Sensor Provisioning Guide') {
-    return <SensorProvisioningGuide />
+    if (clickupToken !== '') {
+      return <SensorProvisioningGuide />
+    }
+    return <NotAuthenticated clickup={clickupToken !== ''} />
   }
   return <HomeView />
 }
@@ -189,6 +213,80 @@ Frame.propTypes = {
   clickupListID: PropTypes.string.isRequired,
   changeClickupListID: PropTypes.func.isRequired,
   environment: PropTypes.string.isRequired,
+}
+
+function NotAuthenticated(props) {
+  const { clickup, particle } = props
+
+  const styles = {
+    main: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 'inherit',
+    },
+    row: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    image: {
+      height: '150px',
+    },
+  }
+
+  if (!clickup && !particle) {
+    return (
+      <div style={styles.main}>
+        <h2>Not Authenticated</h2>
+        <div style={styles.row}>
+          <a href="/clickup">
+            <img src={ClickupLogo} alt="Clickup Logo" style={styles.image} />
+          </a>
+          <a href="/particle">
+            <img src={ParticleLogo} alt="Particle Logo" style={styles.image} />
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  if (!clickup) {
+    return (
+      <div style={styles.main}>
+        <h2>Not Authenticated</h2>
+        <div style={styles.row}>
+          <a href="/clickup">
+            <img src={ClickupLogo} alt="Clickup Logo" style={styles.image} />
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  if (!particle) {
+    return (
+      <div style={styles.main}>
+        <h2>Not Authenticated</h2>
+        <div style={styles.row}>
+          <a href="/particle">
+            <img src={ParticleLogo} alt="Particle Logo" style={styles.image} />
+          </a>
+        </div>
+      </div>
+    )
+  }
+}
+
+NotAuthenticated.propTypes = {
+  clickup: PropTypes.bool,
+  particle: PropTypes.bool,
+}
+
+NotAuthenticated.defaultProps = {
+  clickup: true,
+  particle: true,
 }
 
 export default Frame

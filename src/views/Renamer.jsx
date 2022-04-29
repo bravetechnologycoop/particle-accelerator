@@ -17,7 +17,7 @@ import { ClickupStatuses } from '../utilities/Constants'
 import DashboardConfiguration from '../components/Renamer/DashboardConfiguration'
 import TwilioConfiguration from '../components/Renamer/TwilioConfiguration'
 
-function Renamer(props) {
+export default function Renamer(props) {
   // eslint-disable-next-line no-unused-vars
   const { activatedDevices, particleToken, clickupToken, clickupListID, environment } = props
 
@@ -158,8 +158,6 @@ function Renamer(props) {
     if (dashboardCheck) {
       setDashboardStatus('waiting')
 
-      // If statement would go here for environment selection. See ButtonRegistration.jsx for example code
-
       const databaseInsert = await insertSensorLocation(
         clickupToken,
         password,
@@ -170,6 +168,7 @@ function Renamer(props) {
         stateMachine,
         client,
         radarType,
+        environment,
       )
       if (databaseInsert) {
         setDashboardStatus('true')
@@ -296,6 +295,7 @@ function Renamer(props) {
               changeDisplayName={changeDisplayName}
               password={password}
               changePassword={changePassword}
+              environment={environment}
             />
             <Card>
               <Card.Header>Device Rename Status</Card.Header>
@@ -340,5 +340,3 @@ Renamer.propTypes = {
   clickupListID: PropTypes.string.isRequired,
   environment: PropTypes.string.isRequired,
 }
-
-export default Renamer

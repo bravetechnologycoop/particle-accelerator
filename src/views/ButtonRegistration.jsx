@@ -19,23 +19,7 @@ export default function ButtonRegistration(props) {
     setRegistrationStatus('waiting')
     setFormLock(true)
 
-    /*
-    If statement for production/development would go here.
-
-    for example:
-
-    let awsRegistration
-
-    if (environment === Environments.dev.name) {
-      awsRegistration = await registerLoraButton(environment/url, deviceEUI, deviceName, clickupToken)
-    } else if (environment === Environments.prod.name) {
-      awsRegistration = await registerLoraButton(environment/url, deviceEUI, deviceName, clickupToken)
-    } else {
-      setRegistrationStatus('error')
-    }
-     */
-
-    const awsRegistration = await registerLoraButton(deviceEUI, deviceName, clickupToken)
+    const awsRegistration = await registerLoraButton(deviceEUI, deviceName, environment, clickupToken)
 
     if (awsRegistration === 'success') {
       setRegistrationStatus(awsRegistration)
