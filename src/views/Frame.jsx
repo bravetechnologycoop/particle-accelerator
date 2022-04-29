@@ -24,7 +24,7 @@ import SensorProvisioningGuide from './SensorProvisioningGuide'
 
 function Frame(props) {
   const {
-    token,
+    particleToken,
     changeToken,
     loginState,
     changeLoginState,
@@ -88,7 +88,7 @@ function Frame(props) {
   if (viewState === 'Activator') {
     return (
       <Activator
-        particleToken={token}
+        particleToken={particleToken}
         changeToken={changeToken}
         activationHistory={activationHistory}
         activatedDevices={activatedDevices}
@@ -102,7 +102,7 @@ function Frame(props) {
     )
   }
   if (viewState === 'Device Lookup') {
-    return <Validator token={token} changeToken={changeToken} particleSettings={particleSettings} />
+    return <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
   }
   if (viewState === 'Particle') {
     return (
@@ -110,7 +110,7 @@ function Frame(props) {
         loginState={loginState}
         changeLoginState={changeLoginState}
         changeToken={changeToken}
-        token={token}
+        token={particleToken}
         particleSettings={particleSettings}
         changeParticleSettings={changeParticleSettings}
       />
@@ -138,7 +138,7 @@ function Frame(props) {
     return (
       <DoorSensorPairing
         activatedDevices={activatedDevices}
-        particleToken={token}
+        particleToken={particleToken}
         changeActivatedDevices={changeActivatedDevices}
         particleSettings={particleSettings}
         clickupToken={clickupToken}
@@ -151,7 +151,7 @@ function Frame(props) {
     return (
       <Renamer
         activatedDevices={activatedDevices}
-        particleToken={token}
+        particleToken={particleToken}
         clickupToken={clickupToken}
         clickupListID={clickupListID}
         environment={environment}
@@ -174,7 +174,7 @@ function Frame(props) {
 }
 
 Frame.propTypes = {
-  token: PropTypes.string.isRequired,
+  particleToken: PropTypes.string.isRequired,
   changeToken: PropTypes.func.isRequired,
   loginState: PropTypes.string.isRequired,
   changeLoginState: PropTypes.func.isRequired,

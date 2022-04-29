@@ -70,28 +70,11 @@ if (viewState === 'View State Name No Kebab Case') {
 
 ## Roadmap
 
-### Immediate Cleanup
-- Refactor various files to allow for future developers to understand the code better
-- Document _everything_
-- Give the site a domain
-- Better file structure
-- More explanatory home page
-- Better 'blocking' mechanisms based on authentication
-- Changelog
-- Rename endpoints (/pa) (grouping)
-
-### Tier 0
-- Add a better encryption mechanism for the entire site (Google OAuth?) (needs domain)
-
 ### Tier 1
-- [moderate] Allow for new devices to be added to the `activated devices` list without having to be activated
-- [easy win] Remove the ability to add new devices in the `Renamer` and `Door Sensor Pairer`
-- [semi-easy] Remove the decision-making in the ClickUp stuff
+- Add a better encryption mechanism for the entire site (Google OAuth?)
 
 ### Tier 2
 - [moderate] Verify the AWS and database adding and switch the variables to prod
-- [unsure] Move endpoints that are in the `chatbot-dev` server to a `sensor` server (dev/prod)
-- [semi-easy] Add logs to the Twilio Number and Button Registration Views
 
 ### Tier 3
 - [good cost-benefit] Synthesize the database inserts, AWS functionality, and phone number adding into one cohesive tool to register buttons.
@@ -100,12 +83,13 @@ if (viewState === 'View State Name No Kebab Case') {
   - https://www.chartjs.org/
 - [good cost-benefit] More streamlined sensor activation, less configuration, automatic sensor_XX incrementing, essentially just using the scanner and the return character to do everything
 - [moderate] Make the validator look nice again
-- [moderate] Make the renamer look nice
 - [moderate] Toggle between Dev/Prod/Staging modes, etc.
 
 ### Tier 4
 - [large endeavour] Back the application with a database
 - [decent cost-benefit] Create a (desktop application) serial tool that interfaces with an accelerator endpoint to automatically register every button
+- OAuth2 Flow for Particle
+- Create automated tests for the entire application, unit, integration, etc.
 
 ### Random Dev Make Work Tasks
 - Remove all instances of inline CSS

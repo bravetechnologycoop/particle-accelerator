@@ -25,7 +25,7 @@ import ParticleSettings from './utilities/ParticleSettings'
 function RouterInterface(props) {
   const { viewState } = props
 
-  const [token, setToken] = useState(getParticleToken())
+  const [particleToken, setParticleToken] = useState(getParticleToken())
   const [loginState, setLoginState] = useState(getParticleLoginState())
   const [safeMode, setSafeMode] = useState(getSafeModeState())
   const [particleSettings, setParticleSettings] = useState(getParticleSettings())
@@ -87,9 +87,9 @@ function RouterInterface(props) {
     }
   }
 
-  function changeToken(newToken) {
+  function changeParticleToken(newToken) {
     storeParticleToken(newToken)
-    setToken(newToken)
+    setParticleToken(newToken)
   }
 
   function changeLoginState(newState) {
@@ -136,8 +136,8 @@ function RouterInterface(props) {
         <Navigation
           viewState={viewState}
           loginStatus={loginState}
-          token={token}
-          changeToken={changeToken}
+          token={particleToken}
+          changeToken={changeParticleToken}
           changeLoginState={changeLoginState}
           safeModeState={safeMode}
           changeSafeModeState={changeSafeModeState}
@@ -151,9 +151,9 @@ function RouterInterface(props) {
       <div style={styles.main}>
         <Frame
           changeLoginState={changeLoginState}
-          changeToken={changeToken}
+          changeToken={changeParticleToken}
           loginState={loginState}
-          token={token}
+          particleToken={particleToken}
           viewState={viewState}
           safeModeState={safeMode}
           changeSafeModeState={changeSafeModeState}
