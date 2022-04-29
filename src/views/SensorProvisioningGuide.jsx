@@ -18,11 +18,17 @@ import ClickupStatuses from '../utilities/ClickupStatuses'
 function SensorProvisioningGuide() {
   const styles = {
     cardBoundary: {
-      maxWidth: '950px',
+      flex: '1 1',
       paddingTop: '10px',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
     },
     cardInterior: {
       padding: '10px',
+      flex: '1 1',
+      maxWidth: '55vw',
     },
     centerParent: {
       display: 'flex',
