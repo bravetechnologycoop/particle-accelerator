@@ -47,7 +47,7 @@ function RenamerDeviceRow(props) {
     <Card style={style}>
       <Card.Body>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div>
+          <div style={{ paddingRight: '10px' }}>
             <h5>{device.deviceName}</h5>
             {device.serialNumber}
           </div>
