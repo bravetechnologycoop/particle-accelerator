@@ -224,7 +224,8 @@ function Activator(props) {
 
       let clickupStatusCopy
 
-      if (totalStatusCopy === 'true') {
+      // Checks that the total status of activation was successful, and that the product was registered to the production account to be added to the PA Tracker/Activated Devices
+      if (totalStatusCopy === 'true' && productID === process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID) {
         let clickupTaskID
         // create a task in the sensor tracker for the device
         const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy)
@@ -321,6 +322,10 @@ function Activator(props) {
                   )
                 })}
               </Form.Control>
+              <Form.Text className="text-muted">
+                Note: Devices not added to the production product family will not be added as an Activated Device and will not be added to the PA
+                Tracker.
+              </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formCountrySelect">

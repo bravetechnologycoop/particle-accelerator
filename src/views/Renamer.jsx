@@ -18,32 +18,38 @@ import DashboardConfiguration from '../components/Renamer/DashboardConfiguration
 import TwilioConfiguration from '../components/Renamer/TwilioConfiguration'
 
 export default function Renamer(props) {
-  // eslint-disable-next-line no-unused-vars
-  const { activatedDevices, particleToken, clickupToken, clickupListID, environment } = props
+  const { activatedDevices, particleToken, clickupToken, clickupListID, environment, modifyActivatedDevice } = props
 
   const blankActivatedDevice = ActivatedDevice.BlankDevice()
 
+  // the selectedDevice is the device currently selected to be renamed/modified.
   const [selectedDevice, setSelectedDevice] = useState(blankActivatedDevice)
+  // essentially the new name of the device to rename to. Used as friendly_name in Twilio, new ClickUp task name, Particle device name, and dashboard locationID.
   const [locationID, setLocationID] = useState('')
+  // the sensor number to be placed on the labels.
   const [sensorNumber, setSensorNumber] = useState('')
   const [twilioAreaCode, setTwilioAreaCode] = useState('')
 
+  // State hooks for all of the config options in the renamer.
   const [particleCheck, setParticleCheck] = useState(false)
   const [clickupCheck, setClickupCheck] = useState(false)
   const [twilioCheck, setTwilioCheck] = useState(false)
   const [dashboardCheck, setDashboardCheck] = useState(false)
 
+  // State hooks for all of the statuses of the operations available in the renamer.
   const [particleStatus, setParticleStatus] = useState('idle')
   const [clickupStatus, setClickupStatus] = useState('idle')
   const [twilioStatus, setTwilioStatus] = useState('idle')
   const [dashboardStatus, setDashboardStatus] = useState('idle')
 
+  // config options for the dashboard
   const [client, setClient] = useState('')
   const [stateMachine, setStateMachine] = useState(true)
   const [displayName, setDisplayName] = useState('')
   const [radarType, setRadarType] = useState('')
   const [password, setPassword] = useState('')
 
+  // modifier functions for passing hooks.
   function changePassword(newPassword) {
     setPassword(newPassword)
   }
@@ -106,7 +112,8 @@ export default function Renamer(props) {
 
   function changeSelectedDevice(newDevice) {
     setSelectedDevice(newDevice)
-    setSensorNumber(newDevice.deviceName.replace(/[^0-9]*/, ''))
+    // extracts the number out of the former sensor number
+    setSensorNumber(newDevice.formerSensorNumber.replace(/[^0-9]*/, ''))
   }
 
   async function handleRenameSubmit(event) {
@@ -114,10 +121,18 @@ export default function Renamer(props) {
 
     let twilioPhoneNumber
 
+    let particleRename = false
+    let clickupRename = false
+    let clickupStatusChange = false
+    let databaseInsert = false
+    let twilioFieldChange = false
+
     if (particleCheck) {
       setParticleStatus('waiting')
-      const rename = await changeDeviceName(selectedDevice.deviceID, selectedDevice.productID, locationID, particleToken)
-      if (rename) {
+      // change device name on particle console
+      particleRename = await changeDeviceName(selectedDevice.deviceID, selectedDevice.productID, locationID, particleToken)
+
+      if (particleRename) {
         setParticleStatus('true')
       } else {
         setParticleStatus('error')
@@ -127,9 +142,10 @@ export default function Renamer(props) {
     }
     if (clickupCheck) {
       setClickupStatus('waiting')
-      const rename = await modifyClickupTaskName(selectedDevice.deviceName, locationID, clickupListID, clickupToken)
-      const statusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.registeredToClient.name, clickupToken)
-      if (rename && statusChange) {
+      // rename clickup task on clickup and change status
+      clickupRename = await modifyClickupTaskName(selectedDevice.clickupTaskID, locationID, clickupListID, clickupToken)
+      clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.registeredToClient.name, clickupToken)
+      if (clickupRename && clickupStatusChange) {
         setClickupStatus('true')
       } else {
         setClickupStatus('error')
@@ -139,11 +155,13 @@ export default function Renamer(props) {
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
-      const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, clickupToken)
+      // purchase twilio number
+      const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, environment, clickupToken)
       if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.phoneNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
-        await modifyClickupTaskCustomFieldValue(
+        // modify clickup custom field value
+        twilioFieldChange = await modifyClickupTaskCustomFieldValue(
           selectedDevice.clickupTaskID,
           process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
           twilioPhoneNumber,
@@ -158,7 +176,7 @@ export default function Renamer(props) {
     if (dashboardCheck) {
       setDashboardStatus('waiting')
 
-      const databaseInsert = await insertSensorLocation(
+      databaseInsert = await insertSensorLocation(
         clickupToken,
         password,
         locationID,
@@ -175,6 +193,34 @@ export default function Renamer(props) {
       } else {
         setDashboardStatus('error')
       }
+    }
+
+    /*
+    As a consequence of react state updates being non-instantaneous, modifyActivatedDevice is employed.
+    The if statements account for all successful conditions, except for if a clickupRename was successful, but the
+    clickupStatusChange was not, however, this would be rare. With the current approach used, this mitigation was not
+    made due to the mass amounts of smelly repeated code that would be implemented.
+     */
+    if (clickupRename && clickupStatusChange && databaseInsert && twilioFieldChange) {
+      modifyActivatedDevice(
+        selectedDevice.clickupTaskID,
+        ['clickupStatus', 'clickupStatusColour', 'twilioNumber', 'deviceName'],
+        [ClickupStatuses.addedToDatabase.name, ClickupStatuses.addedToDatabase.colour, twilioPhoneNumber, locationID],
+      )
+    }
+    if (clickupRename && clickupStatusChange && twilioFieldChange) {
+      modifyActivatedDevice(
+        selectedDevice.clickupTaskID,
+        ['clickupStatus', 'clickupStatusColour', 'twilioNumber', 'deviceName'],
+        [ClickupStatuses.registeredToClient.name, ClickupStatuses.registeredToClient.colour, twilioPhoneNumber, locationID],
+      )
+    }
+    if (clickupRename && clickupStatusChange) {
+      modifyActivatedDevice(
+        selectedDevice.clickupTaskID,
+        ['clickupStatus', 'clickupStatusColour', 'deviceName'],
+        [ClickupStatuses.registeredToClient.name, ClickupStatuses.registeredToClient.colour, locationID],
+      )
     }
   }
 
@@ -339,4 +385,5 @@ Renamer.propTypes = {
   clickupToken: PropTypes.string.isRequired,
   clickupListID: PropTypes.string.isRequired,
   environment: PropTypes.string.isRequired,
+  modifyActivatedDevice: PropTypes.func.isRequired,
 }

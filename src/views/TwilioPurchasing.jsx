@@ -35,8 +35,6 @@ function TwilioPurchasing(props) {
 
     let twilioNumber
 
-    // If statement would go here for environment selection. See ButtonRegistration.jsx for example code
-
     if (deviceType === 'sensor') {
       twilioNumber = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken)
     } else if (deviceType === 'buttons') {
@@ -49,7 +47,12 @@ function TwilioPurchasing(props) {
       setRegistrationStatus('error')
     }
 
-    pushHistory({ friendlyName: twilioNumber.friendlyName, phoneNumber: twilioNumber.phoneNumber, deviceType, environment })
+    pushHistory({
+      friendlyName: twilioNumber.friendlyName,
+      phoneNumber: twilioNumber.phoneNumber,
+      deviceType,
+      environment,
+    })
 
     setLocationID(locationID.replace(/[0-9]/g, ''))
 

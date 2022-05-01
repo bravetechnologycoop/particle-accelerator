@@ -33,6 +33,7 @@ function DeviceManager(props) {
   const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
+    // no top-level await workaround
     async function getTasks() {
       setClickupTaskLoadStatus('true')
       const tasks = await getAllTasksInPATracker(clickupToken)
@@ -46,16 +47,25 @@ function DeviceManager(props) {
 
     if (!initialized) {
       getTasks()
+      // only fetch once.
       setInitialized(true)
     }
   })
 
+  /**
+   * pushTaskToDevices: helper function to add a Clickup Task from the PA Tracker as an ActivatedDevice to the activatedDevices list.
+   * @param {ClickupTask} existingTask  the clickup task to add to activatedDevices
+   */
   function pushTaskToDevices(existingTask) {
     const newDeviceArray = [ActivatedDevice.FromClickupTask(existingTask)]
     const updatedList = newDeviceArray.concat(activatedDevices)
     changeActivatedDevices(updatedList)
   }
 
+  /**
+   * deleteDevice: removes a device from the activatedDevices list.
+   * @param {ActivatedDevice} deviceToDelete
+   */
   function deleteDevice(deviceToDelete) {
     const modifiedDeviceList = activatedDevices.filter(device => {
       return !deviceToDelete.compareDevices(device)

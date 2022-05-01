@@ -55,15 +55,18 @@ function Frame(props) {
     storeActivatedDevices(newActivatedDevices)
   }
 
+  /**
+   * modifyActivatedDevice
+   * @param clickupTaskID the task ID to change
+   * @param fields        array
+   * @param newValues     new values
+   * @return {boolean}
+   */
   function modifyActivatedDevice(clickupTaskID, fields, newValues) {
-    console.log('fields: ', fields, 'new values: ', newValues)
-
     if (Array.isArray(fields) && Array.isArray(newValues)) {
-      console.log('is array')
       if (fields.length !== newValues.length) {
         return false
       }
-      console.log('same length')
       const copyOfActivatedDevices = copyActivatedDevices(activatedDevices)
       const targetIndex = copyOfActivatedDevices.findIndex(device => device.clickupTaskID === clickupTaskID)
       console.log('target index', targetIndex)
@@ -131,6 +134,7 @@ function Frame(props) {
       clickupToken={clickupToken}
       clickupListID={clickupListID}
       environment={environment}
+      modifyActivatedDevice={modifyActivatedDevice}
     />
   )
   viewConfig[Pages.twilio.displayName] = <TwilioPurchasing clickupToken={clickupToken} environment={environment} />

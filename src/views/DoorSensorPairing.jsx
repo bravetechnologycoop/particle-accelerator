@@ -17,8 +17,13 @@ function DoorSensorPairing(props) {
   // A future project could be to have a field to customize this value.
   // eslint-disable-next-line no-unused-vars
   const [updateInterval, setUpdateInterval] = useState(DEFAULT_TIMEOUT_INTERVAL)
+  // Hook to store pairing states (to display). Statuses are identified by their clickupTaskID.
   const [pairingStatuses, setPairingStatuses] = useState(retPairingList())
 
+  /**
+   * **addNewPairingStatus**: adds a new device to the pairingStatuses object/hook, with default status 'idle'.
+   * @param {string} clickupTaskID  ClickUp task ID of the desired task to add to the pairingStatuses object.
+   */
   function addNewPairingStatus(clickupTaskID) {
     const copyOfPairingStatuses = JSON.parse(JSON.stringify(pairingStatuses))
     copyOfPairingStatuses[clickupTaskID] = 'idle'
@@ -26,6 +31,11 @@ function DoorSensorPairing(props) {
     storePairingList(copyOfPairingStatuses)
   }
 
+  /**
+   * **changeDevicePairingState**: modifies a device's pairing state in the pairingStatuses object.
+   * @param {string} clickupTaskID    ClickUp task ID of the desired task to modify in the pairingStatuses object.
+   * @param {string} newStatus        The new status of pairing to write to the device
+   */
   function changeDevicePairingState(clickupTaskID, newStatus) {
     const copyOfPairingStatuses = JSON.parse(JSON.stringify(pairingStatuses))
     copyOfPairingStatuses[clickupTaskID] = newStatus
@@ -33,6 +43,11 @@ function DoorSensorPairing(props) {
     storePairingList(copyOfPairingStatuses)
   }
 
+  /**
+   * **submitDeviceHandler**: enters a device into a 'pairing' state and calls the pairDoorSensor method on an ActivatedDevice
+   * @param {ActivatedDevice} device  device to initiate pairing a door sensor with.
+   * @param {string} doorSensorID     IM21 door sensor ID to pair with, formatted a1,b2,c3.
+   */
   function submitDeviceHandler(device, doorSensorID) {
     addNewPairingStatus(device.doorSensorID)
     device.pairDoorSensor(particleToken, doorSensorID, updateInterval, changeDevicePairingState, modifyActivatedDevice, clickupToken)

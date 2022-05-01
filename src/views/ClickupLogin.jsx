@@ -6,18 +6,20 @@ import { getClickupAccessToken, getClickupUserName } from '../utilities/ClickupF
 function ClickupLogin(props) {
   const { clickupToken, changeClickupToken, clickupUserName, changeClickupUserName } = props
 
+  // Fetch OAuth code from redirect URL
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
 
   useEffect(() => {
+    // Declare async function since top-level awaits don't exist yet.
     async function tokenLogin() {
+      // temps avoid conflict with other variables.
       const tempClickupToken = await getClickupAccessToken(clickupCode)
-      console.log('token: ', tempClickupToken)
       changeClickupToken(tempClickupToken)
       const tempUserName = await getClickupUserName(tempClickupToken)
       changeClickupUserName(tempUserName)
-      console.log('username: ', tempUserName)
     }
+    // Only call the fetch token when no tokens are present and there is a code in the current url.
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
     }

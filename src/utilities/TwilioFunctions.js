@@ -42,7 +42,7 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, clickup
  * **purchaseSensorTwilioNumberByAreaCode**: purchases a twilio number with production configurations for a sensor
  * @param {string} areaCode      the area code to purchase a phone number in
  * @param {string} locationID    the location ID of the sensor
- * @param {string} environment
+ * @param {string} environment   the phase of deployment to add the twilio number to
  * @param {string} clickupToken  clickup auth token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
@@ -63,7 +63,7 @@ export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID,
  * **purchaseButtonTwilioNumberByAreaCode**: purchases a twilio number with production configurations for a button
  * @param {string} areaCode      the area code to purchase a phone number in
  * @param {string} locationID    the friendly name for the twilio number
- * @param {string} environment
+ * @param {string} environment   the phase of deployment to add the twilio number to
  * @param {string} clickupToken  clickup auth token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */

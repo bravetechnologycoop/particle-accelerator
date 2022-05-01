@@ -435,8 +435,7 @@ export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, 
  * @param {string} token               clickup token
  * @return {Promise<boolean>} true if successful, false if not
  */
-export async function modifyClickupTaskName(oldName, newName, listID, token) {
-  const taskID = await getClickupTaskIDByName(listID, oldName, token)
+export async function modifyClickupTaskName(taskID, newName, listID, token) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/task/${taskID}`
   const data = {
     name: newName,
