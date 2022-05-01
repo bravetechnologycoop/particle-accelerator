@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, Table } from 'react-bootstrap'
-import ActivatedDevice from '../utilities/ActivatedDevice'
+import ActivatedDevice from '../../utilities/ActivatedDevice'
 
 function ActivatedDevices(props) {
   const { activatedDeviceList } = props

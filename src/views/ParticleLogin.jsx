@@ -14,14 +14,14 @@ function ParticleLogin(props) {
 
   if (loginState === 'true') {
     return (
-      <>
+      <div style={{ padding: 20 }}>
         <h1>Logged in as: {particleSettings.userName}</h1>
         <LogoutButton changeLoginState={changeLoginState} changeToken={changeToken} token={token} changeParticleSettings={changeParticleSettings} />
-      </>
+      </div>
     )
   }
   return (
-    <div style={{ width: '25ch' }}>
+    <div style={{ width: '25ch', padding: 20 }}>
       <h2>Particle Login</h2>
       <h4>
         <LoginStatus loginState={loginState} userName={particleSettings.userName} />

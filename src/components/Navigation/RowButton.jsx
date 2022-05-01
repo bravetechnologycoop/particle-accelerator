@@ -19,9 +19,7 @@ import ParticleLogo from '../../graphics/ParticleLogo.svg'
  * @return {JSX.Element}
  */
 function RowButton(props) {
-  const { label, state, enabled, clickup, particle } = props
-
-  const webLink = label.replace(/\s+/g, '-').toLowerCase()
+  const { label, state, enabled, clickup, particle, link } = props
 
   const styles = {
     parent: {
@@ -45,7 +43,7 @@ function RowButton(props) {
 
   if (!enabled && clickup && particle) {
     return (
-      <Link to={`/${webLink}`} className={style}>
+      <Link to={link} className={style}>
         <div style={styles.parent}>
           {label}{' '}
           <div style={{ paddingLeft: '1ch', display: 'flex', flexDirection: 'row', justifyContent: 'right', alignItems: 'center' }}>
@@ -59,7 +57,7 @@ function RowButton(props) {
 
   if (!enabled && clickup) {
     return (
-      <Link to={`/${webLink}`} className={style}>
+      <Link to={link} className={style}>
         <div style={styles.parent}>
           {label}{' '}
           <div style={{ paddingLeft: '1ch', display: 'flex', flexDirection: 'row', justifyContent: 'right', alignItems: 'center' }}>
@@ -72,7 +70,7 @@ function RowButton(props) {
 
   if (!enabled && particle) {
     return (
-      <Link to={`/${webLink}`} className={style}>
+      <Link to={link} className={style}>
         <div style={styles.parent}>
           {label}{' '}
           <div style={{ paddingLeft: '1ch', display: 'flex', flexDirection: 'row', justifyContent: 'right', alignItems: 'center' }}>
@@ -84,7 +82,7 @@ function RowButton(props) {
   }
 
   return (
-    <Link to={`/${webLink}`} className={style}>
+    <Link to={link} className={style}>
       {label}{' '}
     </Link>
   )
@@ -96,6 +94,7 @@ RowButton.propTypes = {
   enabled: PropTypes.bool,
   clickup: PropTypes.bool,
   particle: PropTypes.bool,
+  link: PropTypes.string.isRequired,
 }
 
 RowButton.defaultProps = {

@@ -321,5 +321,5 @@ export function retEnvironment() {
   if (result === null) {
     return Environments.default.name
   }
-  return result
+  return JSON.parse(result)
 }

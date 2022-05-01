@@ -20,7 +20,7 @@ import LoginStatus from '../general/LoginStatus'
  * @return {JSX.Element}
  */
 function LoginRowButton(props) {
-  const { label, state, enabled, loginState, userName } = props
+  const { label, state, enabled, loginState, userName, link } = props
 
   const styles = {
     parent: {
@@ -29,8 +29,6 @@ function LoginRowButton(props) {
       justifyContent: 'space-between',
     },
   }
-
-  const lowercaseLabel = label.toLowerCase()
 
   let style
 
@@ -45,7 +43,7 @@ function LoginRowButton(props) {
   }
 
   return (
-    <Link to={`/${lowercaseLabel}`} className={style}>
+    <Link to={link} className={style}>
       <div style={styles.parent}>
         {label}{' '}
         <div style={{ paddingLeft: '1ch' }}>
@@ -61,14 +59,12 @@ LoginRowButton.propTypes = {
   state: PropTypes.string.isRequired,
   enabled: PropTypes.bool,
   loginState: PropTypes.string.isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  changeToken: PropTypes.func,
   userName: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
 }
 
 LoginRowButton.defaultProps = {
   enabled: true,
-  changeToken: () => {},
 }
 
 export default LoginRowButton

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Navigation from './views/Navigation'
-import Frame from './views/Frame'
+import Navigation from './Navigation'
+import Frame from './Frame'
 import {
   getClickupToken,
   getParticleLoginState,
@@ -19,8 +19,8 @@ import {
   storeParticleSettings,
   storeParticleToken,
   storeSafeModeState,
-} from './utilities/StorageFunctions'
-import ParticleSettings from './utilities/ParticleSettings'
+} from '../utilities/StorageFunctions'
+import ParticleSettings from '../utilities/ParticleSettings'
 
 function RouterInterface(props) {
   const { viewState } = props

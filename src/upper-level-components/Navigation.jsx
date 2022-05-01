@@ -10,6 +10,7 @@ import RowToggler from '../components/Navigation/RowToggler'
 import ParticleSettings from '../utilities/ParticleSettings'
 import BraveLogoWhite from '../pdf/BraveLogoWhite.svg'
 import { Environments } from '../utilities/Constants'
+import Pages from './Pages'
 
 function Navigation(props) {
   const {
@@ -30,6 +31,18 @@ function Navigation(props) {
     changeToken(getParticleToken())
     changeLoginState(getParticleLoginState())
   })
+
+  const loginButtonConfig = {
+    Particle: {
+      loginState: loginStatus,
+      changeToken,
+      userName: particleSettings.userName,
+    },
+    ClickUp: {
+      loginState: `${clickupToken !== ''}`,
+      userName: clickupUserName,
+    },
+  }
 
   const styles = {
     parent: {
@@ -63,35 +76,46 @@ function Navigation(props) {
       flexDirection: 'column',
     },
   }
+
   return (
     <div style={styles.parent}>
       <div style={styles.header}>
         <img src={BraveLogoWhite} alt="Brave Logo" height="100px" />
       </div>
       <div style={styles.navi}>
-        <RowButton label="Home" state={viewState} />
-        <LoginRowButton label="Particle" state={viewState} loginState={loginStatus} changeToken={changeToken} userName={particleSettings.userName} />
-        <LoginRowButton label="ClickUp" state={viewState} loginState={`${clickupToken !== ''}`} userName={clickupUserName} />
-        <RowButton label="Sensor Provisioning Guide" state={viewState} enabled={clickupToken !== ''} clickup />
-        <RowButton label="Device Manager" state={viewState} enabled={clickupToken !== ''} clickup />
-        <RowButton
-          label="Activator"
-          state={viewState}
-          enabled={loginStatus === 'true' && clickupToken !== ''}
-          particle={loginStatus !== 'true'}
-          clickup={clickupToken === ''}
-        />
-        <RowButton label="Device Lookup" state={viewState} enabled={loginStatus === 'true'} particle />
-        <RowButton label="Door Sensor Pairing" state={viewState} enabled={loginStatus === 'true'} particle />
-        <RowButton
-          label="Renamer"
-          state={viewState}
-          enabled={loginStatus === 'true' && clickupToken !== ''}
-          clickup={clickupToken === ''}
-          particle={loginStatus !== 'true'}
-        />
-        <RowButton label="Button Registration" state={viewState} enabled={clickupToken !== ''} clickup />
-        <RowButton label="Twilio Number Purchasing" state={viewState} enabled={clickupToken !== ''} clickup />
+        {Object.values(Pages).map(page => {
+          if (page.loginBadge) {
+            return (
+              <LoginRowButton
+                state={viewState}
+                loginState={loginButtonConfig[page.displayName].loginState}
+                userName={loginButtonConfig[page.displayName].userName}
+                label={page.displayName}
+                changeToken={loginButtonConfig[page.displayName].change}
+                link={page.paths[0]}
+              />
+            )
+          }
+          if (page.authorizations.clickup && page.authorizations.particle) {
+            return (
+              <RowButton
+                label={page.displayName}
+                state={viewState}
+                enabled={loginStatus === 'true' && clickupToken !== ''}
+                particle={loginStatus !== 'true'}
+                clickup={clickupToken === ''}
+                link={page.paths[0]}
+              />
+            )
+          }
+          if (page.authorizations.clickup) {
+            return <RowButton label={page.displayName} state={viewState} enabled={clickupToken !== ''} clickup link={page.paths[0]} />
+          }
+          if (page.authorizations.particle) {
+            return <RowButton label={page.displayName} state={viewState} enabled={loginStatus === 'true'} particle link={page.paths[0]} />
+          }
+          return <RowButton label={page.displayName} state={viewState} link={page.paths[0]} />
+        })}
       </div>
       <div style={styles.buttonGroup}>
         <Form>

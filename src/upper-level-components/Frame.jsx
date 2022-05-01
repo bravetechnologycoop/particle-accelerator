@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import Activator from './Activator'
-import Validator from './Validator'
-import ParticleLogin from './ParticleLogin'
-import ClickupLogin from './ClickupLogin'
-import ActivationHistory from './ActivationHistory'
+import Activator from '../views/Activator'
+import Validator from '../views/Validator'
+import ParticleLogin from '../views/ParticleLogin'
+import ClickupLogin from '../views/ClickupLogin'
 import {
   copyActivatedDevices,
   getActivatedDevices,
@@ -12,18 +11,18 @@ import {
   storeActivatedDevices,
   storeActivationHistory,
 } from '../utilities/StorageFunctions'
-import ActivatedDevices from './ActivatedDevices'
-import DoorSensorPairing from './DoorSensorPairing'
-import Renamer from './Renamer'
+import DoorSensorPairing from '../views/DoorSensorPairing'
+import Renamer from '../views/Renamer'
 import ParticleSettings from '../utilities/ParticleSettings'
-import ButtonRegistration from './ButtonRegistration'
-import TwilioPurchasing from './TwilioPurchasing'
-import HomeView from './HomeView'
-import DeviceManager from './DeviceManager'
-import SensorProvisioningGuide from './SensorProvisioningGuide'
+import ButtonRegistration from '../views/ButtonRegistration'
+import TwilioPurchasing from '../views/TwilioPurchasing'
+import HomeView from '../views/HomeView'
+import DeviceManager from '../views/DeviceManager'
+import SensorProvisioningGuide from '../views/SensorProvisioningGuide'
 
 import ClickupLogo from '../graphics/ClickupLogo.svg'
 import ParticleLogo from '../graphics/ParticleLogo.svg'
+import Pages from './Pages'
 
 function Frame(props) {
   const {
@@ -40,7 +39,6 @@ function Frame(props) {
     clickupUserName,
     changeClickupUserName,
     clickupListID,
-    changeClickupListID,
     environment,
   } = props
 
@@ -88,113 +86,98 @@ function Frame(props) {
     return true
   }
 
-  if (viewState === 'Activator') {
+  const viewConfig = {}
+  viewConfig[Pages.home.displayName] = <HomeView />
+  viewConfig[Pages.activator.displayName] = (
+    <Activator
+      particleToken={particleToken}
+      changeToken={changeToken}
+      activationHistory={activationHistory}
+      activatedDevices={activatedDevices}
+      changeActivationHistory={changeActivationHistory}
+      changeActivatedDevices={changeActivatedDevices}
+      safeModeState={safeModeState}
+      particleSettings={particleSettings}
+      clickupToken={clickupToken}
+      clickupListID={clickupListID}
+    />
+  )
+  viewConfig[Pages.deviceLookup.displayName] = <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
+  viewConfig[Pages.particle.displayName] = (
+    <ParticleLogin
+      loginState={loginState}
+      changeLoginState={changeLoginState}
+      changeToken={changeToken}
+      token={particleToken}
+      particleSettings={particleSettings}
+      changeParticleSettings={changeParticleSettings}
+    />
+  )
+  viewConfig[Pages.doorSensorPairing.displayName] = (
+    <DoorSensorPairing
+      activatedDevices={activatedDevices}
+      particleToken={particleToken}
+      changeActivatedDevices={changeActivatedDevices}
+      particleSettings={particleSettings}
+      clickupToken={clickupToken}
+      clickupListID={clickupListID}
+      modifyActivatedDevice={modifyActivatedDevice}
+    />
+  )
+  viewConfig[Pages.renamer.displayName] = (
+    <Renamer
+      activatedDevices={activatedDevices}
+      particleToken={particleToken}
+      clickupToken={clickupToken}
+      clickupListID={clickupListID}
+      environment={environment}
+    />
+  )
+  viewConfig[Pages.twilio.displayName] = <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
+  viewConfig[Pages.buttonRegistration.displayName] = <ButtonRegistration clickupToken={clickupToken} environment={environment} />
+  viewConfig[Pages.deviceManager.displayName] = (
+    <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
+  )
+  viewConfig[Pages.sensorGuide.displayName] = <SensorProvisioningGuide />
+  viewConfig[Pages.clickup.displayName] = (
+    <ClickupLogin
+      clickupToken={clickupToken}
+      changeClickupToken={changeClickupToken}
+      clickupUserName={clickupUserName}
+      changeClickupUserName={changeClickupUserName}
+    />
+  )
+
+  const currentPageInfo = Object.values(Pages).find(page => {
+    return page.displayName === viewState
+  })
+
+  if (currentPageInfo === undefined) {
+    return <HomeView />
+  }
+
+  if (currentPageInfo.authorizations.clickup && currentPageInfo.authorizations.particle) {
     if (particleToken !== '' && clickupToken !== '') {
-      return (
-        <Activator
-          particleToken={particleToken}
-          changeToken={changeToken}
-          activationHistory={activationHistory}
-          activatedDevices={activatedDevices}
-          changeActivationHistory={changeActivationHistory}
-          changeActivatedDevices={changeActivatedDevices}
-          safeModeState={safeModeState}
-          particleSettings={particleSettings}
-          clickupToken={clickupToken}
-          clickupListID={clickupListID}
-        />
-      )
+      return viewConfig[viewState]
     }
     return <NotAuthenticated clickup={clickupToken !== ''} particle={particleToken !== ''} />
   }
-  if (viewState === 'Device Lookup') {
-    return <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
-  }
-  if (viewState === 'Particle') {
-    return (
-      <ParticleLogin
-        loginState={loginState}
-        changeLoginState={changeLoginState}
-        changeToken={changeToken}
-        token={particleToken}
-        particleSettings={particleSettings}
-        changeParticleSettings={changeParticleSettings}
-      />
-    )
-  }
-  if (viewState === 'ClickUp') {
-    return (
-      <ClickupLogin
-        clickupToken={clickupToken}
-        changeClickupToken={changeClickupToken}
-        clickupListID={clickupListID}
-        changeClickupListID={changeClickupListID}
-        clickupUserName={clickupUserName}
-        changeClickupUserName={changeClickupUserName}
-      />
-    )
-  }
-  if (viewState === 'Activation History') {
-    return <ActivationHistory activationHistory={activationHistory} />
-  }
-  if (viewState === 'Activated Devices') {
-    return <ActivatedDevices activatedDeviceList={activatedDevices} />
-  }
-  if (viewState === 'Door Sensor Pairing') {
+
+  if (currentPageInfo.authorizations.particle) {
     if (particleToken !== '') {
-      return (
-        <DoorSensorPairing
-          activatedDevices={activatedDevices}
-          particleToken={particleToken}
-          changeActivatedDevices={changeActivatedDevices}
-          particleSettings={particleSettings}
-          clickupToken={clickupToken}
-          clickupListID={clickupListID}
-          modifyActivatedDevice={modifyActivatedDevice}
-        />
-      )
+      return viewConfig[viewState]
     }
-    return <NotAuthenticated particle={particleToken !== ''} />
+    return <NotAuthenticated particle={false} />
   }
-  if (viewState === 'Renamer') {
-    if (particleToken !== '' && clickupToken !== '') {
-      return (
-        <Renamer
-          activatedDevices={activatedDevices}
-          particleToken={particleToken}
-          clickupToken={clickupToken}
-          clickupListID={clickupListID}
-          environment={environment}
-        />
-      )
-    }
-    return <NotAuthenticated clickup={clickupToken !== ''} particle={particleToken !== ''} />
-  }
-  if (viewState === 'Twilio Number Purchasing') {
+
+  if (currentPageInfo.authorizations.clickup) {
     if (clickupToken !== '') {
-      return <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
+      return viewConfig[viewState]
     }
-    return <NotAuthenticated clickup={clickupToken !== ''} />
+    return <NotAuthenticated particle={false} />
   }
-  if (viewState === 'Button Registration') {
-    if (clickupToken !== '') {
-      return <ButtonRegistration clickupToken={clickupToken} environment={environment} />
-    }
-    return <NotAuthenticated clickup={clickupToken !== ''} />
-  }
-  if (viewState === 'Device Manager') {
-    if (clickupToken !== '') {
-      return <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
-    }
-    return <NotAuthenticated clickup={clickupToken !== ''} />
-  }
-  if (viewState === 'Sensor Provisioning Guide') {
-    if (clickupToken !== '') {
-      return <SensorProvisioningGuide />
-    }
-    return <NotAuthenticated clickup={clickupToken !== ''} />
-  }
-  return <HomeView />
+
+  return viewConfig[viewState]
 }
 
 Frame.propTypes = {
@@ -211,7 +194,6 @@ Frame.propTypes = {
   clickupUserName: PropTypes.string.isRequired,
   changeClickupUserName: PropTypes.func.isRequired,
   clickupListID: PropTypes.string.isRequired,
-  changeClickupListID: PropTypes.func.isRequired,
   environment: PropTypes.string.isRequired,
 }
 

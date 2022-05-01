@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import ActivationAttempt from '../utilities/ActivationAttempt'
-import ActivationRow from '../components/ActivationHistory/ActivationRow'
+import ActivationAttempt from '../../utilities/ActivationAttempt'
+import ActivationRow from '../../components/ActivationHistory/ActivationRow'
 
 function ActivationHistory(props) {
   const { activationHistory } = props
