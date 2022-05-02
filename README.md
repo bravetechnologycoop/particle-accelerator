@@ -72,6 +72,14 @@ Nearly all of the tools in the PA work on the following basis:
 5. Based on the response from the operation in step 4, the hook containing the status is updated to show the user the result of their input.
 6. Whatever data is returned is supplied to a hook/function/variable, etc.
 
+### Clickup-as-a-databse
+
+---
+The PA attempts to use Clickup [the PA Tracker] as a primitive database. This is done in two main ways:
+1. The Device Manager allows the user to pull devices from the tracker into local memory on demand
+2. At every step of the provisioning process, the PA will only update fields on an ActivatedDevice if the operation on the
+clickup backend is successful. Therefore, they PA tracker and the PA will stay in sync. Discrepancies will only arise 
+if edits are made on the clickup end, but a device can always be popped and readded from the local memory to prevent this.
 ## How-Tos
 
 ### Adding a New Page
@@ -117,6 +125,7 @@ viewConfig[Pages.developerName.displayName] = (
 ## Roadmap
 
 ### Tier 1
+- Update Home page to reflect most recent changes.
 - Add a better encryption mechanism for the entire site (Google OAuth?)
 
 ### Tier 2

@@ -1,3 +1,4 @@
+// Order matters!
 const Pages = {
   home: {
     displayName: 'Home',
@@ -12,6 +13,7 @@ const Pages = {
     displayName: 'Sensor Provisioning Guide',
     paths: ['/sensor-provisioning-guide'],
     authorizations: {
+      // The sensor guide is protected because there are links that contain sensitive details inside the page.
       clickup: true,
       particle: false,
     },

@@ -98,26 +98,33 @@ export default class ActivatedDevice {
         if (pairing) {
           // Declare a modifyActivatedDevice 'dictionary'
           const modifyDeviceValues = {}
+          // Stop the retry interval
           clearInterval(this.intervalID)
+          // modify the doorSensorID clickup custom field
           const fieldModification = await modifyClickupTaskCustomFieldValue(
             this.clickupTaskID,
             process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID,
             doorSensorID,
             clickupToken,
           )
+          // change activated device field if successful
           if (fieldModification) {
             modifyDeviceValues.doorSensorID = doorSensorID
           }
+          // modify clickup task status
           const statusModification = await modifyClickupTaskStatus(this.clickupTaskID, ClickupStatuses.pairedDoorSensor.name, clickupToken)
+          // change activated device field if successful
           if (statusModification) {
             modifyDeviceValues.clickupStatus = ClickupStatuses.pairedDoorSensor.name
             modifyDeviceValues.clickupStatusColour = ClickupStatuses.pairedDoorSensor.color
           }
           modifyActivatedDevice(this.clickupTaskID, modifyDeviceValues)
         } else {
+          // Tell the user that the device pairing failed due to pairing issues
           changePairingState(this.clickupTaskID, 'idleNoPair')
         }
       } else {
+        // Tell the user that the device pairing failed due to incorrect firmware.
         changePairingState(this.clickupTaskID, 'idleNoFirmware')
       }
     }, interval)

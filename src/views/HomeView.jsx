@@ -20,6 +20,7 @@ function HomeView() {
       flexDirection: 'column',
       alignItems: 'center',
       overflowY: 'auto',
+      padding: 20,
     },
     cardTitle: {
       fontSize: '28px',
@@ -40,11 +41,8 @@ function HomeView() {
             Necessary for Use Of:
             <ul>
               <li>Activator</li>
-              <li>Validator</li>
+              <li>Device Lookup</li>
               <li>Door Sensor Pairing</li>
-            </ul>
-            Optional for Use Of:
-            <ul>
               <li>Renamer</li>
             </ul>
             <b>ClickUp</b>: Login Using a Brave-Linked ClickUp Account via ClickUp
@@ -53,11 +51,10 @@ function HomeView() {
             <ul>
               <li>Button Registration</li>
               <li>Twilio Number Purchasing</li>
-            </ul>
-            Optional for Use Of:
-            <ul>
               <li>Activator</li>
               <li>Door Sensor Pairing</li>
+              <li>Sensor Provisioning Guide</li>
+              <li>Device Manager</li>
             </ul>
             <b>Additional Database Password</b>: Found in Brave 1Password
             <hr />
@@ -93,7 +90,7 @@ function HomeView() {
             <ul>
               <li>Adds device to Particle Product Family</li>
               <li>Enables device to receive Brave firmware OTA</li>
-              <li>Creates a new task in the Device Tracker in ClickUp</li>
+              <li>Creates a new task in the PA Tracker in ClickUp</li>
             </ul>
             <hr />
             The Activator tool is for use in the provisioning process of sensors. It&apos;s intent is to be used when a Boron device is taken out of
@@ -107,49 +104,6 @@ function HomeView() {
             <br />
             The Activator can also create a task in Brave&apos;s ClickUp Sensor Tracker, by selecting the correct custom fields. Keep in mind that one
             must be logged in and have selected the appropriate list in the ClickUp login in order to access the Sensor Tracker.
-          </Card.Text>
-        </Card>
-      </div>
-
-      <div style={styles.cardBoundary}>
-        <Card style={styles.cardInterior}>
-          <Card.Title style={styles.cardTitle}>Activation History</Card.Title>
-          <Card.Text>
-            <b>Product</b>: Sensor
-            <br />
-            <b>Authentication</b>: None
-            <br />
-            <b>Requirements</b>:
-            <ul>
-              <li>At least one device activation attempt</li>
-            </ul>
-            <b>Effects</b>: None
-            <hr />
-            Activation History shows the history all of the activation attempts performed by the Activator (in the current browser), both successful
-            and unsuccessful. This information can also be viewed in the Activator page.
-          </Card.Text>
-        </Card>
-      </div>
-
-      <div style={styles.cardBoundary}>
-        <Card style={styles.cardInterior}>
-          <Card.Title style={styles.cardTitle}>Activated Devices</Card.Title>
-          <Card.Text>
-            <b>Product</b>: Sensor
-            <br />
-            <b>Authentication</b>: None
-            <br />
-            <b>Requirements</b>:
-            <ul>
-              <li>
-                At least one <i>successful</i> device activation attempt
-              </li>
-            </ul>
-            <b>Effects</b>: None
-            <hr />
-            The Activated Devices page shows all of the successfully Activated and Added devices (in the current browser). &quot;Activated
-            Device&quot; objects are the heart of the sensor part of the PA&apos;s workflow. When performing actions on sensors in subsequent pages,
-            they will always be done on the same Activated Device object.
           </Card.Text>
         </Card>
       </div>
