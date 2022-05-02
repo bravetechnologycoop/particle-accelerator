@@ -6,7 +6,7 @@ import ActivatedDevice from '../../utilities/ActivatedDevice'
 import QueueStatusBadge from './QueueStatusBadge'
 
 function DoorSensorQueueCard(props) {
-  const { device, status, reactStateHandler } = props
+  const { device, status, modifyActivatedDevice } = props
   if (status === 'paired') {
     return (
       <Card key={`${device.dateStamp}${device.timeStamp}`}>
@@ -28,7 +28,7 @@ function DoorSensorQueueCard(props) {
           <QueueStatusBadge status={status} />
         </div>
         <Button
-          onClick={() => device.stopPairing(reactStateHandler)}
+          onClick={() => device.stopPairing(modifyActivatedDevice)}
           type="button"
           variant="danger"
           style={{ fontSize: 'small', paddingTop: '10px' }}
@@ -43,11 +43,11 @@ function DoorSensorQueueCard(props) {
 DoorSensorQueueCard.propTypes = {
   device: PropTypes.instanceOf(ActivatedDevice).isRequired,
   status: PropTypes.string.isRequired,
-  reactStateHandler: PropTypes.func,
+  modifyActivatedDevice: PropTypes.func,
 }
 
 DoorSensorQueueCard.defaultProps = {
-  reactStateHandler: () => {},
+  modifyActivatedDevice: () => {},
 }
 
 export default DoorSensorQueueCard

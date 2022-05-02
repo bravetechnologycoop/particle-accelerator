@@ -57,36 +57,22 @@ function Frame(props) {
 
   /**
    * modifyActivatedDevice
-   * @param clickupTaskID the task ID to change
-   * @param fields        array
-   * @param newValues     new values
-   * @return {boolean}
+   * @param clickupTaskID
+   * @param fieldValueDictionary
    */
-  function modifyActivatedDevice(clickupTaskID, fields, newValues) {
-    if (Array.isArray(fields) && Array.isArray(newValues)) {
-      if (fields.length !== newValues.length) {
-        return false
-      }
+  function modifyActivatedDevice(clickupTaskID, fieldValueDictionary) {
+    if (typeof fieldValueDictionary === 'object' && fieldValueDictionary !== null) {
       const copyOfActivatedDevices = copyActivatedDevices(activatedDevices)
       const targetIndex = copyOfActivatedDevices.findIndex(device => device.clickupTaskID === clickupTaskID)
-      console.log('target index', targetIndex)
 
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < fields.length; i++) {
-        copyOfActivatedDevices[targetIndex][fields[i]] = newValues[i]
-        console.log(copyOfActivatedDevices)
-      }
+      Object.keys(fieldValueDictionary).forEach(field => {
+        copyOfActivatedDevices[targetIndex][field] = fieldValueDictionary[field]
+      })
+
       changeActivatedDevices(copyOfActivatedDevices)
       return true
     }
-
-    const copyOfActivatedDevices = copyActivatedDevices(activatedDevices)
-    const targetIndex = copyOfActivatedDevices.findIndex(device => device.clickupTaskID === clickupTaskID)
-    console.log('target index', targetIndex)
-
-    copyOfActivatedDevices[targetIndex][fields] = newValues
-    changeActivatedDevices(copyOfActivatedDevices)
-    return true
+    return false
   }
 
   const viewConfig = {}

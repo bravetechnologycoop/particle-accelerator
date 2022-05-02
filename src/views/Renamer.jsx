@@ -120,17 +120,12 @@ export default function Renamer(props) {
     event.preventDefault()
 
     let twilioPhoneNumber
-
-    let particleRename = false
-    let clickupRename = false
-    let clickupStatusChange = false
-    let databaseInsert = false
-    let twilioFieldChange = false
+    const modifyDeviceValues = {}
 
     if (particleCheck) {
       setParticleStatus('waiting')
       // change device name on particle console
-      particleRename = await changeDeviceName(selectedDevice.deviceID, selectedDevice.productID, locationID, particleToken)
+      const particleRename = await changeDeviceName(selectedDevice.deviceID, selectedDevice.productID, locationID, particleToken)
 
       if (particleRename) {
         setParticleStatus('true')
@@ -143,12 +138,20 @@ export default function Renamer(props) {
     if (clickupCheck) {
       setClickupStatus('waiting')
       // rename clickup task on clickup and change status
-      clickupRename = await modifyClickupTaskName(selectedDevice.clickupTaskID, locationID, clickupListID, clickupToken)
-      clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.registeredToClient.name, clickupToken)
+      const clickupRename = await modifyClickupTaskName(selectedDevice.clickupTaskID, locationID, clickupListID, clickupToken)
+      const clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.registeredToClient.name, clickupToken)
       if (clickupRename && clickupStatusChange) {
         setClickupStatus('true')
       } else {
         setClickupStatus('error')
+      }
+
+      if (clickupStatusChange) {
+        modifyDeviceValues.clickupStatus = ClickupStatuses.registeredToClient.name
+        modifyDeviceValues.clickupStatusColour = ClickupStatuses.registeredToClient.colour
+      }
+      if (clickupRename) {
+        modifyDeviceValues.deviceName = locationID
       }
     } else {
       setParticleStatus('notChecked')
@@ -161,12 +164,15 @@ export default function Renamer(props) {
         setTwilioStatus(twilioResponse.phoneNumber)
         twilioPhoneNumber = twilioResponse.phoneNumber
         // modify clickup custom field value
-        twilioFieldChange = await modifyClickupTaskCustomFieldValue(
+        const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
           selectedDevice.clickupTaskID,
           process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
           twilioPhoneNumber,
           clickupToken,
         )
+        if (twilioFieldChange) {
+          modifyDeviceValues.twilioNumber = twilioPhoneNumber
+        }
       } else {
         setTwilioStatus('error')
       }
@@ -176,7 +182,7 @@ export default function Renamer(props) {
     if (dashboardCheck) {
       setDashboardStatus('waiting')
 
-      databaseInsert = await insertSensorLocation(
+      const databaseInsert = await insertSensorLocation(
         clickupToken,
         password,
         locationID,
@@ -190,38 +196,13 @@ export default function Renamer(props) {
       )
       if (databaseInsert) {
         setDashboardStatus('true')
+        modifyDeviceValues.clickupStatus = ClickupStatuses.addedToDatabase.name
+        modifyDeviceValues.clickupStatus = ClickupStatuses.addedToDatabase.colour
       } else {
         setDashboardStatus('error')
       }
     }
-
-    /*
-    As a consequence of react state updates being non-instantaneous, modifyActivatedDevice is employed.
-    The if statements account for all successful conditions, except for if a clickupRename was successful, but the
-    clickupStatusChange was not, however, this would be rare. With the current approach used, this mitigation was not
-    made due to the mass amounts of smelly repeated code that would be implemented.
-     */
-    if (clickupRename && clickupStatusChange && databaseInsert && twilioFieldChange) {
-      modifyActivatedDevice(
-        selectedDevice.clickupTaskID,
-        ['clickupStatus', 'clickupStatusColour', 'twilioNumber', 'deviceName'],
-        [ClickupStatuses.addedToDatabase.name, ClickupStatuses.addedToDatabase.colour, twilioPhoneNumber, locationID],
-      )
-    }
-    if (clickupRename && clickupStatusChange && twilioFieldChange) {
-      modifyActivatedDevice(
-        selectedDevice.clickupTaskID,
-        ['clickupStatus', 'clickupStatusColour', 'twilioNumber', 'deviceName'],
-        [ClickupStatuses.registeredToClient.name, ClickupStatuses.registeredToClient.colour, twilioPhoneNumber, locationID],
-      )
-    }
-    if (clickupRename && clickupStatusChange) {
-      modifyActivatedDevice(
-        selectedDevice.clickupTaskID,
-        ['clickupStatus', 'clickupStatusColour', 'deviceName'],
-        [ClickupStatuses.registeredToClient.name, ClickupStatuses.registeredToClient.colour, locationID],
-      )
-    }
+    modifyActivatedDevice(selectedDevice.clickupTaskID, modifyDeviceValues)
   }
 
   const styles = {

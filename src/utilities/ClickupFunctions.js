@@ -11,11 +11,10 @@ const axios = require('axios')
 export async function getClickupAccessToken(code) {
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/oauth/token?client_id=${process.env.REACT_APP_CLICKUP_CLIENT_ID}&client_secret=${process.env.REACT_APP_CLICKUP_CLIENT_SECRET}&code=${code}`
   try {
-    console.log(`POST to ${url}`)
     const response = await axios.post(url)
     return response.data.access_token
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return null
   }
 }
@@ -33,7 +32,6 @@ export async function getClickupUserName(token) {
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log(response)
     return response.data.user.username
   } catch (err) {
     console.error(err)
@@ -54,7 +52,6 @@ export async function getClickupWorkspaces(token) {
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log(response)
     return response.data.teams.map(team => {
       return { name: team.name, id: team.id }
     })
@@ -78,7 +75,6 @@ export async function getClickupSpaces(token, workspaceID) {
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log('spaces: ', response)
     return response.data.spaces.map(space => {
       return { name: space.name, id: space.id }
     })
@@ -126,7 +122,6 @@ export async function getClickupListsInFolders(token, folderID) {
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log(`lists in folder ${folderID}: `, response)
     return response.data.lists.map(list => {
       return { name: list.name, id: list.id }
     })
@@ -150,7 +145,6 @@ export async function getClickupListsWithoutFolders(token, spaceID) {
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log(`lists in space ${spaceID}: `, response)
     return response.data.lists.map(list => {
       return { name: list.name, id: list.id }
     })
@@ -215,8 +209,6 @@ export async function getClickupStatusesInList(token, listID) {
  * @return {Promise<{name: string, id: string}[]>} array of custom field names and ids if successful, empty array if not
  */
 export async function getClickupCustomFieldsInList(token, listID) {
-  console.log('token', token)
-  console.log('listID', listID)
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/field`
   try {
     const response = await axios.get(url, {
@@ -332,8 +324,6 @@ export async function createTaskInSensorTracker(token, sensorName, deviceID, ser
  * @return {Promise<{}|null>}   the tasks in a list if successful, null if not.
  */
 export async function getClickupTasksInList(listID, token) {
-  console.log('searching listid', listID)
-  console.log('searching token', token)
   const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${listID}/task`
   try {
     const response = await axios.get(url, {
@@ -341,7 +331,6 @@ export async function getClickupTasksInList(listID, token) {
         Authorization: token,
       },
     })
-    console.log(response)
     return response.data.tasks
   } catch (err) {
     console.error(err)
@@ -429,7 +418,7 @@ export async function modifyClickupTaskCustomFieldValue(taskID, fieldID, value, 
 
 /**
  * modifyClickupTaskName: modifies the name of a clickup task
- * @param {string} oldName             the former name of the clickup task
+ * @param {string} taskID
  * @param {string} newName             the desired new name for the clickup task
  * @param {string} listID              the ID of the list that the task resides in
  * @param {string} token               clickup token
@@ -458,7 +447,10 @@ function getCustomFieldValue(customFieldObject, customFieldID) {
     return field.id === customFieldID
   })
   if (desiredField.length === 1) {
-    return desiredField[0].value
+    if (desiredField[0].value !== undefined) {
+      return desiredField[0].value
+    }
+    return ''
   }
   return ''
 }

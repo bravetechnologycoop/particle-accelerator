@@ -8,6 +8,15 @@ const Pages = {
     },
     loginBadge: false,
   },
+  sensorGuide: {
+    displayName: 'Sensor Provisioning Guide',
+    paths: ['/sensor-provisioning-guide'],
+    authorizations: {
+      clickup: true,
+      particle: false,
+    },
+    loginBadge: false,
+  },
   particle: {
     displayName: 'Particle',
     paths: ['/particle'],
@@ -83,15 +92,6 @@ const Pages = {
   twilio: {
     displayName: 'Twilio Number Purchasing',
     paths: ['/twilio-number-purchasing'],
-    authorizations: {
-      clickup: true,
-      particle: false,
-    },
-    loginBadge: false,
-  },
-  sensorGuide: {
-    displayName: 'Sensor Provisioning Guide',
-    paths: ['/sensor-provisioning-guide'],
     authorizations: {
       clickup: true,
       particle: false,

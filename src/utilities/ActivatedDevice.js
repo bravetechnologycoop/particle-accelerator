@@ -74,11 +74,11 @@ export default class ActivatedDevice {
 
     // Change the device's state to be 'in the list of devices undergoing pairing'
 
-    modifyActivatedDevice(this.clickupTaskID, 'inPairingList', true)
+    modifyActivatedDevice(this.clickupTaskID, { inPairingList: true })
     // Creates a setInterval for repeated pairing attempts
     this.intervalID = setInterval(async () => {
       // Reaffirm that the device is in the pairing list.
-      modifyActivatedDevice(this.clickupTaskID, 'inPairingList', true)
+      modifyActivatedDevice(this.clickupTaskID, { inPairingList: true })
 
       // Indicate to user that the device is undergoing a firmware check
       changePairingState(this.clickupTaskID, 'firmwareCheck')
@@ -96,19 +96,23 @@ export default class ActivatedDevice {
         const pairing = await pairDoorSensor(this.deviceID, doorSensorID, this.productID, particleToken)
         // If pairing is successful, change properties of the activatedDevice to advance clickupStatus
         if (pairing) {
+          const modifyDeviceValues = {}
           clearInterval(this.intervalID)
-          await modifyClickupTaskCustomFieldValue(
+          const fieldModification = await modifyClickupTaskCustomFieldValue(
             this.clickupTaskID,
             process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_DOOR_SENSOR_ID,
             doorSensorID,
             clickupToken,
           )
-          await modifyClickupTaskStatus(this.clickupTaskID, ClickupStatuses.pairedDoorSensor.name, clickupToken)
-          modifyActivatedDevice(
-            this.clickupTaskID,
-            ['inPairingList', 'doorSensorID', 'clickupStatus', 'clickupStatusColour'],
-            [false, doorSensorID, ClickupStatuses.pairedDoorSensor.name, ClickupStatuses.pairedDoorSensor.color],
-          )
+          if (fieldModification) {
+            modifyDeviceValues.doorSensorID = doorSensorID
+          }
+          const statusModification = await modifyClickupTaskStatus(this.clickupTaskID, ClickupStatuses.pairedDoorSensor.name, clickupToken)
+          if (statusModification) {
+            modifyDeviceValues.clickupStatus = ClickupStatuses.pairedDoorSensor.name
+            modifyDeviceValues.clickupStatusColour = ClickupStatuses.pairedDoorSensor.color
+          }
+          modifyActivatedDevice(this.clickupTaskID, modifyDeviceValues)
         } else {
           changePairingState(this.clickupTaskID, 'idleNoPair')
         }
@@ -118,10 +122,9 @@ export default class ActivatedDevice {
     }, interval)
   }
 
-  stopPairing(reactStateHandler) {
-    console.log('interval id', this.intervalID)
+  stopPairing(modifyActivatedDevice) {
     clearInterval(this.intervalID)
-    reactStateHandler(this.clickupTaskID, 'inPairingList', false)
+    modifyActivatedDevice(this.clickupTaskID, { inPairingList: false })
   }
 
   /**
@@ -229,6 +232,26 @@ export default class ActivatedDevice {
       this.doorSensorID === other.doorSensorID &&
       this.inPairingList === other.inPairingList &&
       this.intervalID === other.intervalID &&
+      this.clickupTaskID === other.clickupTaskID &&
+      this.clickupStatus === other.clickupStatus &&
+      this.clickupStatusColour === other.clickupStatusColour &&
+      this.twilioNumber === other.twilioNumber &&
+      this.formerSensorNumber === other.formerSensorNumber
+    )
+  }
+
+  /**
+   * Same as compareDevices, but without time or date stamps, or intervalIDs.
+   * @param other
+   * @return {boolean}
+   */
+  compareDevicesFromClickup(other) {
+    return (
+      this.deviceName === other.deviceName &&
+      this.serialNumber === other.serialNumber &&
+      this.productID === other.productID &&
+      this.iccid === other.iccid &&
+      this.doorSensorID === other.doorSensorID &&
       this.clickupTaskID === other.clickupTaskID &&
       this.clickupStatus === other.clickupStatus &&
       this.clickupStatusColour === other.clickupStatusColour &&

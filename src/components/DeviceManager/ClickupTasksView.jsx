@@ -2,9 +2,10 @@ import { Badge, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import React from 'react'
 import ClickupTaskDisplay from './ClickupTaskDisplay'
+import ActivatedDevice from '../../utilities/ActivatedDevice'
 
 function ClickupTasksView(props) {
-  const { clickupTasks, status, pushDevice } = props
+  const { clickupTasks, status, pushDevice, filterMatches, searchValue, searchParam, activatedDevices } = props
 
   if (status === 'idle') {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -21,6 +22,62 @@ function ClickupTasksView(props) {
     )
   }
   if (status === 'success') {
+    if (filterMatches && searchValue !== '') {
+      return (
+        <>
+          {clickupTasks
+            .filter(task => {
+              const taskAsDevice = ActivatedDevice.FromClickupTask(task)
+              if (activatedDevices.length === 0) {
+                return true
+              }
+              const matchingDevices = activatedDevices.filter(device => {
+                return !device.compareDevicesFromClickup(taskAsDevice)
+              })
+              return matchingDevices.length === 1
+            })
+            .filter(task => {
+              return task[searchParam].toUpperCase().includes(searchValue.toUpperCase())
+            })
+            .map(task => {
+              return <ClickupTaskDisplay task={task} pushDevice={pushDevice} key={task.id} />
+            })}
+        </>
+      )
+    }
+    if (filterMatches) {
+      return (
+        <>
+          {clickupTasks
+            .filter(task => {
+              const taskAsDevice = ActivatedDevice.FromClickupTask(task)
+              if (activatedDevices.length === 0) {
+                return true
+              }
+              const matchingDevices = activatedDevices.filter(device => {
+                return !device.compareDevicesFromClickup(taskAsDevice)
+              })
+              return matchingDevices.length === 1
+            })
+            .map(task => {
+              return <ClickupTaskDisplay task={task} pushDevice={pushDevice} key={task.id} />
+            })}
+        </>
+      )
+    }
+    if (searchValue !== '') {
+      return (
+        <>
+          {clickupTasks
+            .filter(task => {
+              return task[searchParam].toUpperCase().includes(searchValue.toUpperCase())
+            })
+            .map(task => {
+              return <ClickupTaskDisplay task={task} pushDevice={pushDevice} key={task.id} />
+            })}
+        </>
+      )
+    }
     return (
       <>
         {clickupTasks.map(task => {
@@ -37,6 +94,17 @@ ClickupTasksView.propTypes = {
   clickupTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   status: PropTypes.string.isRequired,
   pushDevice: PropTypes.func.isRequired,
+  filterMatches: PropTypes.bool,
+  searchValue: PropTypes.string,
+  searchParam: PropTypes.string,
+  activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
+}
+
+ClickupTasksView.defaultProps = {
+  filterMatches: false,
+  searchValue: '',
+  searchParam: '',
+  activatedDevices: [],
 }
 
 export default ClickupTasksView
