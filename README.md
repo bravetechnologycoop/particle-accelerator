@@ -127,6 +127,7 @@ viewConfig[Pages.developerName.displayName] = (
 ### Tier 1
 - Update Home page to reflect most recent changes.
 - Add a better encryption mechanism for the entire site (Google OAuth?)
+- Remove redundant environment variables from DigitalOcean that are now on the backend
 
 ### Tier 2
 - [moderate] Verify the AWS and database adding and switch the variables to prod
