@@ -18,28 +18,48 @@
 #### File Organization
 
 - Files and components are organized in four main folders.
-  - `components` - Every subcomponent (although some are stored inside the views themselves if they are specific)
-  - `utilities` - Every 'middle-end' function that assists the accelerator
+  - `components` - Every subcomponent is stored in a subdirectory labelled after the parent component, unless it is a `general` component.
+  - `utilities` - Every 'middle-end' function that assists the accelerator, as well as classes and constants.
   - `views` - Every view seen by `Frame.jsx`
   - `pdf` - Components that produce the button labels
+  - `stylesheets` - `.css` files for particular uses.
+  - `graphics` - SVGs for use in various pages
+  - `upper-level-components` - components (and `Pages.js`) for use in the higher level abstractions of the program
+    (`Frame.jsx`, `Navigation.jsx`, `PageNotFound.jsx`, `Pages.js`, and `RouterInterface.jsx`)
+  
 
 ### Environment Variables
 
 ---
 Environment Variables in the PA are done in DigitalOcean. Each environment variable must be preceded by `REACT_APP_`, for example: `REACT_APP_TWILIO_MESSAGING_SID`. Environment variables are to be added at the component level, not the app level.
+A .env.example file can also be found in this repo.
 
 ### Development Environments
 
 ---
+By finding the appropriate values for the environment variables in .env.example, one can easily set up a .env file and run the program on `localhost` to ease development. This can be done with `npm start`.
 
 ### Strange Artefacts
 
 ---
-- `token` generally means `particleToken`
+- `token` means `particleToken` if not defined. This is an artefact from when the program used to only deal with tokens from Particle.
 
 ### Styling and CSS
 
+---
+- The PA makes use of CSS in three main ways:
+  1. (main, desirable, way) css-in-js `styles` constants containing CSS.
+  2. Stylesheets in the `stylesheets` directory: used only for styling hovers and clicking properties, or existing components (harder to do in css-in-js)
+  3. Inline styles, which are regretted and frowned upon. A future make-work project would be to remove the heavy usage of inline styles in this project.
+
 ### History
+
+---
+The PA started as the 'Particle Accelerator' and was only meant to activate Borons, and check them with the Device Lookup page (then called the Validator).
+At this time, the PA was also an Electron app and ran on the desktop. As time progressed, it was deemed more viable for the PA
+to become a React web app, so the original Electron react was flipped over to the browser. A navigation bar was added, and
+from there, features were rapidly added. Due to the very primitive nature of the first releases of the PA, there may exist
+some pockets of code that don't quite fit the style of the rest of the project.
 
 ### General Format
 
@@ -57,16 +77,42 @@ Nearly all of the tools in the PA work on the following basis:
 ### Adding a New Page
 
 ---
-1. Create a component in the `views` folder.
-2. In `App.js`, name the `ViewState` with a name of your choice.
-3. Make the `path` a kebab-cased version of the `ViewState` name (important).
-4. Add an `if` statement in `Frame.jsx` following the format:
-```jsx
-if (viewState === 'View State Name No Kebab Case') {
-  return <ComponentNameInViews />
-} 
+1. Create a new page in the `Pages.js` file. The format is the following:
+```js
+// ...
+const Pages = {
+  developerName: {
+    displayName: 'Name for navigation and identification',
+    paths: ['/array', '/of', '/the', '/desired', '/routes', '/for/the/page'],
+    authorizations: {
+      // Whether clickup or particle are required to access the page or not 
+      // Should always be declared whether true or false.
+      clickup: true,
+      particle: false,
+    },
+    // Whether the page will have a loginState badge in the navbar. Generally not touched.
+    loginBadge: false
+  },
+}
 ```
-5. Create a `RowButton` in `components/Navigation.jsx`, with care to the order that you would like the page to appear in the navigation.
+2. If the page has `loginBadge: true`, then one must add the variables for the device in `Navigation.jsx`:
+```js
+loginButtonConfig[Pages.developerName.displayName] = {
+  // Hook to display what the current login state for that account is.
+  loginState: hook,
+  // Function to change the token (in case one would like to add a logout button to the badge)
+  // Should probably be deprecated.
+  changeToken: function,
+  // Username to display on the badge if login is successful
+  userName: hook,
+}
+```
+3. Add the component to the component config object in `Frame.jsx`
+```jsx
+viewConfig[Pages.developerName.displayName] = (
+  <ComponentName properties={goHere} />
+)
+```
 
 ## Roadmap
 
@@ -89,8 +135,7 @@ if (viewState === 'View State Name No Kebab Case') {
 - [large endeavour] Back the application with a database
 - [decent cost-benefit] Create a (desktop application) serial tool that interfaces with an accelerator endpoint to automatically register every button
 - OAuth2 Flow for Particle
-- Create automated tests for the entire application, unit, integration, etc.
+- Create automated tests for the entire application, unit, integration, end-to-end, etc.
 
 ### Random Dev Make Work Tasks
 - Remove all instances of inline CSS
-- Make Door Sensor Pairing single-action instead of interval.

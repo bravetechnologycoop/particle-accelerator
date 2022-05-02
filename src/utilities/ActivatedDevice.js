@@ -96,6 +96,7 @@ export default class ActivatedDevice {
         const pairing = await pairDoorSensor(this.deviceID, doorSensorID, this.productID, particleToken)
         // If pairing is successful, change properties of the activatedDevice to advance clickupStatus
         if (pairing) {
+          // Declare a modifyActivatedDevice 'dictionary'
           const modifyDeviceValues = {}
           clearInterval(this.intervalID)
           const fieldModification = await modifyClickupTaskCustomFieldValue(
@@ -122,6 +123,10 @@ export default class ActivatedDevice {
     }, interval)
   }
 
+  /**
+   * Stops pairing the device.
+   * @param modifyActivatedDevice
+   */
   stopPairing(modifyActivatedDevice) {
     clearInterval(this.intervalID)
     modifyActivatedDevice(this.clickupTaskID, { inPairingList: false })

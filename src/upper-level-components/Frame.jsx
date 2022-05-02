@@ -56,9 +56,16 @@ function Frame(props) {
   }
 
   /**
-   * modifyActivatedDevice
-   * @param clickupTaskID
-   * @param fieldValueDictionary
+   * ### modifyActivatedDevice
+   * modifyActivatedDevice modifies a singular ActivatedDevice within the activatedDevices list. It writes to local memory
+   * while changing the hook.
+   *
+   * modifyActivatedDevice is designed to modify all of the desired properties at once, due to the nature of React's
+   * hook updating methods. It was determined in testing that multiple similtaneous calls to modifyActivatedDevices in
+   * the same update cycle resulted in only the last field being updated. Due to this, the idea of passing a
+   * 'field-value dictionary' was created, where all fields and values would be edited in one function call.
+   * @param {string} clickupTaskID
+   * @param {Object} fieldValueDictionary
    */
   function modifyActivatedDevice(clickupTaskID, fieldValueDictionary) {
     if (typeof fieldValueDictionary === 'object' && fieldValueDictionary !== null) {

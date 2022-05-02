@@ -32,16 +32,16 @@ function Navigation(props) {
     changeLoginState(getParticleLoginState())
   })
 
-  const loginButtonConfig = {
-    Particle: {
-      loginState: loginStatus,
-      changeToken,
-      userName: particleSettings.userName,
-    },
-    ClickUp: {
-      loginState: `${clickupToken !== ''}`,
-      userName: clickupUserName,
-    },
+  const loginButtonConfig = {}
+
+  loginButtonConfig[Pages.particle.displayName] = {
+    loginState: loginStatus,
+    changeToken,
+    userName: particleSettings.userName,
+  }
+  loginButtonConfig[Pages.clickup.displayName] = {
+    loginState: `${clickupToken !== ''}`,
+    userName: clickupUserName,
   }
 
   const styles = {
@@ -91,7 +91,7 @@ function Navigation(props) {
                 loginState={loginButtonConfig[page.displayName].loginState}
                 userName={loginButtonConfig[page.displayName].userName}
                 label={page.displayName}
-                changeToken={loginButtonConfig[page.displayName].change}
+                changeToken={loginButtonConfig[page.displayName].changeToken}
                 link={page.paths[0]}
               />
             )
