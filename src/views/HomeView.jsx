@@ -132,6 +132,23 @@ function HomeView() {
 
       <div style={styles.cardBoundary}>
         <Card style={styles.cardInterior}>
+          <Card.Title style={styles.cardTitle}>Device Manager</Card.Title>
+          <Card.Text>
+            <b>Product</b>: Sensor
+            <br />
+            <b>Authentication</b>: Particle and Clickup
+            <b>Requirements</b>:
+            <ul>
+              <li>Clickup auth</li>
+            </ul>
+            The Device Manager allows the user to interface with the tasks in the PA tracker in order to share and add devices across different
+            browsers/users.
+          </Card.Text>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
           <Card.Title style={styles.cardTitle}>Door Sensor Pairing</Card.Title>
           <Card.Text>
             <b>Product</b>: Sensor
