@@ -59,27 +59,43 @@ export default class ActivatedDevice {
     this.formerSensorNumber = formerSensorNumber
   }
 
-  pairDoorSensor(particleToken, doorSensorID, interval, changeCheckState, reactStateHandler, clickupToken) {
-    changeCheckState(this.clickupTaskID, 'idle')
-    reactStateHandler(this.clickupTaskID, 'inPairingList', true)
+  /**
+   * **pairDoorSensor**: employs Particle cloud functions to pair an IM21 door sensor to a production boron device.
+   * @param {string} particleToken            particle auth token
+   * @param {string} doorSensorID             IM21 door sensor BLE ID, formatted a1,b2,c3
+   * @param {number} interval                 interval in ms for retries if the pairing is unsuccessful.
+   * @param {function} changePairingState     handler function for modifying the pairing state hook.
+   * @param {function} modifyActivatedDevice  handler function for modifying the fields on an ActivatedDevice.
+   * @param {string} clickupToken             clickup auth token
+   */
+  pairDoorSensor(particleToken, doorSensorID, interval, changePairingState, modifyActivatedDevice, clickupToken) {
+    // Change the current pairing state to idle
+    changePairingState(this.clickupTaskID, 'idle')
+
+    // Change the device's state to be 'in the list of devices undergoing pairing'
+
+    modifyActivatedDevice(this.clickupTaskID, 'inPairingList', true)
+    // Creates a setInterval for repeated pairing attempts
     this.intervalID = setInterval(async () => {
-      reactStateHandler(this.clickupTaskID, 'inPairingList', true)
-      console.log('interval')
-      changeCheckState(this.clickupTaskID, 'firmwareCheck')
+      // Reaffirm that the device is in the pairing list.
+      modifyActivatedDevice(this.clickupTaskID, 'inPairingList', true)
+
+      // Indicate to user that the device is undergoing a firmware check
+      changePairingState(this.clickupTaskID, 'firmwareCheck')
+
+      // Retrieve the current firmware version from Particle (could be memoized in a future project)
       const targetFirmwareVersion = await getCurrentFirmwareVersion(this.productID, particleToken)
-      console.log('target firmware version', targetFirmwareVersion)
+
+      // Retrieve device details from Particle.
       const deviceDetails = await getDeviceDetails(this.serialNumber, this.productID, particleToken)
+      // Check that the device holds the most current firmware version
       if (deviceDetails.firmware_version === targetFirmwareVersion) {
-        changeCheckState(this.clickupTaskID, 'attemptingPairing')
-        console.log('attempting to pair')
+        // Indicate to user that the device is attempting to pair
+        changePairingState(this.clickupTaskID, 'attemptingPairing')
+        // Attempt to pair door sensor using Particle cloud functions.
         const pairing = await pairDoorSensor(this.deviceID, doorSensorID, this.productID, particleToken)
-        console.log('pairing request finished', pairing)
+        // If pairing is successful, change properties of the activatedDevice to advance clickupStatus
         if (pairing) {
-          reactStateHandler(
-            this.clickupTaskID,
-            ['inPairingList', 'doorSensorID', 'clickupStatus', 'clickupStatusColour'],
-            [false, doorSensorID, ClickupStatuses.pairedDoorSensor.name, ClickupStatuses.pairedDoorSensor.color],
-          )
           clearInterval(this.intervalID)
           await modifyClickupTaskCustomFieldValue(
             this.clickupTaskID,
@@ -88,11 +104,16 @@ export default class ActivatedDevice {
             clickupToken,
           )
           await modifyClickupTaskStatus(this.clickupTaskID, ClickupStatuses.pairedDoorSensor.name, clickupToken)
+          modifyActivatedDevice(
+            this.clickupTaskID,
+            ['inPairingList', 'doorSensorID', 'clickupStatus', 'clickupStatusColour'],
+            [false, doorSensorID, ClickupStatuses.pairedDoorSensor.name, ClickupStatuses.pairedDoorSensor.color],
+          )
         } else {
-          changeCheckState(this.clickupTaskID, 'idleNoPair')
+          changePairingState(this.clickupTaskID, 'idleNoPair')
         }
       } else {
-        changeCheckState(this.clickupTaskID, 'idleNoFirmware')
+        changePairingState(this.clickupTaskID, 'idleNoFirmware')
       }
     }, interval)
   }
@@ -103,10 +124,24 @@ export default class ActivatedDevice {
     reactStateHandler(this.clickupTaskID, 'inPairingList', false)
   }
 
+  /**
+   * Creates a blank activated device.
+   * @return {ActivatedDevice}
+   */
   static BlankDevice() {
     return new ActivatedDevice('', '', '', '', '', null, null, '', false, '', '', '', '', '', '')
   }
 
+  /**
+   * Creates a new activated device from the initial activation part of the development process.
+   * @param deviceName
+   * @param serialNumber
+   * @param productID
+   * @param deviceID
+   * @param iccid
+   * @param clickupTaskID
+   * @return {ActivatedDevice}
+   */
   static FromActivation(deviceName, serialNumber, productID, deviceID, iccid, clickupTaskID) {
     return new ActivatedDevice(
       deviceName,
@@ -127,6 +162,11 @@ export default class ActivatedDevice {
     )
   }
 
+  /**
+   * Creates a new activated device from a ClickupTask
+   * @param {ClickupTask} task
+   * @return {ActivatedDevice}
+   */
   static FromClickupTask(task) {
     return new ActivatedDevice(
       task.name,
@@ -147,6 +187,12 @@ export default class ActivatedDevice {
     )
   }
 
+  /**
+   * Creates a new activated device from an object. Usually used from localStorage.
+   * @param object
+   * @return {ActivatedDevice}
+   * @constructor
+   */
   static FromObject(object) {
     return new ActivatedDevice(
       object.name,
@@ -167,6 +213,11 @@ export default class ActivatedDevice {
     )
   }
 
+  /**
+   * Value equality comparison for ActivatedDevices
+   * @param {ActivatedDevice} other
+   * @return {boolean} true if referential equality is present, false if not.
+   */
   compareDevices(other) {
     return (
       this.deviceName === other.deviceName &&

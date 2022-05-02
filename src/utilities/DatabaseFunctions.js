@@ -8,7 +8,7 @@ const SENSOR_STAGING_URL = process.env.REACT_APP_SENSOR_STAGING_URL
 
 /**
  * getSensorClients: retrieves the list of clients in the Brave sensor DB, uses the sensors backend.
- * @param environment
+ * @param {string} environment       which server to retrieve clients from
  * @param {string} clickupToken      clickup token
  * @return {Promise<{name: string, id: string}[]>}   array of client names and ids if successful, empty if not.
  */
@@ -63,7 +63,7 @@ export async function getSensorClients(environment, clickupToken) {
  * @param {boolean} stateMachineBool  whether the location uses a state machine or not
  * @param {string} clientID           Unique clientID for location
  * @param {string} radarType          Innosent or XeThru radar type ('innosent' or 'xethru')
- * @param {string} environment        production, development, or staging
+ * @param {string} environment        which server to insert a sensor location to.
  * @return {Promise<boolean>}         true if successful, false if not
  */
 export async function insertSensorLocation(
