@@ -23,37 +23,23 @@ export async function registerLoraButton(deviceEUI, targetName, environment, cli
     braveKey: braveAPIKey,
   }
 
+  let baseUrl = ''
+
   if (environment === Environments.dev.name) {
-    const url = `${BUTTONS_DEV_URL}/pa/aws-device-registration`
-    try {
-      await axios.post(url, data)
-      return 'success'
-    } catch (err) {
-      console.error(err)
-      return err.response.data
-    }
+    baseUrl = BUTTONS_DEV_URL
+  } else if (environment === Environments.prod.name) {
+    baseUrl = BUTTONS_PROD_URL
+  } else if (environment === Environments.staging.name) {
+    baseUrl = BUTTONS_STAGING_URL
+  } else {
+    return 'Error: no corresponding target found'
   }
 
-  if (environment === Environments.prod.name) {
-    const url = `${BUTTONS_PROD_URL}/pa/aws-device-registration`
-    try {
-      await axios.post(url, data)
-      return 'success'
-    } catch (err) {
-      console.error(err)
-      return err.response.data
-    }
+  try {
+    await axios.post(`${baseUrl}/pa/aws-device-registration`, data)
+    return 'success'
+  } catch (err) {
+    console.error(err)
+    return err.response.data
   }
-
-  if (environment === Environments.staging.name) {
-    const url = `${BUTTONS_STAGING_URL}/pa/aws-device-registration`
-    try {
-      await axios.post(url, data)
-      return 'success'
-    } catch (err) {
-      console.error(err)
-      return err.response.data
-    }
-  }
-  return 'Error: no corresponding target found'
 }
