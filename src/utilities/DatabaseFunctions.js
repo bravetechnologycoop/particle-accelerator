@@ -18,37 +18,24 @@ export async function getSensorClients(environment, clickupToken) {
     braveKey: process.env.REACT_APP_BRAVE_API_KEY,
   }
 
+  let baseUrl = ''
   if (environment === Environments.dev.name) {
-    try {
-      const response = await axios.post(`${SENSOR_DEV_URL}/pa/get-sensor-clients`, data)
-      const resultArray = []
-      response.data.clients.forEach(client => resultArray.push(client))
-      return resultArray
-    } catch (err) {
-      return []
-    }
+    baseUrl = SENSOR_DEV_URL
+  } else if (environment === Environments.prod.name) {
+    baseUrl = SENSOR_PROD_URL
+  } else if (environment === Environments.staging.name) {
+    baseUrl = SENSOR_STAGING_URL
+  } else {
+    return []
   }
 
-  if (environment === Environments.prod.name) {
-    try {
-      const response = await axios.post(`${SENSOR_PROD_URL}/pa/get-sensor-clients`, data)
-      const resultArray = []
-      response.data.clients.forEach(client => resultArray.push(client))
-      return resultArray
-    } catch (err) {
-      return []
-    }
-  }
-
-  if (environment === Environments.staging.name) {
-    try {
-      const response = await axios.post(`${SENSOR_STAGING_URL}/pa/get-sensor-clients`, data)
-      const resultArray = []
-      response.data.clients.forEach(client => resultArray.push(client))
-      return resultArray
-    } catch (err) {
-      return []
-    }
+  try {
+    const response = await axios.post(`${baseUrl}/pa/get-sensor-clients`, data)
+    const resultArray = []
+    response.data.clients.forEach(client => resultArray.push(client))
+    return resultArray
+  } catch (err) {
+    return []
   }
 }
 
@@ -91,35 +78,22 @@ export async function insertSensorLocation(
     radarType,
   }
 
+  let baseUrl = ''
   if (environment === Environments.dev.name) {
-    try {
-      const response = await axios.post(`${SENSOR_DEV_URL}/pa/create-sensor-location`, data)
-      return response.data.message === 'success'
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    baseUrl = SENSOR_DEV_URL
+  } else if (environment === Environments.prod.name) {
+    baseUrl = SENSOR_PROD_URL
+  } else if (environment === Environments.staging.name) {
+    baseUrl = SENSOR_STAGING_URL
+  } else {
+    return false
   }
 
-  if (environment === Environments.prod.name) {
-    try {
-      const response = await axios.post(`${SENSOR_PROD_URL}/pa/create-sensor-location`, data)
-      return response.data.message === 'success'
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+  try {
+    const response = await axios.post(`${baseUrl}/pa/create-sensor-location`, data)
+    return response.data.message === 'success'
+  } catch (err) {
+    console.error(err)
+    return false
   }
-
-  if (environment === Environments.staging.name) {
-    try {
-      const response = await axios.post(`${SENSOR_STAGING_URL}/pa/create-sensor-location`, data)
-      return response.data.message === 'success'
-    } catch (err) {
-      console.error(err)
-      return false
-    }
-  }
-
-  return false
 }

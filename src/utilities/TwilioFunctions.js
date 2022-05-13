@@ -47,16 +47,18 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, clickup
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
 export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken) {
+  let baseUrl = ''
   if (environment === Environments.dev.name) {
-    return purchaseTwilioNumberByAreaCode(`${SENSOR_DEV_URL}/pa/sensor-twilio-number`, areaCode, locationID, clickupToken)
+    baseUrl = SENSOR_DEV_URL
+  } else if (environment === Environments.prod.name) {
+    baseUrl = SENSOR_PROD_URL
+  } else if (environment === Environments.staging.name) {
+    baseUrl = SENSOR_STAGING_URL
+  } else {
+    return 'Error: No environment found'
   }
-  if (environment === Environments.prod.name) {
-    return purchaseTwilioNumberByAreaCode(`${SENSOR_PROD_URL}/pa/sensor-twilio-number`, areaCode, locationID, clickupToken)
-  }
-  if (environment === Environments.staging.name) {
-    return purchaseTwilioNumberByAreaCode(`${SENSOR_STAGING_URL}/pa/sensor-twilio-number`, areaCode, locationID, clickupToken)
-  }
-  return 'Error: No environment found'
+
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/sensor-twilio-number`, areaCode, locationID, clickupToken)
 }
 
 /**
@@ -68,14 +70,16 @@ export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID,
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
 export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken) {
+  let baseUrl = ''
   if (environment === Environments.dev.name) {
-    return purchaseTwilioNumberByAreaCode(`${BUTTONS_DEV_URL}/pa/buttons-twilio-number`, areaCode, locationID, clickupToken)
+    baseUrl = BUTTONS_DEV_URL
+  } else if (environment === Environments.prod.name) {
+    baseUrl = BUTTONS_PROD_URL
+  } else if (environment === Environments.staging.name) {
+    baseUrl = BUTTONS_STAGING_URL
+  } else {
+    return 'Error: No environment found'
   }
-  if (environment === Environments.prod.name) {
-    return purchaseTwilioNumberByAreaCode(`${BUTTONS_PROD_URL}/pa/buttons-twilio-number`, areaCode, locationID, clickupToken)
-  }
-  if (environment === Environments.staging.name) {
-    return purchaseTwilioNumberByAreaCode(`${BUTTONS_STAGING_URL}/pa/buttons-twilio-number`, areaCode, locationID, clickupToken)
-  }
-  return 'Error: No environment found'
+
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, clickupToken)
 }
