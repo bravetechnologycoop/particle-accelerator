@@ -1,5 +1,41 @@
 # The PA/Personal Assistant/Particle Accelerator/Papa Alpha...
 
+## Deployment instructions
+
+### Deploy to production
+
+---
+
+1. On your local machine, in the `particle-accelerator` repository:
+   1. Pull the latest code ready for release: `git checkout main && git pull origin main`
+   1. Decide on an appropriate version number for the new version
+   1. Update `CHANGELOG.md` by moving everything in `Unreleased` to a section for the new version
+   1. Make a new commit directly on `main` which updates the CHANGELOG
+   1. Tag the new commit - for example, if the version number is v1.0.0, use `git tag v1.0.0`
+   1. Push the new version to GitHub: `git push origin main --tags`
+   1. Update the `production` branch: `git checkout production && git merge main && git push origin production`
+1. Make any changes to the environment variables
+   1. Navigate to Digital Ocean --> Apps --> particle-accelerator
+   1. Navigate to Settings --> Components: particle-accelerator
+   1. Beside "Environment Variables", click "Edit"
+   1. Make changes
+   1. Click "Save"
+1. Deploy on Digital Ocean
+   1. In Digital Ocean --> Apps --> particle-accelerator
+   1. Click Actions --> Deploy
+
+### Deploy to dev
+
+---
+
+1. Make any changes to the environment variables
+   1. Navigate to Digital Ocean --> Apps --> particle-accelerator-dev
+   1. Navigate to Settings --> Components: particle-accelerator
+   1. Beside "Environment Variables", click "Edit"
+   1. Make changes
+   1. Click "Save"
+1. Commit to the `main` branch and it will automatically deploy to `dev.pa.brave.coop`
+
 ## Principles of the Program
 
 ### Prop Tree
@@ -36,6 +72,7 @@
 ---
 
 Environment Variables in the PA are done in DigitalOcean. Each environment variable must be preceded by `REACT_APP_`, for example: `REACT_APP_TWILIO_MESSAGING_SID`. Environment variables are to be added at the component level, not the app level.
+
 A `.env.example` file can also be found in this repo.
 
 ### Development Environments
