@@ -5,6 +5,7 @@ import { Badge, Card } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 import { Link } from 'react-router-dom'
+import { Environments } from '../utilities/Constants'
 import ActivationAttempt from '../utilities/ActivationAttempt'
 import StatusBadge from '../components/general/StatusBadge'
 import DeviceIDStatus from '../components/general/DeviceIDStatus'
@@ -85,6 +86,7 @@ function Activator(props) {
     safeModeState,
     particleSettings,
     clickupToken,
+    environment,
   } = props
 
   const [serialNumber, setSerialNumber] = useState('')
@@ -225,7 +227,13 @@ function Activator(props) {
       let clickupStatusCopy
 
       // Checks that the total status of activation was successful, and that the product was registered to the production account to be added to the PA Tracker/Activated Devices
-      if (totalStatusCopy === 'true' && productID === process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID) {
+      let particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_DEV
+      if (environment === Environments.staging) {
+        particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_STAGING
+      } else if (environment === Environments.prod) {
+        particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_PROD
+      }
+      if (totalStatusCopy === 'true' && productID === particleSensorProductId) {
         let clickupTaskID
         // create a task in the sensor tracker for the device
         const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy)
@@ -284,6 +292,17 @@ function Activator(props) {
     }
   }
 
+  function filterProductsByEnvironment(product) {
+    let particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_DEV
+    if (environment === Environments.staging) {
+      particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_STAGING
+    } else if (environment === Environments.prod) {
+      particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_PROD
+    }
+
+    return `${product.id}` === particleProductId
+  }
+
   // eslint-disable-next-line
   return (
     <div style={styles.parent}>
@@ -314,7 +333,7 @@ function Activator(props) {
                 <option id="null" key="null" value="null">
                   No Product Family
                 </option>
-                {particleSettings.productList.map(product => {
+                {particleSettings.productList.filter(filterProductsByEnvironment).map(product => {
                   return (
                     <option key={`${product.id}`} id={`${product.id}`} value={`${product.id}`}>
                       {`${product.id}`.concat(': ', product.name, ' (', product.deviceType, ')')}
@@ -322,10 +341,6 @@ function Activator(props) {
                   )
                 })}
               </Form.Control>
-              <Form.Text className="text-muted">
-                Note: Devices not added to the production product family will not be added as an Activated Device and will not be added to the PA
-                Tracker.
-              </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formCountrySelect">
@@ -413,7 +428,7 @@ function Activator(props) {
           </div>
 
           <div style={styles.child}>
-            <h5>Clickup Task Creation</h5>
+            <h5>Clickup Task Creation:</h5>
             Status: <StatusBadge status={clickupStatus} />
           </div>
 
@@ -487,6 +502,7 @@ Activator.propTypes = {
   safeModeState: PropTypes.bool.isRequired,
   particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
   clickupToken: PropTypes.string.isRequired,
+  environment: PropTypes.string.isRequired,
 }
 
 export default Activator

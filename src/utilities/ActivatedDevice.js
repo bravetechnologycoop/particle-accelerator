@@ -1,6 +1,6 @@
 import { getCurrentFirmwareVersion, getDeviceDetails, pairDoorSensor } from './ParticleFunctions'
 import { modifyClickupTaskCustomFieldValue, modifyClickupTaskStatus } from './ClickupFunctions'
-import { ClickupStatuses } from './Constants'
+import { ClickupStatuses, Environments } from './Constants'
 
 /**
  * ActivatedDevice
@@ -182,11 +182,17 @@ export default class ActivatedDevice {
    * @param {ClickupTask} task
    * @return {ActivatedDevice}
    */
-  static FromClickupTask(task) {
+  static FromClickupTask(task, environment) {
+    let particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_DEV
+    if (environment === Environments.staging) {
+      particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_STAGING
+    } else if (environment === Environments.prod) {
+      particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_PROD
+    }
     return new ActivatedDevice(
       task.name,
       task.serialNumber,
-      process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID,
+      particleProductId,
       task.deviceID,
       task.iccid,
       null,
