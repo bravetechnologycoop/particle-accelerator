@@ -34,7 +34,7 @@ const styles = {
 }
 
 function DeviceManager(props) {
-  const { activatedDevices, changeActivatedDevices, clickupToken } = props
+  const { activatedDevices, changeActivatedDevices, clickupToken, environment } = props
 
   const [clickupTasks, setClickupTasks] = useState([])
   const [clickupTaskLoadStatus, setClickupTaskLoadStatus] = useState('idle')
@@ -84,7 +84,7 @@ function DeviceManager(props) {
    * @param {ClickupTask} existingTask  the clickup task to add to activatedDevices
    */
   function pushTaskToDevices(existingTask) {
-    const newDeviceArray = [ActivatedDevice.FromClickupTask(existingTask)]
+    const newDeviceArray = [ActivatedDevice.FromClickupTask(existingTask, environment)]
     const updatedList = newDeviceArray.concat(activatedDevices)
     changeActivatedDevices(updatedList)
   }
@@ -156,6 +156,7 @@ function DeviceManager(props) {
             filterMatches={filterMatches}
             searchParam={searchParam}
             searchValue={searchValue}
+            environment={environment}
           />
         </div>
       </div>
@@ -175,6 +176,7 @@ DeviceManager.propTypes = {
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)).isRequired,
   changeActivatedDevices: PropTypes.func.isRequired,
   clickupToken: PropTypes.string.isRequired,
+  environment: PropTypes.string.isRequired,
 }
 
 export default DeviceManager

@@ -96,6 +96,7 @@ function Frame(props) {
       particleSettings={particleSettings}
       clickupToken={clickupToken}
       clickupListID={clickupListID}
+      environment={environment}
     />
   )
   viewConfig[Pages.deviceLookup.displayName] = <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
@@ -133,7 +134,12 @@ function Frame(props) {
   viewConfig[Pages.twilio.displayName] = <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
   viewConfig[Pages.buttonRegistration.displayName] = <ButtonRegistration clickupToken={clickupToken} environment={environment} />
   viewConfig[Pages.deviceManager.displayName] = (
-    <DeviceManager activatedDevices={activatedDevices} changeActivatedDevices={changeActivatedDevices} clickupToken={clickupToken} />
+    <DeviceManager
+      activatedDevices={activatedDevices}
+      changeActivatedDevices={changeActivatedDevices}
+      clickupToken={clickupToken}
+      environment={environment}
+    />
   )
   viewConfig[Pages.sensorGuide.displayName] = <SensorProvisioningGuide />
   viewConfig[Pages.clickup.displayName] = (

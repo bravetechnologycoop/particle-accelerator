@@ -5,7 +5,7 @@ import ClickupTaskDisplay from './ClickupTaskDisplay'
 import ActivatedDevice from '../../utilities/ActivatedDevice'
 
 function ClickupTasksView(props) {
-  const { clickupTasks, status, pushDevice, filterMatches, searchValue, searchParam, activatedDevices } = props
+  const { clickupTasks, status, pushDevice, filterMatches, searchValue, searchParam, activatedDevices, environment } = props
 
   if (status === 'idle') {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -34,7 +34,7 @@ function ClickupTasksView(props) {
         <>
           {clickupTasks
             .filter(task => {
-              const taskAsDevice = ActivatedDevice.FromClickupTask(task)
+              const taskAsDevice = ActivatedDevice.FromClickupTask(task, environment)
               if (activatedDevices.length === 0) {
                 return true
               }
@@ -57,7 +57,7 @@ function ClickupTasksView(props) {
         <>
           {clickupTasks
             .filter(task => {
-              const taskAsDevice = ActivatedDevice.FromClickupTask(task)
+              const taskAsDevice = ActivatedDevice.FromClickupTask(task, environment)
               if (activatedDevices.length === 0) {
                 return true
               }
@@ -105,6 +105,7 @@ ClickupTasksView.propTypes = {
   searchValue: PropTypes.string,
   searchParam: PropTypes.string,
   activatedDevices: PropTypes.arrayOf(PropTypes.instanceOf(ActivatedDevice)),
+  environment: PropTypes.string.isRequired,
 }
 
 ClickupTasksView.defaultProps = {
