@@ -2,6 +2,10 @@ import { Environments } from './Constants'
 
 const axios = require('axios')
 
+const BRAVE_API_KEY_DEV = process.env.REACT_APP_BRAVE_API_KEY_DEV
+const BRAVE_API_KEY_STAGING = process.env.REACT_APP_BRAVE_API_KEY_STAGING
+const BRAVE_API_KEY_PROD = process.env.REACT_APP_BRAVE_API_KEY_PROD
+
 const SENSOR_DEV_URL = process.env.REACT_APP_SENSOR_DEV_URL
 const SENSOR_PROD_URL = process.env.REACT_APP_SENSOR_PROD_URL
 const SENSOR_STAGING_URL = process.env.REACT_APP_SENSOR_STAGING_URL
@@ -13,20 +17,24 @@ const SENSOR_STAGING_URL = process.env.REACT_APP_SENSOR_STAGING_URL
  * @return {Promise<{name: string, id: string}[]>}   array of client names and ids if successful, empty if not.
  */
 export async function getSensorClients(environment, clickupToken) {
-  const data = {
-    clickupToken,
-    braveKey: process.env.REACT_APP_BRAVE_API_KEY,
-  }
-
   let baseUrl = ''
+  let braveApiKey = ''
   if (environment === Environments.dev.name) {
     baseUrl = SENSOR_DEV_URL
+    braveApiKey = BRAVE_API_KEY_DEV
   } else if (environment === Environments.prod.name) {
     baseUrl = SENSOR_PROD_URL
+    braveApiKey = BRAVE_API_KEY_PROD
   } else if (environment === Environments.staging.name) {
     baseUrl = SENSOR_STAGING_URL
+    braveApiKey = BRAVE_API_KEY_STAGING
   } else {
     return []
+  }
+
+  const data = {
+    clickupToken,
+    braveKey: braveApiKey,
   }
 
   try {
@@ -65,9 +73,24 @@ export async function insertSensorLocation(
   radarType,
   environment,
 ) {
+  let baseUrl = ''
+  let braveApiKey = ''
+  if (environment === Environments.dev.name) {
+    baseUrl = SENSOR_DEV_URL
+    braveApiKey = BRAVE_API_KEY_DEV
+  } else if (environment === Environments.prod.name) {
+    baseUrl = SENSOR_PROD_URL
+    braveApiKey = BRAVE_API_KEY_PROD
+  } else if (environment === Environments.staging.name) {
+    baseUrl = SENSOR_STAGING_URL
+    braveApiKey = BRAVE_API_KEY_STAGING
+  } else {
+    return false
+  }
+
   const data = {
     clickupToken,
-    braveKey: process.env.REACT_APP_BRAVE_API_KEY,
+    braveKey: braveApiKey,
     password,
     locationID,
     displayName,
@@ -76,17 +99,6 @@ export async function insertSensorLocation(
     stateMachineBool,
     clientID,
     radarType,
-  }
-
-  let baseUrl = ''
-  if (environment === Environments.dev.name) {
-    baseUrl = SENSOR_DEV_URL
-  } else if (environment === Environments.prod.name) {
-    baseUrl = SENSOR_PROD_URL
-  } else if (environment === Environments.staging.name) {
-    baseUrl = SENSOR_STAGING_URL
-  } else {
-    return false
   }
 
   try {
