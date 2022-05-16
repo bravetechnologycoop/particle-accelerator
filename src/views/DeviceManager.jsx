@@ -60,7 +60,7 @@ function DeviceManager(props) {
     // no top-level await workaround
     async function getTasks() {
       setClickupTaskLoadStatus('true')
-      const tasks = await getAllTasksInPATracker(clickupToken)
+      const tasks = await getAllTasksInPATracker(clickupToken, environment)
       if (tasks === null) {
         setClickupTaskLoadStatus('error')
       } else if (tasks.length !== 0) {

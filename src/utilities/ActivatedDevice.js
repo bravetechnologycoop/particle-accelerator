@@ -184,9 +184,9 @@ export default class ActivatedDevice {
    */
   static FromClickupTask(task, environment) {
     let particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_DEV
-    if (environment === Environments.staging) {
+    if (environment === Environments.staging.name) {
       particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_STAGING
-    } else if (environment === Environments.prod) {
+    } else if (environment === Environments.prod.name) {
       particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_PROD
     }
     return new ActivatedDevice(
