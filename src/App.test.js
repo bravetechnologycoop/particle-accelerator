@@ -1,6 +1,3 @@
-import { render, screen } from '@testing-library/react'
-import React from 'react'
-import App from './App'
 import ActivatedDevice from './utilities/ActivatedDevice'
 
 test('creates a new activated device from secondary constructor', () => {
