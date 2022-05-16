@@ -41,6 +41,14 @@
    1. Select the branch that you want to have automatically deployed from the "Branch" dropdown list
    1. Click "Save"
 
+### Deploy to localhost
+
+---
+
+1. Make any changes to the environment variables in `.env`
+1. Run `npm ci` to download dependencies
+1. Run `npm start` to build and deploy to http://localhost:3000
+
 ## Principles of the Program
 
 ### Prop Tree
@@ -79,12 +87,6 @@
 Environment Variables in the PA are done in DigitalOcean. Each environment variable must be preceded by `REACT_APP_`, for example: `REACT_APP_TWILIO_MESSAGING_SID`. Environment variables are to be added at the component level, not the app level.
 
 A `.env.example` file can also be found in this repo.
-
-### Development Environments
-
----
-
-By finding the appropriate values for the environment variables in `.env.example`, one can easily set up a `.env` file and run the program on `localhost` to ease development. This can be done with `npm start`.
 
 ### Strange Artefacts
 
