@@ -34,7 +34,12 @@
    1. Beside "Environment Variables", click "Edit"
    1. Make changes
    1. Click "Save"
-1. Commit to the `main` branch and it will automatically deploy to `dev.pa.brave.coop`
+1. Update the branch that will be deployed anytime a new commit it made
+   1. Navigate to Digital Ocean --> Apps --> particle-accelerator-dev
+   1. Navigate to Settings --> Components: particle-accelerator
+   1. Beside "Source", click "Edit"
+   1. Select the branch that you want to have automatically deployed from the "Branch" dropdown list
+   1. Click "Save"
 
 ## Principles of the Program
 
