@@ -130,7 +130,7 @@ function SensorProvisioningGuide() {
                   </a>
                   ,{' '}
                   <a
-                    href={`https://app.clickup.com/${process.env.REACT_APP_CLICKUP_BRAVE_TEAM_ID}/v/l/li/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}`}
+                    href={`https://app.clickup.com/${process.env.REACT_APP_CLICKUP_BRAVE_TEAM_ID}/v/l/li/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_PROD}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -333,7 +333,7 @@ function SensorProvisioningGuide() {
                   to <mark style={{ background: ClickupStatuses.tested.colour }}>Tested</mark>
                   in the{' '}
                   <a
-                    href={`https://app.clickup.com/${process.env.REACT_APP_CLICKUP_BRAVE_TEAM_ID}/v/l/li/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}`}
+                    href={`https://app.clickup.com/${process.env.REACT_APP_CLICKUP_BRAVE_TEAM_ID}/v/l/li/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_PROD}`}
                     target="_blank"
                     rel="noreferrer"
                   >

@@ -1,5 +1,5 @@
 import ClickupTask from './ClickupTask'
-import { ClickupStatuses } from './Constants'
+import { ClickupStatuses, Environments } from './Constants'
 
 const axios = require('axios')
 
@@ -274,8 +274,14 @@ export async function createTaskInClickup(token, sensorName, listID, deviceID, s
   }
 }
 
-export async function createTaskInSensorTracker(token, sensorName, deviceID, serialNumber, iccid) {
-  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}/task`
+export async function createTaskInSensorTracker(token, sensorName, deviceID, serialNumber, iccid, environment) {
+  let paTrackerListId = process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_DEV
+  if (environment === Environments.staging.name) {
+    paTrackerListId = process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_STAGING
+  } else if (environment === Environments.prod.name) {
+    paTrackerListId = process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_PROD
+  }
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${paTrackerListId}/task`
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -455,8 +461,14 @@ function getCustomFieldValue(customFieldObject, customFieldID) {
   return ''
 }
 
-export async function getAllTasksInPATracker(token) {
-  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID}/task`
+export async function getAllTasksInPATracker(token, environment) {
+  let paTrackerListId = process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_DEV
+  if (environment === Environments.staging.name) {
+    paTrackerListId = process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_STAGING
+  } else if (environment === Environments.prod.name) {
+    paTrackerListId = process.env.REACT_APP_CLICKUP_PA_TRACKER_LIST_ID_PROD
+  }
+  const url = `${process.env.REACT_APP_CLICKUP_PROXY_BASE_URL}/v2/list/${paTrackerListId}/task`
   try {
     const response = await axios.get(url, {
       headers: {

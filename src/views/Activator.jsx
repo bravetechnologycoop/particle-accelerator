@@ -228,15 +228,15 @@ function Activator(props) {
 
       // Checks that the total status of activation was successful, and that the product was registered to the production account to be added to the PA Tracker/Activated Devices
       let particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_DEV
-      if (environment === Environments.staging) {
+      if (environment === Environments.staging.name) {
         particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_STAGING
-      } else if (environment === Environments.prod) {
+      } else if (environment === Environments.prod.name) {
         particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_PROD
       }
       if (totalStatusCopy === 'true' && productID === particleSensorProductId) {
         let clickupTaskID
         // create a task in the sensor tracker for the device
-        const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy)
+        const clickup = await createTaskInSensorTracker(clickupToken, newDeviceName, deviceIDCopy, serialNumber, iccidCopy, environment)
         if (clickup !== null) {
           clickupTaskID = clickup
           setClickupStatus('true')
@@ -294,9 +294,9 @@ function Activator(props) {
 
   function filterProductsByEnvironment(product) {
     let particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_DEV
-    if (environment === Environments.staging) {
+    if (environment === Environments.staging.name) {
       particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_STAGING
-    } else if (environment === Environments.prod) {
+    } else if (environment === Environments.prod.name) {
       particleProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_PROD
     }
 
