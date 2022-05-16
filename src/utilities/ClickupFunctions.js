@@ -479,7 +479,7 @@ export async function getAllTasksInPATracker(token) {
     })
   } catch (err) {
     console.error(err)
-    return []
+    return null
   }
 }
 

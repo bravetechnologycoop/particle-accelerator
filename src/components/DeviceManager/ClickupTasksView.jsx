@@ -21,6 +21,13 @@ function ClickupTasksView(props) {
       </h3>
     )
   }
+  if (status === 'empty') {
+    return (
+      <h3>
+        <Badge bg="info">No Devices in Clickup</Badge>
+      </h3>
+    )
+  }
   if (status === 'success') {
     if (filterMatches && searchValue !== '') {
       return (

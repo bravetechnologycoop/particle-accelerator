@@ -61,11 +61,14 @@ function DeviceManager(props) {
     async function getTasks() {
       setClickupTaskLoadStatus('true')
       const tasks = await getAllTasksInPATracker(clickupToken)
-      if (tasks.length !== 0) {
+      if (tasks === null) {
+        setClickupTaskLoadStatus('error')
+      } else if (tasks.length !== 0) {
         setClickupTaskLoadStatus('success')
         setClickupTasks(tasks)
       } else {
-        setClickupTaskLoadStatus('error')
+        setClickupTaskLoadStatus('empty')
+        setClickupTasks(tasks)
       }
     }
 
