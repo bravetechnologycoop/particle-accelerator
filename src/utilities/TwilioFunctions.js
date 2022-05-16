@@ -10,23 +10,38 @@ const SENSOR_DEV_URL = process.env.REACT_APP_SENSOR_DEV_URL
 const SENSOR_PROD_URL = process.env.REACT_APP_SENSOR_PROD_URL
 const SENSOR_STAGING_URL = process.env.REACT_APP_SENSOR_STAGING_URL
 
-const braveAPIKey = process.env.REACT_APP_BRAVE_API_KEY
+const BRAVE_API_KEY_DEV = process.env.REACT_APP_BRAVE_API_KEY_DEV
+const BRAVE_API_KEY_STAGING = process.env.REACT_APP_BRAVE_API_KEY_STAGING
+const BRAVE_API_KEY_PROD = process.env.REACT_APP_BRAVE_API_KEY_PROD
 
 /**
  * purchaseTwilioNumberByAreaCode: helper function for purchaseSensorTwilioNumberByAreaCode and purchaseButtonTwilioNumberByAreaCode.
  * purchases a twilio number using the Brave backend as a middle person.
- * @param {string} url      the endpoint to contact for the http request
+ * @param {string} url               the endpoint to contact for the http request
  * @param {string} areaCode          the area code to purchase a phone number in
  * @param {string} locationID        the friendly name to assign to the phone number
+ * @param {string} environment       the phase of deployment to add the twilio number to
  * @param {string} clickupToken      clickup auth token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
-async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, clickupToken) {
+async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environment, clickupToken) {
+  let braveApiKey = ''
+
+  if (environment === Environments.dev.name) {
+    braveApiKey = BRAVE_API_KEY_DEV
+  } else if (environment === Environments.prod.name) {
+    braveApiKey = BRAVE_API_KEY_PROD
+  } else if (environment === Environments.staging.name) {
+    braveApiKey = BRAVE_API_KEY_STAGING
+  } else {
+    return 'Error: No environment found'
+  }
+
   const data = {
     areaCode,
     locationID,
     clickupToken,
-    braveKey: braveAPIKey,
+    braveKey: braveApiKey,
   }
 
   try {
@@ -58,7 +73,7 @@ export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID,
     return 'Error: No environment found'
   }
 
-  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/sensor-twilio-number`, areaCode, locationID, clickupToken)
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/sensor-twilio-number`, areaCode, locationID, environment, clickupToken)
 }
 
 /**
@@ -81,5 +96,5 @@ export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID,
     return 'Error: No environment found'
   }
 
-  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, clickupToken)
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, environment, clickupToken)
 }

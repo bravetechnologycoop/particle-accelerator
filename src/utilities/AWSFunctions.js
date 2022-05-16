@@ -1,7 +1,10 @@
 import axios from 'axios'
 import { Environments } from './Constants'
 
-const braveAPIKey = process.env.REACT_APP_BRAVE_API_KEY
+const BRAVE_API_KEY_DEV = process.env.REACT_APP_BRAVE_API_KEY_DEV
+const BRAVE_API_KEY_STAGING = process.env.REACT_APP_BRAVE_API_KEY_STAGING
+const BRAVE_API_KEY_PROD = process.env.REACT_APP_BRAVE_API_KEY_PROD
+
 const BUTTONS_DEV_URL = process.env.REACT_APP_BUTTONS_DEV_URL
 const BUTTONS_PROD_URL = process.env.REACT_APP_BUTTONS_PROD_URL
 const BUTTONS_STAGING_URL = process.env.REACT_APP_BUTTONS_STAGING_URL
@@ -16,23 +19,27 @@ const BUTTONS_STAGING_URL = process.env.REACT_APP_BUTTONS_STAGING_URL
  */
 // eslint-disable-next-line import/prefer-default-export
 export async function registerLoraButton(deviceEUI, targetName, environment, clickupToken) {
+  let baseUrl = ''
+  let braveApiKey = ''
+
+  if (environment === Environments.dev.name) {
+    baseUrl = BUTTONS_DEV_URL
+    braveApiKey = BRAVE_API_KEY_DEV
+  } else if (environment === Environments.prod.name) {
+    baseUrl = BUTTONS_PROD_URL
+    braveApiKey = BRAVE_API_KEY_PROD
+  } else if (environment === Environments.staging.name) {
+    baseUrl = BUTTONS_STAGING_URL
+    braveApiKey = BRAVE_API_KEY_STAGING
+  } else {
+    return 'Error: no corresponding target found'
+  }
+
   const data = {
     deviceEUI,
     targetName,
     clickupToken,
-    braveKey: braveAPIKey,
-  }
-
-  let baseUrl = ''
-
-  if (environment === Environments.dev.name) {
-    baseUrl = BUTTONS_DEV_URL
-  } else if (environment === Environments.prod.name) {
-    baseUrl = BUTTONS_PROD_URL
-  } else if (environment === Environments.staging.name) {
-    baseUrl = BUTTONS_STAGING_URL
-  } else {
-    return 'Error: no corresponding target found'
+    braveKey: braveApiKey,
   }
 
   try {
