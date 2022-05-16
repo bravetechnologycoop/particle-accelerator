@@ -185,7 +185,6 @@ The PA attempts to use Clickup [the PA Tracker] as a primitive database. This is
 
 ### Tier 1
 
-- Update Home page to reflect most recent changes.
 - Add a better encryption mechanism for the entire site (Google OAuth?)
 
 ### Tier 2

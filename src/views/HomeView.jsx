@@ -93,9 +93,9 @@ function HomeView() {
               <li>Creates a new task in the PA Tracker in ClickUp</li>
             </ul>
             <hr />
-            The Activator tool is for use in the provisioning process of sensors. It&apos;s intent is to be used when a Boron device is taken out of
-            the box, and is ready to be provisioned. After using the Activator, the Boron can be left connected to power (no computer required) until
-            the device connects to the Particle servers and receives the latest firmware. The LED on the Boron should breath cyan in this state.
+            The Activator tool is for use in the provisioning process of sensors. Its intent is to be used when a Boron device is taken out of the
+            box, and is ready to be provisioned. After using the Activator, the Boron can be left connected to power (no computer required) until the
+            device connects to the Particle servers and receives the latest firmware. The LED on the Boron should breath cyan in this state.
             <br />
             <br />
             Before using the Activator on a Boron, it is important that the <code>particle usb setup-done</code> command is sent by USB serial and the
@@ -103,7 +103,7 @@ function HomeView() {
             <br />
             <br />
             The Activator can also create a task in Brave&apos;s ClickUp Sensor Tracker, by selecting the correct custom fields. Keep in mind that one
-            must be logged in and have selected the appropriate list in the ClickUp login in order to access the Sensor Tracker.
+            must be logged in to ClickUp in order to access the Sensor Tracker.
           </Card.Text>
         </Card>
       </div>
@@ -124,8 +124,8 @@ function HomeView() {
             </ul>
             <b>Effects</b>: None
             <hr />
-            Device Lookup allows a user to scan the barcode on a Boron in order to determine it&apos;s name and other details without having to touch
-            the Particle console.
+            Device Lookup allows a user to scan the barcode on a Boron in order to determine its name and other details without having to touch the
+            Particle console.
           </Card.Text>
         </Card>
       </div>
@@ -137,6 +137,7 @@ function HomeView() {
             <b>Product</b>: Sensor
             <br />
             <b>Authentication</b>: Particle and Clickup
+            <br />
             <b>Requirements</b>:
             <ul>
               <li>Clickup auth</li>
@@ -153,13 +154,13 @@ function HomeView() {
           <Card.Text>
             <b>Product</b>: Sensor
             <br />
-            <b>Authentication</b>: Particle, ClickUp (optional [but should be mandatory])
+            <b>Authentication</b>: Particle and ClickUp
             <br />
             <br />
             <b>Requirements</b>:
             <ul>
               <li>
-                A device that has been added through the Activator <del>or Device Add</del> tools.
+                A device that has been added through the Activator tool.
                 <br />
                 (It is recommended that this device is online.)
               </li>
