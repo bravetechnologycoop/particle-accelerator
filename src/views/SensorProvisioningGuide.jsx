@@ -2,16 +2,16 @@ import React from 'react'
 import { Card } from 'react-bootstrap'
 import Step1 from '../graphics/sensor-provisioning-guide/step1.svg'
 import Step2 from '../graphics/sensor-provisioning-guide/Step2.svg'
-import Step3 from '../graphics/sensor-provisioning-guide/Step3.svg'
 import Step4 from '../graphics/sensor-provisioning-guide/Step4.svg'
 import Step5 from '../graphics/sensor-provisioning-guide/Step5.svg'
 import Step6 from '../graphics/sensor-provisioning-guide/Step6.svg'
 import Step7 from '../graphics/sensor-provisioning-guide/Step7.svg'
 import Step8 from '../graphics/sensor-provisioning-guide/Step8.svg'
 import Step9 from '../graphics/sensor-provisioning-guide/Step9.svg'
-import Step11 from '../graphics/sensor-provisioning-guide/Step11.svg'
-import Step11_2 from '../graphics/sensor-provisioning-guide/Step11-2.svg'
+import Step10 from '../graphics/sensor-provisioning-guide/Step10.svg'
 import Step12 from '../graphics/sensor-provisioning-guide/Step12.svg'
+import Step12_2 from '../graphics/sensor-provisioning-guide/Step12-2.svg'
+import Step13 from '../graphics/sensor-provisioning-guide/Step13.svg'
 import '../stylesheets/SensorProvisioningGuide.css'
 import { ClickupStatuses } from '../utilities/Constants'
 
@@ -112,6 +112,21 @@ function SensorProvisioningGuide() {
             <div style={styles.stepText}>
               <ol start="3">
                 <li style={styles.stepTitle}>
+                  Select the environment (Development, Staging, or Production) for which the Devices will be provisioned from the bottom left of the
+                  menu bar (above Safe Mode).
+                </li>
+              </ol>
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
+          <Card.Body style={styles.cardBodyParent}>
+            <div style={styles.stepText}>
+              <ol start="4">
+                <li style={styles.stepTitle}>
                   Use the <a href="/activator">Activator</a> to register the Boron to Brave&apos;s <u>Production Sensor</u> Particle product family.
                 </li>
               </ol>
@@ -145,28 +160,6 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step3} alt="Step 3" />
-            </div>
-          </Card.Body>
-        </Card>
-      </div>
-
-      <div style={styles.cardBoundary}>
-        <Card style={styles.cardInterior}>
-          <Card.Body style={styles.cardBodyParent}>
-            <div style={styles.stepText}>
-              <ol start="4">
-                <li style={styles.stepTitle}>
-                  Connect the Boron to power and wait for the <u>Breathing Cyan</u> light.
-                </li>
-              </ol>
-              <ul>
-                <li>Use the big blue USB charger.</li>
-                <li>This may take a considerable amount of time.</li>
-                <li>Ensure that the cyan light has been breathing for at least a minute.</li>
-              </ul>
-            </div>
-            <div style={styles.stepGraphic}>
               <img src={Step4} alt="Step 4" />
             </div>
           </Card.Body>
@@ -179,13 +172,13 @@ function SensorProvisioningGuide() {
             <div style={styles.stepText}>
               <ol start="5">
                 <li style={styles.stepTitle}>
-                  Obtain an IM21 Door Sensor and retrieve it&apos;s BLE ID (shown in image) and use the{' '}
-                  <a href="/door-sensor-pairing">Door Sensor Pairing Tool</a> to pair the IM21 to the Boron.
+                  Connect the Boron to power and wait for the <u>Breathing Cyan</u> light.
                 </li>
               </ol>
               <ul>
-                <li>The BLE ID can be found between the two blocks of the IM21 sensor.</li>
-                <li>The Boron must be connected to power and internet.</li>
+                <li>Use the big blue USB charger.</li>
+                <li>This may take a considerable amount of time.</li>
+                <li>Ensure that the cyan light has been breathing for at least a minute.</li>
               </ul>
             </div>
             <div style={styles.stepGraphic}>
@@ -200,14 +193,18 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="6">
-                <li style={styles.stepTitle}>Wait for the Device to finish pairing.</li>
+                <li style={styles.stepTitle}>
+                  Obtain an IM21 Door Sensor and retrieve it&apos;s BLE ID (shown in image) and use the{' '}
+                  <a href="/door-sensor-pairing">Door Sensor Pairing Tool</a> to pair the IM21 to the Boron.
+                </li>
               </ol>
               <ul>
+                <li>The BLE ID can be found between the two blocks of the IM21 sensor.</li>
                 <li>The Boron must be connected to power and internet.</li>
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step6} alt="Step 6" width="300px" />
+              <img src={Step6} alt="Step 6" />
             </div>
           </Card.Body>
         </Card>
@@ -218,6 +215,24 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="7">
+                <li style={styles.stepTitle}>Wait for the Device to finish pairing.</li>
+              </ol>
+              <ul>
+                <li>The Boron must be connected to power and internet.</li>
+              </ul>
+            </div>
+            <div style={styles.stepGraphic}>
+              <img src={Step7} alt="Step 7" width="300px" />
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
+          <Card.Body style={styles.cardBodyParent}>
+            <div style={styles.stepText}>
+              <ol start="8">
                 <li style={styles.stepTitle}>
                   Connect the Particle to a Brave Sensor PCB and open the{' '}
                   <a
@@ -238,7 +253,7 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step7} alt="Step 7" />
+              <img src={Step8} alt="Step 8" />
             </div>
           </Card.Body>
         </Card>
@@ -248,7 +263,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="8">
+              <ol start="9">
                 <li style={styles.stepTitle}>To declare the device successfully tested, wait until the following debugging values are achieved.</li>
               </ol>
               <div style={{ paddingLeft: '2em' }}>
@@ -296,26 +311,6 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step8} alt="Step 8" />
-            </div>
-          </Card.Body>
-        </Card>
-      </div>
-
-      <div style={styles.cardBoundary}>
-        <Card style={styles.cardInterior}>
-          <Card.Body style={styles.cardBodyParent}>
-            <div style={styles.stepText}>
-              <ol start="9">
-                <li style={styles.stepTitle}>
-                  Pass <code>0</code> to <code>Turn_Debugging_Publishes_On_Off</code> to stop the event stream.
-                </li>
-              </ol>
-              <ul>
-                <li>The Boron must be connected to power and internet.</li>
-              </ul>
-            </div>
-            <div style={styles.stepGraphic}>
               <img src={Step9} alt="Step 9" />
             </div>
           </Card.Body>
@@ -327,6 +322,26 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="10">
+                <li style={styles.stepTitle}>
+                  Pass <code>0</code> to <code>Turn_Debugging_Publishes_On_Off</code> to stop the event stream.
+                </li>
+              </ol>
+              <ul>
+                <li>The Boron must be connected to power and internet.</li>
+              </ul>
+            </div>
+            <div style={styles.stepGraphic}>
+              <img src={Step10} alt="Step 10" />
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
+          <Card.Body style={styles.cardBodyParent}>
+            <div style={styles.stepText}>
+              <ol start="11">
                 <li style={styles.stepTitle}>
                   Change the ClickUp status of the device from{' '}
                   <mark style={{ background: ClickupStatuses.pairedDoorSensor.color }}>Paired Door Sensor</mark>
@@ -350,7 +365,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="11">
+              <ol start="12">
                 <li style={styles.stepTitle}>
                   With the Boron, PCB, and Antenna inside an enclosure with a Paired Door Sensor, select the current device in the{' '}
                   <a href="/renamer">Renamer</a>
@@ -360,8 +375,8 @@ function SensorProvisioningGuide() {
               </ol>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step11} alt="Step 11" />
-              <img src={Step11_2} alt="Step 11" />
+              <img src={Step12} alt="Step 12" />
+              <img src={Step12_2} alt="Step 12" />
             </div>
           </Card.Body>
         </Card>
@@ -371,7 +386,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="12">
+              <ol start="13">
                 <li style={styles.stepTitle}>
                   Connect the{' '}
                   <a href="https://www.polono.com/pages/driver-user-manual" target="_blank" rel="noreferrer">
@@ -393,7 +408,7 @@ function SensorProvisioningGuide() {
               </div>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step12} alt="Step 12" />
+              <img src={Step13} alt="Step 13" />
             </div>
           </Card.Body>
         </Card>
