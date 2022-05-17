@@ -168,9 +168,8 @@ function HomeView() {
             </ul>
             <b>Effects</b>:
             <ul>
-              <li>Adds device to Particle Product Family</li>
-              <li>Enables device to receive Brave firmware OTA</li>
-              <li>Creates a new task in the Device Tracker in ClickUp</li>
+              <li>Pairs the door sensor to the Boron</li>
+              <li>Updates the PA Tracker in ClickUp</li>
             </ul>
             <hr />
             Door Sensor Pairing allows a user to seamlessly pair a Boron to an IM21 door sensor. By adding the hex code for the IM21 door sensor in
