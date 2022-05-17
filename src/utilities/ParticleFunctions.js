@@ -90,7 +90,7 @@ export async function getDeviceInfo(serialNum, token) {
   try {
     const deviceData = await particle.lookupSerialNumber({ serialNumber: serialNum, auth: token })
     // eslint-disable-next-line
-    const { device_id } = deviceData.body;
+    const { device_id } = deviceData.body
     const { iccid } = deviceData.body
     const deviceID = device_id
     return { deviceID, iccid }
@@ -234,22 +234,23 @@ export async function searchDeviceByName(deviceName, token, productID) {
 }
 
 /**
- * getCurrentFirmwareVersion: retrieves the current firmware version of a particle product family
- * @param {string} productID  the ID of the product family to find the current firmware version of
+ * getCurrentFirmwareVersion: retrieves the current "product default" firmware version of a particle product family
+ * @param {string} productID  the ID of the product family to find the current "product default" firmware version of
  * @param {string} token      particle auth token
- * @return {Promise<null|string>} the current firmware version of the product family if successful, null if not.
+ * @return {Promise<null|string>} the current "product default" firmware version of the product family if successful, null if not.
  */
 export async function getCurrentFirmwareVersion(productID, token) {
-  console.log('productID', productID)
   try {
     const response = await particle.listProductFirmware({ product: productID, auth: token })
-    const firmwareVersion = response.body[0].version
-    console.log(response)
-    if (response.body.length !== 1) {
+    const productDefaultFirmware = response.body.filter(firmware => {
+      return firmware.product_default
+    })
+
+    if (productDefaultFirmware.length !== 1) {
       return null
     }
 
-    return firmwareVersion
+    return productDefaultFirmware[0].version
   } catch (err) {
     console.error(err)
     return null

@@ -22,7 +22,7 @@ function DoorSensorEntryCard(props) {
   const [buttonStyle, setButtonStyle] = useState('primary')
   const [buttonText, setButtonText] = useState('Add to Queue')
 
-  const doorSensorIDRegex = /^[a-f0-9]{2}[,][a-f0-9]{2}[,][a-f0-9]{2}$/
+  const doorSensorIDRegex = /^[a-fA-F0-9]{2}[,][a-fA-F0-9]{2}[,][a-fA-F0-9]{2}$/
 
   useEffect(() => {
     if (device.inPairingList === false && buttonStyle !== 'danger') {
