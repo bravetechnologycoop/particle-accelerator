@@ -194,10 +194,11 @@ export default function Renamer(props) {
         radarType,
         environment,
       )
-      if (databaseInsert) {
+      const clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.addedToDatabase.name, clickupToken)
+      if (databaseInsert && clickupStatusChange) {
         setDashboardStatus('true')
         modifyDeviceValues.clickupStatus = ClickupStatuses.addedToDatabase.name
-        modifyDeviceValues.clickupStatus = ClickupStatuses.addedToDatabase.colour
+        modifyDeviceValues.clickupStatusColour = ClickupStatuses.addedToDatabase.colour
       } else {
         setDashboardStatus('error')
       }
