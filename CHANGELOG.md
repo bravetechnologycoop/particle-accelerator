@@ -11,6 +11,8 @@ the code was deployed.
 
 ## [Unreleased]
 
+## [1.1.0] - 2022-05-19
+
 ### Changed
 
 - Added versioning and CHANGELOG structure.
@@ -22,5 +24,6 @@ the code was deployed.
 
 - Initial version (CU-21ghk0x).
 
-[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/bravetechnologycoop/BraveSensor/releases/tag/v1.0.0
