@@ -69,7 +69,7 @@ function SensorProvisioningGuide() {
             <div style={styles.stepText}>
               <ol>
                 <li style={styles.stepTitle}>
-                  Write the command <code>particle setup usb-done</code> to a new Particle Boron device.
+                  Write the command <code>particle usb setup-done</code> to a new Particle Boron device.
                 </li>
               </ol>
               <ul>
