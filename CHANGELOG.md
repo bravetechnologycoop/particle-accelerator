@@ -11,6 +11,9 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+- Sensor Provisioning Guide step 6 to include maching door sensor address. 
+
 ## [1.1.0] - 2022-05-19
 
 ### Changed
