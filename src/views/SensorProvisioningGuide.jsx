@@ -201,6 +201,8 @@ function SensorProvisioningGuide() {
               <ul>
                 <li>The BLE ID can be found between the two blocks of the IM21 sensor.</li>
                 <li>The Boron must be connected to power and internet.</li>
+                <li>Input the red values as a parameter as shown</li>
+                <li>Make sure the blue values match the one of the two addresses on the pictures</li>
               </ul>
             </div>
             <div style={styles.stepGraphic}>
