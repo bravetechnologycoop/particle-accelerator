@@ -11,10 +11,12 @@ the code was deployed.
 
 ## [Unreleased]
 
+## [1.2.0] - 2022-07-14
+
 ### Changed
 - Sensor Provisioning Guide step 6 to include maching door sensor address. 
 - Typo on the Particle CLI command and its corresponding image. 
-- Changed labels on the Twilio Number Purchasing page for more clarification. (CU-2mdcnzt)
+- Labels on the Twilio Number Purchasing page for more clarification. (CU-2mdcnzt)
 
 ## [1.1.0] - 2022-05-19
 
@@ -29,6 +31,7 @@ the code was deployed.
 
 - Initial version (CU-21ghk0x).
 
-[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.1.0...HEAD
+[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/bravetechnologycoop/BraveSensor/releases/tag/v1.0.0
