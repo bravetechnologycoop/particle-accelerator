@@ -75,12 +75,12 @@ function TwilioPurchasing(props) {
             </Form.Control>
           </Form.Group>
           <Form.Group>
-            <Form.Label style={{ paddingTop: '10px' }}>Area Code</Form.Label>
+            <Form.Label style={{ paddingTop: '10px' }}>3-digit Client Area Code</Form.Label>
             <Form.Control value={areaCode} onChange={x => setAreaCode(x.target.value)} disabled={formLock} maxLength="3" />
           </Form.Group>
           <Form.Group>
-            <Form.Label style={{ paddingTop: '10px' }}>Location Name</Form.Label>
-            <Form.Control value={locationID} onChange={x => setLocationID(x.target.value)} disabled={formLock} />
+            <Form.Label style={{ paddingTop: '10px' }}>LocationName Unit</Form.Label>
+            <Form.Control placeholder="e.g. CoolBuilding 211" value={locationID} onChange={x => setLocationID(x.target.value)} disabled={formLock} />
           </Form.Group>
           <div style={{ paddingTop: '10px' }}>
             <Button type="submit">Submit</Button>

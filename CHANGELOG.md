@@ -14,6 +14,7 @@ the code was deployed.
 ### Changed
 - Sensor Provisioning Guide step 6 to include maching door sensor address. 
 - Typo on the Particle CLI command and its corresponding image. 
+- Changed labels on the Twilio Number Purchasing page for more clarification. (CU-2mdcnzt)
 
 ## [1.1.0] - 2022-05-19
 
