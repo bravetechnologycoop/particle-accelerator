@@ -10,7 +10,7 @@ function TwilioConfiguration(props) {
         <Card.Header>Twilio Configuration</Card.Header>
         <div style={{ padding: '10px' }}>
           <Form.Group>
-            <Form.Label style={{ paddingTop: '10px' }}>Phone Number Area Code</Form.Label>
+            <Form.Label style={{ paddingTop: '10px' }}>3-digit Client Area Code</Form.Label>
             <Form.Control placeholder="Area Code" value={twilioAreaCode} onChange={x => changeTwilioAreaCode(x.target.value)} />
           </Form.Group>
         </div>
