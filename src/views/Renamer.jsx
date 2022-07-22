@@ -47,6 +47,7 @@ export default function Renamer(props) {
   const [stateMachine, setStateMachine] = useState(true)
   const [displayName, setDisplayName] = useState('')
   const [password, setPassword] = useState('')
+  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('')
 
   // modifier functions for passing hooks.
   function changePassword(newPassword) {
@@ -65,8 +66,12 @@ export default function Renamer(props) {
     setDisplayName(newName)
   }
 
-  function changeTwilioAreaCode(city) {
-    setTwilioAreaCode(city)
+  function changeTwilioAreaCode(areaCode) {
+    setTwilioAreaCode(areaCode)
+  }
+
+  function changeTwilioPhoneNumber(phoneNumber) {
+    setTwilioPhoneNumber(phoneNumber)
   }
 
   function toggleParticleCheck() {
@@ -114,7 +119,7 @@ export default function Renamer(props) {
   async function handleRenameSubmit(event) {
     event.preventDefault()
 
-    let twilioPhoneNumber
+    let newTwilioPhoneNumber
     const modifyDeviceValues = {}
 
     if (particleCheck) {
@@ -157,16 +162,16 @@ export default function Renamer(props) {
       const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, environment, clickupToken)
       if (twilioResponse !== null) {
         setTwilioStatus(twilioResponse.phoneNumber)
-        twilioPhoneNumber = twilioResponse.phoneNumber
+        newTwilioPhoneNumber = twilioResponse.phoneNumber
         // modify clickup custom field value
         const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
           selectedDevice.clickupTaskID,
           process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
-          twilioPhoneNumber,
+          newTwilioPhoneNumber,
           clickupToken,
         )
         if (twilioFieldChange) {
-          modifyDeviceValues.twilioNumber = twilioPhoneNumber
+          modifyDeviceValues.twilioNumber = newTwilioPhoneNumber
         }
       } else {
         setTwilioStatus('error')
@@ -177,17 +182,29 @@ export default function Renamer(props) {
     if (dashboardCheck) {
       setDashboardStatus('waiting')
 
+      newTwilioPhoneNumber = twilioCheck ? newTwilioPhoneNumber : twilioPhoneNumber
+      console.log(`***TKD twilioCheck: ${twilioCheck} newTwilioPhoneNumber: ${newTwilioPhoneNumber} twilioPhoneNumber: ${twilioPhoneNumber}`)
       const databaseInsert = await insertSensorLocation(
         clickupToken,
         password,
         locationID,
         displayName,
         selectedDevice.deviceID,
-        twilioPhoneNumber,
+        newTwilioPhoneNumber,
         stateMachine,
         client,
         environment,
       )
+      // modify clickup custom field value
+      const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
+        selectedDevice.clickupTaskID,
+        process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
+        newTwilioPhoneNumber,
+        clickupToken,
+      )
+      if (twilioFieldChange) {
+        modifyDeviceValues.twilioNumber = newTwilioPhoneNumber
+      }
       const clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.addedToDatabase.name, clickupToken)
       if (databaseInsert && clickupStatusChange) {
         setDashboardStatus('true')
@@ -292,7 +309,7 @@ export default function Renamer(props) {
                   label="Register to Dashboard"
                   checked={dashboardCheck}
                   onChange={toggleDashboardCheck}
-                  disabled={locationID === '' || !twilioCheck}
+                  disabled={locationID === ''}
                 />
                 <div style={{ paddingTop: '10px' }}>
                   <Button type="submit">Rename Device</Button>
@@ -316,6 +333,9 @@ export default function Renamer(props) {
               password={password}
               changePassword={changePassword}
               environment={environment}
+              twilioPhoneNumber={twilioPhoneNumber}
+              changeTwilioPhoneNumber={changeTwilioPhoneNumber}
+              displayTwilioPhoneNumber={!twilioCheck}
             />
             <Card>
               <Card.Header>Device Rename Status</Card.Header>

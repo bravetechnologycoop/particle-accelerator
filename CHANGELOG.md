@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Ability to use an existing Twilio phone number when adding a new Sensor to the Dashboard using the Renamer (CU-2fk3y8a).
+
 ### Removed
 
 - RadarType dropdown menu in the Renamer.
