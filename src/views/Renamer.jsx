@@ -170,7 +170,7 @@ export default function Renamer(props) {
         modifyDeviceValues.deviceName = locationID
       }
     } else {
-      setParticleStatus('notSelected')
+      setClickupStatus('notSelected')
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
