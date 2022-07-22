@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+
+- Improved error messaging in Twilio Number Purchasing.
+
 ### Added
 
 - Ability to use an existing Twilio phone number when adding a new Sensor to the Dashboard using the Renamer (CU-2fk3y8a).
