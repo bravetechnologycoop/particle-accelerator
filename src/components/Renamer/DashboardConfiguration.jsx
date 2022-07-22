@@ -17,6 +17,9 @@ function DashboardConfiguration(props) {
     password,
     changePassword,
     environment,
+    displayTwilioPhoneNumber,
+    twilioPhoneNumber,
+    changeTwilioPhoneNumber,
   } = props
 
   const [clientList, setClientList] = useState([])
@@ -54,7 +57,7 @@ function DashboardConfiguration(props) {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>State Machine</Form.Label>
+              <Form.Label>Is Firmware State Machine</Form.Label>
               <Form.Control as="select" value={stateMachine} onChange={x => changeStateMachine(JSON.parse(x.target.value))}>
                 <option id="true" key="true" value="true">
                   True
@@ -66,9 +69,16 @@ function DashboardConfiguration(props) {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Password</Form.Label>
+              <Form.Label>PA Dashboard Renamer Password (in 1Password)</Form.Label>
               <Form.Control value={password} onChange={x => changePassword(x.target.value)} type="password" placeholder="Password" />
             </Form.Group>
+
+            {displayTwilioPhoneNumber && (
+              <Form.Group>
+                <Form.Label>Existing Twilio Number</Form.Label>
+                <Form.Control value={twilioPhoneNumber} onChange={x => changeTwilioPhoneNumber(x.target.value)} />
+              </Form.Group>
+            )}
           </Form>
         </Card.Body>
       </Card>
@@ -90,6 +100,9 @@ DashboardConfiguration.propTypes = {
   password: PropTypes.string.isRequired,
   changePassword: PropTypes.func.isRequired,
   environment: PropTypes.string.isRequired,
+  twilioPhoneNumber: PropTypes.string.isRequired,
+  changeTwilioPhoneNumber: PropTypes.func.isRequired,
+  displayTwilioPhoneNumber: PropTypes.bool.isRequired,
 }
 
 export default DashboardConfiguration
