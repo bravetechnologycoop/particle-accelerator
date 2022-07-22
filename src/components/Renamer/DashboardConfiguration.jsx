@@ -9,8 +9,6 @@ function DashboardConfiguration(props) {
     dashboardCheck,
     displayName,
     changeDisplayName,
-    radarType,
-    changeRadarType,
     client,
     changeClient,
     clickupToken,
@@ -51,18 +49,6 @@ function DashboardConfiguration(props) {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Radar Type</Form.Label>
-              <Form.Control value={radarType} onChange={x => changeRadarType(x.target.value)} as="select">
-                <option id="Innosent" value="Innosent" key="Innosent">
-                  Innosent
-                </option>
-                <option id="XeThru" value="XeThru" key="XeThru">
-                  XeThru
-                </option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group>
               <Form.Label>Select Client</Form.Label>
               <DropdownList itemList={clientList} item={client} changeItem={changeClient} loading={clientLoading} title="Client" />
             </Form.Group>
@@ -94,8 +80,6 @@ function DashboardConfiguration(props) {
 
 DashboardConfiguration.propTypes = {
   dashboardCheck: PropTypes.bool.isRequired,
-  radarType: PropTypes.string.isRequired,
-  changeRadarType: PropTypes.func.isRequired,
   client: PropTypes.string.isRequired,
   changeClient: PropTypes.func.isRequired,
   clickupToken: PropTypes.string.isRequired,

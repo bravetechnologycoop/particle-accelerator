@@ -46,7 +46,6 @@ export default function Renamer(props) {
   const [client, setClient] = useState('')
   const [stateMachine, setStateMachine] = useState(true)
   const [displayName, setDisplayName] = useState('')
-  const [radarType, setRadarType] = useState('')
   const [password, setPassword] = useState('')
 
   // modifier functions for passing hooks.
@@ -64,10 +63,6 @@ export default function Renamer(props) {
 
   function changeDisplayName(newName) {
     setDisplayName(newName)
-  }
-
-  function changeRadarType(newRadar) {
-    setRadarType(newRadar)
   }
 
   function changeTwilioAreaCode(city) {
@@ -191,7 +186,6 @@ export default function Renamer(props) {
         twilioPhoneNumber,
         stateMachine,
         client,
-        radarType,
         environment,
       )
       const clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.addedToDatabase.name, clickupToken)
@@ -312,8 +306,6 @@ export default function Renamer(props) {
             </div>
             <DashboardConfiguration
               dashboardCheck={dashboardCheck}
-              radarType={radarType}
-              changeRadarType={changeRadarType}
               client={client}
               changeClient={changeClient}
               clickupToken={clickupToken}
