@@ -14,6 +14,7 @@ the code was deployed.
 ### Changed
 
 - Improved error messaging in Twilio Number Purchasing.
+- Improved error messaging and status display in Renamer.
 
 ### Added
 
