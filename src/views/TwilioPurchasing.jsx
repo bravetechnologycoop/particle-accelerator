@@ -14,7 +14,7 @@ function TwilioPurchasing(props) {
   const [areaCode, setAreaCode] = useState('')
   const [locationID, setLocationID] = useState('')
   const [formLock, setFormLock] = useState(false)
-  const [registrationStatus, setRegistrationStatus] = useState('idle')
+  const [registrationStatus, setRegistrationStatus] = useState('none')
   const [history, setHistory] = useState(retTwilioHistory())
   const [errorMessage, setErrorMessage] = useState('')
 

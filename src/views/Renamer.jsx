@@ -37,10 +37,11 @@ export default function Renamer(props) {
   const [dashboardCheck, setDashboardCheck] = useState(false)
 
   // State hooks for all of the statuses of the operations available in the renamer.
-  const [particleStatus, setParticleStatus] = useState('idle')
-  const [clickupStatus, setClickupStatus] = useState('idle')
-  const [twilioStatus, setTwilioStatus] = useState('idle')
-  const [dashboardStatus, setDashboardStatus] = useState('idle')
+  const [particleStatus, setParticleStatus] = useState('notSelected')
+  const [clickupStatus, setClickupStatus] = useState('notSelected')
+  const [twilioStatus, setTwilioStatus] = useState('notSelected')
+  const [dashboardStatus, setDashboardStatus] = useState('notSelected')
+  const [twilioErrorMessage, setTwilioErrorMessage] = useState('')
 
   // config options for the dashboard
   const [client, setClient] = useState('')
@@ -77,32 +78,40 @@ export default function Renamer(props) {
   function toggleParticleCheck() {
     if (particleCheck) {
       setParticleCheck(false)
+      setParticleStatus('notSelected')
     } else {
       setParticleCheck(true)
+      setParticleStatus('idle')
     }
   }
 
   function toggleClickupCheck() {
     if (clickupCheck) {
       setClickupCheck(false)
+      setClickupStatus('notSelected')
     } else {
       setClickupCheck(true)
+      setClickupStatus('idle')
     }
   }
 
   function toggleTwilioCheck() {
     if (twilioCheck) {
       setTwilioCheck(false)
+      setTwilioStatus('notSelected')
     } else {
       setTwilioCheck(true)
+      setTwilioStatus('idle')
     }
   }
 
   function toggleDashboardCheck() {
     if (dashboardCheck) {
       setDashboardCheck(false)
+      setDashboardStatus('notSelected')
     } else {
       setDashboardCheck(true)
+      setDashboardStatus('idle')
     }
   }
 
@@ -114,12 +123,19 @@ export default function Renamer(props) {
     setSelectedDevice(newDevice)
     // extracts the number out of the former sensor number
     setSensorNumber(newDevice.formerSensorNumber.replace(/[^0-9]*/, ''))
+
+    // clears status
+    setParticleStatus(particleCheck ? 'idle' : 'notSelected')
+    setClickupStatus(clickupCheck ? 'idle' : 'notSelected')
+    setTwilioStatus(twilioCheck ? 'idle' : 'notSelected')
+    setDashboardStatus(dashboardCheck ? 'idle' : 'notSelected')
+    setTwilioErrorMessage('')
   }
 
   async function handleRenameSubmit(event) {
     event.preventDefault()
 
-    let newTwilioPhoneNumber
+    let newTwilioPhoneNumber = ''
     const modifyDeviceValues = {}
 
     if (particleCheck) {
@@ -133,7 +149,7 @@ export default function Renamer(props) {
         setParticleStatus('error')
       }
     } else {
-      setParticleStatus('notChecked')
+      setParticleStatus('notSelected')
     }
     if (clickupCheck) {
       setClickupStatus('waiting')
@@ -154,13 +170,13 @@ export default function Renamer(props) {
         modifyDeviceValues.deviceName = locationID
       }
     } else {
-      setParticleStatus('notChecked')
+      setParticleStatus('notSelected')
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
       // purchase twilio number
       const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, environment, clickupToken)
-      if (twilioResponse !== null) {
+      if (twilioResponse.message === 'success') {
         setTwilioStatus(twilioResponse.phoneNumber)
         newTwilioPhoneNumber = twilioResponse.phoneNumber
         // modify clickup custom field value
@@ -175,15 +191,15 @@ export default function Renamer(props) {
         }
       } else {
         setTwilioStatus('error')
+        setTwilioErrorMessage(twilioResponse)
       }
     } else {
-      setTwilioStatus('notChecked')
+      setTwilioStatus('notSelected')
     }
     if (dashboardCheck) {
       setDashboardStatus('waiting')
 
       newTwilioPhoneNumber = twilioCheck ? newTwilioPhoneNumber : twilioPhoneNumber
-      console.log(`***TKD twilioCheck: ${twilioCheck} newTwilioPhoneNumber: ${newTwilioPhoneNumber} twilioPhoneNumber: ${twilioPhoneNumber}`)
       const databaseInsert = await insertSensorLocation(
         clickupToken,
         password,
@@ -352,6 +368,11 @@ export default function Renamer(props) {
                   <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div>
                   <PhoneNumberStatus status={twilioStatus} />{' '}
                 </div>
+                {twilioStatus === 'error' && (
+                  <div>
+                    <p style={{ color: 'red' }}>{twilioErrorMessage}</p>
+                  </div>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
                   <div style={{ paddingRight: '10px' }}>Registering to Dashboard:</div>
                   <StatusBadge status={dashboardStatus} />{' '}
