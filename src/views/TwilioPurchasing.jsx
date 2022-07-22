@@ -16,6 +16,7 @@ function TwilioPurchasing(props) {
   const [formLock, setFormLock] = useState(false)
   const [registrationStatus, setRegistrationStatus] = useState('idle')
   const [history, setHistory] = useState(retTwilioHistory())
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     console.log(history)
@@ -31,25 +32,27 @@ function TwilioPurchasing(props) {
   async function handleSubmit(event) {
     event.preventDefault()
     setRegistrationStatus('waiting')
+    setErrorMessage('')
     setFormLock(true)
 
-    let twilioNumber
+    let response
 
     if (deviceType === 'sensor') {
-      twilioNumber = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken)
+      response = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken)
     } else if (deviceType === 'buttons') {
-      twilioNumber = await purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken)
+      response = await purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken)
     }
 
-    if (twilioNumber.message === 'success') {
-      setRegistrationStatus(twilioNumber.phoneNumber)
+    if (response.message === 'success') {
+      setRegistrationStatus(response.phoneNumber)
     } else {
       setRegistrationStatus('error')
+      setErrorMessage(response)
     }
 
     pushHistory({
-      friendlyName: twilioNumber.friendlyName,
-      phoneNumber: twilioNumber.phoneNumber,
+      friendlyName: response.friendlyName,
+      phoneNumber: response.phoneNumber,
       deviceType,
       environment,
     })
@@ -89,6 +92,7 @@ function TwilioPurchasing(props) {
             <h4>
               <PhoneNumberStatus status={registrationStatus} />
             </h4>
+            <p style={{ color: 'red' }}>{errorMessage}</p>
           </div>
         </Form>
       </div>

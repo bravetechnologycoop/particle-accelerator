@@ -35,6 +35,12 @@ function PhoneNumberStatus(props) {
   if (checkValidPhoneNumber(status)) {
     return <Badge bg="success">{status}</Badge>
   }
+  if (status === 'notSelected') {
+    return <Badge bg="secondary">Not Selected</Badge>
+  }
+  if (status === 'fail') {
+    return <Badge bg="danger">Failed</Badge>
+  }
   return <Badge bg="danger">Error</Badge>
 }
 
