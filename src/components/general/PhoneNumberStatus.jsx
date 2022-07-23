@@ -7,7 +7,13 @@ import React from 'react'
  *
  * States:
  *
- *  - status === 'idle' returns nothing
+ *  - status === 'none' returns nothing
+ *
+ *  - status === 'idle' returns grey badge with 'Waiting' as text
+ *
+ *  - status === 'notSelected' returns grey badge with 'Not Selected' as text
+ *
+ *  - status === 'fail' returns red badge with 'Failed' as text
  *
  *  - status === 'waiting' returns loading spinner
  *
@@ -25,15 +31,24 @@ function PhoneNumberStatus(props) {
   }
 
   const { status } = props
-  if (status === 'idle') {
+  if (status === 'none') {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>
+  }
+  if (status === 'idle') {
+    return <Badge bg="secondary">Waiting</Badge>
   }
   if (status === 'waiting') {
     return <Spinner animation="border" />
   }
   if (checkValidPhoneNumber(status)) {
     return <Badge bg="success">{status}</Badge>
+  }
+  if (status === 'notSelected') {
+    return <Badge bg="secondary">Not Selected</Badge>
+  }
+  if (status === 'fail') {
+    return <Badge bg="danger">Failed</Badge>
   }
   return <Badge bg="danger">Error</Badge>
 }

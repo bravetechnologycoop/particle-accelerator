@@ -11,11 +11,25 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+
+- Improved error messaging in Twilio Number Purchasing.
+- Improved error messaging and status display in Renamer.
+
+### Added
+
+- Ability to use an existing Twilio phone number when adding a new Sensor to the Dashboard using the Renamer (CU-2fk3y8a).
+
+### Removed
+
+- RadarType dropdown menu in the Renamer.
+
 ## [1.2.0] - 2022-07-14
 
 ### Changed
-- Sensor Provisioning Guide step 6 to include maching door sensor address. 
-- Typo on the Particle CLI command and its corresponding image. 
+
+- Sensor Provisioning Guide step 6 to include maching door sensor address.
+- Typo on the Particle CLI command and its corresponding image.
 - Labels on the Twilio Number Purchasing page for more clarification. (CU-2mdcnzt)
 
 ## [1.1.0] - 2022-05-19

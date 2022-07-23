@@ -57,7 +57,6 @@ export async function getSensorClients(environment, clickupToken) {
  * @param {string} twilioNumber       Twilio number for the location
  * @param {boolean} stateMachineBool  whether the location uses a state machine or not
  * @param {string} clientID           Unique clientID for location
- * @param {string} radarType          Innosent or XeThru radar type ('innosent' or 'xethru')
  * @param {string} environment        which server to insert a sensor location to.
  * @return {Promise<boolean>}         true if successful, false if not
  */
@@ -70,7 +69,6 @@ export async function insertSensorLocation(
   twilioNumber,
   stateMachineBool,
   clientID,
-  radarType,
   environment,
 ) {
   let baseUrl = ''
@@ -98,7 +96,6 @@ export async function insertSensorLocation(
     twilioNumber,
     stateMachineBool,
     clientID,
-    radarType,
   }
 
   try {

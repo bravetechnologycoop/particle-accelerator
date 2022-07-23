@@ -37,17 +37,18 @@ export default function Renamer(props) {
   const [dashboardCheck, setDashboardCheck] = useState(false)
 
   // State hooks for all of the statuses of the operations available in the renamer.
-  const [particleStatus, setParticleStatus] = useState('idle')
-  const [clickupStatus, setClickupStatus] = useState('idle')
-  const [twilioStatus, setTwilioStatus] = useState('idle')
-  const [dashboardStatus, setDashboardStatus] = useState('idle')
+  const [particleStatus, setParticleStatus] = useState('notSelected')
+  const [clickupStatus, setClickupStatus] = useState('notSelected')
+  const [twilioStatus, setTwilioStatus] = useState('notSelected')
+  const [dashboardStatus, setDashboardStatus] = useState('notSelected')
+  const [twilioErrorMessage, setTwilioErrorMessage] = useState('')
 
   // config options for the dashboard
   const [client, setClient] = useState('')
   const [stateMachine, setStateMachine] = useState(true)
   const [displayName, setDisplayName] = useState('')
-  const [radarType, setRadarType] = useState('')
   const [password, setPassword] = useState('')
+  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('')
 
   // modifier functions for passing hooks.
   function changePassword(newPassword) {
@@ -66,43 +67,51 @@ export default function Renamer(props) {
     setDisplayName(newName)
   }
 
-  function changeRadarType(newRadar) {
-    setRadarType(newRadar)
+  function changeTwilioAreaCode(areaCode) {
+    setTwilioAreaCode(areaCode)
   }
 
-  function changeTwilioAreaCode(city) {
-    setTwilioAreaCode(city)
+  function changeTwilioPhoneNumber(phoneNumber) {
+    setTwilioPhoneNumber(phoneNumber)
   }
 
   function toggleParticleCheck() {
     if (particleCheck) {
       setParticleCheck(false)
+      setParticleStatus('notSelected')
     } else {
       setParticleCheck(true)
+      setParticleStatus('idle')
     }
   }
 
   function toggleClickupCheck() {
     if (clickupCheck) {
       setClickupCheck(false)
+      setClickupStatus('notSelected')
     } else {
       setClickupCheck(true)
+      setClickupStatus('idle')
     }
   }
 
   function toggleTwilioCheck() {
     if (twilioCheck) {
       setTwilioCheck(false)
+      setTwilioStatus('notSelected')
     } else {
       setTwilioCheck(true)
+      setTwilioStatus('idle')
     }
   }
 
   function toggleDashboardCheck() {
     if (dashboardCheck) {
       setDashboardCheck(false)
+      setDashboardStatus('notSelected')
     } else {
       setDashboardCheck(true)
+      setDashboardStatus('idle')
     }
   }
 
@@ -114,12 +123,19 @@ export default function Renamer(props) {
     setSelectedDevice(newDevice)
     // extracts the number out of the former sensor number
     setSensorNumber(newDevice.formerSensorNumber.replace(/[^0-9]*/, ''))
+
+    // clears status
+    setParticleStatus(particleCheck ? 'idle' : 'notSelected')
+    setClickupStatus(clickupCheck ? 'idle' : 'notSelected')
+    setTwilioStatus(twilioCheck ? 'idle' : 'notSelected')
+    setDashboardStatus(dashboardCheck ? 'idle' : 'notSelected')
+    setTwilioErrorMessage('')
   }
 
   async function handleRenameSubmit(event) {
     event.preventDefault()
 
-    let twilioPhoneNumber
+    let newTwilioPhoneNumber = ''
     const modifyDeviceValues = {}
 
     if (particleCheck) {
@@ -133,7 +149,7 @@ export default function Renamer(props) {
         setParticleStatus('error')
       }
     } else {
-      setParticleStatus('notChecked')
+      setParticleStatus('notSelected')
     }
     if (clickupCheck) {
       setClickupStatus('waiting')
@@ -154,46 +170,57 @@ export default function Renamer(props) {
         modifyDeviceValues.deviceName = locationID
       }
     } else {
-      setParticleStatus('notChecked')
+      setClickupStatus('notSelected')
     }
     if (twilioCheck) {
       setTwilioStatus('waiting')
       // purchase twilio number
       const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, environment, clickupToken)
-      if (twilioResponse !== null) {
+      if (twilioResponse.message === 'success') {
         setTwilioStatus(twilioResponse.phoneNumber)
-        twilioPhoneNumber = twilioResponse.phoneNumber
+        newTwilioPhoneNumber = twilioResponse.phoneNumber
         // modify clickup custom field value
         const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
           selectedDevice.clickupTaskID,
           process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
-          twilioPhoneNumber,
+          newTwilioPhoneNumber,
           clickupToken,
         )
         if (twilioFieldChange) {
-          modifyDeviceValues.twilioNumber = twilioPhoneNumber
+          modifyDeviceValues.twilioNumber = newTwilioPhoneNumber
         }
       } else {
         setTwilioStatus('error')
+        setTwilioErrorMessage(twilioResponse)
       }
     } else {
-      setTwilioStatus('notChecked')
+      setTwilioStatus('notSelected')
     }
     if (dashboardCheck) {
       setDashboardStatus('waiting')
 
+      newTwilioPhoneNumber = twilioCheck ? newTwilioPhoneNumber : twilioPhoneNumber
       const databaseInsert = await insertSensorLocation(
         clickupToken,
         password,
         locationID,
         displayName,
         selectedDevice.deviceID,
-        twilioPhoneNumber,
+        newTwilioPhoneNumber,
         stateMachine,
         client,
-        radarType,
         environment,
       )
+      // modify clickup custom field value
+      const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
+        selectedDevice.clickupTaskID,
+        process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
+        newTwilioPhoneNumber,
+        clickupToken,
+      )
+      if (twilioFieldChange) {
+        modifyDeviceValues.twilioNumber = newTwilioPhoneNumber
+      }
       const clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.addedToDatabase.name, clickupToken)
       if (databaseInsert && clickupStatusChange) {
         setDashboardStatus('true')
@@ -298,7 +325,7 @@ export default function Renamer(props) {
                   label="Register to Dashboard"
                   checked={dashboardCheck}
                   onChange={toggleDashboardCheck}
-                  disabled={locationID === '' || !twilioCheck}
+                  disabled={locationID === ''}
                 />
                 <div style={{ paddingTop: '10px' }}>
                   <Button type="submit">Rename Device</Button>
@@ -312,8 +339,6 @@ export default function Renamer(props) {
             </div>
             <DashboardConfiguration
               dashboardCheck={dashboardCheck}
-              radarType={radarType}
-              changeRadarType={changeRadarType}
               client={client}
               changeClient={changeClient}
               clickupToken={clickupToken}
@@ -324,6 +349,9 @@ export default function Renamer(props) {
               password={password}
               changePassword={changePassword}
               environment={environment}
+              twilioPhoneNumber={twilioPhoneNumber}
+              changeTwilioPhoneNumber={changeTwilioPhoneNumber}
+              displayTwilioPhoneNumber={!twilioCheck}
             />
             <Card>
               <Card.Header>Device Rename Status</Card.Header>
@@ -340,6 +368,11 @@ export default function Renamer(props) {
                   <div style={{ paddingRight: '10px' }}>Purchasing Twilio Number:</div>
                   <PhoneNumberStatus status={twilioStatus} />{' '}
                 </div>
+                {twilioStatus === 'error' && (
+                  <div>
+                    <p style={{ color: 'red' }}>{twilioErrorMessage}</p>
+                  </div>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
                   <div style={{ paddingRight: '10px' }}>Registering to Dashboard:</div>
                   <StatusBadge status={dashboardStatus} />{' '}
