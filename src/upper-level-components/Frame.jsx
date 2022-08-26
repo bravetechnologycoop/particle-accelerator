@@ -19,6 +19,7 @@ import TwilioPurchasing from '../views/TwilioPurchasing'
 import HomeView from '../views/HomeView'
 import DeviceManager from '../views/DeviceManager'
 import SensorProvisioningGuide from '../views/SensorProvisioningGuide'
+import Dashboard from '../views/Dashboard'
 
 import ClickupLogo from '../graphics/ClickupLogo.svg'
 import ParticleLogo from '../graphics/ParticleLogo.svg'
@@ -150,6 +151,7 @@ function Frame(props) {
       changeClickupUserName={changeClickupUserName}
     />
   )
+  viewConfig[Pages.dashboard.displayName] = <Dashboard clickupToken={clickupToken} environment={environment} />
 
   const currentPageInfo = Object.values(Pages).find(page => {
     return page.displayName === viewState

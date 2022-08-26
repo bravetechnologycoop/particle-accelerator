@@ -100,6 +100,15 @@ const Pages = {
     },
     loginBadge: false,
   },
+  dashboard: {
+    displayName: 'Dashboard',
+    paths: ['/dashboard'],
+    authorizations: {
+      clickup: true,
+      particle: true,
+    },
+    loginBadge: false,
+  },
 }
 
 export default Pages
