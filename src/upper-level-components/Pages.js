@@ -8,6 +8,7 @@ const Pages = {
       particle: false,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   sensorGuide: {
     displayName: 'Sensor Provisioning Guide',
@@ -18,6 +19,7 @@ const Pages = {
       particle: false,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   particle: {
     displayName: 'Particle',
@@ -27,6 +29,7 @@ const Pages = {
       particle: false,
     },
     loginBadge: true,
+    isInNavBar: true,
   },
   clickup: {
     displayName: 'ClickUp',
@@ -36,6 +39,7 @@ const Pages = {
       particle: false,
     },
     loginBadge: true,
+    isInNavBar: true,
   },
   deviceManager: {
     displayName: 'Device Manager',
@@ -45,6 +49,7 @@ const Pages = {
       particle: false,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   activator: {
     displayName: 'Activator',
@@ -54,6 +59,7 @@ const Pages = {
       particle: true,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   deviceLookup: {
     displayName: 'Device Lookup',
@@ -72,6 +78,7 @@ const Pages = {
       particle: true,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   renamer: {
     displayName: 'Renamer',
@@ -81,6 +88,7 @@ const Pages = {
       particle: true,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   buttonRegistration: {
     displayName: 'Button Registration',
@@ -90,6 +98,7 @@ const Pages = {
       particle: false,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   twilio: {
     displayName: 'Twilio Number Purchasing',
@@ -99,6 +108,7 @@ const Pages = {
       particle: false,
     },
     loginBadge: false,
+    isInNavBar: true,
   },
   dashboard: {
     displayName: 'Dashboard',
@@ -108,6 +118,17 @@ const Pages = {
       particle: true,
     },
     loginBadge: false,
+    isInNavBar: true,
+  },
+  sensorEdit: {
+    displayName: 'Sensor Editor',
+    paths: ['/dashboard/clients/:clientId/sensors/:sensorId/edit'],
+    authorizations: {
+      clickup: true,
+      particle: true,
+    },
+    loginBadge: false,
+    isInNavBar: false,
   },
 }
 

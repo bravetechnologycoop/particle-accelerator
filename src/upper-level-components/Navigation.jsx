@@ -83,39 +83,61 @@ function Navigation(props) {
         <img src={BraveLogoWhite} alt="Brave Logo" height="100px" />
       </div>
       <div style={styles.navi}>
-        {Object.values(Pages).map(page => {
-          if (page.loginBadge) {
-            return (
-              <LoginRowButton
-                state={viewState}
-                loginState={loginButtonConfig[page.displayName].loginState}
-                userName={loginButtonConfig[page.displayName].userName}
-                label={page.displayName}
-                changeToken={loginButtonConfig[page.displayName].changeToken}
-                link={page.paths[0]}
-              />
-            )
-          }
-          if (page.authorizations.clickup && page.authorizations.particle) {
-            return (
-              <RowButton
-                label={page.displayName}
-                state={viewState}
-                enabled={loginStatus === 'true' && clickupToken !== ''}
-                particle={loginStatus !== 'true'}
-                clickup={clickupToken === ''}
-                link={page.paths[0]}
-              />
-            )
-          }
-          if (page.authorizations.clickup) {
-            return <RowButton label={page.displayName} state={viewState} enabled={clickupToken !== ''} clickup link={page.paths[0]} />
-          }
-          if (page.authorizations.particle) {
-            return <RowButton label={page.displayName} state={viewState} enabled={loginStatus === 'true'} particle link={page.paths[0]} />
-          }
-          return <RowButton label={page.displayName} state={viewState} link={page.paths[0]} />
-        })}
+        {Object.values(Pages)
+          .filter(page => page.isInNavBar)
+          .map(page => {
+            if (page.loginBadge) {
+              return (
+                <LoginRowButton
+                  state={viewState}
+                  loginState={loginButtonConfig[page.displayName].loginState}
+                  userName={loginButtonConfig[page.displayName].userName}
+                  label={page.displayName}
+                  changeToken={loginButtonConfig[page.displayName].changeToken}
+                  link={page.paths[0]}
+                  key={page.displayName}
+                />
+              )
+            }
+            if (page.authorizations.clickup && page.authorizations.particle) {
+              return (
+                <RowButton
+                  label={page.displayName}
+                  state={viewState}
+                  enabled={loginStatus === 'true' && clickupToken !== ''}
+                  particle={loginStatus !== 'true'}
+                  clickup={clickupToken === ''}
+                  link={page.paths[0]}
+                  key={page.displayName}
+                />
+              )
+            }
+            if (page.authorizations.clickup) {
+              return (
+                <RowButton
+                  label={page.displayName}
+                  state={viewState}
+                  enabled={clickupToken !== ''}
+                  clickup
+                  link={page.paths[0]}
+                  key={page.displayName}
+                />
+              )
+            }
+            if (page.authorizations.particle) {
+              return (
+                <RowButton
+                  label={page.displayName}
+                  state={viewState}
+                  enabled={loginStatus === 'true'}
+                  particle
+                  link={page.paths[0]}
+                  key={page.displayName}
+                />
+              )
+            }
+            return <RowButton label={page.displayName} state={viewState} link={page.paths[0]} key={page.displayName} />
+          })}
       </div>
       <div style={styles.buttonGroup}>
         <Form>

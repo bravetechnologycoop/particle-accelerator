@@ -33,8 +33,8 @@ export default function Dashboard(props) {
   ]
 
   const rowEvents = {
-    onClick: (/* e, row, rowIndex */) => {
-      navigate(`/device-lookup`)
+    onClick: (e, row) => {
+      navigate(`/dashboard/clients/${row.clientId}/sensors/${row.locationid}/edit`)
     },
   }
 
@@ -50,44 +50,40 @@ export default function Dashboard(props) {
   return (
     <div style={styles.container}>
       <h1>Buttons Dashboard</h1>
-      <p>
-        Go to:
-        <ul>
-          <li>
-            <a href="https://chatbot.brave.coop" target="_blank" rel="noreferrer">
-              Production Buttons Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="https://chatbot-dev.brave.coop" target="_blank" rel="noreferrer">
-              Dev Buttons Dashboard
-            </a>
-          </li>
-        </ul>
-      </p>
+      <p>Go to:</p>
+      <ul>
+        <li>
+          <a href="https://chatbot.brave.coop" target="_blank" rel="noreferrer">
+            Production Buttons Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="https://chatbot-dev.brave.coop" target="_blank" rel="noreferrer">
+            Dev Buttons Dashboard
+          </a>
+        </li>
+      </ul>
       <h1>Sensors Dashboard</h1>
-      <p>
-        Go to:
-        <ul>
-          <li>
-            <a href="https://sensors.brave.coop" target="_blank" rel="noreferrer">
-              Production Sensor Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="https://staging.sensors.brave.coop" target="_blank" rel="noreferrer">
-              Staging Sensor Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="https://dev.sensors.brave.coop" target="_blank" rel="noreferrer">
-              Dev Sensor Dashboard
-            </a>
-          </li>
-        </ul>
-      </p>
+      <p>Go to:</p>
+      <ul>
+        <li>
+          <a href="https://sensors.brave.coop" target="_blank" rel="noreferrer">
+            Production Sensor Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="https://staging.sensors.brave.coop" target="_blank" rel="noreferrer">
+            Staging Sensor Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="https://dev.sensors.brave.coop" target="_blank" rel="noreferrer">
+            Dev Sensor Dashboard
+          </a>
+        </li>
+      </ul>
       <h1>Sensors</h1>
-      <BootstrapTable keyField="id" data={sensors} columns={columns} rowEvents={rowEvents} rowStyle={styles.rowStyles} />
+      <BootstrapTable keyField="locationid" data={sensors} columns={columns} rowEvents={rowEvents} rowStyle={styles.rowStyles} />
     </div>
   )
 }

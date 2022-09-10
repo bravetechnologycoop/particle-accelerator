@@ -1,8 +1,8 @@
 import './App.css'
-import 'bootstrap/dist/css/bootstrap.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import RouterInterface from './upper-level-components/RouterInterface'
 import Pages from './upper-level-components/Pages'
@@ -15,7 +15,7 @@ function App() {
       <Routes>
         {Object.values(Pages).map(page => {
           return page.paths.map(route => {
-            return <Route path={`${route}`} element={<RouterInterface viewState={page.displayName} />} />
+            return <Route path={`${route}`} element={<RouterInterface viewState={page.displayName} key={page.displayName} />} />
           })
         })}
         <Route path="*" element={<PageNotFound />} />

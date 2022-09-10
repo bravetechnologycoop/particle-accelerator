@@ -128,7 +128,6 @@ function RouterInterface(props) {
       flexDirection: 'column',
     },
   }
-
   return (
     // eslint-disable-next-line react/jsx-no-bind
     <div style={styles.parent}>
