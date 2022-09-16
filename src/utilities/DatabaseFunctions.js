@@ -47,6 +47,59 @@ export async function getSensorClients(environment, clickupToken) {
   }
 }
 
+export async function getSensor(sensorId, environment, clickupToken) {
+  // TODO get the URL and API key for the given environment
+
+  // TODO replace this function call with one that gets the sensors instead. For now, this was just to show that the Spinner works
+  await getSensorClients(environment, clickupToken)
+
+  // TODO call real API
+  let toReturn = null
+  if (sensorId === 'myid1') {
+    toReturn = {
+      locationid: 'myid1',
+      displayName: 'Sensor 1 (FSM)',
+      movementThreshold: '60',
+      durationTimer: '900',
+      stillnessTimer: '60',
+      doorCoreId: 'AC2348838747324',
+      radarCoreId: 'AC2348838747324',
+      phoneNumber: '+12223334444',
+      initialTimer: '5',
+      isActive: true,
+      firmwareStateMachine: true,
+      doorId: '7A239C',
+      clientId: 'clientId1',
+      clients: [
+        { id: 'clientId1', displayName: 'client1' },
+        { id: 'clientId2', displayName: 'client2' },
+      ],
+    }
+  } else if (sensorId === 'myid2') {
+    toReturn = {
+      locationid: 'myid2',
+      displayName: 'Sensor 2 (SSM)',
+      movementThreshold: '60',
+      durationTimer: '900',
+      stillnessTimer: '60',
+      doorCoreId: 'AC2348838747324',
+      radarCoreId: 'AC2348838747324',
+      phoneNumber: '+12223334444',
+      initialTimer: '5',
+      isActive: false,
+      firmwareStateMachine: false,
+      doorId: '123456',
+      clientId: 'clientId2',
+      clients: [
+        { id: 'clientId1', displayName: 'client1' },
+        { id: 'clientId2', displayName: 'client2' },
+      ],
+    }
+  }
+
+  return toReturn
+}
+
 /**
  * insertSensorLocation: inserts a location into the brave sensor DB
  * @param {string} clickupToken       clickup token
