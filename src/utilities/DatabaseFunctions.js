@@ -66,8 +66,8 @@ export async function getSensor(sensorId, environment, clickupToken) {
       radarCoreId: 'AC2348838747324',
       phoneNumber: '+12223334444',
       initialTimer: '5',
-      isActive: true,
-      firmwareStateMachine: true,
+      isActive: true ? 'Yes' : 'No',
+      firmwareStateMachine: true ? 'Yes' : 'No',
       doorId: '7A239C',
       clientId: 'clientId1',
       clients: [
@@ -86,8 +86,8 @@ export async function getSensor(sensorId, environment, clickupToken) {
       radarCoreId: 'AC2348838747324',
       phoneNumber: '+12223334444',
       initialTimer: '5',
-      isActive: false,
-      firmwareStateMachine: false,
+      isActive: false ? 'Yes' : 'No',
+      firmwareStateMachine: false ? 'Yes' : 'No',
       doorId: '123456',
       clientId: 'clientId2',
       clients: [
@@ -98,6 +98,45 @@ export async function getSensor(sensorId, environment, clickupToken) {
   }
 
   return toReturn
+}
+
+export async function updateSensor(
+  locationid,
+  displayName,
+  movementThreshold,
+  durationTimer,
+  stillnessTimer,
+  doorCoreId,
+  radarCoreId,
+  phoneNumber,
+  initialTimer,
+  isActive,
+  firmwareStateMachine,
+  doorId,
+  clientId,
+  environment,
+  clickupToken,
+) {
+  // TODO get the URL and API key for the given environment
+
+  // TODO replace this function call with one that gets the sensors instead. For now, this was just to show that the Spinner works
+  await getSensorClients(environment, clickupToken)
+
+  console.log(`***TKD locationid: ${locationid}`)
+  console.log(`***TKD displayName: ${displayName}`)
+  console.log(`***TKD movementThreshold: ${movementThreshold}`)
+  console.log(`***TKD durationTimer: ${durationTimer}`)
+  console.log(`***TKD stillnessTimer: ${stillnessTimer}`)
+  console.log(`***TKD doorCoreId: ${doorCoreId}`)
+  console.log(`***TKD radarCoreId: ${radarCoreId}`)
+  console.log(`***TKD phoneNumber: ${phoneNumber}`)
+  console.log(`***TKD initialTimer: ${initialTimer}`)
+  console.log(`***TKD isActive: ${isActive === 'Yes'}`)
+  console.log(`***TKD firmwareStateMachine: ${firmwareStateMachine === 'Yes'}`)
+  console.log(`***TKD doorId: ${doorId}`)
+  console.log(`***TKD clientId: ${clientId}`)
+
+  return { message: 'success' }
 }
 
 /**
