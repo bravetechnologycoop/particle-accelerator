@@ -4,8 +4,18 @@ import PropTypes from 'prop-types'
 import { Alert, Badge, Button, Col, Form, Row, Spinner } from 'react-bootstrap'
 
 const { getSensor, updateSensor } = require('../utilities/DatabaseFunctions')
+const {
+  getDeviceDetailsByDeviceId,
+  getDurationTimer,
+  getInitialTimer,
+  getMovementThreshold,
+  getStillnessTimer,
+} = require('../utilities/ParticleFunctions')
 
 const styles = {
+  mismatchedValue: {
+    backgroundColor: '#f8d7da',
+  },
   scrollView: {
     overflow: 'auto',
     paddingRight: '10px',
@@ -16,7 +26,7 @@ const styles = {
 
 export default function SensorEdit(props) {
   // eslint-disable-next-line no-unused-vars
-  const { clickupToken, environment } = props
+  const { clickupToken, environment, particleToken } = props
 
   const { clientId, sensorId } = useParams()
 
@@ -35,22 +45,29 @@ export default function SensorEdit(props) {
       setLoadStatus('waiting')
 
       // Get values from DB
-      const getSensorResult = await getSensor(sensorId, environment, clickupToken)
+      const initialSensorData = await getSensor(sensorId, environment, clickupToken)
 
-      // If FSM:
-      //   Get Particle status
-      //   If online:
-      //     Get door ID
-      //     Get initial timer
-      //     Get stillness timer
-      //     Get duration timer
+      // Get values from Particle, if it's online
+      if (initialSensorData && initialSensorData.firmwareStateMachine) {
+        const details = await getDeviceDetailsByDeviceId(initialSensorData.radarCoreId, particleToken)
 
-      if (getSensorResult === null) {
+        if (details && details.online) {
+          initialSensorData.isOnline = true
+          initialSensorData.actualMovementThreshold = await getMovementThreshold(initialSensorData.radarCoreId, particleToken)
+          initialSensorData.actualInitialTimer = await getInitialTimer(initialSensorData.radarCoreId, particleToken)
+          initialSensorData.actualDurationTimer = await getDurationTimer(initialSensorData.radarCoreId, particleToken)
+          initialSensorData.actualStillnessTimer = await getStillnessTimer(initialSensorData.radarCoreId, particleToken)
+
+          // TODO Get door ID
+        }
+      }
+
+      if (initialSensorData === null) {
         setLoadStatus('error')
-      } else if (getSensorResult.length !== 0) {
+      } else if (initialSensorData.length !== 0) {
         setLoadStatus('success')
-        setSensor(getSensorResult)
-        setModifiedSensor(getSensorResult)
+        setSensor(initialSensorData)
+        setModifiedSensor(initialSensorData)
       } else {
         setLoadStatus('empty')
       }
@@ -129,6 +146,16 @@ export default function SensorEdit(props) {
     setFormLock(false)
   }
 
+  function displayTestModeAlert() {
+    return (
+      (modifiedSensor.isOnline && parseInt(modifiedSensor.doorId, 10) !== parseInt(modifiedSensor.actualDoorId, 10)) ||
+      parseInt(modifiedSensor.movementThreshold, 10) !== parseInt(modifiedSensor.actualMovementThreshold, 10) ||
+      parseInt(modifiedSensor.initialTimer, 10) !== parseInt(modifiedSensor.actualInitialTimer, 10) ||
+      parseInt(modifiedSensor.durationTimer, 10) !== parseInt(modifiedSensor.actualDurationTimer, 10) ||
+      parseInt(modifiedSensor.stillnessTimer, 10) !== parseInt(modifiedSensor.actualStillnessTimer, 10)
+    )
+  }
+
   return (
     <div style={styles.scrollView}>
       <h1 className="mt-10">
@@ -136,9 +163,9 @@ export default function SensorEdit(props) {
         <a href="https://console.particle.io/production-sensor-devices-15479/devices/e00fce68733ffa3b94f7698d" target="_blank" rel="noreferrer">
           {loadStatus === 'success' && sensor.firmwareStateMachine === 'Yes' && (
             <>
-              <Badge bg="info">Online</Badge>
-              <Badge bg="warning">Offline</Badge>
-              <Badge bg="danger">Not Found</Badge>
+              {modifiedSensor.isOnline && <Badge bg="info">Online</Badge>}
+              {!modifiedSensor.isOnline && <Badge bg="warning">Offline</Badge>}
+              {modifiedSensor === {} && <Badge bg="danger">Not Found</Badge>}
             </>
           )}
         </a>
@@ -148,7 +175,7 @@ export default function SensorEdit(props) {
 
       {loadStatus === 'success' && (
         <>
-          {sensor.firmwareStateMachine === 'Yes' && (
+          {sensor.firmwareStateMachine === 'Yes' && displayTestModeAlert(modifiedSensor) && (
             <Alert variant="danger">
               This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
               <Button variant="link" className="float-end pt-0" type="submit">
@@ -254,13 +281,22 @@ export default function SensorEdit(props) {
                 <Form.Control
                   type="text"
                   value={modifiedSensor.doorId}
-                  disabled={formLock}
+                  disabled={formLock || !modifiedSensor.isOnline}
                   onChange={x => setModifiedSensor({ ...modifiedSensor, doorId: x.target.value })}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Door ID</Form.Label>
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={modifiedSensor.isOnline ? modifiedSensor.actualDoorId : 'Unknown (Particle offline)'}
+                  style={
+                    modifiedSensor.isOnline && parseInt(modifiedSensor.doorId, 16) !== parseInt(modifiedSensor.actualDoorId, 16)
+                      ? styles.mismatchedValue
+                      : {}
+                  }
+                  disabled
+                />
               </Col>
             </Row>
 
@@ -271,12 +307,21 @@ export default function SensorEdit(props) {
                   type="text"
                   value={modifiedSensor.movementThreshold}
                   onChange={x => setModifiedSensor({ ...modifiedSensor, movementThreshold: x.target.value })}
-                  disabled={formLock}
+                  disabled={formLock || !modifiedSensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Movement Threshold</Form.Label>
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={modifiedSensor.isOnline ? modifiedSensor.actualMovementThreshold : 'Unknown (Particle offline)'}
+                  style={
+                    modifiedSensor.isOnline && parseInt(modifiedSensor.movementThreshold, 10) !== parseInt(modifiedSensor.actualMovementThreshold, 10)
+                      ? styles.mismatchedValue
+                      : {}
+                  }
+                  disabled
+                />
               </Col>
             </Row>
 
@@ -287,12 +332,21 @@ export default function SensorEdit(props) {
                   type="text"
                   value={modifiedSensor.initialTimer}
                   onChange={x => setModifiedSensor({ ...modifiedSensor, initialTimer: x.target.value })}
-                  disabled={formLock}
+                  disabled={formLock || !modifiedSensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Initial Timer (seconds)</Form.Label>
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={modifiedSensor.isOnline ? modifiedSensor.actualInitialTimer : 'Unknown (Particle offline)'}
+                  style={
+                    modifiedSensor.isOnline && parseInt(modifiedSensor.initialTimer, 10) !== parseInt(modifiedSensor.actualInitialTimer, 10)
+                      ? styles.mismatchedValue
+                      : {}
+                  }
+                  disabled
+                />
               </Col>
             </Row>
 
@@ -303,12 +357,21 @@ export default function SensorEdit(props) {
                   type="text"
                   value={modifiedSensor.durationTimer}
                   onChange={x => setModifiedSensor({ ...modifiedSensor, durationTimer: x.target.value })}
-                  disabled={formLock}
+                  disabled={formLock || !modifiedSensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Duration Timer (seconds)</Form.Label>
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={modifiedSensor.isOnline ? modifiedSensor.actualDurationTimer : 'Unknown (Particle offline)'}
+                  style={
+                    modifiedSensor.isOnline && parseInt(modifiedSensor.durationTimer, 10) !== parseInt(modifiedSensor.actualDurationTimer, 10)
+                      ? styles.mismatchedValue
+                      : {}
+                  }
+                  disabled
+                />
               </Col>
             </Row>
 
@@ -319,16 +382,25 @@ export default function SensorEdit(props) {
                   type="text"
                   value={modifiedSensor.stillnessTimer}
                   onChange={x => setModifiedSensor({ ...modifiedSensor, stillnessTimer: x.target.value })}
-                  disabled={formLock}
+                  disabled={formLock || !modifiedSensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Stillness Timer (seconds)</Form.Label>
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={modifiedSensor.isOnline ? modifiedSensor.actualStillnessTimer : 'Unknown (Particle offline)'}
+                  style={
+                    modifiedSensor.isOnline && parseInt(modifiedSensor.stillnessTimer, 10) !== parseInt(modifiedSensor.actualStillnessTimer, 10)
+                      ? styles.mismatchedValue
+                      : {}
+                  }
+                  disabled
+                />
               </Col>
             </Row>
 
-            {sensor.firmwareStateMachine === 'Yes' && (
+            {sensor.firmwareStateMachine === 'Yes' && displayTestModeAlert() && (
               <Alert variant="danger">
                 This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
                 <Button variant="link" className="float-end pt-0" type="submit">
@@ -370,4 +442,5 @@ export default function SensorEdit(props) {
 SensorEdit.propTypes = {
   clickupToken: PropTypes.string.isRequired,
   environment: PropTypes.string.isRequired,
+  particleToken: PropTypes.string.isRequired,
 }

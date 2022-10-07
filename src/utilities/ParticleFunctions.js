@@ -207,6 +207,21 @@ export async function getDeviceDetails(serialNumber, product, token) {
 }
 
 /**
+ * getDeviceDetailsByDeviceId: retrieves various details on a device from particle
+ * @param {string} deviceId         the ID the device to lookup
+ * @param {string} token            particle auth token
+ * @return {Promise<null|Object>}   an object containing data on the device if successful, null if not
+ */
+export async function getDeviceDetailsByDeviceId(deviceId, token) {
+  try {
+    const info = await particle.getDevice({ deviceId, auth: token })
+    return info.body
+  } catch (err) {
+    return null
+  }
+}
+
+/**
  * searchDeviceByName: retrieves data on a particle device based on its name
  * @param {string} deviceName   the name of the device to search for
  * @param {string} token        particle auth token
@@ -279,4 +294,35 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
     console.error(err)
     return false
   }
+}
+
+async function echoCloudFunction(functionName, deviceID, token) {
+  try {
+    const response = await particle.callFunction({
+      deviceId: deviceID,
+      name: functionName,
+      argument: 'e',
+      auth: token,
+    })
+    return response.body.return_value
+  } catch (err) {
+    console.error(err)
+    return null
+  }
+}
+
+export async function getMovementThreshold(deviceID, token) {
+  return echoCloudFunction('Change_INS_Threshold', deviceID, token)
+}
+
+export async function getInitialTimer(deviceID, token) {
+  return echoCloudFunction('Change_Initial_Timer', deviceID, token)
+}
+
+export async function getDurationTimer(deviceID, token) {
+  return echoCloudFunction('Change_Duration_Timer', deviceID, token)
+}
+
+export async function getStillnessTimer(deviceID, token) {
+  return echoCloudFunction('Change_Stillness_Timer', deviceID, token)
 }
