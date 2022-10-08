@@ -295,34 +295,3 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
     return false
   }
 }
-
-async function echoCloudFunction(functionName, deviceID, token) {
-  try {
-    const response = await particle.callFunction({
-      deviceId: deviceID,
-      name: functionName,
-      argument: 'e',
-      auth: token,
-    })
-    return response.body.return_value
-  } catch (err) {
-    console.error(err)
-    return null
-  }
-}
-
-export async function getMovementThreshold(deviceID, token) {
-  return echoCloudFunction('Change_INS_Threshold', deviceID, token)
-}
-
-export async function getInitialTimer(deviceID, token) {
-  return echoCloudFunction('Change_Initial_Timer', deviceID, token)
-}
-
-export async function getDurationTimer(deviceID, token) {
-  return echoCloudFunction('Change_Duration_Timer', deviceID, token)
-}
-
-export async function getStillnessTimer(deviceID, token) {
-  return echoCloudFunction('Change_Stillness_Timer', deviceID, token)
-}

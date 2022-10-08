@@ -4,13 +4,6 @@ import PropTypes from 'prop-types'
 import { Alert, Badge, Button, Col, Form, Row, Spinner } from 'react-bootstrap'
 
 const { getSensor, updateSensor } = require('../utilities/DatabaseFunctions')
-const {
-  getDeviceDetailsByDeviceId,
-  getDurationTimer,
-  getInitialTimer,
-  getMovementThreshold,
-  getStillnessTimer,
-} = require('../utilities/ParticleFunctions')
 
 const styles = {
   mismatchedValue: {
@@ -30,37 +23,21 @@ export default function SensorEdit(props) {
 
   const { clientId, sensorId } = useParams()
 
-  const [loadStatus, setLoadStatus] = useState('idle')
-  const [initialized, setInitialized] = useState(false)
+  const [loadStatus, setLoadStatus] = useState('idle') // Controls loading spinner and error display
+  const [initialized, setInitialized] = useState(false) // Ensures data is only loaded once
   const [submissionStatus, setSubmissionStatus] = useState('idle')
   const [sensor, setSensor] = useState({})
   const [modifiedSensor, setModifiedSensor] = useState({})
   const [errorMessages, setErrorMessages] = useState([])
   const [formLock, setFormLock] = useState(false)
 
-  // Load the initial values
+  // Load the initial values from backend
   useEffect(() => {
     // no top-level await workaround
     async function load() {
       setLoadStatus('waiting')
 
-      // Get values from DB
       const initialSensorData = await getSensor(sensorId, environment, clickupToken)
-
-      // Get values from Particle, if it's online
-      if (initialSensorData && initialSensorData.firmwareStateMachine) {
-        const details = await getDeviceDetailsByDeviceId(initialSensorData.radarCoreId, particleToken)
-
-        if (details && details.online) {
-          initialSensorData.isOnline = true
-          initialSensorData.actualMovementThreshold = await getMovementThreshold(initialSensorData.radarCoreId, particleToken)
-          initialSensorData.actualInitialTimer = await getInitialTimer(initialSensorData.radarCoreId, particleToken)
-          initialSensorData.actualDurationTimer = await getDurationTimer(initialSensorData.radarCoreId, particleToken)
-          initialSensorData.actualStillnessTimer = await getStillnessTimer(initialSensorData.radarCoreId, particleToken)
-
-          // TODO Get door ID
-        }
-      }
 
       if (initialSensorData === null) {
         setLoadStatus('error')
@@ -137,7 +114,6 @@ export default function SensorEdit(props) {
       errors.push(response.message)
     }
 
-    console.log(`***TKD errors: ${JSON.stringify(errors)}`)
     if (errors.length > 0) {
       setErrorMessages(errors)
     }
@@ -148,11 +124,12 @@ export default function SensorEdit(props) {
 
   function displayTestModeAlert() {
     return (
-      (modifiedSensor.isOnline && parseInt(modifiedSensor.doorId, 10) !== parseInt(modifiedSensor.actualDoorId, 10)) ||
-      parseInt(modifiedSensor.movementThreshold, 10) !== parseInt(modifiedSensor.actualMovementThreshold, 10) ||
-      parseInt(modifiedSensor.initialTimer, 10) !== parseInt(modifiedSensor.actualInitialTimer, 10) ||
-      parseInt(modifiedSensor.durationTimer, 10) !== parseInt(modifiedSensor.actualDurationTimer, 10) ||
-      parseInt(modifiedSensor.stillnessTimer, 10) !== parseInt(modifiedSensor.actualStillnessTimer, 10)
+      modifiedSensor.isOnline &&
+      (parseInt(modifiedSensor.doorId, 10) !== parseInt(modifiedSensor.actualDoorId, 10) ||
+        parseInt(modifiedSensor.movementThreshold, 10) !== parseInt(modifiedSensor.actualMovementThreshold, 10) ||
+        parseInt(modifiedSensor.initialTimer, 10) !== parseInt(modifiedSensor.actualInitialTimer, 10) ||
+        parseInt(modifiedSensor.durationTimer, 10) !== parseInt(modifiedSensor.actualDurationTimer, 10) ||
+        parseInt(modifiedSensor.stillnessTimer, 10) !== parseInt(modifiedSensor.actualStillnessTimer, 10))
     )
   }
 
@@ -161,7 +138,7 @@ export default function SensorEdit(props) {
       <h1 className="mt-10">
         {clientId}&apos;s {sensorId}{' '}
         <a href="https://console.particle.io/production-sensor-devices-15479/devices/e00fce68733ffa3b94f7698d" target="_blank" rel="noreferrer">
-          {loadStatus === 'success' && sensor.firmwareStateMachine === 'Yes' && (
+          {loadStatus === 'success' && sensor.firmwareStateMachine && (
             <>
               {modifiedSensor.isOnline && <Badge bg="info">Online</Badge>}
               {!modifiedSensor.isOnline && <Badge bg="warning">Offline</Badge>}
@@ -173,9 +150,10 @@ export default function SensorEdit(props) {
 
       {(loadStatus === 'waiting' || loadStatus === 'idle') && <Spinner animation="border" />}
 
+      {loadStatus === 'error' && <p>Error retrieving Sensor data</p>}
       {loadStatus === 'success' && (
         <>
-          {sensor.firmwareStateMachine === 'Yes' && displayTestModeAlert(modifiedSensor) && (
+          {sensor.firmwareStateMachine && displayTestModeAlert(modifiedSensor) && (
             <Alert variant="danger">
               This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
               <Button variant="link" className="float-end pt-0" type="submit">
@@ -400,7 +378,7 @@ export default function SensorEdit(props) {
               </Col>
             </Row>
 
-            {sensor.firmwareStateMachine === 'Yes' && displayTestModeAlert() && (
+            {sensor.firmwareStateMachine && displayTestModeAlert() && (
               <Alert variant="danger">
                 This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
                 <Button variant="link" className="float-end pt-0" type="submit">
@@ -427,7 +405,7 @@ export default function SensorEdit(props) {
             )}
             {submissionStatus === 'waiting' && <Spinner animation="border" />}
 
-            {sensor.firmwareStateMachine === 'Yes' && (
+            {sensor.firmwareStateMachine && (
               <Button variant="danger" type="submit">
                 Start Test Mode
               </Button>

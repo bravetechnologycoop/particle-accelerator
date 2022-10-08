@@ -47,57 +47,28 @@ export async function getSensorClients(environment, clickupToken) {
   }
 }
 
-export async function getSensor(sensorId, environment, clickupToken) {
-  // TODO get the URL and API key for the given environment
-
-  // TODO replace this function call with one that gets the sensors instead. For now, this was just to show that the Spinner works
-  await getSensorClients(environment, clickupToken)
-
-  // TODO call real API
-  let toReturn = null
-  if (sensorId === 'myid1') {
-    toReturn = {
-      locationid: 'myid1',
-      displayName: 'Sensor 1 (FSM)',
-      movementThreshold: '60',
-      durationTimer: '900',
-      stillnessTimer: '60',
-      doorCoreId: 'e00fce6838ebcc9f5fe99350',
-      radarCoreId: 'e00fce6838ebcc9f5fe99350',
-      phoneNumber: '+12223334444',
-      initialTimer: '5',
-      isActive: true ? 'Yes' : 'No',
-      firmwareStateMachine: true ? 'Yes' : 'No',
-      doorId: '7A239C',
-      clientId: 'clientId1',
-      clients: [
-        { id: 'clientId1', displayName: 'client1' },
-        { id: 'clientId2', displayName: 'client2' },
-      ],
-    }
-  } else if (sensorId === 'myid2') {
-    toReturn = {
-      locationid: 'myid2',
-      displayName: 'Sensor 2 (SSM)',
-      movementThreshold: '60',
-      durationTimer: '900',
-      stillnessTimer: '60',
-      doorCoreId: 'AC2348838747324',
-      radarCoreId: 'AC2348838747324',
-      phoneNumber: '+12223334444',
-      initialTimer: '5',
-      isActive: false ? 'Yes' : 'No',
-      firmwareStateMachine: false ? 'Yes' : 'No',
-      doorId: '123456',
-      clientId: 'clientId2',
-      clients: [
-        { id: 'clientId1', displayName: 'client1' },
-        { id: 'clientId2', displayName: 'client2' },
-      ],
-    }
+export async function getSensor(sensorId, environment) {
+  let baseUrl = ''
+  if (environment === Environments.dev.name) {
+    baseUrl = SENSOR_DEV_URL
+  } else if (environment === Environments.prod.name) {
+    baseUrl = SENSOR_PROD_URL
+  } else if (environment === Environments.staging.name) {
+    baseUrl = SENSOR_STAGING_URL
+  } else {
+    return []
   }
 
-  return toReturn
+  try {
+    const response = await axios.get(`${baseUrl}/api/sensors/${sensorId}`)
+    if (response.data.status !== 'success') {
+      return null
+    }
+
+    return response.data.body
+  } catch (err) {
+    return null
+  }
 }
 
 export async function updateSensor(
