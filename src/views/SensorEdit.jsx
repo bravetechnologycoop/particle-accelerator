@@ -1,7 +1,11 @@
+// Third-party dependencies
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Alert, Badge, Button, Col, Form, Row, Spinner } from 'react-bootstrap'
+
+// In-house dependences
+import { Environments } from '../utilities/Constants'
 
 const { getSensor, updateSensor } = require('../utilities/DatabaseFunctions')
 
@@ -30,6 +34,15 @@ export default function SensorEdit(props) {
   const [modifiedSensor, setModifiedSensor] = useState({})
   const [errorMessages, setErrorMessages] = useState([])
   const [formLock, setFormLock] = useState(false)
+
+  let particleSensorProductId = ''
+  if (environment === Environments.dev.name) {
+    particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_DEV
+  } else if (environment === Environments.prod.name) {
+    particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_PROD
+  } else if (environment === Environments.staging.name) {
+    particleSensorProductId = process.env.REACT_APP_PARTICLE_SENSOR_PRODUCT_ID_STAGING
+  }
 
   // Load the initial values from backend
   useEffect(() => {
@@ -137,7 +150,7 @@ export default function SensorEdit(props) {
     <div style={styles.scrollView}>
       <h1 className="mt-10">
         {clientId}&apos;s {sensorId}{' '}
-        <a href="https://console.particle.io/production-sensor-devices-15479/devices/e00fce68733ffa3b94f7698d" target="_blank" rel="noreferrer">
+        <a href={`https://console.particle.io/${particleSensorProductId}/devices/${modifiedSensor.radarCoreId}`} target="_blank" rel="noreferrer">
           {loadStatus === 'success' && sensor.firmwareStateMachine && (
             <>
               {modifiedSensor.isOnline && <Badge bg="info">Online</Badge>}
