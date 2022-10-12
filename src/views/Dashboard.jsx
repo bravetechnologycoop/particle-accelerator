@@ -10,7 +10,7 @@ export default function Dashboard(props) {
   const navigate = useNavigate()
 
   const sensors = [
-    { locationid: 'myid1', displayName: 'Sensor1 (FSM)', clientId: 'clientId1', clientDisplayName: 'client1' },
+    { locationid: 'Theresa4', displayName: 'Sensor1 (FSM)', clientId: 'clientId1', clientDisplayName: 'client1' },
     { locationid: 'myid2', displayName: 'Sensor2 (SSM)', clientId: 'clientId2', clientDisplayName: 'client2' },
     { locationid: 'myid3', displayName: 'Sensor3 (Will error)', clientId: 'clientId1', clientDisplayName: 'client1' },
   ]

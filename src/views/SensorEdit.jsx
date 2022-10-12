@@ -7,7 +7,7 @@ import { Alert, Badge, Button, Col, Form, Row, Spinner } from 'react-bootstrap'
 // In-house dependences
 import { Environments } from '../utilities/Constants'
 
-const { getSensor, updateSensor } = require('../utilities/DatabaseFunctions')
+const { endTestMode, getSensor, startTestMode, updateSensor } = require('../utilities/DatabaseFunctions')
 
 const styles = {
   mismatchedValue: {
@@ -29,7 +29,6 @@ export default function SensorEdit(props) {
 
   const [loadStatus, setLoadStatus] = useState('idle') // Controls loading spinner and error display
   const [initialized, setInitialized] = useState(false) // Ensures data is only loaded once
-  const [submissionStatus, setSubmissionStatus] = useState('idle')
   const [sensor, setSensor] = useState({})
   const [modifiedSensor, setModifiedSensor] = useState({})
   const [errorMessages, setErrorMessages] = useState([])
@@ -73,7 +72,6 @@ export default function SensorEdit(props) {
 
   async function handleSubmit(event) {
     event.preventDefault()
-    setSubmissionStatus('waiting')
     setErrorMessages([])
     setFormLock(true)
 
@@ -121,7 +119,6 @@ export default function SensorEdit(props) {
     )
 
     if (response.message === 'success') {
-      setSubmissionStatus('success')
       setSensor(modifiedSensor)
     } else {
       errors.push(response.message)
@@ -131,7 +128,58 @@ export default function SensorEdit(props) {
       setErrorMessages(errors)
     }
 
-    setSubmissionStatus('idle')
+    setFormLock(false)
+  }
+
+  async function handleStartTestMode(event) {
+    event.preventDefault()
+    setErrorMessages([])
+    setFormLock(true)
+
+    const errors = []
+
+    try {
+      const response = await startTestMode(sensorId, environment)
+      if (response.status === 'error') {
+        errors.push(response.body)
+      } else if (response.status === 'success') {
+        setSensor(response.body)
+        setModifiedSensor(response.body)
+      }
+    } catch (e) {
+      errors.push('Error communicating with the server')
+    }
+
+    if (errors.length > 0) {
+      setErrorMessages(errors)
+    }
+
+    setFormLock(false)
+  }
+
+  async function handleEndTestMode(event) {
+    event.preventDefault()
+    setErrorMessages([])
+    setFormLock(true)
+
+    const errors = []
+
+    try {
+      const response = await endTestMode(sensorId, environment)
+      if (response.status === 'error') {
+        errors.push(response.body)
+      } else if (response.status === 'success') {
+        setSensor(response.body)
+        setModifiedSensor(response.body)
+      }
+    } catch (e) {
+      errors.push('Error communicating with the server')
+    }
+
+    if (errors.length > 0) {
+      setErrorMessages(errors)
+    }
+
     setFormLock(false)
   }
 
@@ -169,7 +217,7 @@ export default function SensorEdit(props) {
           {sensor.firmwareStateMachine && displayTestModeAlert(modifiedSensor) && (
             <Alert variant="danger">
               This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
-              <Button variant="link" className="float-end pt-0" type="submit">
+              <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
                 End test mode
               </Button>
             </Alert>
@@ -394,7 +442,7 @@ export default function SensorEdit(props) {
             {sensor.firmwareStateMachine && displayTestModeAlert() && (
               <Alert variant="danger">
                 This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
-                <Button variant="link" className="float-end pt-0" type="submit">
+                <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
                   End test mode
                 </Button>
               </Alert>
@@ -411,18 +459,17 @@ export default function SensorEdit(props) {
               </Alert>
             )}
 
-            {submissionStatus !== 'waiting' && (
-              <Button variant="primary" className="mr-1" type="submit">
-                Submit
-              </Button>
-            )}
-            {submissionStatus === 'waiting' && <Spinner animation="border" />}
+            <Button variant="primary" className="mr-1" type="submit" disabled={formLock}>
+              Submit
+            </Button>
 
             {sensor.firmwareStateMachine && (
-              <Button variant="danger" type="submit">
+              <Button variant="danger" type="button" onClick={handleStartTestMode} disabled={formLock}>
                 Start Test Mode
               </Button>
             )}
+
+            {formLock && <Spinner animation="border" />}
           </Form>
         </>
       )}
