@@ -106,12 +106,10 @@ export default function SensorEdit(props) {
       modifiedSensor.movementThreshold,
       modifiedSensor.durationTimer,
       modifiedSensor.stillnessTimer,
-      modifiedSensor.doorCoreId,
       modifiedSensor.radarCoreId,
       modifiedSensor.phoneNumber,
       modifiedSensor.initialTimer,
       modifiedSensor.isActive,
-      modifiedSensor.firmwareStateMachine,
       modifiedSensor.doorId,
       modifiedSensor.clientId,
       environment,
@@ -199,7 +197,7 @@ export default function SensorEdit(props) {
       <h1 className="mt-10">
         {clientId}&apos;s {sensorId}{' '}
         <a href={`https://console.particle.io/${particleSensorProductId}/devices/${modifiedSensor.radarCoreId}`} target="_blank" rel="noreferrer">
-          {loadStatus === 'success' && sensor.firmwareStateMachine && (
+          {loadStatus === 'success' && (
             <>
               {modifiedSensor.isOnline && <Badge bg="info">Online</Badge>}
               {!modifiedSensor.isOnline && <Badge bg="warning">Offline</Badge>}
@@ -214,7 +212,7 @@ export default function SensorEdit(props) {
       {loadStatus === 'error' && <p>Error retrieving Sensor data</p>}
       {loadStatus === 'success' && (
         <>
-          {sensor.firmwareStateMachine && displayTestModeAlert(modifiedSensor) && (
+          {displayTestModeAlert(modifiedSensor) && (
             <Alert variant="danger">
               This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
               <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
@@ -272,16 +270,6 @@ export default function SensorEdit(props) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Door Particle Core ID</Form.Label>
-              <Form.Control
-                type="text"
-                value={modifiedSensor.doorCoreId}
-                onChange={x => setModifiedSensor({ ...modifiedSensor, doorCoreId: x.target.value })}
-                disabled={formLock}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
               <Form.Label>Radar Particle Core ID</Form.Label>
               <Form.Control
                 type="text"
@@ -299,19 +287,6 @@ export default function SensorEdit(props) {
                 onChange={x => setModifiedSensor({ ...modifiedSensor, phoneNumber: x.target.value })}
                 disabled={formLock}
               />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Does this Sensor use a firmware state machine?</Form.Label>
-              <Form.Select
-                aria-label="Does this Sensor use a firmware state machine"
-                onChange={x => setModifiedSensor({ ...modifiedSensor, firmwareStateMachine: x.target.value })}
-                value={modifiedSensor.firmwareStateMachine}
-                disabled={formLock}
-              >
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </Form.Select>
             </Form.Group>
 
             <Row className="mb-3">
@@ -439,7 +414,7 @@ export default function SensorEdit(props) {
               </Col>
             </Row>
 
-            {sensor.firmwareStateMachine && displayTestModeAlert() && (
+            {displayTestModeAlert() && (
               <Alert variant="danger">
                 This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
                 <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
@@ -463,11 +438,9 @@ export default function SensorEdit(props) {
               Submit
             </Button>
 
-            {sensor.firmwareStateMachine && (
-              <Button variant="danger" type="button" onClick={handleStartTestMode} disabled={formLock}>
-                Start Test Mode
-              </Button>
-            )}
+            <Button variant="danger" type="button" onClick={handleStartTestMode} disabled={formLock}>
+              Start Test Mode
+            </Button>
 
             {formLock && <Spinner animation="border" />}
           </Form>

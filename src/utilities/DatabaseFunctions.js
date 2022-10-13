@@ -104,12 +104,10 @@ export async function updateSensor(
   movementThreshold,
   durationTimer,
   stillnessTimer,
-  doorCoreId,
   radarCoreId,
   phoneNumber,
   initialTimer,
   isActive,
-  firmwareStateMachine,
   doorId,
   clientId,
   environment,
@@ -125,12 +123,10 @@ export async function updateSensor(
   console.log(`***TKD movementThreshold: ${movementThreshold}`)
   console.log(`***TKD durationTimer: ${durationTimer}`)
   console.log(`***TKD stillnessTimer: ${stillnessTimer}`)
-  console.log(`***TKD doorCoreId: ${doorCoreId}`)
   console.log(`***TKD radarCoreId: ${radarCoreId}`)
   console.log(`***TKD phoneNumber: ${phoneNumber}`)
   console.log(`***TKD initialTimer: ${initialTimer}`)
   console.log(`***TKD isActive: ${isActive === 'Yes'}`)
-  console.log(`***TKD firmwareStateMachine: ${firmwareStateMachine === 'Yes'}`)
   console.log(`***TKD doorId: ${doorId}`)
   console.log(`***TKD clientId: ${clientId}`)
 
