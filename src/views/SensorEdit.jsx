@@ -410,11 +410,11 @@ export default function SensorEdit(props) {
               </Alert>
             )}
 
-            <Button variant="primary" className="mr-1" type="submit" disabled={formLock}>
+            <Button variant="primary" className="me-2" type="submit" disabled={formLock}>
               Submit
             </Button>
 
-            <Button variant="danger" type="button" onClick={handleStartTestMode} disabled={formLock}>
+            <Button variant="danger" type="button" onClick={handleStartTestMode} disabled={formLock || !sensor.isOnline}>
               Start Test Mode
             </Button>
 
