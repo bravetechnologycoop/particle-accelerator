@@ -193,7 +193,14 @@ export default function SensorEdit(props) {
         </a>
       </h1>
 
-      {(loadStatus === 'waiting' || loadStatus === 'idle') && <Spinner animation="border" />}
+      {(loadStatus === 'waiting' || loadStatus === 'idle') && (
+        <div>
+          <div className="mx-auto" style={{ width: 45 }}>
+            <Spinner animation="border" />
+          </div>
+          <p className="text-center">It is normal for this to take up to 15 seconds.</p>
+        </div>
+      )}
 
       {loadStatus === 'error' && <p>Error retrieving Sensor data</p>}
       {loadStatus === 'success' && (
@@ -418,7 +425,14 @@ export default function SensorEdit(props) {
               Start Test Mode
             </Button>
 
-            {formLock && <Spinner animation="border" />}
+            {formLock && (
+              <div>
+                <div className="mx-auto" style={{ width: 45 }}>
+                  <Spinner animation="border" />
+                </div>
+                <p className="text-center">It is normal for this to take up to 30 seconds.</p>
+              </div>
+            )}
           </Form>
         </>
       )}
