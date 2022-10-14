@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import BootstrapTable from 'react-bootstrap-table-next'
-import { Alert, Spinner } from 'react-bootstrap'
+import { Alert } from 'react-bootstrap'
 
 // In-house dependencies
+import SpinnerWithTimeEstimate from '../components/general/SpinnerWithTimeEstimate'
+
 const { getAllSensors } = require('../utilities/DatabaseFunctions')
 
 export default function Dashboard(props) {
@@ -118,7 +120,7 @@ export default function Dashboard(props) {
 
       <h1>Sensors</h1>
 
-      {(loadStatus === 'waiting' || loadStatus === 'idle') && <Spinner animation="border" />}
+      {(loadStatus === 'waiting' || loadStatus === 'idle') && <SpinnerWithTimeEstimate timeEstimate={1} timeEstimateUnits="second" />}
 
       {loadStatus === 'empty' && <h2>No Sensors</h2>}
 

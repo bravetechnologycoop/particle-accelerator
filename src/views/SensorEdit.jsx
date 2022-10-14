@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Alert, Badge, Button, Col, Form, Row, Spinner } from 'react-bootstrap'
+import { Alert, Badge, Button, Col, Form, Row } from 'react-bootstrap'
 
 // In-house dependences
+import SpinnerWithTimeEstimate from '../components/general/SpinnerWithTimeEstimate'
 import { Environments } from '../utilities/Constants'
 
 const { endTestMode, getSensor, startTestMode, updateSensor } = require('../utilities/DatabaseFunctions')
@@ -193,14 +194,7 @@ export default function SensorEdit(props) {
         </a>
       </h1>
 
-      {(loadStatus === 'waiting' || loadStatus === 'idle') && (
-        <div>
-          <div className="mx-auto" style={{ width: 45 }}>
-            <Spinner animation="border" />
-          </div>
-          <p className="text-center">It is normal for this to take up to 15 seconds.</p>
-        </div>
-      )}
+      {(loadStatus === 'waiting' || loadStatus === 'idle') && <SpinnerWithTimeEstimate timeEstimate={15} timeEstimateUnits="seconds" />}
 
       {loadStatus === 'error' && <p>Error retrieving Sensor data</p>}
       {loadStatus === 'success' && (
@@ -425,14 +419,7 @@ export default function SensorEdit(props) {
               Start Test Mode
             </Button>
 
-            {formLock && (
-              <div>
-                <div className="mx-auto" style={{ width: 45 }}>
-                  <Spinner animation="border" />
-                </div>
-                <p className="text-center">It is normal for this to take up to 30 seconds.</p>
-              </div>
-            )}
+            {formLock && <SpinnerWithTimeEstimate timeEstimate={30} timeEstimateUnits="seconds" />}
           </Form>
         </>
       )}
