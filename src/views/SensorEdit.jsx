@@ -2,18 +2,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Alert, Badge, Button, Col, Form, Row } from 'react-bootstrap'
+import { Alert, Badge, Button, Form } from 'react-bootstrap'
 
 // In-house dependences
 import SpinnerWithTimeEstimate from '../components/general/SpinnerWithTimeEstimate'
 import { Environments } from '../utilities/Constants'
+import ParticleValueFormInput from '../components/SensorEdit/ParticleValueFormInput'
 
 const { endTestMode, getSensor, startTestMode, updateSensor } = require('../utilities/DatabaseFunctions')
 
 const styles = {
-  mismatchedValue: {
-    backgroundColor: '#f8d7da',
-  },
   scrollView: {
     overflow: 'auto',
     paddingRight: '10px',
@@ -197,6 +195,7 @@ export default function SensorEdit(props) {
       {(loadStatus === 'waiting' || loadStatus === 'idle') && <SpinnerWithTimeEstimate timeEstimate={15} timeEstimateUnits="seconds" />}
 
       {loadStatus === 'error' && <p>Error retrieving Sensor data</p>}
+
       {loadStatus === 'success' && (
         <>
           {displayTestModeAlert(sensor) && (
@@ -276,120 +275,51 @@ export default function SensorEdit(props) {
               />
             </Form.Group>
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Label>Door ID</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.doorId}
-                  disabled={formLock || !sensor.isOnline}
-                  onChange={x => setSensor({ ...sensor, doorId: x.target.value })}
-                />
-              </Col>
-              <Col>
-                <Form.Label>Actual Door ID</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.isOnline ? sensor.actualDoorId : 'Unknown (Particle offline)'}
-                  style={sensor.isOnline && parseInt(sensor.doorId, 16) !== parseInt(sensor.actualDoorId, 16) ? styles.mismatchedValue : {}}
-                  disabled
-                />
-              </Col>
-            </Row>
+            <ParticleValueFormInput
+              label="Door ID"
+              keyName="doorId"
+              actualKeyName="actualDoorId"
+              sensor={sensor}
+              setSensor={setSensor}
+              radix={16}
+              disabled={formLock}
+            />
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Label>Movement Threshold</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.movementThreshold}
-                  onChange={x => setSensor({ ...sensor, movementThreshold: x.target.value })}
-                  disabled={formLock || !sensor.isOnline}
-                />
-              </Col>
-              <Col>
-                <Form.Label>Actual Movement Threshold</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.isOnline ? sensor.actualMovementThreshold : 'Unknown (Particle offline)'}
-                  style={
-                    sensor.isOnline && parseInt(sensor.movementThreshold, 10) !== parseInt(sensor.actualMovementThreshold, 10)
-                      ? styles.mismatchedValue
-                      : {}
-                  }
-                  disabled
-                />
-              </Col>
-            </Row>
+            <ParticleValueFormInput
+              label="Movement Threshold"
+              keyName="movementThreshold"
+              actualKeyName="actualMovementThreshold"
+              sensor={sensor}
+              setSensor={setSensor}
+              disabled={formLock}
+            />
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Label>Initial Timer (seconds)</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.initialTimer}
-                  onChange={x => setSensor({ ...sensor, initialTimer: x.target.value })}
-                  disabled={formLock || !sensor.isOnline}
-                />
-              </Col>
-              <Col>
-                <Form.Label>Actual Initial Timer (seconds)</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.isOnline ? sensor.actualInitialTimer : 'Unknown (Particle offline)'}
-                  style={
-                    sensor.isOnline && parseInt(sensor.initialTimer, 10) !== parseInt(sensor.actualInitialTimer, 10) ? styles.mismatchedValue : {}
-                  }
-                  disabled
-                />
-              </Col>
-            </Row>
+            <ParticleValueFormInput
+              label="Initial Timer (seconds)"
+              keyName="initialTimer"
+              actualKeyName="actualInitialTimer"
+              sensor={sensor}
+              setSensor={setSensor}
+              disabled={formLock}
+            />
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Label>Duration Timer (seconds)</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.durationTimer}
-                  onChange={x => setSensor({ ...sensor, durationTimer: x.target.value })}
-                  disabled={formLock || !sensor.isOnline}
-                />
-              </Col>
-              <Col>
-                <Form.Label>Actual Duration Timer (seconds)</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.isOnline ? sensor.actualDurationTimer : 'Unknown (Particle offline)'}
-                  style={
-                    sensor.isOnline && parseInt(sensor.durationTimer, 10) !== parseInt(sensor.actualDurationTimer, 10) ? styles.mismatchedValue : {}
-                  }
-                  disabled
-                />
-              </Col>
-            </Row>
+            <ParticleValueFormInput
+              label="Duration Timer (seconds)"
+              keyName="durationTimer"
+              actualKeyName="actualDurationTimer"
+              sensor={sensor}
+              setSensor={setSensor}
+              disabled={formLock}
+            />
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Label>Stillness Timer (seconds)</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.stillnessTimer}
-                  onChange={x => setSensor({ ...sensor, stillnessTimer: x.target.value })}
-                  disabled={formLock || !sensor.isOnline}
-                />
-              </Col>
-              <Col>
-                <Form.Label>Actual Stillness Timer (seconds)</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={sensor.isOnline ? sensor.actualStillnessTimer : 'Unknown (Particle offline)'}
-                  style={
-                    sensor.isOnline && parseInt(sensor.stillnessTimer, 10) !== parseInt(sensor.actualStillnessTimer, 10) ? styles.mismatchedValue : {}
-                  }
-                  disabled
-                />
-              </Col>
-            </Row>
+            <ParticleValueFormInput
+              label="Stillness Timer (seconds)"
+              keyName="stillnessTimer"
+              actualKeyName="actualStillnessTimer"
+              sensor={sensor}
+              setSensor={setSensor}
+              disabled={formLock}
+            />
 
             {displayTestModeAlert() && (
               <Alert variant="danger">
