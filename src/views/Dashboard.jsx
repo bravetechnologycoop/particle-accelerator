@@ -1,7 +1,12 @@
-import React from 'react'
+// Third-party dependencies
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import BootstrapTable from 'react-bootstrap-table-next'
+import { Alert, Spinner } from 'react-bootstrap'
+
+// In-house dependencies
+const { getAllSensors } = require('../utilities/DatabaseFunctions')
 
 export default function Dashboard(props) {
   // eslint-disable-next-line no-unused-vars
@@ -9,14 +14,13 @@ export default function Dashboard(props) {
 
   const navigate = useNavigate()
 
-  const sensors = [
-    { locationid: 'Theresa4', displayName: 'Sensor1 (FSM)', clientId: 'clientId1', clientDisplayName: 'client1' },
-    { locationid: 'myid2', displayName: 'Sensor2 (SSM)', clientId: 'clientId2', clientDisplayName: 'client2' },
-    { locationid: 'myid3', displayName: 'Sensor3 (Will error)', clientId: 'clientId1', clientDisplayName: 'client1' },
-  ]
+  const [loadStatus, setLoadStatus] = useState('idle') // Controls loading spinner and error display
+  const [initialized, setInitialized] = useState(false) // Ensures data is only loaded once
+  const [sensors, setSensors] = useState([])
+
   const columns = [
     {
-      dataField: 'clientDisplayName',
+      dataField: 'client.displayName',
       text: 'Client',
       sort: true,
     },
@@ -39,16 +43,45 @@ export default function Dashboard(props) {
   }
 
   const styles = {
-    container: {
-      padding: 10,
+    scrollView: {
+      overflow: 'auto',
+      paddingRight: '10px',
+      paddingLeft: '10px',
+      paddingBottom: '10px',
     },
     rowStyles: {
       cursor: 'pointer',
     },
   }
 
+  // Load the initial values from backend
+  useEffect(() => {
+    // no top-level await workaround
+    async function load() {
+      setLoadStatus('waiting')
+
+      const allSensors = await getAllSensors(environment)
+
+      if (allSensors === null) {
+        setLoadStatus('error')
+      } else if (allSensors.length !== 0) {
+        setLoadStatus('success')
+        setSensors(allSensors)
+      } else {
+        setLoadStatus('empty')
+      }
+    }
+
+    if (!initialized) {
+      load()
+
+      // only load once
+      setInitialized(true)
+    }
+  })
+
   return (
-    <div style={styles.container}>
+    <div style={styles.scrollView}>
       <h1>Buttons Dashboard</h1>
       <p>Go to:</p>
       <ul>
@@ -82,8 +115,18 @@ export default function Dashboard(props) {
           </a>
         </li>
       </ul>
+
       <h1>Sensors</h1>
-      <BootstrapTable keyField="locationid" data={sensors} columns={columns} rowEvents={rowEvents} rowStyle={styles.rowStyles} />
+
+      {(loadStatus === 'waiting' || loadStatus === 'idle') && <Spinner animation="border" />}
+
+      {loadStatus === 'empty' && <h2>No Sensors</h2>}
+
+      {loadStatus === 'error' && <Alert variant="danger">Error feteching Sensors</Alert>}
+
+      {loadStatus === 'success' && (
+        <BootstrapTable keyField="locationid" data={sensors} columns={columns} rowEvents={rowEvents} rowStyle={styles.rowStyles} striped />
+      )}
     </div>
   )
 }

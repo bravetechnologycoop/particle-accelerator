@@ -66,6 +66,21 @@ export async function getSensor(sensorId, environment) {
   }
 }
 
+export async function getAllSensors(environment) {
+  const { baseUrl } = getEnvVars(environment)
+
+  try {
+    const response = await axios.get(`${baseUrl}/api/sensors`)
+    if (response.data.status !== 'success') {
+      return null
+    }
+
+    return response.data.body
+  } catch (err) {
+    return null
+  }
+}
+
 export async function startTestMode(sensorId, environment, clickupToken) {
   const { baseUrl, braveApiKey } = getEnvVars(environment)
 
