@@ -23,14 +23,13 @@ const styles = {
 
 export default function SensorEdit(props) {
   // eslint-disable-next-line no-unused-vars
-  const { clickupToken, environment, particleToken } = props
+  const { clickupToken, environment } = props
 
-  const { clientId, sensorId } = useParams()
+  const { sensorId } = useParams()
 
   const [loadStatus, setLoadStatus] = useState('idle') // Controls loading spinner and error display
   const [initialized, setInitialized] = useState(false) // Ensures data is only loaded once
   const [sensor, setSensor] = useState({})
-  const [modifiedSensor, setModifiedSensor] = useState({})
   const [errorMessages, setErrorMessages] = useState([])
   const [formLock, setFormLock] = useState(false)
 
@@ -50,13 +49,14 @@ export default function SensorEdit(props) {
       setLoadStatus('waiting')
 
       const initialSensorData = await getSensor(sensorId, environment, clickupToken)
+      initialSensorData.isActive = initialSensorData.isActive.toString()
+      initialSensorData.clientId = initialSensorData.client.id
 
       if (initialSensorData === null) {
         setLoadStatus('error')
       } else if (initialSensorData.length !== 0) {
         setLoadStatus('success')
         setSensor(initialSensorData)
-        setModifiedSensor(initialSensorData)
       } else {
         setLoadStatus('empty')
       }
@@ -77,49 +77,33 @@ export default function SensorEdit(props) {
 
     const errors = []
 
-    // If online:
-    if (modifiedSensor.doorId !== sensor.doorId) {
-      console.log(`TODO update Door ID in Particle`)
-      // If error:
-      errors.push('Error updating the Door ID in Particle, please try again later.')
-    }
-    if (modifiedSensor.initialTimer !== sensor.initialTimer) {
-      console.log(`TODO update initialTimer in Particle`)
-      // If error:
-      errors.push('Error updating the initialTimer in Particle, please try again later.')
-    }
-    if (modifiedSensor.durationTimer !== sensor.durationTimer) {
-      console.log(`TODO update durationTimer in Particle`)
-      // If error:
-      errors.push('Error updating the durationTimer in Particle, please try again later.')
-    }
-    if (modifiedSensor.stillnessTimer !== sensor.stillnessTimer) {
-      console.log(`TODO update stillnessTimer in Particle`)
-      // If error:
-      errors.push('Error updating the stillnessTimer in Particle, please try again later.')
-    }
+    try {
+      // Update DB
+      const response = await updateSensor(
+        sensor.locationid,
+        sensor.displayName,
+        sensor.movementThreshold,
+        sensor.durationTimer,
+        sensor.stillnessTimer,
+        sensor.radarCoreId,
+        sensor.phoneNumber,
+        sensor.initialTimer,
+        sensor.isActive === 'true',
+        sensor.doorId,
+        sensor.clientId,
+        environment,
+        clickupToken,
+      )
 
-    // Update DB
-    const response = await updateSensor(
-      modifiedSensor.locationid,
-      modifiedSensor.displayName,
-      modifiedSensor.movementThreshold,
-      modifiedSensor.durationTimer,
-      modifiedSensor.stillnessTimer,
-      modifiedSensor.radarCoreId,
-      modifiedSensor.phoneNumber,
-      modifiedSensor.initialTimer,
-      modifiedSensor.isActive,
-      modifiedSensor.doorId,
-      modifiedSensor.clientId,
-      environment,
-      clickupToken,
-    )
-
-    if (response.message === 'success') {
-      setSensor(modifiedSensor)
-    } else {
-      errors.push(response.message)
+      if (response.status === 'error') {
+        errors.push(response.body)
+      } else if (response.status === 'success') {
+        response.body.isActive = response.body.isActive.toString()
+        response.body.clientId = response.body.client.id
+        setSensor(response.body)
+      }
+    } catch (e) {
+      errors.push('Error communicating with the server')
     }
 
     if (errors.length > 0) {
@@ -137,12 +121,13 @@ export default function SensorEdit(props) {
     const errors = []
 
     try {
-      const response = await startTestMode(sensorId, environment)
+      const response = await startTestMode(sensorId, environment, clickupToken)
       if (response.status === 'error') {
         errors.push(response.body)
       } else if (response.status === 'success') {
+        response.body.isActive = response.body.isActive.toString()
+        response.body.clientId = response.body.client.id
         setSensor(response.body)
-        setModifiedSensor(response.body)
       }
     } catch (e) {
       errors.push('Error communicating with the server')
@@ -163,12 +148,13 @@ export default function SensorEdit(props) {
     const errors = []
 
     try {
-      const response = await endTestMode(sensorId, environment)
+      const response = await endTestMode(sensorId, environment, clickupToken)
       if (response.status === 'error') {
         errors.push(response.body)
       } else if (response.status === 'success') {
+        response.body.isActive = response.body.isActive.toString()
+        response.body.clientId = response.body.client.id
         setSensor(response.body)
-        setModifiedSensor(response.body)
       }
     } catch (e) {
       errors.push('Error communicating with the server')
@@ -183,25 +169,25 @@ export default function SensorEdit(props) {
 
   function displayTestModeAlert() {
     return (
-      modifiedSensor.isOnline &&
-      (parseInt(modifiedSensor.doorId, 10) !== parseInt(modifiedSensor.actualDoorId, 10) ||
-        parseInt(modifiedSensor.movementThreshold, 10) !== parseInt(modifiedSensor.actualMovementThreshold, 10) ||
-        parseInt(modifiedSensor.initialTimer, 10) !== parseInt(modifiedSensor.actualInitialTimer, 10) ||
-        parseInt(modifiedSensor.durationTimer, 10) !== parseInt(modifiedSensor.actualDurationTimer, 10) ||
-        parseInt(modifiedSensor.stillnessTimer, 10) !== parseInt(modifiedSensor.actualStillnessTimer, 10))
+      sensor.isOnline &&
+      (parseInt(sensor.doorId, 10) !== parseInt(sensor.actualDoorId, 10) ||
+        parseInt(sensor.movementThreshold, 10) !== parseInt(sensor.actualMovementThreshold, 10) ||
+        parseInt(sensor.initialTimer, 10) !== parseInt(sensor.actualInitialTimer, 10) ||
+        parseInt(sensor.durationTimer, 10) !== parseInt(sensor.actualDurationTimer, 10) ||
+        parseInt(sensor.stillnessTimer, 10) !== parseInt(sensor.actualStillnessTimer, 10))
     )
   }
 
   return (
     <div style={styles.scrollView}>
       <h1 className="mt-10">
-        {clientId}&apos;s {sensorId}{' '}
-        <a href={`https://console.particle.io/${particleSensorProductId}/devices/${modifiedSensor.radarCoreId}`} target="_blank" rel="noreferrer">
+        {sensorId}{' '}
+        <a href={`https://console.particle.io/${particleSensorProductId}/devices/${sensor.radarCoreId}`} target="_blank" rel="noreferrer">
           {loadStatus === 'success' && (
             <>
-              {modifiedSensor.isOnline && <Badge bg="info">Online</Badge>}
-              {!modifiedSensor.isOnline && <Badge bg="warning">Offline</Badge>}
-              {modifiedSensor === {} && <Badge bg="danger">Not Found</Badge>}
+              {sensor.isOnline && <Badge bg="info">Online</Badge>}
+              {!sensor.isOnline && <Badge bg="warning">Offline</Badge>}
+              {sensor === {} && <Badge bg="danger">Not Found</Badge>}
             </>
           )}
         </a>
@@ -212,7 +198,7 @@ export default function SensorEdit(props) {
       {loadStatus === 'error' && <p>Error retrieving Sensor data</p>}
       {loadStatus === 'success' && (
         <>
-          {displayTestModeAlert(modifiedSensor) && (
+          {displayTestModeAlert(sensor) && (
             <Alert variant="danger">
               This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
               <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
@@ -224,19 +210,19 @@ export default function SensorEdit(props) {
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>locationid</Form.Label>
-              <Form.Control placeholder={modifiedSensor.locationid} disabled />
+              <Form.Control placeholder={sensor.locationid} disabled />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Is this Sensor active?</Form.Label>
               <Form.Select
                 aria-label="Is this Sensor active?"
-                onChange={x => setModifiedSensor({ ...modifiedSensor, isActive: x.target.value })}
-                value={modifiedSensor.isActive}
+                onChange={x => setSensor({ ...sensor, isActive: x.target.value })}
+                value={sensor.isActive}
                 disabled={formLock}
               >
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
               </Form.Select>
             </Form.Group>
 
@@ -244,8 +230,8 @@ export default function SensorEdit(props) {
               <Form.Label>Display Name</Form.Label>
               <Form.Control
                 type="text"
-                value={modifiedSensor.displayName}
-                onChange={x => setModifiedSensor({ ...modifiedSensor, displayName: x.target.value })}
+                value={sensor.displayName}
+                onChange={x => setSensor({ ...sensor, displayName: x.target.value })}
                 disabled={formLock}
               />
             </Form.Group>
@@ -254,8 +240,8 @@ export default function SensorEdit(props) {
               <Form.Label>Client</Form.Label>
               <Form.Select
                 aria-label="Client"
-                onChange={x => setModifiedSensor({ ...modifiedSensor, clientId: x.target.value })}
-                value={modifiedSensor.clientId}
+                onChange={x => setSensor({ ...sensor, clientId: x.target.value })}
+                value={sensor.clientId}
                 disabled={formLock}
               >
                 {sensor.clients &&
@@ -273,8 +259,8 @@ export default function SensorEdit(props) {
               <Form.Label>Radar Particle Core ID</Form.Label>
               <Form.Control
                 type="text"
-                value={modifiedSensor.radarCoreId}
-                onChange={x => setModifiedSensor({ ...modifiedSensor, radarCodeId: x.target.value })}
+                value={sensor.radarCoreId}
+                onChange={x => setSensor({ ...sensor, radarCoreId: x.target.value })}
                 disabled={formLock}
               />
             </Form.Group>
@@ -283,8 +269,8 @@ export default function SensorEdit(props) {
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type="text"
-                value={modifiedSensor.phoneNumber}
-                onChange={x => setModifiedSensor({ ...modifiedSensor, phoneNumber: x.target.value })}
+                value={sensor.phoneNumber}
+                onChange={x => setSensor({ ...sensor, phoneNumber: x.target.value })}
                 disabled={formLock}
               />
             </Form.Group>
@@ -294,21 +280,17 @@ export default function SensorEdit(props) {
                 <Form.Label>Door ID</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.doorId}
-                  disabled={formLock || !modifiedSensor.isOnline}
-                  onChange={x => setModifiedSensor({ ...modifiedSensor, doorId: x.target.value })}
+                  value={sensor.doorId}
+                  disabled={formLock || !sensor.isOnline}
+                  onChange={x => setSensor({ ...sensor, doorId: x.target.value })}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Door ID</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.isOnline ? modifiedSensor.actualDoorId : 'Unknown (Particle offline)'}
-                  style={
-                    modifiedSensor.isOnline && parseInt(modifiedSensor.doorId, 16) !== parseInt(modifiedSensor.actualDoorId, 16)
-                      ? styles.mismatchedValue
-                      : {}
-                  }
+                  value={sensor.isOnline ? sensor.actualDoorId : 'Unknown (Particle offline)'}
+                  style={sensor.isOnline && parseInt(sensor.doorId, 16) !== parseInt(sensor.actualDoorId, 16) ? styles.mismatchedValue : {}}
                   disabled
                 />
               </Col>
@@ -319,18 +301,18 @@ export default function SensorEdit(props) {
                 <Form.Label>Movement Threshold</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.movementThreshold}
-                  onChange={x => setModifiedSensor({ ...modifiedSensor, movementThreshold: x.target.value })}
-                  disabled={formLock || !modifiedSensor.isOnline}
+                  value={sensor.movementThreshold}
+                  onChange={x => setSensor({ ...sensor, movementThreshold: x.target.value })}
+                  disabled={formLock || !sensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Movement Threshold</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.isOnline ? modifiedSensor.actualMovementThreshold : 'Unknown (Particle offline)'}
+                  value={sensor.isOnline ? sensor.actualMovementThreshold : 'Unknown (Particle offline)'}
                   style={
-                    modifiedSensor.isOnline && parseInt(modifiedSensor.movementThreshold, 10) !== parseInt(modifiedSensor.actualMovementThreshold, 10)
+                    sensor.isOnline && parseInt(sensor.movementThreshold, 10) !== parseInt(sensor.actualMovementThreshold, 10)
                       ? styles.mismatchedValue
                       : {}
                   }
@@ -344,20 +326,18 @@ export default function SensorEdit(props) {
                 <Form.Label>Initial Timer (seconds)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.initialTimer}
-                  onChange={x => setModifiedSensor({ ...modifiedSensor, initialTimer: x.target.value })}
-                  disabled={formLock || !modifiedSensor.isOnline}
+                  value={sensor.initialTimer}
+                  onChange={x => setSensor({ ...sensor, initialTimer: x.target.value })}
+                  disabled={formLock || !sensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Initial Timer (seconds)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.isOnline ? modifiedSensor.actualInitialTimer : 'Unknown (Particle offline)'}
+                  value={sensor.isOnline ? sensor.actualInitialTimer : 'Unknown (Particle offline)'}
                   style={
-                    modifiedSensor.isOnline && parseInt(modifiedSensor.initialTimer, 10) !== parseInt(modifiedSensor.actualInitialTimer, 10)
-                      ? styles.mismatchedValue
-                      : {}
+                    sensor.isOnline && parseInt(sensor.initialTimer, 10) !== parseInt(sensor.actualInitialTimer, 10) ? styles.mismatchedValue : {}
                   }
                   disabled
                 />
@@ -369,20 +349,18 @@ export default function SensorEdit(props) {
                 <Form.Label>Duration Timer (seconds)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.durationTimer}
-                  onChange={x => setModifiedSensor({ ...modifiedSensor, durationTimer: x.target.value })}
-                  disabled={formLock || !modifiedSensor.isOnline}
+                  value={sensor.durationTimer}
+                  onChange={x => setSensor({ ...sensor, durationTimer: x.target.value })}
+                  disabled={formLock || !sensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Duration Timer (seconds)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.isOnline ? modifiedSensor.actualDurationTimer : 'Unknown (Particle offline)'}
+                  value={sensor.isOnline ? sensor.actualDurationTimer : 'Unknown (Particle offline)'}
                   style={
-                    modifiedSensor.isOnline && parseInt(modifiedSensor.durationTimer, 10) !== parseInt(modifiedSensor.actualDurationTimer, 10)
-                      ? styles.mismatchedValue
-                      : {}
+                    sensor.isOnline && parseInt(sensor.durationTimer, 10) !== parseInt(sensor.actualDurationTimer, 10) ? styles.mismatchedValue : {}
                   }
                   disabled
                 />
@@ -394,20 +372,18 @@ export default function SensorEdit(props) {
                 <Form.Label>Stillness Timer (seconds)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.stillnessTimer}
-                  onChange={x => setModifiedSensor({ ...modifiedSensor, stillnessTimer: x.target.value })}
-                  disabled={formLock || !modifiedSensor.isOnline}
+                  value={sensor.stillnessTimer}
+                  onChange={x => setSensor({ ...sensor, stillnessTimer: x.target.value })}
+                  disabled={formLock || !sensor.isOnline}
                 />
               </Col>
               <Col>
                 <Form.Label>Actual Stillness Timer (seconds)</Form.Label>
                 <Form.Control
                   type="text"
-                  value={modifiedSensor.isOnline ? modifiedSensor.actualStillnessTimer : 'Unknown (Particle offline)'}
+                  value={sensor.isOnline ? sensor.actualStillnessTimer : 'Unknown (Particle offline)'}
                   style={
-                    modifiedSensor.isOnline && parseInt(modifiedSensor.stillnessTimer, 10) !== parseInt(modifiedSensor.actualStillnessTimer, 10)
-                      ? styles.mismatchedValue
-                      : {}
+                    sensor.isOnline && parseInt(sensor.stillnessTimer, 10) !== parseInt(sensor.actualStillnessTimer, 10) ? styles.mismatchedValue : {}
                   }
                   disabled
                 />
@@ -453,5 +429,4 @@ export default function SensorEdit(props) {
 SensorEdit.propTypes = {
   clickupToken: PropTypes.string.isRequired,
   environment: PropTypes.string.isRequired,
-  particleToken: PropTypes.string.isRequired,
 }

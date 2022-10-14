@@ -153,7 +153,7 @@ function Frame(props) {
     />
   )
   viewConfig[Pages.dashboard.displayName] = <Dashboard clickupToken={clickupToken} environment={environment} />
-  viewConfig[Pages.sensorEdit.displayName] = <SensorEdit clickupToken={clickupToken} particleToken={particleToken} environment={environment} />
+  viewConfig[Pages.sensorEdit.displayName] = <SensorEdit clickupToken={clickupToken} environment={environment} />
 
   const currentPageInfo = Object.values(Pages).find(page => {
     return page.displayName === viewState

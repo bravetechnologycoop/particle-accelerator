@@ -66,10 +66,11 @@ export async function getSensor(sensorId, environment) {
   }
 }
 
-export async function startTestMode(sensorId, environment) {
+export async function startTestMode(sensorId, environment, clickupToken) {
   const { baseUrl, braveApiKey } = getEnvVars(environment)
 
   const data = {
+    clickupToken,
     braveKey: braveApiKey,
   }
 
@@ -82,10 +83,11 @@ export async function startTestMode(sensorId, environment) {
   }
 }
 
-export async function endTestMode(sensorId, environment) {
+export async function endTestMode(sensorId, environment, clickupToken) {
   const { baseUrl, braveApiKey } = getEnvVars(environment)
 
   const data = {
+    clickupToken,
     braveKey: braveApiKey,
   }
 
@@ -99,7 +101,7 @@ export async function endTestMode(sensorId, environment) {
 }
 
 export async function updateSensor(
-  locationid,
+  sensorId,
   displayName,
   movementThreshold,
   durationTimer,
@@ -113,24 +115,30 @@ export async function updateSensor(
   environment,
   clickupToken,
 ) {
-  // TODO get the URL and API key for the given environment
+  const { baseUrl, braveApiKey } = getEnvVars(environment)
 
-  // TODO replace this function call with one that gets the sensors instead. For now, this was just to show that the Spinner works
-  await getSensorClients(environment, clickupToken)
+  const data = {
+    displayName,
+    movementThreshold,
+    durationTimer,
+    stillnessTimer,
+    radarCoreId,
+    phoneNumber,
+    initialTimer,
+    isActive,
+    doorId,
+    clientId,
+    clickupToken,
+    braveKey: braveApiKey,
+  }
 
-  console.log(`***TKD locationid: ${locationid}`)
-  console.log(`***TKD displayName: ${displayName}`)
-  console.log(`***TKD movementThreshold: ${movementThreshold}`)
-  console.log(`***TKD durationTimer: ${durationTimer}`)
-  console.log(`***TKD stillnessTimer: ${stillnessTimer}`)
-  console.log(`***TKD radarCoreId: ${radarCoreId}`)
-  console.log(`***TKD phoneNumber: ${phoneNumber}`)
-  console.log(`***TKD initialTimer: ${initialTimer}`)
-  console.log(`***TKD isActive: ${isActive === 'Yes'}`)
-  console.log(`***TKD doorId: ${doorId}`)
-  console.log(`***TKD clientId: ${clientId}`)
+  try {
+    const response = await axios.post(`${baseUrl}/api/sensors/${sensorId}`, data)
 
-  return { message: 'success' }
+    return response.data
+  } catch (err) {
+    return null
+  }
 }
 
 /**
