@@ -4,7 +4,7 @@ import { Row, Col, Form } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 export default function ParticleValueFormInput(props) {
-  const { sensor, setSensor, keyName, actualKeyName, label, disabled, radix } = props
+  const { sensor, setSensor, keyName, actualKeyName, label, disabled, type, radix } = props
 
   const styles = {
     mismatchedValue: {
@@ -16,13 +16,28 @@ export default function ParticleValueFormInput(props) {
     <Row className="mb-3">
       <Col>
         <Form.Label>{label}</Form.Label>
-        <Form.Control
-          type="text"
-          value={sensor[keyName] || ''}
-          onChange={x => setSensor({ ...sensor, [keyName]: x.target.value })}
-          disabled={!sensor.isOnline || disabled}
-        />
+        {type === 'text' && (
+          <Form.Control
+            type="text"
+            value={sensor[keyName] || ''}
+            onChange={x => setSensor({ ...sensor, [keyName]: x.target.value })}
+            disabled={!sensor.isOnline || disabled}
+          />
+        )}
+
+        {type === 'bool' && (
+          <Form.Select
+            aria-label={label}
+            onChange={x => setSensor({ ...sensor, [keyName]: x.target.value })}
+            value={sensor[keyName]}
+            disabled={!sensor.isOnline || disabled}
+          >
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </Form.Select>
+        )}
       </Col>
+
       <Col>
         <Form.Label>Actual {label}</Form.Label>
         <Form.Control
@@ -46,6 +61,7 @@ ParticleValueFormInput.propTypes = {
   setSensor: PropTypes.func.isRequired,
   radix: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 }
 
 ParticleValueFormInput.defaultProps = {

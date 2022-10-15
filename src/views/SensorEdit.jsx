@@ -51,6 +51,7 @@ export default function SensorEdit(props) {
       const initialSensorData = await getSensor(sensorId, environment, clickupToken)
       initialSensorData.isActive = initialSensorData.isActive.toString()
       initialSensorData.clientId = initialSensorData.client.id
+      initialSensorData.isInDebugMode = initialSensorData.isInDebugMode.toString()
 
       if (initialSensorData === null) {
         setLoadStatus('error')
@@ -90,6 +91,7 @@ export default function SensorEdit(props) {
         sensor.initialTimer,
         sensor.isActive === 'true',
         sensor.doorId,
+        sensor.isInDebugMode === 'true',
         sensor.clientId,
         environment,
         clickupToken,
@@ -189,11 +191,11 @@ export default function SensorEdit(props) {
       {loadStatus === 'success' && (
         <>
           {sensor.isInTestMode && <TestModeAlert disabled={formLock} onEndTestMode={handleEndTestMode} />}
+
+          {sensor.isOnline && !sensor.isInTestMode && sensor.actualIsInDebugMode && (
             <Alert variant="danger">
-              This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
-              <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
-                End test mode
-              </Button>
+              Sensor is in <b>DEBUG MODE</b>!!! <br /> This means that it is publishing frequent debug messages. You probably want to turn this off
+              before leaving this screen.
             </Alert>
           )}
 
@@ -267,6 +269,7 @@ export default function SensorEdit(props) {
 
             <ParticleValueFormInput
               label="Door ID"
+              type="text"
               keyName="doorId"
               actualKeyName="actualDoorId"
               sensor={sensor}
@@ -277,6 +280,7 @@ export default function SensorEdit(props) {
 
             <ParticleValueFormInput
               label="Movement Threshold"
+              type="text"
               keyName="movementThreshold"
               actualKeyName="actualMovementThreshold"
               sensor={sensor}
@@ -286,6 +290,7 @@ export default function SensorEdit(props) {
 
             <ParticleValueFormInput
               label="Initial Timer (seconds)"
+              type="text"
               keyName="initialTimer"
               actualKeyName="actualInitialTimer"
               sensor={sensor}
@@ -295,6 +300,7 @@ export default function SensorEdit(props) {
 
             <ParticleValueFormInput
               label="Duration Timer (seconds)"
+              type="text"
               keyName="durationTimer"
               actualKeyName="actualDurationTimer"
               sensor={sensor}
@@ -304,6 +310,7 @@ export default function SensorEdit(props) {
 
             <ParticleValueFormInput
               label="Stillness Timer (seconds)"
+              type="text"
               keyName="stillnessTimer"
               actualKeyName="actualStillnessTimer"
               sensor={sensor}
@@ -311,14 +318,16 @@ export default function SensorEdit(props) {
               disabled={formLock}
             />
 
-            {displayTestModeAlert() && (
-              <Alert variant="danger">
-                This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
-                <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
-                  End test mode
-                </Button>
-              </Alert>
-            )}
+            <ParticleValueFormInput
+              label="Is In Debug Mode?"
+              type="bool"
+              keyName="isInDebugMode"
+              actualKeyName="actualIsInDebugMode"
+              sensor={sensor}
+              setSensor={setSensor}
+              disabled={formLock}
+            />
+
             {sensor.isInTestMode && <TestModeAlert disabled={formLock} onEndTestMode={handleEndTestMode} />}
 
             {errorMessages.length > 0 && (
