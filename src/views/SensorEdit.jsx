@@ -6,8 +6,9 @@ import { Alert, Badge, Button, Form } from 'react-bootstrap'
 
 // In-house dependences
 import SpinnerWithTimeEstimate from '../components/general/SpinnerWithTimeEstimate'
-import { Environments } from '../utilities/Constants'
 import ParticleValueFormInput from '../components/SensorEdit/ParticleValueFormInput'
+import TestModeAlert from '../components/SensorEdit/TestModeAlert'
+import { Environments } from '../utilities/Constants'
 
 const { endTestMode, getSensor, startTestMode, updateSensor } = require('../utilities/DatabaseFunctions')
 
@@ -166,17 +167,6 @@ export default function SensorEdit(props) {
     setFormLock(false)
   }
 
-  function displayTestModeAlert() {
-    return (
-      sensor.isOnline &&
-      (parseInt(sensor.doorId, 10) !== parseInt(sensor.actualDoorId, 10) ||
-        parseInt(sensor.movementThreshold, 10) !== parseInt(sensor.actualMovementThreshold, 10) ||
-        parseInt(sensor.initialTimer, 10) !== parseInt(sensor.actualInitialTimer, 10) ||
-        parseInt(sensor.durationTimer, 10) !== parseInt(sensor.actualDurationTimer, 10) ||
-        parseInt(sensor.stillnessTimer, 10) !== parseInt(sensor.actualStillnessTimer, 10))
-    )
-  }
-
   return (
     <div style={styles.scrollView}>
       <h1 className="mt-10">
@@ -198,7 +188,7 @@ export default function SensorEdit(props) {
 
       {loadStatus === 'success' && (
         <>
-          {displayTestModeAlert(sensor) && (
+          {sensor.isInTestMode && <TestModeAlert disabled={formLock} onEndTestMode={handleEndTestMode} />}
             <Alert variant="danger">
               This Sensor may be in <b>TEST MODE</b>!!! (Values in the DB do not match Particle.)
               <Button variant="link" className="float-end pt-0" type="button" onClick={handleEndTestMode} disabled={formLock}>
@@ -329,6 +319,7 @@ export default function SensorEdit(props) {
                 </Button>
               </Alert>
             )}
+            {sensor.isInTestMode && <TestModeAlert disabled={formLock} onEndTestMode={handleEndTestMode} />}
 
             {errorMessages.length > 0 && (
               <Alert variant="danger">
@@ -350,6 +341,13 @@ export default function SensorEdit(props) {
             </Button>
 
             {formLock && <SpinnerWithTimeEstimate timeEstimate={30} timeEstimateUnits="seconds" />}
+
+            <dl className="fst-italic mt-3">
+              <dt>Test Mode</dt>
+              <dd>Used when performing system tests with clients. The debug publishes are turned on and the timers are reduced.</dd>
+              <dt>Debug Mode</dt>
+              <dd>Used when testing a Sensor. The debug publishes are turned on.</dd>
+            </dl>
           </Form>
         </>
       )}
