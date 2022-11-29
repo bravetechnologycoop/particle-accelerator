@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Removed
+
+- Ability to select firmware state machine true/false in Renamer (CU-m0we0t).
+
 ## [1.3.0] - 2022-07-26
 
 ### Changed
