@@ -12,8 +12,6 @@ function DashboardConfiguration(props) {
     client,
     changeClient,
     clickupToken,
-    stateMachine,
-    changeStateMachine,
     password,
     changePassword,
     environment,
@@ -57,18 +55,6 @@ function DashboardConfiguration(props) {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Is Firmware State Machine</Form.Label>
-              <Form.Control as="select" value={stateMachine} onChange={x => changeStateMachine(JSON.parse(x.target.value))}>
-                <option id="true" key="true" value="true">
-                  True
-                </option>
-                <option id="false" key="false" value="false">
-                  False
-                </option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group>
               <Form.Label>PA Dashboard Renamer Password (in 1Password)</Form.Label>
               <Form.Control value={password} onChange={x => changePassword(x.target.value)} type="password" placeholder="Password" />
             </Form.Group>
@@ -93,8 +79,6 @@ DashboardConfiguration.propTypes = {
   client: PropTypes.string.isRequired,
   changeClient: PropTypes.func.isRequired,
   clickupToken: PropTypes.string.isRequired,
-  stateMachine: PropTypes.bool.isRequired,
-  changeStateMachine: PropTypes.func.isRequired,
   displayName: PropTypes.string.isRequired,
   changeDisplayName: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,

@@ -208,7 +208,6 @@ function HomeView() {
               <li>Dashboard Display Name</li>
               <li>Dashboard Radar Type</li>
               <li>Dashboard Client</li>
-              <li>Dashboard State Machine Usage</li>
               <li>Dashboard Password</li>
             </ul>
             <b>Effects (All only if selected)</b>:

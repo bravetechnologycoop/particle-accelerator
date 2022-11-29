@@ -55,22 +55,11 @@ export async function getSensorClients(environment, clickupToken) {
  * @param {string} displayName        display name on dashboard
  * @param {string} particleDeviceID   Particle deviceID of location's sensor
  * @param {string} twilioNumber       Twilio number for the location
- * @param {boolean} stateMachineBool  whether the location uses a state machine or not
  * @param {string} clientID           Unique clientID for location
  * @param {string} environment        which server to insert a sensor location to.
  * @return {Promise<boolean>}         true if successful, false if not
  */
-export async function insertSensorLocation(
-  clickupToken,
-  password,
-  locationID,
-  displayName,
-  particleDeviceID,
-  twilioNumber,
-  stateMachineBool,
-  clientID,
-  environment,
-) {
+export async function insertSensorLocation(clickupToken, password, locationID, displayName, particleDeviceID, twilioNumber, clientID, environment) {
   let baseUrl = ''
   let braveApiKey = ''
   if (environment === Environments.dev.name) {
@@ -94,7 +83,6 @@ export async function insertSensorLocation(
     displayName,
     particleDeviceID,
     twilioNumber,
-    stateMachineBool,
     clientID,
   }
 

@@ -45,7 +45,6 @@ export default function Renamer(props) {
 
   // config options for the dashboard
   const [client, setClient] = useState('')
-  const [stateMachine, setStateMachine] = useState(true)
   const [displayName, setDisplayName] = useState('')
   const [password, setPassword] = useState('')
   const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('')
@@ -57,10 +56,6 @@ export default function Renamer(props) {
 
   function changeClient(newClient) {
     setClient(newClient)
-  }
-
-  function changeStateMachine(newState) {
-    setStateMachine(newState)
   }
 
   function changeDisplayName(newName) {
@@ -207,7 +202,6 @@ export default function Renamer(props) {
         displayName,
         selectedDevice.deviceID,
         newTwilioPhoneNumber,
-        stateMachine,
         client,
         environment,
       )
@@ -342,8 +336,6 @@ export default function Renamer(props) {
               client={client}
               changeClient={changeClient}
               clickupToken={clickupToken}
-              stateMachine={stateMachine}
-              changeStateMachine={changeStateMachine}
               displayName={displayName}
               changeDisplayName={changeDisplayName}
               password={password}
