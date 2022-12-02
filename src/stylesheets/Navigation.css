@@ -1,6 +1,6 @@
 .navButton {
     color: white;
-    background: #042857;
+    background: #00383f;
     border-radius: 0;
     height: auto;
     padding-left: 1.5ch;
@@ -30,14 +30,14 @@
 
 .navButton.disabled {
     color: grey !important;
-    background: #042857 !important;
+    background: #00383f !important;
     outline: none;
     border: none;
 }
 
 .customLink {
     color: white;
-    background: #042857;
+    background: #00383f;
     text-decoration: none;
     width: 100%;
     padding: 0.42em 1.5ch;
@@ -67,7 +67,7 @@
 
 .disabledLink {
     color: grey;
-    background: #042857;
+    background: #00383f;
     text-decoration: none;
     padding-left: 1.5ch;
     padding-top: 0.42em;
@@ -78,7 +78,7 @@
 
 .modeSelector {
     color: white;
-    background-color: #042857;
+    background-color: #00383f;
     text-decoration: none;
     border: none;
     padding-left: 1.5ch;
@@ -86,7 +86,7 @@
 
 .modeSelector:focus {
     color: white;
-    background-color: #042857;
+    background-color: #00383f;
     box-shadow: none !important;
     outline: 0 !important;
 }
