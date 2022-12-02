@@ -49,12 +49,12 @@ function Navigation(props) {
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
-      background: '#042857',
+      background: '#00383f',
       justifyContent: 'space-between',
     },
     header: {
       justifyContent: 'center',
-      background: '#042857',
+      background: '#00383f',
       color: 'white',
       display: 'flex',
       flexDirection: 'column',
@@ -65,7 +65,7 @@ function Navigation(props) {
       paddingBottom: '2vh',
     },
     navi: {
-      background: '#042857',
+      background: '#00383f',
       flexGrow: '1',
       display: 'flex',
       flexDirection: 'column',
@@ -80,7 +80,7 @@ function Navigation(props) {
   return (
     <div style={styles.parent}>
       <div style={styles.header}>
-        <img src={BraveLogoWhite} alt="Brave Logo" height="100px" />
+        <img src={BraveLogoWhite} alt="Brave Logo" width="220px" />
       </div>
       <div style={styles.navi}>
         {Object.values(Pages).map(page => {

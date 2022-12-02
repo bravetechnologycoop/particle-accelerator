@@ -37,7 +37,7 @@ const DoorSensorContent = React.forwardRef((props, ref) => {
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
       <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@700&display=swap" rel="stylesheet" />
       <div style={styles.logo}>
-        <img src={BraveLogo} alt="Brave Logo" style={{ width: '0.59in' }} />
+        <img src={BraveLogo} alt="Brave Logo" style={{ width: '0.65in' }} />
       </div>
       <div style={styles.text}>
         <div style={styles.titleNumber}>
