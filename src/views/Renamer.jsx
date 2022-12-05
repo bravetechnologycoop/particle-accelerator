@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { Badge, Card, Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
-import DoorSensorLabel from '../pdf/DoorSensorLabel'
-import MainSensorLabel from '../pdf/MainSensorLabel'
+import SensorLabel from '../pdf/SensorLabel'
 import ActivatedDevice from '../utilities/ActivatedDevice'
 import RenamerDeviceRow from '../components/Renamer/RenamerDeviceRow'
 import { changeDeviceName } from '../utilities/ParticleFunctions'
@@ -377,9 +376,8 @@ export default function Renamer(props) {
       <div style={styles.column}>
         <h3>Completed</h3>
         <hr />
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <MainSensorLabel locationID={locationID} sensorNumber={sensorNumber} />
-          <DoorSensorLabel locationID={locationID} sensorNumber={sensorNumber} />
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'baseline' }}>
+          <SensorLabel locationID={locationID} sensorNumber={sensorNumber} />
         </div>
       </div>
     </div>

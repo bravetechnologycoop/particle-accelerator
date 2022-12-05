@@ -4,14 +4,14 @@ import { useReactToPrint } from 'react-to-print'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 import { Card } from 'react-bootstrap'
-import MainSensorContent from './MainSensorContent'
+import SensorLabelContent from './SensorLabelContent'
 
-function MainSensorLabel(props) {
+function SensorLabel(props) {
   const { sensorNumber, locationID } = props
 
   const pageStyle = `
   @page {
-    size: 58mm 28mm portrait;
+    size: 58mm 84mm portrait;
   }
 `
 
@@ -23,10 +23,14 @@ function MainSensorLabel(props) {
 
   return (
     <Card>
-      <Card.Header>Main Sensor Label</Card.Header>
+      <Card.Header>Sensor Label</Card.Header>
       <Card.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px' }}>
         <div style={{ border: '1px solid grey', borderRadius: '10px' }}>
-          <MainSensorContent ref={componentRef} sensorNumber={sensorNumber} locationID={locationID} />
+          <div ref={componentRef}>
+            <SensorLabelContent sensorNumber={sensorNumber} locationID={locationID} labelType="Brave" />
+            <SensorLabelContent sensorNumber={sensorNumber} locationID={locationID} labelType="Main" />
+            <SensorLabelContent sensorNumber={sensorNumber} locationID={locationID} labelType="Door" />
+          </div>
         </div>
         <div style={{ paddingTop: '10px' }}>
           <Button type="button" variant="outline-secondary" onClick={handlePrint}>
@@ -38,14 +42,14 @@ function MainSensorLabel(props) {
   )
 }
 
-MainSensorLabel.propTypes = {
+SensorLabel.propTypes = {
   sensorNumber: PropTypes.string,
   locationID: PropTypes.string,
 }
 
-MainSensorLabel.defaultProps = {
+SensorLabel.defaultProps = {
   sensorNumber: '',
   locationID: '',
 }
 
-export default MainSensorLabel
+export default SensorLabel
