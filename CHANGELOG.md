@@ -11,9 +11,22 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Travis configuration.
+
+### Changed
+
+- Updated to our newest logo and branding colours (3cqnpkw).
+
 ### Removed
 
 - Ability to select firmware state machine true/false in Renamer (CU-m0we0t).
+
+### Security
+
+- Updated dependencies.
+- Added `npm audit` check to Travis.
 
 ## [1.3.0] - 2022-07-26
 

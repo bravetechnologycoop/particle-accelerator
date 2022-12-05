@@ -1,0 +1,12 @@
+dist: xenial
+
+jobs:
+  include:
+    - stage: 'security audit and linting'
+      language: node_js
+      node_js: 'stable'
+      install:
+        - npm ci
+      script:
+        - if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then npx audit-ci --config ./audit-ci.json; fi
+        - npm run lint
