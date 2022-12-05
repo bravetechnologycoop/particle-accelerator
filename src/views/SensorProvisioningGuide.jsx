@@ -398,15 +398,12 @@ function SensorProvisioningGuide() {
                 </li>
               </ol>
               <div style={{ paddingLeft: '2em' }}>
-                Print 4 labels in total:
-                <br />
-                <br />3 Main Sensor Labels:
+                Print the three generated labels:
                 <ul>
-                  <li>One to cover the redundant Mirco USB hole</li>
-                  <li>One on another face of the sensor (ensure there is one public-facing label)</li>
-                  <li>One to go on the external packaging (save for later)</li>
+                  <li>One Brave Sensor Label to go on the external packaging (save for later)</li>
+                  <li>One Main Sensor Label a public-facing side of the ceiling unit enclosure</li>
+                  <li>One Door Sensor Label to go on the door sensor box</li>
                 </ul>
-                1 Door Sensor Label to go on the IM21 box.
               </div>
             </div>
             <div style={styles.stepGraphic}>

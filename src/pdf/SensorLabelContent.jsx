@@ -2,24 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import BraveLogo from './BraveLogo.svg'
 
-const MainSensorContent = React.forwardRef((props, ref) => {
-  const { sensorNumber, locationID } = props
+const SensorLabelContent = React.forwardRef((props, ref) => {
+  const { sensorNumber, locationID, labelType } = props
 
   const styles = {
     main: {
       height: '1.15in',
-      width: '2.35in',
+      width: '3in',
       fontFamily: 'Arial, Helvetica, sans-serif',
       display: 'flex',
       flexDirection: 'row',
     },
     logo: {
-      flex: '0 0 0.8125in',
+      flex: '0 0 1in',
       display: 'flex',
       justifyContent: 'center',
     },
     text: {
-      flex: '0 0 1.7125in',
+      flex: '0 0 2in',
       display: 'flex',
       flexDirection: 'column',
       paddingLeft: '10px',
@@ -37,12 +37,12 @@ const MainSensorContent = React.forwardRef((props, ref) => {
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
       <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@700&display=swap" rel="stylesheet" />
       <div style={styles.logo}>
-        <img src={BraveLogo} alt="Brave Logo" style={{ width: '0.65in' }} />
+        <img src={BraveLogo} alt="Brave Logo" style={{ width: '0.75in' }} />
       </div>
       <div style={styles.text}>
         <div style={styles.titleNumber}>
-          <div style={{ fontSize: '22px', fontFamily: 'Spartan, Arial, sans-serif', paddingTop: '0.08in', letterSpacing: '-1px' }}>
-            Main <br style={{ display: 'block', marginBottom: '0px' }} /> Sensor
+          <div style={{ fontSize: '22px', fontFamily: 'Spartan, Arial, sans-serif', paddingTop: '0.2in', letterSpacing: '-1px' }}>
+            {labelType} Sensor
           </div>
           <div style={{ paddingRight: '30px', paddingTop: '10px', fontSize: '12px' }}>{sensorNumber}</div>
         </div>
@@ -55,14 +55,16 @@ const MainSensorContent = React.forwardRef((props, ref) => {
   )
 })
 
-MainSensorContent.propTypes = {
+SensorLabelContent.propTypes = {
   sensorNumber: PropTypes.string,
   locationID: PropTypes.string,
+  labelType: PropTypes.string,
 }
 
-MainSensorContent.defaultProps = {
+SensorLabelContent.defaultProps = {
   sensorNumber: 'w',
   locationID: '',
+  labelType: '',
 }
 
-export default MainSensorContent
+export default SensorLabelContent
