@@ -13,19 +13,33 @@ const particle = new Particle()
  * @async
  * @param {string} username the user's username/email.
  * @param {string} password the user's respective password.
+ * @param {string} otp the user's one time password (2FA) code.
  * @returns {Promise<string|null>} a token in the event of a successful login or null in the
  * event of an unsuccessful login (technically a promise)
  */
-export async function login(username, password) {
+export async function login(username, password, otp) {
   let token
   try {
     const loginData = await particle.login({ username, password })
     token = loginData.body.access_token
-    return token
   } catch (err) {
-    console.error('Error in acquiring token: ', err)
-    return null
+    let mfaToken
+    try {
+      mfaToken = err.error.response.body.mfa_token
+    } catch (e) {
+      console.error(`Error in acquiring token: ${err}`)
+      return null
+    }
+
+    try {
+      const otpData = await particle.sendOtp({ mfaToken, otp })
+      token = otpData.body.access_token
+    } catch (e2) {
+      console.error(`Error in acquiring token: ${err}`)
+      return null
+    }
   }
+  return token
 }
 
 /**

@@ -27,6 +27,7 @@ the code was deployed.
 
 - Updated dependencies.
 - Added `npm audit` check to Travis.
+- Added Particle 2FA (CU-2nvab4u).
 
 ## [1.3.0] - 2022-07-26
 
