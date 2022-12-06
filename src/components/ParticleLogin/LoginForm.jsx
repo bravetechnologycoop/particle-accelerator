@@ -22,11 +22,12 @@ function LoginForm(props) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [otp, setOtp] = useState('')
 
   async function handleSubmit(evt) {
     changeLoginState('waiting')
     evt.preventDefault()
-    const token = await login(email, password)
+    const token = await login(email, password, otp)
 
     if (token !== null) {
       setEmail('')
@@ -54,6 +55,12 @@ function LoginForm(props) {
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" value={password} onChange={x => setPassword(x.target.value)} />
       </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBaseicOtp">
+        <Form.Label>One Time Password (2FA)</Form.Label>
+        <Form.Control type="password" placeholder="OTP (2FA)" value={otp} onChange={x => setOtp(x.target.value)} />
+      </Form.Group>
+
       <Button variant="primary" type="submit">
         Submit
       </Button>
