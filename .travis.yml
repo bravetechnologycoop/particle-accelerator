@@ -4,7 +4,7 @@ jobs:
   include:
     - stage: 'security audit and linting'
       language: node_js
-      node_js: 'stable'
+      # node_js: node version specified in .nvmrc
       install:
         - npm ci
       script:
