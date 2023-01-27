@@ -13,7 +13,7 @@ the code was deployed.
 
 ### Security
 
-- Update dependencies.
+- Update dependencies (CU-860phzbq5).
 
 ## [1.4.0] - 2022-12-16
 
