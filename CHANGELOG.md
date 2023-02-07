@@ -11,6 +11,8 @@ the code was deployed.
 
 ## [Unreleased]
 
+## [1.5.0] - 2023-02-07
+
 ### Security
 
 - Update dependencies (CU-860phzbq5).
@@ -71,7 +73,8 @@ the code was deployed.
 
 - Initial version (CU-21ghk0x).
 
-[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.1.0...v1.2.0
