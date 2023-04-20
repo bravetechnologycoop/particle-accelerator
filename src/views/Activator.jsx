@@ -14,13 +14,7 @@ import ActivatedDevice from '../utilities/ActivatedDevice'
 import ParticleSettings from '../utilities/ParticleSettings'
 import { createTaskInSensorTracker } from '../utilities/ClickupFunctions'
 
-const { getDeviceInfo } = require('../utilities/ParticleFunctions')
-
-const { activateDeviceSIM } = require('../utilities/ParticleFunctions')
-
-const { changeDeviceName } = require('../utilities/ParticleFunctions')
-
-const { verifyDeviceRegistration } = require('../utilities/ParticleFunctions')
+const { activateDeviceSIM, addDeviceToProduct, changeDeviceName, getDeviceInfo, verifyDeviceRegistration } = require('../utilities/ParticleFunctions')
 
 // CSS Styles
 const styles = {
@@ -193,6 +187,11 @@ function Activator(props) {
 
       // change device ID
       setDeviceID(deviceInfo.deviceID)
+
+      // add device to product on Particle
+      await addDeviceToProduct(deviceInfo.deviceID, productID, particleToken)
+
+      // change device name on Particle
       const rename = await changeDeviceName(deviceInfo.deviceID, productID, newDeviceName, particleToken)
 
       if (rename) {
