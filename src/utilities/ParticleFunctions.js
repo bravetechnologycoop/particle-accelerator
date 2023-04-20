@@ -92,6 +92,25 @@ export async function getProducts(token) {
 }
 
 /**
+ * addDeviceToProduct: Add a device to a product or move device out of quarantine.
+ * @async
+ * @param {string} deviceID  the device id of the target Particle device.
+ * @param {string} product   the product family ID of the target Particle device.
+ * @param {string} token Particle access token.
+ */
+export async function addDeviceToProduct(deviceId, product, token) {
+  try {
+    await particle.addDeviceToProduct({
+      deviceId,
+      product,
+      auth: token,
+    })
+  } catch (err) {
+    console.error(`Error in adding device '${deviceId}' to product '${product}'`, err)
+  }
+}
+
+/**
  * getDeviceInfo: makes a GET request to the Particle server to get a device's
  * deviceID and ICCID.
  * @async

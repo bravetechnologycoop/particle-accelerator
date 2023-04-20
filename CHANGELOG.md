@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Fixes
+
+- Activator explicitly adds the Boron Device to the selected Product (CU-860qkqnnn).
+
 ## [1.5.0] - 2023-02-07
 
 ### Security
