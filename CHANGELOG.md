@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Security
+
+- Upgrade to Node.js 18.16.1 (CU-860pqat6u).
+
 ## [1.6.0] - 2023-04-24
 
 ### Fixes
