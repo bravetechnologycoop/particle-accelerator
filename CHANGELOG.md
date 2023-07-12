@@ -11,6 +11,11 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade Node JS to 16.20.1.
+- Travis runs on Ubuntu 18.04.
+
 ## [1.6.0] - 2023-04-24
 
 ### Fixes
