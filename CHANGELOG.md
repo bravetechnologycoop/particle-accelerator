@@ -11,6 +11,9 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+- Updated favicon image from old logo to current logo
+
 ## [1.7.0] - 2023-07-13
 
 ### Changed
