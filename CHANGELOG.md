@@ -12,7 +12,8 @@ the code was deployed.
 ## [Unreleased]
 
 ### Changed
-- Updated favicon image from old logo to current logo
+- Updated favicon image from old logo to current logo (CU-8678w897a).
+- Upgrade Node JS to 18.16.1 (CU-860raw01r).
 
 ## [1.7.0] - 2023-07-13
 
