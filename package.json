@@ -6,6 +6,7 @@
     "node": "18.16.1"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.11.1",
     "@react-pdf/renderer": "^2.1.1",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",

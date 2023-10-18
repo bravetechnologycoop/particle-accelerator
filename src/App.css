@@ -37,3 +37,26 @@
     transform: rotate(360deg);
   }
 }
+
+.googleLoginContainer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.googleLoginContainer h2 {
+  font-size: 14pt;
+  font-weight: 400;
+}
+
+.googleLoginContainer * {
+  margin: 8px;
+}
