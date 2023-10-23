@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import Activator from '../views/Activator'
 import Validator from '../views/Validator'
-import GoogleProfile from '../views/GoogleProfile'
+import GoogleLogin from '../views/GoogleLogin'
 import ParticleLogin from '../views/ParticleLogin'
 import ClickupLogin from '../views/ClickupLogin'
 import {
@@ -102,7 +102,7 @@ function Frame(props) {
     />
   )
   viewConfig[Pages.deviceLookup.displayName] = <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
-  viewConfig[Pages.google.displayName] = <GoogleProfile googleProfile={googleProfile} />
+  viewConfig[Pages.google.displayName] = <GoogleLogin googleProfile={googleProfile} />
   viewConfig[Pages.particle.displayName] = (
     <ParticleLogin
       loginState={loginState}

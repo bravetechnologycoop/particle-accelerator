@@ -17,10 +17,6 @@
 }
 
 .googleLoginScreen h2 {
-    font-size: 14pt;
-    font-weight: 400;
-}
-
-.googleLoginScreen * {
-    margin: 8px;
+    font-size: 16pt;
+    font-weight: 600;
 }

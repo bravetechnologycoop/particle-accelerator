@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { CookiesProvider } from 'react-cookie'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import './index.css'
 import App from './App'
@@ -8,11 +9,13 @@ import reportWebVitals from './reportWebVitals'
 
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension
-  <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </GoogleOAuthProvider>,
+  <CookiesProvider defaultSetOptions={{ path: '/' }}>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </GoogleOAuthProvider>
+  </CookiesProvider>,
   // eslint-disable-next-line no-undef
   document.getElementById('root'),
 )

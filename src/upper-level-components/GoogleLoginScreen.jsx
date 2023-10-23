@@ -1,12 +1,15 @@
 import '../stylesheets/GoogleLoginScreen.css'
 import React from 'react'
 import PropTypes from 'prop-types'
+import Button from 'react-bootstrap/Button'
+import { useCookies } from 'react-cookie'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import BraveLogo from '../pdf/BraveLogo.svg'
 
 function GoogleLoginScreen(props) {
   const { onLogin } = props
+  const [cookies, setCookie] = useCookies(['googleAccessToken'])
 
   const handleAccessToken = async accessToken => {
     try {
@@ -17,7 +20,7 @@ function GoogleLoginScreen(props) {
         },
       })
 
-      onLogin(res.data)
+      if (res.status === 200) onLogin(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -25,18 +28,26 @@ function GoogleLoginScreen(props) {
 
   const login = useGoogleLogin({
     onSuccess: response => {
+      setCookie('googleAccessToken', response.access_token)
       handleAccessToken(response.access_token)
     },
     onError: error => console.log('Login Error:', error),
   })
 
+  // attempt to login with Google access token in cookies (if it exists)
+  if (cookies.googleAccessToken !== undefined) {
+    handleAccessToken(cookies.googleAccessToken)
+  }
+
   return (
     <div className="googleLoginScreen">
-      <img src={BraveLogo} alt="Brave Logo" />
-      <h2>Please log in to use PA.</h2>
-      <button type="button" onClick={() => login()}>
-        Sign in with Google
-      </button>
+      <img src={BraveLogo} alt="Brave" />
+      <br />
+      <h2>Welcome to the PA.</h2>
+      <p>Please log in using your Brave email.</p>
+      <Button variant="primary" onClick={() => login()}>
+        Login
+      </Button>
     </div>
   )
 }
