@@ -1,0 +1,26 @@
+.googleLoginScreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.googleLoginScreen img {
+    width: 128px;
+}
+
+.googleLoginScreen h2 {
+    font-size: 14pt;
+    font-weight: 400;
+}
+
+.googleLoginScreen * {
+    margin: 8px;
+}

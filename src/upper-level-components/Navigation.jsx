@@ -15,6 +15,7 @@ import Pages from './Pages'
 function Navigation(props) {
   const {
     viewState,
+    googleProfile,
     loginStatus,
     changeToken,
     changeLoginState,
@@ -34,6 +35,10 @@ function Navigation(props) {
 
   const loginButtonConfig = {}
 
+  loginButtonConfig[Pages.google.displayName] = {
+    loginState: 'true',
+    userName: googleProfile.name,
+  }
   loginButtonConfig[Pages.particle.displayName] = {
     loginState: loginStatus,
     changeToken,
@@ -139,6 +144,7 @@ function Navigation(props) {
 
 Navigation.propTypes = {
   viewState: PropTypes.string.isRequired,
+  googleProfile: PropTypes.shape.isRequired,
   loginStatus: PropTypes.string.isRequired,
   changeToken: PropTypes.func.isRequired,
   changeLoginState: PropTypes.func.isRequired,

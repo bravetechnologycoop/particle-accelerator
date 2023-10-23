@@ -6,8 +6,6 @@ import App from './App'
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import reportWebVitals from './reportWebVitals'
 
-console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID)
-
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension
   <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>

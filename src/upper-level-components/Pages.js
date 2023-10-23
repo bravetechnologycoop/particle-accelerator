@@ -19,6 +19,15 @@ const Pages = {
     },
     loginBadge: false,
   },
+  google: {
+    displayName: 'Google',
+    paths: ['/google'],
+    authorizations: {
+      clickup: false,
+      particle: false,
+    },
+    loginBadge: true,
+  },
   particle: {
     displayName: 'Particle',
     paths: ['/particle'],

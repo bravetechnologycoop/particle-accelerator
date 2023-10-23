@@ -1,46 +1,35 @@
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import React, { useState } from 'react'
-import { GoogleLogin } from '@react-oauth/google'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import RouterInterface from './upper-level-components/RouterInterface'
 import Pages from './upper-level-components/Pages'
 import PageNotFound from './upper-level-components/PageNotFound'
-import BraveLogo from './pdf/BraveLogo.svg'
+import GoogleLoginScreen from './upper-level-components/GoogleLoginScreen'
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [googleProfile, setGoogleProfile] = useState(null)
+
+  // If not logged in, display the Google login screen instead.
+  // NOTE: The GoogleLoginScreen component checks cookies for an existing session,
+  //   and will call onLogin in the case that the previous session is recent enough.
+  if (googleProfile == null) {
+    // eslint-disable-next-line react/jsx-filename-extension
+    return <GoogleLoginScreen onLogin={profile => setGoogleProfile(profile)} />
+  }
 
   return (
-    // eslint-disable-next-line react/jsx-filename-extension, react/jsx-no-useless-fragment
-    <>
-      {loggedIn ? (
-        <BrowserRouter>
-          <Routes>
-            {Object.values(Pages).map(page => {
-              return page.paths.map(route => {
-                return <Route path={`${route}`} element={<RouterInterface viewState={page.displayName} />} />
-              })
-            })}
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </BrowserRouter>
-      ) : (
-        <div className="googleLoginContainer">
-          <img src={BraveLogo} alt="Brave Logo" width="128px" />
-          <h2>Please log in to use PA.</h2>
-          <GoogleLogin
-            onSuccess={response => {
-              console.log('Login Success:', JSON.stringify(response))
-              setLoggedIn(true)
-            }}
-            onError={error => {
-              console.log('Login Error:', error)
-            }}
-          />
-        </div>
-      )}
-    </>
+    // eslint-disable-next-line react/jsx-filename-extension
+    <BrowserRouter>
+      <Routes>
+        {Object.values(Pages).map(page => {
+          return page.paths.map(route => {
+            return <Route path={`${route}`} element={<RouterInterface viewState={page.displayName} googleProfile={googleProfile} />} />
+          })
+        })}
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
