@@ -9,34 +9,43 @@ import BraveLogo from '../pdf/BraveLogo.svg'
 
 function GoogleLoginScreen(props) {
   const { onLogin } = props
-  const [cookies, setCookie] = useCookies(['googleAccessToken'])
+  const [cookies, setCookie, removeCookie] = useCookies(['googleIdToken'])
 
-  const handleAccessToken = async accessToken => {
+  const handleIdToken = async idToken => {
     try {
-      const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/json',
-        },
-      })
+      const res = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URL}/pa/get-google-payload`, { idToken })
 
-      if (res.status === 200) onLogin(res.data)
-    } catch (err) {
-      console.log(err)
+      if (res.status === 200) {
+        onLogin({ email: res.data.email, name: res.data.name })
+      } else {
+        // ID token must be old; force user to re-login
+        removeCookie('googleIdToken')
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
   const login = useGoogleLogin({
-    onSuccess: response => {
-      setCookie('googleAccessToken', response.access_token)
-      handleAccessToken(response.access_token)
+    onSuccess: async ({ code }) => {
+      try {
+        const res = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URL}/pa/get-google-tokens`, { code })
+        setCookie('googleIdToken', res.data.id_token)
+        handleIdToken(res.data.id_token)
+      } catch (error) {
+        console.log(error)
+      }
     },
     onError: error => console.log('Login Error:', error),
+    flow: 'auth-code',
+    scope: 'email openid profile',
   })
 
   // attempt to login with Google access token in cookies (if it exists)
-  if (cookies.googleAccessToken !== undefined) {
-    handleAccessToken(cookies.googleAccessToken)
+  if (cookies.googleIdToken !== undefined) {
+    handleIdToken(cookies.googleIdToken)
+    // return a blank page
+    return <div />
   }
 
   return (
@@ -44,7 +53,7 @@ function GoogleLoginScreen(props) {
       <img src={BraveLogo} alt="Brave" />
       <br />
       <h2>Welcome to the PA.</h2>
-      <p>Please log in using your Brave email.</p>
+      <p>Please login using your Brave email.</p>
       <Button variant="primary" onClick={() => login()}>
         Login
       </Button>

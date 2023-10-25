@@ -32,7 +32,7 @@ function Frame(props) {
     loginState,
     changeLoginState,
     viewState,
-    googleProfile,
+    googlePayload,
     safeModeState,
     particleSettings,
     changeParticleSettings,
@@ -102,7 +102,7 @@ function Frame(props) {
     />
   )
   viewConfig[Pages.deviceLookup.displayName] = <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
-  viewConfig[Pages.google.displayName] = <GoogleLogin googleProfile={googleProfile} />
+  viewConfig[Pages.google.displayName] = <GoogleLogin googlePayload={googlePayload} />
   viewConfig[Pages.particle.displayName] = (
     <ParticleLogin
       loginState={loginState}
@@ -192,7 +192,10 @@ Frame.propTypes = {
   loginState: PropTypes.string.isRequired,
   changeLoginState: PropTypes.func.isRequired,
   viewState: PropTypes.string.isRequired,
-  googleProfile: PropTypes.shape.isRequired,
+  googlePayload: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   safeModeState: PropTypes.bool.isRequired,
   particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
   changeParticleSettings: PropTypes.func.isRequired,
