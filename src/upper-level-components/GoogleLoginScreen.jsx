@@ -9,28 +9,27 @@ import BraveLogo from '../pdf/BraveLogo.svg'
 
 function GoogleLoginScreen(props) {
   const { onLogin } = props
-  const [cookies, setCookie, removeCookie] = useCookies(['googleIdToken'])
+  const [cookies, setCookie, removeCookie] = useCookies(['googleIDToken'])
 
   const handleIdToken = async idToken => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URL}/pa/get-google-payload`, { idToken })
-
       if (res.status === 200) {
         onLogin({ email: res.data.email, name: res.data.name })
       } else {
         // ID token must be old; force user to re-login
-        removeCookie('googleIdToken')
+        removeCookie('googleIDToken')
       }
     } catch (error) {
-      console.log(error)
+      removeCookie('googleIDToken')
     }
   }
 
   const login = useGoogleLogin({
     onSuccess: async ({ code }) => {
       try {
-        const res = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URL}/pa/get-google-tokens`, { code })
-        setCookie('googleIdToken', res.data.id_token)
+        const res = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URL}/pa/get-google-tokens`, { authCode: code })
+        setCookie('googleIDToken', res.data.id_token)
         handleIdToken(res.data.id_token)
       } catch (error) {
         console.log(error)
@@ -42,8 +41,8 @@ function GoogleLoginScreen(props) {
   })
 
   // attempt to login with Google access token in cookies (if it exists)
-  if (cookies.googleIdToken !== undefined) {
-    handleIdToken(cookies.googleIdToken)
+  if (cookies.googleIDToken !== undefined) {
+    handleIdToken(cookies.googleIDToken)
     // return a blank page
     return <div />
   }

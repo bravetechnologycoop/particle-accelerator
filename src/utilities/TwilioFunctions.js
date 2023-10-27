@@ -24,7 +24,7 @@ const BRAVE_API_KEY_PROD = process.env.REACT_APP_BRAVE_API_KEY_PROD
  * @param {string} clickupToken      clickup auth token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
-async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environment, clickupToken) {
+async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environment, idToken) {
   let braveApiKey = ''
 
   if (environment === Environments.dev.name) {
@@ -40,7 +40,7 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environ
   const data = {
     areaCode,
     locationID,
-    clickupToken,
+    idToken,
     braveKey: braveApiKey,
   }
 
@@ -61,7 +61,7 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environ
  * @param {string} clickupToken  clickup auth token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
-export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken) {
+export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, idToken) {
   let baseUrl = ''
   if (environment === Environments.dev.name) {
     baseUrl = SENSOR_DEV_URL
@@ -73,7 +73,7 @@ export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID,
     return 'Error: No environment found'
   }
 
-  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/sensor-twilio-number`, areaCode, locationID, environment, clickupToken)
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/sensor-twilio-number`, areaCode, locationID, environment, idToken)
 }
 
 /**
@@ -84,7 +84,7 @@ export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID,
  * @param {string} clickupToken  clickup auth token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
-export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken) {
+export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, idToken) {
   let baseUrl = ''
   if (environment === Environments.dev.name) {
     baseUrl = BUTTONS_DEV_URL
@@ -96,5 +96,5 @@ export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID,
     return 'Error: No environment found'
   }
 
-  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, environment, clickupToken)
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, environment, idToken)
 }

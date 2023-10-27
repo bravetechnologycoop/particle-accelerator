@@ -11,7 +11,7 @@ function DashboardConfiguration(props) {
     changeDisplayName,
     client,
     changeClient,
-    clickupToken,
+    idToken,
     password,
     changePassword,
     environment,
@@ -26,7 +26,7 @@ function DashboardConfiguration(props) {
 
   useEffect(() => {
     async function retrieveClients() {
-      const clients = await getSensorClients(environment, clickupToken)
+      const clients = await getSensorClients(environment, idToken)
       setClientList(clients)
     }
 
@@ -78,7 +78,7 @@ DashboardConfiguration.propTypes = {
   dashboardCheck: PropTypes.bool.isRequired,
   client: PropTypes.string.isRequired,
   changeClient: PropTypes.func.isRequired,
-  clickupToken: PropTypes.string.isRequired,
+  idToken: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   changeDisplayName: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,

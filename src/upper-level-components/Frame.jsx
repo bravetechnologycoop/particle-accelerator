@@ -134,7 +134,7 @@ function Frame(props) {
       modifyActivatedDevice={modifyActivatedDevice}
     />
   )
-  viewConfig[Pages.twilio.displayName] = <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
+  viewConfig[Pages.twilio.displayName] = <TwilioPurchasing environment={environment} />
   viewConfig[Pages.buttonRegistration.displayName] = <ButtonRegistration clickupToken={clickupToken} environment={environment} />
   viewConfig[Pages.deviceManager.displayName] = (
     <DeviceManager
