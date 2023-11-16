@@ -18,7 +18,7 @@ const BUTTONS_STAGING_URL = process.env.REACT_APP_BUTTONS_STAGING_URL
  * @return {Promise<string|*>} 'success' if successful, server error message if not.
  */
 // eslint-disable-next-line import/prefer-default-export
-export async function registerLoraButton(deviceEUI, targetName, environment, clickupToken) {
+export async function registerLoraButton(deviceEUI, targetName, environment, googleIdToken) {
   let baseUrl = ''
   let braveApiKey = ''
 
@@ -38,7 +38,7 @@ export async function registerLoraButton(deviceEUI, targetName, environment, cli
   const data = {
     deviceEUI,
     targetName,
-    clickupToken,
+    googleIdToken,
     braveKey: braveApiKey,
   }
 

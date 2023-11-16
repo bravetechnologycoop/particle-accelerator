@@ -1,61 +1,90 @@
 import '../stylesheets/GoogleLoginScreen.css'
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Button from 'react-bootstrap/Button'
 import { useCookies } from 'react-cookie'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
-import BraveLogo from '../pdf/BraveLogo.svg'
+import BraveLogoHorizontalSlate from '../pdf/BraveLogoHorizontalSlate.png'
 
 function GoogleLoginScreen(props) {
   const { onLogin } = props
-  const [cookies, setCookie, removeCookie] = useCookies(['googleIDToken'])
+  const [errorMessage, setErrorMessage] = useState('Waiting for user login.')
+  const [cookies, setCookie, removeCookie] = useCookies(['googleIdToken'])
 
-  const handleIdToken = async idToken => {
+  async function handleIdToken(googleIdToken) {
     try {
-      const res = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URL}/pa/get-google-payload`, { idToken })
-      if (res.status === 200) {
-        onLogin({ email: res.data.email, name: res.data.name })
-      } else {
-        // ID token must be old; force user to re-login
-        removeCookie('googleIDToken')
+      const res = await axios.post(`${process.env.REACT_APP_PA_GOOGLE_API}/pa/get-google-payload`, { googleIdToken })
+
+      // throw Error (also remove cookie for Google ID token) in the event of failure
+      /* NOTE: there are too many fields in the Google payload to check for each;
+       * expect that if res.data exists, it is properly populated. */
+      if (res.status !== 200 || !res.data) {
+        throw new Error('There was a problem interacting with the PA Google API.')
       }
+
+      const googlePayload = res.data
+
+      // run login function while providing only the email and name of the account
+      onLogin({ email: googlePayload.email, name: googlePayload.name })
     } catch (error) {
-      removeCookie('googleIDToken')
+      setErrorMessage(error.message)
+      removeCookie('googleIdToken') // ensure cookie is undefined
     }
   }
 
-  const login = useGoogleLogin({
-    onSuccess: async ({ code }) => {
+  const googleLogin = useGoogleLogin({
+    /* Use the Google authorization code flow; this means that a separate OAuth2 client
+     * will get tokens from Google using a received Google authorization code. */
+    flow: 'auth-code',
+    // upon successful log in of a Google account and the receival of an authorization code (response.code)
+    onSuccess: async response => {
+      const googleAuthCode = response.code
+
       try {
-        const res = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URL}/pa/get-google-tokens`, { authCode: code })
-        setCookie('googleIDToken', res.data.id_token)
-        handleIdToken(res.data.id_token)
+        const res = await axios.post(`${process.env.REACT_APP_PA_GOOGLE_API}/pa/get-google-tokens`, { googleAuthCode })
+
+        // ensure that response was successful and returned all tokens needed
+        if (res.status !== 200 || !res.data || !res.data.googleAccessToken || !res.data.googleIdToken) {
+          throw new Error('There was a problem interacting with the PA Google API.')
+        }
+
+        // googleTokens contains members googleAccessToken and googleIdToken
+        /* NOTE: at present, googleAccessToken is not used, and is discarded after this function completes.
+         * For further interaction with Google's APIs, googleAccessToken will become useful. */
+        const googleTokens = res.data
+
+        setCookie('googleIdToken', googleTokens.googleIdToken)
+        handleIdToken(googleTokens.googleIdToken)
       } catch (error) {
-        console.log(error)
+        setErrorMessage(error.message)
+        removeCookie('googleIdToken') // unsure cookie is undefined
       }
     },
     onError: error => console.log('Login Error:', error),
-    flow: 'auth-code',
     scope: 'email openid profile',
   })
 
-  // attempt to login with Google access token in cookies (if it exists)
-  if (cookies.googleIDToken !== undefined) {
-    handleIdToken(cookies.googleIDToken)
-    // return a blank page
+  // if a Google ID token exists in cookies...
+  if (cookies.googleIdToken !== undefined) {
+    // ...attempt to log in using it.
+    handleIdToken(cookies.googleIdToken)
+
+    // return a blank page, pending handleIdToken resolves
     return <div />
   }
 
   return (
     <div className="googleLoginScreen">
-      <img src={BraveLogo} alt="Brave" />
-      <br />
-      <h2>Welcome to the PA.</h2>
-      <p>Please login using your Brave email.</p>
-      <Button variant="primary" onClick={() => login()}>
-        Login
-      </Button>
+      <div className="googleLoginScreenContainer">
+        <img src={BraveLogoHorizontalSlate} alt="Brave" />
+        <h2>Welcome to the PA.</h2>
+        <p>Please log in using your Brave email.</p>
+        <Button variant="primary" onClick={() => googleLogin()}>
+          Login
+        </Button>
+        <p className="errorMessage">{errorMessage}</p>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Form } from 'react-bootstrap'
+import { useCookies } from 'react-cookie'
 import PropTypes from 'prop-types'
 import { getSensorClients } from '../../utilities/DatabaseFunctions'
 import DropdownList from '../general/DropdownList'
@@ -11,7 +12,6 @@ function DashboardConfiguration(props) {
     changeDisplayName,
     client,
     changeClient,
-    idToken,
     password,
     changePassword,
     environment,
@@ -23,10 +23,11 @@ function DashboardConfiguration(props) {
   const [clientList, setClientList] = useState([])
   const [clientLoading, setClientLoading] = useState('idle')
   const [initialized, setInitialized] = useState(false)
+  const [cookies] = useCookies(['googleIdToken'])
 
   useEffect(() => {
     async function retrieveClients() {
-      const clients = await getSensorClients(environment, idToken)
+      const clients = await getSensorClients(environment, cookies.googleIdToken)
       setClientList(clients)
     }
 
@@ -78,7 +79,6 @@ DashboardConfiguration.propTypes = {
   dashboardCheck: PropTypes.bool.isRequired,
   client: PropTypes.string.isRequired,
   changeClient: PropTypes.func.isRequired,
-  idToken: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   changeDisplayName: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,

@@ -20,7 +20,7 @@ import TwilioConfiguration from '../components/Renamer/TwilioConfiguration'
 export default function Renamer(props) {
   const { activatedDevices, particleToken, clickupToken, clickupListID, environment, modifyActivatedDevice } = props
 
-  const [cookies] = useCookies(['googleIDToken'])
+  const [cookies] = useCookies(['googleIdToken'])
 
   const blankActivatedDevice = ActivatedDevice.BlankDevice()
 
@@ -172,7 +172,7 @@ export default function Renamer(props) {
     if (twilioCheck) {
       setTwilioStatus('waiting')
       // purchase twilio number
-      const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, environment, cookies.googleIDToken)
+      const twilioResponse = await purchaseSensorTwilioNumberByAreaCode(twilioAreaCode, locationID, environment, cookies.googleIdToken)
       if (twilioResponse.message === 'success') {
         setTwilioStatus(twilioResponse.phoneNumber)
         newTwilioPhoneNumber = twilioResponse.phoneNumber
@@ -198,7 +198,7 @@ export default function Renamer(props) {
 
       newTwilioPhoneNumber = twilioCheck ? newTwilioPhoneNumber : twilioPhoneNumber
       const databaseInsert = await insertSensorLocation(
-        cookies.googleIDToken,
+        cookies.googleIdToken,
         password,
         locationID,
         displayName,
@@ -337,7 +337,6 @@ export default function Renamer(props) {
               dashboardCheck={dashboardCheck}
               client={client}
               changeClient={changeClient}
-              idToken={cookies.googleIDToken}
               displayName={displayName}
               changeDisplayName={changeDisplayName}
               password={password}

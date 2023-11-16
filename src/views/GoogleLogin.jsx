@@ -7,7 +7,7 @@ import LoginStatus from '../components/general/LoginStatus'
 function GoogleLogin(props) {
   const { googlePayload } = props
   // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie, removeCookie] = useCookies(['googleIDToken'])
+  const [cookies, setCookie, removeCookie] = useCookies(['googleIdToken'])
 
   return (
     <div style={{ width: '25ch', padding: 20 }}>
@@ -18,7 +18,7 @@ function GoogleLogin(props) {
       <Button
         variant="danger"
         onClick={() => {
-          removeCookie('googleIDToken')
+          removeCookie('googleIdToken')
           window.location.reload()
         }}
       >
