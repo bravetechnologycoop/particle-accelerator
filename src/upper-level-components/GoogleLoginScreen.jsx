@@ -80,7 +80,13 @@ function GoogleLoginScreen(props) {
         <img src={BraveLogoHorizontalSlate} alt="Brave" />
         <h2>Welcome to the PA.</h2>
         <p>Please log in using your Brave email.</p>
-        <Button variant="primary" onClick={() => googleLogin()}>
+        <Button
+          variant="primary"
+          onClick={() => {
+            setErrorMessage('Waiting for server response...')
+            googleLogin()
+          }}
+        >
           Login
         </Button>
         <p className="errorMessage">{errorMessage}</p>
