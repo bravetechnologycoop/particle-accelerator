@@ -1,18 +1,20 @@
-import '../stylesheets/GoogleLoginScreen.css'
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import Button from 'react-bootstrap/Button'
 import { useCookies } from 'react-cookie'
-import { useGoogleLogin } from '@react-oauth/google'
+import PropTypes from 'prop-types'
 import axios from 'axios'
+import { useGoogleLogin } from '@react-oauth/google'
+
+import Button from 'react-bootstrap/Button'
+
+import '../stylesheets/GoogleLoginScreen.css'
 import BraveLogoHorizontalSlate from '../pdf/BraveLogoHorizontalSlate.png'
 
 function GoogleLoginScreen(props) {
   const { onLogin } = props
-  const [errorMessage, setErrorMessage] = useState('Waiting for user login.')
   const [cookies, setCookie, removeCookie] = useCookies(['googleIdToken'])
+  const [errorMessage, setErrorMessage] = useState('Waiting for user login.')
 
-  async function handleIdToken(googleIdToken) {
+  async function handleGoogleIdToken(googleIdToken) {
     try {
       const res = await axios.post(`${process.env.REACT_APP_PA_GOOGLE_API}/pa/get-google-payload`, { googleIdToken })
 
@@ -55,22 +57,22 @@ function GoogleLoginScreen(props) {
         const googleTokens = res.data
 
         setCookie('googleIdToken', googleTokens.googleIdToken)
-        handleIdToken(googleTokens.googleIdToken)
+        handleGoogleIdToken(googleTokens.googleIdToken)
       } catch (error) {
         setErrorMessage(error.message)
         removeCookie('googleIdToken') // unsure cookie is undefined
       }
     },
-    onError: error => console.log('Login Error:', error),
+    onError: error => setErrorMessage(error.message),
+    // see https://developers.google.com/identity/protocols/oauth2/scopes#google-sign-in
     scope: 'email openid profile',
   })
 
-  // if a Google ID token exists in cookies...
+  // attempt to log in if a Google ID token exists in cookies
   if (cookies.googleIdToken !== undefined) {
-    // ...attempt to log in using it.
-    handleIdToken(cookies.googleIdToken)
+    handleGoogleIdToken(cookies.googleIdToken)
 
-    // return a blank page, pending handleIdToken resolves
+    // return a blank page, pending handleGoogleIdToken resolves
     return <div />
   }
 
