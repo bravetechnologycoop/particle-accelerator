@@ -1,5 +1,5 @@
 import Button from 'react-bootstrap/Button'
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { getClickupAccessToken, getClickupUserName } from '../utilities/ClickupFunctions'
 
@@ -9,6 +9,7 @@ function ClickupLogin(props) {
   // Fetch OAuth code from redirect URL
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
+  const [performingTokenLogin, setPerformingTokenLogin] = useState(false)
 
   useEffect(() => {
     // Declare async function since top-level awaits don't exist yet.
@@ -18,9 +19,11 @@ function ClickupLogin(props) {
       changeClickupToken(tempClickupToken)
       const tempUserName = await getClickupUserName(tempClickupToken)
       changeClickupUserName(tempUserName)
+      setPerformingTokenLogin(false) // no longer performing token login
     }
     // Only call the fetch token when no tokens are present and there is a code in the current url.
-    if (clickupCode !== null && clickupToken === '') {
+    if (clickupCode !== null && clickupToken === '' && !performingTokenLogin) {
+      setPerformingTokenLogin(true) // we only want to run tokenLogin once
       tokenLogin()
     }
   })
