@@ -1,6 +1,6 @@
-import { Environments } from './Constants'
+import axios from 'axios'
 
-const axios = require('axios')
+import { Environments } from './Constants'
 
 const BUTTONS_DEV_URL = process.env.REACT_APP_BUTTONS_DEV_URL
 const BUTTONS_PROD_URL = process.env.REACT_APP_BUTTONS_PROD_URL

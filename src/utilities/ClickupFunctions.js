@@ -1,7 +1,7 @@
+import axios from 'axios'
+
 import ClickupTask from './ClickupTask'
 import { ClickupStatuses, Environments } from './Constants'
-
-const axios = require('axios')
 
 /**
  * getClickupAccessToken: attempts to retrieve an authentication from ClickUp

@@ -18,7 +18,7 @@ function TwilioPurchasing(props) {
   const [registrationStatus, setRegistrationStatus] = useState('none')
   const [history, setHistory] = useState(retTwilioHistory())
   const [errorMessage, setErrorMessage] = useState('')
-  const [cookies] = useCookies(['googleIDToken'])
+  const [cookies] = useCookies(['googleIdToken'])
 
   useEffect(() => {
     console.log(history)
@@ -40,9 +40,9 @@ function TwilioPurchasing(props) {
     let response
 
     if (deviceType === 'sensor') {
-      response = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, cookies.googleIDToken)
+      response = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, cookies.googleIdToken)
     } else if (deviceType === 'buttons') {
-      response = await purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, cookies.googleIDToken)
+      response = await purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, cookies.googleIdToken)
     }
 
     if (response.message === 'success') {

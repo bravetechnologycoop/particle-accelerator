@@ -1,6 +1,6 @@
-import { Environments } from './Constants'
+import axios from 'axios'
 
-const axios = require('axios')
+import { Environments } from './Constants'
 
 const BRAVE_API_KEY_DEV = process.env.REACT_APP_BRAVE_API_KEY_DEV
 const BRAVE_API_KEY_STAGING = process.env.REACT_APP_BRAVE_API_KEY_STAGING
