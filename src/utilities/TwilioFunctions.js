@@ -21,7 +21,7 @@ const BRAVE_API_KEY_PROD = process.env.REACT_APP_BRAVE_API_KEY_PROD
  * @param {string} areaCode          the area code to purchase a phone number in
  * @param {string} locationID        the friendly name to assign to the phone number
  * @param {string} environment       the phase of deployment to add the twilio number to
- * @param {string} clickupToken      clickup auth token
+ * @param {string} googleIdToken     Google ID token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
 async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environment, googleIdToken) {
@@ -58,7 +58,7 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environ
  * @param {string} areaCode      the area code to purchase a phone number in
  * @param {string} locationID    the location ID of the sensor
  * @param {string} environment   the phase of deployment to add the twilio number to
- * @param {string} clickupToken  clickup auth token
+ * @param {string} googleIdToken Google ID token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
 export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, googleIdToken) {
