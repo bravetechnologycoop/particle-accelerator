@@ -68,14 +68,18 @@ function GoogleLoginScreen(props) {
     scope: 'email openid profile',
   })
 
-  // attempt to log in if a Google ID token exists in cookies
-  if (cookies.googleIdToken !== undefined) {
-    handleGoogleIdToken(cookies.googleIdToken)
+  // attempt to log in if a Google ID token exists in cookies on page load
+  useEffect(() => {
+    if (cookies.googleIdToken !== undefined) {
+      handleGoogleIdToken(cookies.googleIdToken)
+    }
+  }, [])
 
-    // return a blank page, pending handleGoogleIdToken resolves
+  // return a blank page pending handleGoogleIdToken resolves and cookies.googleIdToken becomes undefined
+  if (cookies.googleIdToken !== undefined)
     return <div />
-  }
 
+  // return the Google login screen
   return (
     <div className="googleLoginScreen">
       <div className="googleLoginScreenContainer">

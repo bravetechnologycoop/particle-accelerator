@@ -9,7 +9,6 @@ function ClickupLogin(props) {
   // Fetch OAuth code from redirect URL
   const urlParams = new URLSearchParams(window.location.search)
   const clickupCode = urlParams.get('code')
-  const [performingTokenLogin, setPerformingTokenLogin] = useState(false)
 
   useEffect(() => {
     // Declare async function since top-level awaits don't exist yet.
@@ -19,14 +18,12 @@ function ClickupLogin(props) {
       changeClickupToken(tempClickupToken)
       const tempUserName = await getClickupUserName(tempClickupToken)
       changeClickupUserName(tempUserName)
-      setPerformingTokenLogin(false) // no longer performing token login
     }
     // Only call the fetch token when no tokens are present and there is a code in the current url.
-    if (clickupCode !== null && clickupToken === '' && !performingTokenLogin) {
-      setPerformingTokenLogin(true) // we only want to run tokenLogin once
+    if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
     }
-  })
+  }, [])
 
   if (clickupToken !== '') {
     return (
