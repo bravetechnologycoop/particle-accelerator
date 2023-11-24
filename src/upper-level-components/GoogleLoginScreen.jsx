@@ -76,8 +76,7 @@ function GoogleLoginScreen(props) {
   }, [])
 
   // return a blank page pending handleGoogleIdToken resolves and cookies.googleIdToken becomes undefined
-  if (cookies.googleIdToken !== undefined)
-    return <div />
+  if (cookies.googleIdToken !== undefined) return <div />
 
   // return the Google login screen
   return (

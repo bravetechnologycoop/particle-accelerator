@@ -1,5 +1,5 @@
 import Button from 'react-bootstrap/Button'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { getClickupAccessToken, getClickupUserName } from '../utilities/ClickupFunctions'
 
