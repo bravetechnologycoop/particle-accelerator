@@ -8,13 +8,14 @@ import LoginRowButton from '../components/Navigation/LoginRowButton'
 import { getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 import RowToggler from '../components/Navigation/RowToggler'
 import ParticleSettings from '../utilities/ParticleSettings'
-import BraveLogoWhite from '../pdf/BraveLogoWhite.svg'
+import BraveLogoWhite from '../graphics/BraveLogoWhite.svg'
 import { Environments } from '../utilities/Constants'
 import Pages from './Pages'
 
 function Navigation(props) {
   const {
     viewState,
+    googlePayload,
     loginStatus,
     changeToken,
     changeLoginState,
@@ -34,6 +35,10 @@ function Navigation(props) {
 
   const loginButtonConfig = {}
 
+  loginButtonConfig[Pages.google.displayName] = {
+    loginState: 'true',
+    userName: googlePayload.name,
+  }
   loginButtonConfig[Pages.particle.displayName] = {
     loginState: loginStatus,
     changeToken,
@@ -139,6 +144,10 @@ function Navigation(props) {
 
 Navigation.propTypes = {
   viewState: PropTypes.string.isRequired,
+  googlePayload: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   loginStatus: PropTypes.string.isRequired,
   changeToken: PropTypes.func.isRequired,
   changeLoginState: PropTypes.func.isRequired,

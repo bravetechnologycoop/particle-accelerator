@@ -19,6 +19,15 @@ const Pages = {
     },
     loginBadge: false,
   },
+  google: {
+    displayName: 'Google',
+    paths: ['/google'],
+    authorizations: {
+      clickup: false,
+      particle: false,
+    },
+    loginBadge: true,
+  },
   particle: {
     displayName: 'Particle',
     paths: ['/particle'],
@@ -86,7 +95,7 @@ const Pages = {
     displayName: 'Button Registration',
     paths: ['/button-registration'],
     authorizations: {
-      clickup: true,
+      clickup: false,
       particle: false,
     },
     loginBadge: false,
@@ -95,7 +104,7 @@ const Pages = {
     displayName: 'Twilio Number Purchasing',
     paths: ['/twilio-number-purchasing'],
     authorizations: {
-      clickup: true,
+      clickup: false,
       particle: false,
     },
     loginBadge: false,

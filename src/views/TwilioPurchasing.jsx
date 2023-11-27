@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Card, Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
+import { useCookies } from 'react-cookie'
 import PhoneNumberStatus from '../components/general/PhoneNumberStatus'
 import { purchaseButtonTwilioNumberByAreaCode, purchaseSensorTwilioNumberByAreaCode } from '../utilities/TwilioFunctions'
 import { retTwilioHistory, storeTwilioHistory } from '../utilities/StorageFunctions'
 
 function TwilioPurchasing(props) {
   // eslint-disable-next-line no-unused-vars
-  const { clickupToken, environment } = props
+  const { environment } = props
 
   const [deviceType, setDeviceType] = useState('sensor')
   const [areaCode, setAreaCode] = useState('')
@@ -17,6 +18,7 @@ function TwilioPurchasing(props) {
   const [registrationStatus, setRegistrationStatus] = useState('none')
   const [history, setHistory] = useState(retTwilioHistory())
   const [errorMessage, setErrorMessage] = useState('')
+  const [cookies] = useCookies(['googleIdToken'])
 
   useEffect(() => {
     console.log(history)
@@ -38,9 +40,9 @@ function TwilioPurchasing(props) {
     let response
 
     if (deviceType === 'sensor') {
-      response = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken)
+      response = await purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, cookies.googleIdToken)
     } else if (deviceType === 'buttons') {
-      response = await purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken)
+      response = await purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, cookies.googleIdToken)
     }
 
     if (response.message === 'success') {
@@ -119,9 +121,6 @@ function TwilioPurchasing(props) {
   )
 }
 
-TwilioPurchasing.propTypes = {
-  clickupToken: PropTypes.string.isRequired,
-  environment: PropTypes.string.isRequired,
-}
+TwilioPurchasing.propTypes = { environment: PropTypes.string.isRequired }
 
 export default TwilioPurchasing

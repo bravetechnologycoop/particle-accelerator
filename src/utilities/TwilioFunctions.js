@@ -1,6 +1,6 @@
-import { Environments } from './Constants'
+import axios from 'axios'
 
-const axios = require('axios')
+import { Environments } from './Constants'
 
 const BUTTONS_DEV_URL = process.env.REACT_APP_BUTTONS_DEV_URL
 const BUTTONS_PROD_URL = process.env.REACT_APP_BUTTONS_PROD_URL
@@ -21,10 +21,10 @@ const BRAVE_API_KEY_PROD = process.env.REACT_APP_BRAVE_API_KEY_PROD
  * @param {string} areaCode          the area code to purchase a phone number in
  * @param {string} locationID        the friendly name to assign to the phone number
  * @param {string} environment       the phase of deployment to add the twilio number to
- * @param {string} clickupToken      clickup auth token
+ * @param {string} googleIdToken     Google ID token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
-async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environment, clickupToken) {
+async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environment, googleIdToken) {
   let braveApiKey = ''
 
   if (environment === Environments.dev.name) {
@@ -40,7 +40,7 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environ
   const data = {
     areaCode,
     locationID,
-    clickupToken,
+    googleIdToken,
     braveKey: braveApiKey,
   }
 
@@ -58,10 +58,10 @@ async function purchaseTwilioNumberByAreaCode(url, areaCode, locationID, environ
  * @param {string} areaCode      the area code to purchase a phone number in
  * @param {string} locationID    the location ID of the sensor
  * @param {string} environment   the phase of deployment to add the twilio number to
- * @param {string} clickupToken  clickup auth token
+ * @param {string} googleIdToken Google ID token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
-export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken) {
+export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID, environment, googleIdToken) {
   let baseUrl = ''
   if (environment === Environments.dev.name) {
     baseUrl = SENSOR_DEV_URL
@@ -73,7 +73,7 @@ export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID,
     return 'Error: No environment found'
   }
 
-  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/sensor-twilio-number`, areaCode, locationID, environment, clickupToken)
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/sensor-twilio-number`, areaCode, locationID, environment, googleIdToken)
 }
 
 /**
@@ -81,10 +81,10 @@ export async function purchaseSensorTwilioNumberByAreaCode(areaCode, locationID,
  * @param {string} areaCode      the area code to purchase a phone number in
  * @param {string} locationID    the friendly name for the twilio number
  * @param {string} environment   the phase of deployment to add the twilio number to
- * @param {string} clickupToken  clickup auth token
+ * @param {string} googleIdToken Google ID token
  * @return {Promise<{phoneNumber: string, friendlyName: string}|string>} a phone number object if successful, error message if unsuccessful
  */
-export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, clickupToken) {
+export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID, environment, googleIdToken) {
   let baseUrl = ''
   if (environment === Environments.dev.name) {
     baseUrl = BUTTONS_DEV_URL
@@ -96,5 +96,5 @@ export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID,
     return 'Error: No environment found'
   }
 
-  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, environment, clickupToken)
+  return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, environment, googleIdToken)
 }

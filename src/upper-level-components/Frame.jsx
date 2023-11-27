@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import Activator from '../views/Activator'
 import Validator from '../views/Validator'
+import GoogleLogin from '../views/GoogleLogin'
 import ParticleLogin from '../views/ParticleLogin'
 import ClickupLogin from '../views/ClickupLogin'
 import {
@@ -31,6 +32,7 @@ function Frame(props) {
     loginState,
     changeLoginState,
     viewState,
+    googlePayload,
     safeModeState,
     particleSettings,
     changeParticleSettings,
@@ -100,6 +102,7 @@ function Frame(props) {
     />
   )
   viewConfig[Pages.deviceLookup.displayName] = <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
+  viewConfig[Pages.google.displayName] = <GoogleLogin googlePayload={googlePayload} />
   viewConfig[Pages.particle.displayName] = (
     <ParticleLogin
       loginState={loginState}
@@ -131,8 +134,8 @@ function Frame(props) {
       modifyActivatedDevice={modifyActivatedDevice}
     />
   )
-  viewConfig[Pages.twilio.displayName] = <TwilioPurchasing clickupToken={clickupToken} environment={environment} />
-  viewConfig[Pages.buttonRegistration.displayName] = <ButtonRegistration clickupToken={clickupToken} environment={environment} />
+  viewConfig[Pages.twilio.displayName] = <TwilioPurchasing environment={environment} />
+  viewConfig[Pages.buttonRegistration.displayName] = <ButtonRegistration environment={environment} />
   viewConfig[Pages.deviceManager.displayName] = (
     <DeviceManager
       activatedDevices={activatedDevices}
@@ -189,6 +192,10 @@ Frame.propTypes = {
   loginState: PropTypes.string.isRequired,
   changeLoginState: PropTypes.func.isRequired,
   viewState: PropTypes.string.isRequired,
+  googlePayload: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   safeModeState: PropTypes.bool.isRequired,
   particleSettings: PropTypes.instanceOf(ParticleSettings).isRequired,
   changeParticleSettings: PropTypes.func.isRequired,

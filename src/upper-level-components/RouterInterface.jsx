@@ -23,7 +23,7 @@ import {
 import ParticleSettings from '../utilities/ParticleSettings'
 
 function RouterInterface(props) {
-  const { viewState } = props
+  const { viewState, googlePayload } = props
 
   const [particleToken, setParticleToken] = useState(getParticleToken())
   const [loginState, setLoginState] = useState(getParticleLoginState())
@@ -135,6 +135,7 @@ function RouterInterface(props) {
       <div style={styles.navbar}>
         <Navigation
           viewState={viewState}
+          googlePayload={googlePayload}
           loginStatus={loginState}
           token={particleToken}
           changeToken={changeParticleToken}
@@ -155,6 +156,7 @@ function RouterInterface(props) {
           loginState={loginState}
           particleToken={particleToken}
           viewState={viewState}
+          googlePayload={googlePayload}
           safeModeState={safeMode}
           changeSafeModeState={changeSafeModeState}
           particleSettings={particleSettings}
@@ -174,6 +176,10 @@ function RouterInterface(props) {
 
 RouterInterface.propTypes = {
   viewState: PropTypes.string.isRequired,
+  googlePayload: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
 export default RouterInterface

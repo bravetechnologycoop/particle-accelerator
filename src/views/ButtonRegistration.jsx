@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Form } from 'react-bootstrap'
+import { useCookies } from 'react-cookie'
 import Button from 'react-bootstrap/Button'
 import PropTypes from 'prop-types'
 import { registerLoraButton } from '../utilities/AWSFunctions'
@@ -7,19 +8,20 @@ import RegistrationIcon from '../components/ButtonRegistration/RegistrationIcon'
 
 export default function ButtonRegistration(props) {
   // eslint-disable-next-line no-unused-vars
-  const { clickupToken, environment } = props
+  const { environment } = props
 
   const [deviceEUI, setDeviceEUI] = useState('')
   const [deviceName, setDeviceName] = useState('')
   const [formLock, setFormLock] = useState(false)
   const [registrationStatus, setRegistrationStatus] = useState('idle')
+  const [cookies] = useCookies(['googleIdToken'])
 
   async function handleSubmit(event) {
     event.preventDefault()
     setRegistrationStatus('waiting')
     setFormLock(true)
 
-    const awsRegistration = await registerLoraButton(deviceEUI, deviceName, environment, clickupToken)
+    const awsRegistration = await registerLoraButton(deviceEUI, deviceName, environment, cookies.googleIdToken)
 
     if (awsRegistration === 'success') {
       setRegistrationStatus(awsRegistration)
@@ -54,6 +56,5 @@ export default function ButtonRegistration(props) {
 }
 
 ButtonRegistration.propTypes = {
-  clickupToken: PropTypes.string.isRequired,
   environment: PropTypes.string.isRequired,
 }

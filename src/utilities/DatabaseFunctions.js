@@ -1,6 +1,6 @@
-import { Environments } from './Constants'
+import axios from 'axios'
 
-const axios = require('axios')
+import { Environments } from './Constants'
 
 const BRAVE_API_KEY_DEV = process.env.REACT_APP_BRAVE_API_KEY_DEV
 const BRAVE_API_KEY_STAGING = process.env.REACT_APP_BRAVE_API_KEY_STAGING
@@ -13,10 +13,10 @@ const SENSOR_STAGING_URL = process.env.REACT_APP_SENSOR_STAGING_URL
 /**
  * getSensorClients: retrieves the list of clients in the Brave sensor DB, uses the sensors backend.
  * @param {string} environment       which server to retrieve clients from
- * @param {string} clickupToken      clickup token
+ * @param {string} googleIdToken     Google ID token
  * @return {Promise<{name: string, id: string}[]>}   array of client names and ids if successful, empty if not.
  */
-export async function getSensorClients(environment, clickupToken) {
+export async function getSensorClients(environment, googleIdToken) {
   let baseUrl = ''
   let braveApiKey = ''
   if (environment === Environments.dev.name) {
@@ -33,7 +33,7 @@ export async function getSensorClients(environment, clickupToken) {
   }
 
   const data = {
-    clickupToken,
+    googleIdToken,
     braveKey: braveApiKey,
   }
 
@@ -49,7 +49,7 @@ export async function getSensorClients(environment, clickupToken) {
 
 /**
  * insertSensorLocation: inserts a location into the brave sensor DB
- * @param {string} clickupToken       clickup token
+ * @param {string} googleIdToken      Google ID token
  * @param {string} password           front-end database password
  * @param {string} locationID         new locationID for the DB
  * @param {string} displayName        display name on dashboard
@@ -59,7 +59,7 @@ export async function getSensorClients(environment, clickupToken) {
  * @param {string} environment        which server to insert a sensor location to.
  * @return {Promise<boolean>}         true if successful, false if not
  */
-export async function insertSensorLocation(clickupToken, password, locationID, displayName, particleDeviceID, twilioNumber, clientID, environment) {
+export async function insertSensorLocation(googleIdToken, password, locationID, displayName, particleDeviceID, twilioNumber, clientID, environment) {
   let baseUrl = ''
   let braveApiKey = ''
   if (environment === Environments.dev.name) {
@@ -76,7 +76,7 @@ export async function insertSensorLocation(clickupToken, password, locationID, d
   }
 
   const data = {
-    clickupToken,
+    googleIdToken,
     braveKey: braveApiKey,
     password,
     locationID,

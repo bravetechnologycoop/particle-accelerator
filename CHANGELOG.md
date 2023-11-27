@@ -11,9 +11,20 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Google login screen and page (CU-3denbe6).
+
+### Changed
+
+- Renamer to authenticate with the PA API using Google (CU-3denbe6).
+- Button Registration to authenticate with the PA API using Google (CU-3denbe6).
+- Twilio Number Purchasing to authenticate with the PA API using Google (CU-3denbe6).
+
 ## [1.8.0] - 2023-10-12
 
 ### Changed
+
 - Updated favicon image from old logo to current logo (CU-8678w897a).
 - Upgrade Node JS to 18.16.1 (CU-860raw01r).
 

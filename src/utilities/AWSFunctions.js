@@ -11,14 +11,14 @@ const BUTTONS_STAGING_URL = process.env.REACT_APP_BUTTONS_STAGING_URL
 
 /**
  * registerLoraButton: Uses Brave's backend to register a lora button to Brave's AWS account.
- * @param {string} deviceEUI EUI of RAK 7201 button to register to AWS
- * @param {string} targetName Name for the device in AWS
- * @param {string} environment
- * @param {string} clickupToken Global clickup token for authentication
+ * @param {string} deviceEUI     EUI of RAK 7201 button to register to AWS
+ * @param {string} targetName    Name for the device in AWS
+ * @param {string} environment   Current environment (dev, staging, prod)
+ * @param {string} googleIdToken Google ID token
  * @return {Promise<string|*>} 'success' if successful, server error message if not.
  */
 // eslint-disable-next-line import/prefer-default-export
-export async function registerLoraButton(deviceEUI, targetName, environment, clickupToken) {
+export async function registerLoraButton(deviceEUI, targetName, environment, googleIdToken) {
   let baseUrl = ''
   let braveApiKey = ''
 
@@ -38,7 +38,7 @@ export async function registerLoraButton(deviceEUI, targetName, environment, cli
   const data = {
     deviceEUI,
     targetName,
-    clickupToken,
+    googleIdToken,
     braveKey: braveApiKey,
   }
 

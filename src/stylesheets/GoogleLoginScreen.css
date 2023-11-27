@@ -1,0 +1,42 @@
+.googleLoginScreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.googleLoginScreen .googleLoginScreenContainer {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid #d0d0d0;
+    width: fit-content;
+    height: fit-content;
+}
+
+.googleLoginScreenContainer img {
+    margin: 8px 0;
+    height: 48px;
+}
+
+.googleLoginScreenContainer h2 {
+    margin: 8px 0;
+    font-size: 16pt;
+    font-weight: 600;
+}
+
+.googleLoginScreenContainer p {
+    margin: 8px 0;
+    font-size: 12pt;
+    font-weight: 400;
+}
+
+.googleLoginScreenContainer p.errorMessage {
+    font-size: 10pt;
+    font-weight: 400;
+    color: #808080;
+}

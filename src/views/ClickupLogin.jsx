@@ -23,7 +23,7 @@ function ClickupLogin(props) {
     if (clickupCode !== null && clickupToken === '') {
       tokenLogin()
     }
-  })
+  }, [])
 
   if (clickupToken !== '') {
     return (
