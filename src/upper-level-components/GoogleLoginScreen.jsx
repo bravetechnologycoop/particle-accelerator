@@ -7,7 +7,7 @@ import { useGoogleLogin } from '@react-oauth/google'
 import Button from 'react-bootstrap/Button'
 
 import '../stylesheets/GoogleLoginScreen.css'
-import BraveLogoHorizontalSlate from '../pdf/BraveLogoHorizontalSlate.png'
+import BraveLogoHorizontalSlate from '../graphics/BraveLogoHorizontalSlate.png'
 
 function GoogleLoginScreen(props) {
   const { onLogin } = props

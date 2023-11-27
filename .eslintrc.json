@@ -9,5 +9,5 @@
   "env": {
     "browser": true
   },
-  "ignorePatterns": ["reportWebVitals.js"]
+  "ignorePatterns": ["reportWebVitals.js", "build/*"]
 }

@@ -95,7 +95,7 @@ const Pages = {
     displayName: 'Button Registration',
     paths: ['/button-registration'],
     authorizations: {
-      clickup: true,
+      clickup: false,
       particle: false,
     },
     loginBadge: false,
@@ -104,7 +104,7 @@ const Pages = {
     displayName: 'Twilio Number Purchasing',
     paths: ['/twilio-number-purchasing'],
     authorizations: {
-      clickup: true,
+      clickup: false,
       particle: false,
     },
     loginBadge: false,

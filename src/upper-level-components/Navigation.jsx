@@ -8,7 +8,7 @@ import LoginRowButton from '../components/Navigation/LoginRowButton'
 import { getParticleLoginState, getParticleToken } from '../utilities/StorageFunctions'
 import RowToggler from '../components/Navigation/RowToggler'
 import ParticleSettings from '../utilities/ParticleSettings'
-import BraveLogoWhite from '../pdf/BraveLogoWhite.svg'
+import BraveLogoWhite from '../graphics/BraveLogoWhite.svg'
 import { Environments } from '../utilities/Constants'
 import Pages from './Pages'
 
