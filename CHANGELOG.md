@@ -11,6 +11,11 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- `messageClientsForProduct` helper function in utilities/TwilioFunctions.js (CU-w9bcb5).
+- Message Clients page in views/MessageClients.jsx (CU-w9bcb5).
+
 ## [2.0.0] - 2023-12-01
 
 ### Added
