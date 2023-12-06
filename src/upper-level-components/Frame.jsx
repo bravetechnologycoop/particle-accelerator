@@ -20,6 +20,7 @@ import TwilioPurchasing from '../views/TwilioPurchasing'
 import HomeView from '../views/HomeView'
 import DeviceManager from '../views/DeviceManager'
 import SensorProvisioningGuide from '../views/SensorProvisioningGuide'
+import MessageClients from '../views/MessageClients'
 
 import ClickupLogo from '../graphics/ClickupLogo.svg'
 import ParticleLogo from '../graphics/ParticleLogo.svg'
@@ -153,6 +154,7 @@ function Frame(props) {
       changeClickupUserName={changeClickupUserName}
     />
   )
+  viewConfig[Pages.messageClients.displayName] = <MessageClients environment={environment} />
 
   const currentPageInfo = Object.values(Pages).find(page => {
     return page.displayName === viewState

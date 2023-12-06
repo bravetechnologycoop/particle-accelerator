@@ -98,3 +98,55 @@ export async function purchaseButtonTwilioNumberByAreaCode(areaCode, locationID,
 
   return purchaseTwilioNumberByAreaCode(`${baseUrl}/pa/buttons-twilio-number`, areaCode, locationID, environment, googleIdToken)
 }
+
+/**
+ * messageClientsForProduct: send text message to client for specified product with Twilio
+ * @param {string} product       the product which the message concerns (e.g., 'buttons', 'sensor')
+ * @param {string} environment   the phase of deployment to send the message to
+ * @param {string} twilioMessage the message to send
+ * @param {string} googleIdToken Google ID token
+ * @return {Promise<{status: string, twilioMessage: string, successfullyMessaged: array, failedToMessage: array}|string>}
+ *     Returns information about the clients that were messaged, and weren't messaged. Every
+ *   item in successfullyMessaged and failedToMessage is an object containing to, from, clientId,
+ *   and clientDisplayName attributes, all strings. To and from are phone numbers.
+ */
+export async function messageClientsForProduct(product, environment, twilioMessage, googleIdToken) {
+  let baseUrl = ''
+
+  if (product === 'buttons') {
+    if (environment === Environments.dev.name) {
+      baseUrl = BUTTONS_DEV_URL
+    } else if (environment === Environments.prod.name) {
+      baseUrl = BUTTONS_PROD_URL
+    } else if (environment === Environments.staging.name) {
+      baseUrl = BUTTONS_STAGING_URL
+    } else {
+      throw new Error('No environment found')
+    }
+  } else if (product === 'sensor') {
+    if (environment === Environments.dev.name) {
+      baseUrl = SENSOR_DEV_URL
+    } else if (environment === Environments.prod.name) {
+      baseUrl = SENSOR_PROD_URL
+    } else if (environment === Environments.staging.name) {
+      baseUrl = SENSOR_STAGING_URL
+    } else {
+      throw new Error('No environment found')
+    }
+  } else {
+    throw new Error('No product found')
+  }
+
+  const data = {
+    twilioMessage,
+    googleIdToken,
+  }
+
+  const response = await axios.post(`${baseUrl}/pa/message-clients`, data)
+
+  if (response.status !== 200) {
+    throw new Error(`Got status ${response.status}`)
+  }
+
+  return response.data
+}
