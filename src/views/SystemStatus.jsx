@@ -17,7 +17,7 @@ export default function SystemStatus() {
 
   async function getSensorServerStatus() {
     try {
-      const response = await axios.get(sensorURL)
+      const response = await axios.get(`${sensorURL}/login`)
       setSensorServerConnected(true)
       console.log(`Sensor Server Status: ${response.status}`)
     } catch (error) {
@@ -28,7 +28,7 @@ export default function SystemStatus() {
 
   async function getButtonsServerStatus() {
     try {
-      const response = await axios.get(buttonsURL)
+      const response = await axios.get(`${buttonsURL}/login`)
       setButtonServerConnected(true)
       console.log(`Button Server Status: ${response.status}`)
     } catch (error) {
