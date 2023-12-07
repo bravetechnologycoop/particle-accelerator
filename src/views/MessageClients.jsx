@@ -3,6 +3,7 @@ import { useCookies } from 'react-cookie'
 import PropTypes from 'prop-types'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
 import { messageClientsForProduct } from '../utilities/TwilioFunctions'
 
 function MessageClients(props) {
@@ -11,6 +12,7 @@ function MessageClients(props) {
   const [product, setProduct] = useState('Buttons')
   const [twilioMessage, setTwilioMessage] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
+  const [showPrompt, setShowPrompt] = useState(false)
   const [successfullyMessaged, setSuccessfullyMessaged] = useState([])
   const [failedToMessage, setFailedToMessage] = useState([])
 
@@ -54,10 +56,12 @@ function MessageClients(props) {
       setStatusMessage('Waiting for response...')
       setSuccessfullyMessaged([])
       setFailedToMessage([])
+      setShowPrompt(false)
 
       const data = await messageClientsForProduct(product.toLowerCase(), environment, twilioMessage, cookies.googleIdToken)
 
-      setStatusMessage(`Status: ${data.status}.`)
+      setStatusMessage(`Status: ${data.status}. Sent "${twilioMessage}" to the active clients in the ${environment} environment.`)
+      setTwilioMessage('')
       setSuccessfullyMessaged(data.successfullyMessaged)
       setFailedToMessage(data.failedToMessage)
     } catch (error) {
@@ -82,53 +86,68 @@ function MessageClients(props) {
   }
 
   return (
-    <div style={messageClientsContainerStyles}>
-      <div style={{ width: '40ch', padding: 20 }}>
-        <h3>Message Clients</h3>
-        <p>
-          Only clients considered active will be messaged. Active clients are those that are sending vitals and alerts, and have at least one location
-          (button or sensor) that is sending vitals and alerts.
-        </p>
-        <Form.Group>
-          <Form.Label>Product</Form.Label>
-          <Form.Select value={product} onChange={e => setProduct(e.target.value)}>
-            <option>Buttons</option>
-            <option>Sensor</option>
-          </Form.Select>
-          <Form.Text className="text-muted">
-            Environment <b>{environment}</b> is selected. Is this right?
-          </Form.Text>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label style={{ marginTop: '10px' }}>Text Message</Form.Label>
-          <Form.Control as="textarea" rows={3} value={twilioMessage} onChange={e => setTwilioMessage(e.target.value)} />
-        </Form.Group>
-        <Button variant="primary" style={{ marginTop: '10px' }} onClick={submitMessageClients}>
-          Submit
-        </Button>
-        <p style={{ color: '#808080' }}>{statusMessage}</p>
+    <>
+      <div style={messageClientsContainerStyles}>
+        <div style={{ width: '40ch', padding: 20 }}>
+          <h3>Message Clients</h3>
+          <p>
+            Only clients considered active will be messaged. Active clients are those that are sending vitals and alerts, and have at least one
+            location (button or sensor) that is sending vitals and alerts.
+          </p>
+          <Form.Group>
+            <Form.Label>Product</Form.Label>
+            <Form.Select value={product} onChange={e => setProduct(e.target.value)}>
+              <option>Buttons</option>
+              <option>Sensor</option>
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label style={{ marginTop: '10px' }}>Text Message</Form.Label>
+            <Form.Control as="textarea" rows={6} value={twilioMessage} onChange={e => setTwilioMessage(e.target.value)} />
+          </Form.Group>
+          <Button variant="primary" style={{ marginTop: '10px' }} onClick={() => setShowPrompt(true)}>
+            Submit
+          </Button>
+          <p style={{ color: '#808080', marginTop: '10px' }}>{statusMessage}</p>
+        </div>
+        <div style={{ flexGrow: '1', padding: 20 }}>
+          {successfullyMessaged.length === 0 ? (
+            ''
+          ) : (
+            <>
+              <h3>Successfully Messaged</h3>
+              <div style={summaryColumnStyles}>{successfullyMessaged.map(makeTwilioTraceObjectElement)}</div>
+            </>
+          )}
+        </div>
+        <div style={{ flexGrow: '1', padding: 20 }}>
+          {failedToMessage.length === 0 ? (
+            ''
+          ) : (
+            <>
+              <h3>Failed to message</h3>
+              <div style={summaryColumnStyles}>{failedToMessage.map(makeTwilioTraceObjectElement)}</div>
+            </>
+          )}
+        </div>
       </div>
-      <div style={{ flexGrow: '1', padding: 20 }}>
-        {successfullyMessaged.length === 0 ? (
-          ''
-        ) : (
-          <>
-            <h3>Successfully Messaged</h3>
-            <div style={summaryColumnStyles}>{successfullyMessaged.map(makeTwilioTraceObjectElement)}</div>
-          </>
-        )}
-      </div>
-      <div style={{ flexGrow: '1', padding: 20 }}>
-        {failedToMessage.length === 0 ? (
-          ''
-        ) : (
-          <>
-            <h3>Failed to message</h3>
-            <div style={summaryColumnStyles}>{failedToMessage.map(makeTwilioTraceObjectElement)}</div>
-          </>
-        )}
-      </div>
-    </div>
+      <Modal show={showPrompt} onHide={() => setShowPrompt(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Message Clients</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to send &ldquo;{twilioMessage}&rdquo; to the active clients in the <b>{environment}</b> environment?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPrompt(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={submitMessageClients}>
+            I&apos;m sure
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   )
 }
 

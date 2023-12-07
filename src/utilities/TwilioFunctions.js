@@ -137,6 +137,10 @@ export async function messageClientsForProduct(product, environment, twilioMessa
     throw new Error('No product found')
   }
 
+  if (twilioMessage === '') {
+    throw new Error('No message provided')
+  }
+
   const data = {
     twilioMessage,
     googleIdToken,
