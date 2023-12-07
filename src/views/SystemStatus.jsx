@@ -6,10 +6,10 @@ import checkIcon from '../graphics/check-circle-fill.svg'
 import xIcon from '../graphics/x-circle-fill.svg'
 
 export default function SystemStatus() {
-  const [sensorServerUp, setSensorServerUp] = useState(false)
-  const [buttonServerUp, setButtonServerUp] = useState(false)
-  const [sensorDatabaseUp, setSensorDatabaseUp] = useState(false)
-  // const [buttonsDatabaseUp, setButtonsDatabaseUp] = useState(false)
+  const [sensorServerConnected, setSensorServerConnected] = useState(false)
+  const [buttonServerConnected, setButtonServerConnected] = useState(false)
+  const [sensorDatabaseConnected, setSensorDatabaseConnected] = useState(false)
+  const [buttonsDatabaseConnected, setButtonsDatabaseConnected] = useState(false)
   const [cookies] = useCookies(['googleIdToken'])
   const braveApiKey = process.env.REACT_APP_BRAVE_API_KEY_PROD
   const sensorURL = process.env.REACT_APP_SENSOR_PROD_URL
@@ -18,44 +18,68 @@ export default function SystemStatus() {
   async function getSensorServerStatus() {
     try {
       const response = await axios.get(sensorURL)
-      setSensorServerUp(true)
+      setSensorServerConnected(true)
       console.log(`Sensor Server Status: ${response.status}`)
     } catch (error) {
-      setSensorServerUp(false)
+      setSensorServerConnected(false)
       console.log(error)
     }
   }
 
-  async function getButtonServerStatus() {
+  async function getButtonsServerStatus() {
     try {
       const response = await axios.get(buttonsURL)
-      setButtonServerUp(true)
+      setButtonServerConnected(true)
       console.log(`Button Server Status: ${response.status}`)
     } catch (error) {
-      setButtonServerUp(false)
+      setButtonServerConnected(false)
       console.log(error)
     }
   }
 
   async function getSensorDatabaseStatus() {
     try {
-      const data = {
-        braveKey: braveApiKey,
-        googleIdToken: cookies.googleIdToken,
-      }
-      const response = await axios.post(`http://localhost:8000/pa/check-database-connection`, data)
-      setSensorDatabaseUp(true)
+      const response = await axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_SENSOR_DEV_URL}/pa/get-sensor-clients`, // CHANGE THIS TO NEW SENSOR ROUTE WHEN COMPLETE
+        headers: {},
+        data: {
+          braveKey: braveApiKey,
+          googleIdToken: cookies.googleIdToken,
+        },
+      })
+      setSensorDatabaseConnected(true)
       console.log(`Sensor Database Status: ${response.status}`)
     } catch (error) {
-      setSensorDatabaseUp(false)
+      setSensorDatabaseConnected(false)
+      console.log(`Sensor Database Status: ${error.message}`)
+    }
+  }
+
+  async function getButtonsDatabaseStatus() {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_SENSOR_DEV_URL}/pa/get-sensor-clients`, // CHANGE THIS TO NEW BUTTON ROUTE WHEN COMPLETE
+        headers: {},
+        data: {
+          braveKey: braveApiKey,
+          googleIdToken: cookies.googleIdToken,
+        },
+      })
+      setButtonsDatabaseConnected(true)
+      console.log(`Sensor Database Status: ${response.status}`)
+    } catch (error) {
+      setButtonsDatabaseConnected(false)
       console.log(`Sensor Database Status: ${error.message}`)
     }
   }
 
   useEffect(() => {
     getSensorServerStatus()
-    getButtonServerStatus()
+    getButtonsServerStatus()
     getSensorDatabaseStatus()
+    getButtonsDatabaseStatus()
   }, [])
 
   return (
@@ -72,13 +96,13 @@ export default function SystemStatus() {
         <tbody>
           <tr>
             <td>Brave Sensors</td>
-            <td>{sensorServerUp ? <img src={checkIcon} alt="Green Check" /> : <img src={xIcon} alt="Red X" />}</td>
-            <td>{sensorDatabaseUp ? <img src={checkIcon} alt="Green Check" /> : <img src={xIcon} alt="Red X" />}</td>
+            <td>{sensorServerConnected ? <img src={checkIcon} alt="Green Check" /> : <img src={xIcon} alt="Red X" />}</td>
+            <td>{sensorDatabaseConnected ? <img src={checkIcon} alt="Green Check" /> : <img src={xIcon} alt="Red X" />}</td>
           </tr>
           <tr>
             <td>Brave Buttons</td>
-            <td>{buttonServerUp ? <img src={checkIcon} alt="Green Check" /> : <img src={xIcon} alt="Red X" />}</td>
-            <td>not done yet</td>
+            <td>{buttonServerConnected ? <img src={checkIcon} alt="Green Check" /> : <img src={xIcon} alt="Red X" />}</td>
+            <td>{buttonsDatabaseConnected ? <img src={checkIcon} alt="Green Check" /> : <img src={xIcon} alt="Red X" />}</td>
           </tr>
         </tbody>
       </Table>
