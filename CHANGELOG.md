@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Message Clients page and interaction with PA API call /pa/message-clients (CU-w9bcb5).
+
 ## [2.0.0] - 2023-12-01
 
 ### Added
