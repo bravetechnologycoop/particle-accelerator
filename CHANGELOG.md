@@ -11,6 +11,8 @@ the code was deployed.
 
 ## [Unreleased]
 
+## [2.1.0] - 2023-12-08
+
 ### Added
 
 - Message Clients page and interaction with PA API call /pa/message-clients (CU-w9bcb5).
@@ -109,7 +111,8 @@ the code was deployed.
 
 - Initial version (CU-21ghk0x).
 
-[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v2.0.0...HEAD
+[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.8.0...v2.0.0
 [1.8.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.6.0...v1.7.0
