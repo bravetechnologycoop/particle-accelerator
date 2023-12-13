@@ -109,6 +109,15 @@ const Pages = {
     },
     loginBadge: false,
   },
+  messageClients: {
+    displayName: 'Message Clients',
+    paths: ['/message-clients'],
+    authorizations: {
+      clickup: false,
+      particle: false,
+    },
+    loginBadge: false,
+  },
   systemStatus: {
     displayName: 'System Status',
     paths: ['/system-status'],

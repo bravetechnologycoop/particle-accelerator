@@ -36,6 +36,12 @@ function HomeView() {
           <Card.Title style={styles.fontSize}>Authentication</Card.Title>
           <Card.Text>The PA has three main means of authentication.</Card.Text>
           <Card.Text>
+            <b>Google</b>: Use your Brave Google account upon opening PA.
+            <hr />
+            Necessary for Use Of:
+            <ul>
+              <li>Everything!</li>
+            </ul>
             <b>Particle</b>: Use Brave&apos;s Particle Login.
             <hr />
             Necessary for Use Of:
@@ -247,8 +253,6 @@ function HomeView() {
           <Card.Text>
             <b>Product</b>: Buttons
             <br />
-            <b>Authentication</b>: Clickup
-            <br />
             <br />
             <b>Requirements</b>:
             <ul>
@@ -278,8 +282,6 @@ function HomeView() {
           <Card.Text>
             <b>Product</b>: Buttons and Sensor
             <br />
-            <b>Authentication</b>: Clickup
-            <br />
             <br />
             <b>Requirements</b>:
             <ul>
@@ -296,6 +298,28 @@ function HomeView() {
             <hr />
             The Twilio Number Purchasing tool is meant for rapid acquiring of a Twilio phone number for either Sensor or Buttons production devices.
             It takes the most basic inputs from the user and returns a phone number.
+          </Card.Text>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
+          <Card.Title style={styles.cardTitle}>Message Clients</Card.Title>
+          <Card.Text>
+            <b>Product</b>: Buttons and Sensor
+            <br />
+            <br />
+            <b>Requirements</b>:
+            <ul>
+              <li>A message for active Buttons or Sensor clients</li>
+            </ul>
+            <b>Effects</b>:
+            <ul>
+              <li>Sends the submitted message to active Buttons or Sensor clients using Twilio</li>
+            </ul>
+            <hr />
+            The Message Clients tool is meant for deployments or notifications of downtime. Use this tool sparingly, as most clients expect text
+            messages to be alerts.
           </Card.Text>
         </Card>
       </div>
