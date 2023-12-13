@@ -17,61 +17,73 @@ export default function SystemStatus() {
 
   async function getSensorServerStatus() {
     try {
-      const response = await axios.get(`${sensorURL}/login`)
+      await axios({
+        method: 'GET',
+        url: `${sensorURL}/login`,
+        headers: {
+          'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
+        },
+      })
       setSensorServerConnected(true)
-      console.log(`Sensor Server Status: ${response.status}`)
     } catch (error) {
       setSensorServerConnected(false)
-      console.log(error)
+      console.log(error.message)
     }
   }
 
   async function getButtonsServerStatus() {
     try {
-      const response = await axios.get(`${buttonsURL}/login`)
+      await axios({
+        method: 'GET',
+        url: `${buttonsURL}/login`,
+        headers: {
+          'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
+        },
+      })
       setButtonServerConnected(true)
-      console.log(`Button Server Status: ${response.status}`)
     } catch (error) {
       setButtonServerConnected(false)
-      console.log(error)
+      console.log(error.message)
     }
   }
 
   async function getSensorDatabaseStatus() {
     try {
-      const response = await axios({
+      await axios({
         method: 'POST',
-        url: `${process.env.REACT_APP_SENSOR_DEV_URL}/pa/get-sensor-clients`, // CHANGE THIS TO NEW SENSOR ROUTE WHEN COMPLETE
-        headers: {},
+        url: `${process.env.REACT_APP_SENSOR_DEV_URL}/pa/health`, // CHANGE THIS TO PROD SENSOR ROUTE WHEN SENSOR PR COMPLETE
+        headers: {
+          'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
+        },
         data: {
           braveKey: braveApiKey,
           googleIdToken: cookies.googleIdToken,
         },
       })
       setSensorDatabaseConnected(true)
-      console.log(`Sensor Database Status: ${response.status}`)
     } catch (error) {
       setSensorDatabaseConnected(false)
-      console.log(`Sensor Database Status: ${error.message}`)
+      console.log(error.message)
     }
   }
 
   async function getButtonsDatabaseStatus() {
     try {
-      const response = await axios({
+      await axios({
         method: 'POST',
-        url: `${process.env.REACT_APP_SENSOR_DEV_URL}/pa/get-sensor-clients`, // CHANGE THIS TO NEW BUTTON ROUTE WHEN COMPLETE
-        headers: {},
+        url: `${process.env.REACT_APP_BUTTONS_DEV_URL}/pa/health`, // CHANGE THIS TO PROD SENSOR ROUTE WHEN SENSOR PR COMPLETE
+        headers: {
+          'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
+        },
         data: {
           braveKey: braveApiKey,
           googleIdToken: cookies.googleIdToken,
         },
       })
       setButtonsDatabaseConnected(true)
-      console.log(`Sensor Database Status: ${response.status}`)
     } catch (error) {
       setButtonsDatabaseConnected(false)
-      console.log(`Sensor Database Status: ${error.message}`)
+      console.log(error.message)
     }
   }
 
