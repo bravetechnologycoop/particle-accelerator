@@ -156,7 +156,7 @@ function Frame(props) {
     />
   )
   viewConfig[Pages.messageClients.displayName] = <MessageClients environment={environment} />
-  viewConfig[Pages.systemStatus.displayName] = <SystemStatus />
+  viewConfig[Pages.systemStatus.displayName] = <SystemStatus environment={environment} />
 
   const currentPageInfo = Object.values(Pages).find(page => {
     return page.displayName === viewState

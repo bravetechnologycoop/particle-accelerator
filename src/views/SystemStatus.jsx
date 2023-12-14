@@ -2,24 +2,41 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
 import { useCookies } from 'react-cookie'
+import PropTypes from 'prop-types'
 import checkIcon from '../graphics/check-circle-fill.svg'
 import xIcon from '../graphics/x-circle-fill.svg'
+import { Environments } from '../utilities/Constants'
 
-export default function SystemStatus() {
+export default function SystemStatus(props) {
+  const { environment } = props
   const [sensorServerConnected, setSensorServerConnected] = useState(false)
   const [buttonServerConnected, setButtonServerConnected] = useState(false)
   const [sensorDatabaseConnected, setSensorDatabaseConnected] = useState(false)
   const [buttonsDatabaseConnected, setButtonsDatabaseConnected] = useState(false)
   const [cookies] = useCookies(['googleIdToken'])
-  const braveApiKey = process.env.REACT_APP_BRAVE_API_KEY_PROD
-  const sensorURL = process.env.REACT_APP_SENSOR_PROD_URL
-  const buttonsURL = process.env.REACT_APP_BUTTONS_PROD_URL
+  let braveApiKey = ''
+  let sensorBaseUrl = ''
+  let buttonsBaseUrl = ''
+
+  if (environment === Environments.dev.name) {
+    sensorBaseUrl = process.env.REACT_APP_SENSOR_DEV_URL
+    buttonsBaseUrl = process.env.REACT_APP_BUTTONS_DEV_URL
+    braveApiKey = process.env.REACT_APP_BRAVE_API_KEY_DEV
+  } else if (environment === Environments.prod.name) {
+    sensorBaseUrl = process.env.REACT_APP_SENSOR_PROD_URL
+    buttonsBaseUrl = process.env.REACT_APP_BUTTONS_PROD_URL
+    braveApiKey = process.env.REACT_APP_BRAVE_API_KEY_PROD
+  } else if (environment === Environments.staging.name) {
+    sensorBaseUrl = process.env.REACT_APP_SENSOR_STAGING_URL
+    buttonsBaseUrl = process.env.REACT_APP_BUTTONS_STAGING_URL
+    braveApiKey = process.env.REACT_APP_BRAVE_API_KEY_STAGING
+  }
 
   async function getSensorServerStatus() {
     try {
       await axios({
         method: 'GET',
-        url: `${sensorURL}/login`,
+        url: `${sensorBaseUrl}/login`,
         headers: {
           'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
         },
@@ -35,7 +52,7 @@ export default function SystemStatus() {
     try {
       await axios({
         method: 'GET',
-        url: `${buttonsURL}/login`,
+        url: `${buttonsBaseUrl}/login`,
         headers: {
           'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
         },
@@ -51,7 +68,7 @@ export default function SystemStatus() {
     try {
       await axios({
         method: 'POST',
-        url: `${process.env.REACT_APP_SENSOR_DEV_URL}/pa/health`, // CHANGE THIS TO PROD SENSOR ROUTE WHEN SENSOR PR COMPLETE
+        url: `${sensorBaseUrl}/pa/health`,
         headers: {
           'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
         },
@@ -71,7 +88,7 @@ export default function SystemStatus() {
     try {
       await axios({
         method: 'POST',
-        url: `${process.env.REACT_APP_BUTTONS_DEV_URL}/pa/health`, // CHANGE THIS TO PROD SENSOR ROUTE WHEN SENSOR PR COMPLETE
+        url: `${buttonsBaseUrl}/pa/health`,
         headers: {
           'Cache-Control': 'no-store', // Disable caching so request has the most up-to-date status
         },
@@ -121,3 +138,5 @@ export default function SystemStatus() {
     </div>
   )
 }
+
+SystemStatus.propTypes = { environment: PropTypes.string.isRequired }
