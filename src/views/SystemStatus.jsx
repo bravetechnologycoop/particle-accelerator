@@ -109,12 +109,15 @@ export default function SystemStatus(props) {
     getButtonsServerStatus()
     getSensorDatabaseStatus()
     getButtonsDatabaseStatus()
-  }, [])
+  }, [environment])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', padding: 20 }}>
-      <h3>System Status</h3>
-      <Table>
+      <h2 className="mb-1">System Status</h2>
+      <h5>
+        <span className="badge rounded-pill bg-primary">For {environment.charAt(0).toUpperCase() + environment.slice(1)} Servers</span>
+      </h5>
+      <Table className="mt-2">
         <thead>
           <tr>
             <th>Device Type</th>
