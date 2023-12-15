@@ -118,6 +118,15 @@ const Pages = {
     },
     loginBadge: false,
   },
+  systemStatus: {
+    displayName: 'System Status',
+    paths: ['/system-status'],
+    authorizations: {
+      clickup: false,
+      particle: false,
+    },
+    loginBadge: false,
+  },
 }
 
 export default Pages

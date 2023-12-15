@@ -326,6 +326,18 @@ function HomeView() {
 
       <div style={styles.cardBoundary}>
         <Card style={styles.cardInterior}>
+          <Card.Title style={styles.cardTitle}>System Status</Card.Title>
+          <Card.Text>
+            <b>Product</b>: Buttons and Sensor
+            <hr />
+            The System Status tool summarizes the health of our Brave Devices. Depending on the environment selected in the nav bar, this tool checks
+            the server connection and database connnection for BraveButtons and BraveSensor.
+          </Card.Text>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
           <Card.Title style={styles.cardTitle}>Safe Mode</Card.Title>
           <Card.Text>Safe stops a user from registering the same device twice.</Card.Text>
         </Card>

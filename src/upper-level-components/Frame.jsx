@@ -25,6 +25,7 @@ import MessageClients from '../views/MessageClients'
 import ClickupLogo from '../graphics/ClickupLogo.svg'
 import ParticleLogo from '../graphics/ParticleLogo.svg'
 import Pages from './Pages'
+import SystemStatus from '../views/SystemStatus'
 
 function Frame(props) {
   const {
@@ -155,6 +156,7 @@ function Frame(props) {
     />
   )
   viewConfig[Pages.messageClients.displayName] = <MessageClients environment={environment} />
+  viewConfig[Pages.systemStatus.displayName] = <SystemStatus environment={environment} />
 
   const currentPageInfo = Object.values(Pages).find(page => {
     return page.displayName === viewState
