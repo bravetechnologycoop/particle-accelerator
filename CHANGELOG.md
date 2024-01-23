@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Removed
+
+- Door Sensor Pairing page (CU-860ravwq2).
+
 ## [2.2.0] - 2023-23-18
 
 ### Added
