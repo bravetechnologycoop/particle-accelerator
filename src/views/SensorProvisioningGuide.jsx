@@ -194,8 +194,7 @@ function SensorProvisioningGuide() {
             <div style={styles.stepText}>
               <ol start="6">
                 <li style={styles.stepTitle}>
-                  Obtain an IM21 Door Sensor and retrieve it&apos;s BLE ID (shown in image) and use the{' '}
-                  <a href="/door-sensor-pairing">Door Sensor Pairing Tool</a> to pair the IM21 to the Boron.
+                  Obtain an IM21 Door Sensor and retrieve it&apos;s BLE ID (shown in image) and use the Particle console to pair the IM21 to the Boron.
                 </li>
               </ol>
               <ul>

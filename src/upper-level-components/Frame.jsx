@@ -12,7 +12,6 @@ import {
   storeActivatedDevices,
   storeActivationHistory,
 } from '../utilities/StorageFunctions'
-import DoorSensorPairing from '../views/DoorSensorPairing'
 import Renamer from '../views/Renamer'
 import ParticleSettings from '../utilities/ParticleSettings'
 import ButtonRegistration from '../views/ButtonRegistration'
@@ -113,17 +112,6 @@ function Frame(props) {
       token={particleToken}
       particleSettings={particleSettings}
       changeParticleSettings={changeParticleSettings}
-    />
-  )
-  viewConfig[Pages.doorSensorPairing.displayName] = (
-    <DoorSensorPairing
-      activatedDevices={activatedDevices}
-      particleToken={particleToken}
-      changeActivatedDevices={changeActivatedDevices}
-      particleSettings={particleSettings}
-      clickupToken={clickupToken}
-      clickupListID={clickupListID}
-      modifyActivatedDevice={modifyActivatedDevice}
     />
   )
   viewConfig[Pages.renamer.displayName] = (
