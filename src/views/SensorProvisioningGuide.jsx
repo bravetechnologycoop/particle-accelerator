@@ -334,7 +334,7 @@ function SensorProvisioningGuide() {
             </div>
             <div style={styles.stepGraphic}>
               <img src={Step11} alt="Step 11" />
-              <img src={Step11_2} alt="Step 11" />
+              <img src={Step11_2} alt="Step 11-2" />
             </div>
           </Card.Body>
         </Card>
