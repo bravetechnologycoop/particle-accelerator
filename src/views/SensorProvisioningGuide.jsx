@@ -11,7 +11,7 @@ import Step8 from '../graphics/sensor-provisioning-guide/Step8.svg'
 import Step9 from '../graphics/sensor-provisioning-guide/Step9.svg'
 import Step11 from '../graphics/sensor-provisioning-guide/Step11.svg'
 import Step11_2 from '../graphics/sensor-provisioning-guide/Step11-2.svg'
-import Step12 from '../graphics/sensor-provisioning-guide/Step11.svg'
+import Step12 from '../graphics/sensor-provisioning-guide/Step12.svg'
 import '../stylesheets/SensorProvisioningGuide.css'
 
 function SensorProvisioningGuide() {
@@ -300,7 +300,8 @@ function SensorProvisioningGuide() {
             <div style={styles.stepText}>
               <ol start="8">
                 <li style={styles.stepTitle}>
-                Test the Boron Sensor by plugging it into the PCB. To declare the device successfully tested, wait until the following debugging values are achieved.
+                  Test the Boron Sensor by plugging it into the PCB. To declare the device successfully tested, wait until the following debugging
+                  values are achieved.
                 </li>
               </ol>
               <div style={{ paddingLeft: '2em' }}>
@@ -362,7 +363,7 @@ function SensorProvisioningGuide() {
               </div>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step11} alt="Step 12" />
+              <img src={Step12} alt="Step 12" />
             </div>
           </Card.Body>
         </Card>
