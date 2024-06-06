@@ -91,7 +91,7 @@ function SensorProvisioningGuide() {
               </ol>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step2} alt ="Step 2" />
+              <img src={Step2} alt="Step 2" />
             </div>
           </Card.Body>
         </Card>
@@ -176,9 +176,7 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="5">
-                <li style={styles.stepTitle}>
-                  Obtain an IM24 Door Sensor and retrieve it&apos;s BLE ID (shown in image) to pair it to the Boron.
-                </li>
+                <li style={styles.stepTitle}>Obtain an IM24 Door Sensor and retrieve it&apos;s BLE ID (shown in image) to pair it to the Boron.</li>
               </ol>
               <ul>
                 <li>The BLE ID can be found at the side of the bigger block of the IM24 sensor.</li>
@@ -204,7 +202,9 @@ function SensorProvisioningGuide() {
                 <li>In the top right, change Sandbox to Brave Technology Coop.</li>
                 <li>Click on Production Sensor Devices.</li>
                 <li>Click on Devices (cube on left bar) and search for the newly connected device by name.</li>
-                <li>Under functions, input in <code>Change_IM24_Door_ID</code> the last 6 digits of the IM24 ID with commas after every 2 digits.</li>
+                <li>
+                  Under functions, input in <code>Change_IM24_Door_ID</code> the last 6 digits of the IM24 ID with commas after every 2 digits.
+                </li>
               </ul>
             </div>
             <div style={styles.stepGraphic}>
@@ -220,7 +220,7 @@ function SensorProvisioningGuide() {
             <div style={styles.stepText}>
               <ol start="7">
                 <li style={styles.stepTitle}>
-                Pass <code>1</code> to <code>Turn_Debugging_Publishes_On_Off</code> to start the event stream.
+                  Pass <code>1</code> to <code>Turn_Debugging_Publishes_On_Off</code> to start the event stream.
                 </li>
               </ol>
             </div>
@@ -236,35 +236,31 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="8">
-                <li style={styles.stepTitle}>Test the Door Sensor. To declare the device successfully tested, wait until the following debugging values are achieved.</li>
+                <li style={styles.stepTitle}>
+                  Test the Door Sensor. To declare the device successfully tested, wait until the following debugging values are achieved.
+                </li>
               </ol>
               <div style={{ paddingLeft: '2em' }}>
-
                 <code>door_status</code> (first status) = <code>0x99</code>
                 <ul>
                   <li>Upon connection, this should be the status.</li>
                 </ul>
-
                 <code>door_status</code> (closed door, no tamper) = <code>0x01</code>
                 <ul>
                   <li>Join the Door Sensor Blocks and hold down the tamper at the back.</li>
                 </ul>
-
                 <code>door_status</code> (closed door, tamper) = <code>0x02</code>
                 <ul>
                   <li>Join the Door Sensor Blocks and do not hold down the tamper at the back.</li>
                 </ul>
-
                 <code>door_status</code> (open door, no tamper) = <code>0x03</code>
                 <ul>
                   <li>Separate the Door Sensor Blocks and hold down the tamper at the back.</li>
                 </ul>
-
                 <code>door_status</code> (open door, tamper) = <code>0x04</code>
                 <ul>
                   <li>Seperate the Door Sensor Blocks and hold down the tamper at the back.</li>
                 </ul>
-
               </div>
             </div>
             <div style={styles.stepGraphic}>
