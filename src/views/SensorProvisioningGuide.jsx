@@ -157,10 +157,10 @@ function SensorProvisioningGuide() {
               <ul>
                 <li>Attach the antenna to the boron.</li>
                 <li>Use a micro-USB cable to connect it to a power source.</li>
-                <li>Green light means that...</li>
-                <li>Purple light means that...</li>
-                <li>Cyan light means that...</li>
-                <li>Ensure that the cyan light has been breathing for at least a minute.</li>
+                <li>Green light means that it is connecting to the internet.</li>
+                <li>Purple light means that it is flashing the firmware.</li>
+                <li>Blinking cyan light means that it is connecting to the cloud.</li>
+                <li>Wait for a breathing cyan light and ensure that it has been breathing for at least a minute.</li>
                 <li>This step might take a considerable amount of time. The boron must be connected to power for the next steps.</li>
               </ul>
             </div>
