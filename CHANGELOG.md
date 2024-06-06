@@ -11,6 +11,18 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+
+- Updated all the images in the Sensor Provisioning Guide.
+- Removed steps 1 and 11 completely.
+- Changed steps 6,7, and 8 to reflect the updated method of pairing the Door Sensor to the Boron.
+- Re-ordered the steps to account for missing removed steps.
+- Added boron light statuses in step 4.
+- Changed all instances of IM21 to IM24.
+- Updated door statuses in step 8 to the more accurate, newer ones.
+- Changed the label printer in step 11 into the currently in use.
+
+
 ## [2.2.0] - 2023-23-18
 
 ### Added
