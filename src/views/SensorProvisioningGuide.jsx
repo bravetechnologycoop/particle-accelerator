@@ -4,7 +4,7 @@ import Step1 from '../graphics/sensor-provisioning-guide/Step1.svg'
 import Step2 from '../graphics/sensor-provisioning-guide/Step2.svg'
 import Step3 from '../graphics/sensor-provisioning-guide/Step3.svg'
 import Step4 from '../graphics/sensor-provisioning-guide/Step4.svg'
-// import Step5 from '../graphics/sensor-provisioning-guide/Step5.svg'
+import Step5 from '../graphics/sensor-provisioning-guide/Step5.svg'
 import Step6 from '../graphics/sensor-provisioning-guide/Step6.svg'
 import Step7 from '../graphics/sensor-provisioning-guide/Step7.svg'
 import Step8 from '../graphics/sensor-provisioning-guide/Step8.svg'
@@ -165,7 +165,7 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step4} alt="Step 4" />
+              <img src={Step4} alt="Step 4" width="800px" />
             </div>
           </Card.Body>
         </Card>
@@ -184,8 +184,7 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              {/* ADD IMAGE HERE */}
-              {/* <img src={Step5} alt="Step 5" /> */}
+              <img src={Step5} alt="Step 5" width="500px" />
             </div>
           </Card.Body>
         </Card>
@@ -208,7 +207,7 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step6} alt="Step 6" width="300px" />
+              <img src={Step6} alt="Step 6" />
             </div>
           </Card.Body>
         </Card>
