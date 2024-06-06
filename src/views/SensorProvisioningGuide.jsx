@@ -9,9 +9,9 @@ import Step6 from '../graphics/sensor-provisioning-guide/Step6.svg'
 import Step7 from '../graphics/sensor-provisioning-guide/Step7.svg'
 import Step8 from '../graphics/sensor-provisioning-guide/Step8.svg'
 import Step9 from '../graphics/sensor-provisioning-guide/Step9.svg'
-import Step10 from '../graphics/sensor-provisioning-guide/Step10.svg'
-import Step10_2 from '../graphics/sensor-provisioning-guide/Step10-2.svg'
 import Step11 from '../graphics/sensor-provisioning-guide/Step11.svg'
+import Step11_2 from '../graphics/sensor-provisioning-guide/Step11-2.svg'
+import Step12 from '../graphics/sensor-provisioning-guide/Step11.svg'
 import '../stylesheets/SensorProvisioningGuide.css'
 
 function SensorProvisioningGuide() {
