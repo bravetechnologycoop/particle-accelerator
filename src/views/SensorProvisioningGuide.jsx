@@ -298,18 +298,21 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="10">
+              <ol start="8">
                 <li style={styles.stepTitle}>
-                  With the Boron, PCB, and Antenna inside an enclosure with a Paired Door Sensor, select the current device in the{' '}
-                  <a href="/renamer">Renamer</a>
-                  <hr />
-                  Enter a unique <code>locationID</code> for the device and follow the prompts for all of the other configurations.
+                Test the Boron Sensor by plugging it into the PCB. To declare the device successfully tested, wait until the following debugging values are achieved.
                 </li>
               </ol>
-            </div>
-            <div style={styles.stepGraphic}>
-              <img src={Step10} alt="Step 10" />
-              <img src={Step10_2} alt="Step 10" />
+              <div style={{ paddingLeft: '2em' }}>
+                <code>INS_val</code> (high movement) &gt; <code>2500</code>
+                <ul>
+                  <li>Shake the Boron Sensor Around and Create Movement.</li>
+                </ul>
+                <code>INS_val</code> (low movement) &lt; <code>60</code>
+                <ul>
+                  <li>Leave the Boron Sensor to Rest on a table.</li>
+                </ul>
+              </div>
             </div>
           </Card.Body>
         </Card>
@@ -320,6 +323,27 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="11">
+                <li style={styles.stepTitle}>
+                  With the Boron, PCB, and Antenna inside an enclosure with a Paired Door Sensor, select the current device in the{' '}
+                  <a href="/renamer">Renamer</a>
+                  <hr />
+                  Enter a unique <code>locationID</code> for the device and follow the prompts for all of the other configurations.
+                </li>
+              </ol>
+            </div>
+            <div style={styles.stepGraphic}>
+              <img src={Step11} alt="Step 11" />
+              <img src={Step11_2} alt="Step 11" />
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
+          <Card.Body style={styles.cardBodyParent}>
+            <div style={styles.stepText}>
+              <ol start="12">
                 <li style={styles.stepTitle}>
                   Connect the{' '}
                   <a href="https://support.munbyn.com/hc/en-us/articles/6092544741651-Printer-User-Manuals" target="_blank" rel="noreferrer">
@@ -338,7 +362,7 @@ function SensorProvisioningGuide() {
               </div>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step11} alt="Step 11" />
+              <img src={Step11} alt="Step 12" />
             </div>
           </Card.Body>
         </Card>
