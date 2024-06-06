@@ -1,17 +1,17 @@
 import React from 'react'
 import { Card } from 'react-bootstrap'
-import Step1 from '../graphics/sensor-provisioning-guide/step1.svg'
+import Step1 from '../graphics/sensor-provisioning-guide/Step1.svg'
 import Step2 from '../graphics/sensor-provisioning-guide/Step2.svg'
+import Step3 from '../graphics/sensor-provisioning-guide/Step3.svg'
 import Step4 from '../graphics/sensor-provisioning-guide/Step4.svg'
-import Step5 from '../graphics/sensor-provisioning-guide/Step5.svg'
+// import Step5 from '../graphics/sensor-provisioning-guide/Step5.svg'
 import Step6 from '../graphics/sensor-provisioning-guide/Step6.svg'
 import Step7 from '../graphics/sensor-provisioning-guide/Step7.svg'
 import Step8 from '../graphics/sensor-provisioning-guide/Step8.svg'
 import Step9 from '../graphics/sensor-provisioning-guide/Step9.svg'
 import Step10 from '../graphics/sensor-provisioning-guide/Step10.svg'
-import Step12 from '../graphics/sensor-provisioning-guide/Step12.svg'
-import Step12_2 from '../graphics/sensor-provisioning-guide/Step12-2.svg'
-import Step13 from '../graphics/sensor-provisioning-guide/Step13.svg'
+import Step10_2 from '../graphics/sensor-provisioning-guide/Step10-2.svg'
+import Step11 from '../graphics/sensor-provisioning-guide/Step11.svg'
 import '../stylesheets/SensorProvisioningGuide.css'
 import { ClickupStatuses } from '../utilities/Constants'
 
@@ -74,7 +74,7 @@ function SensorProvisioningGuide() {
               </ol>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step2} alt="Step 2" />
+              <img src={Step1} alt="Step 1" />
             </div>
           </Card.Body>
         </Card>
@@ -87,9 +87,12 @@ function SensorProvisioningGuide() {
               <ol start="2">
                 <li style={styles.stepTitle}>
                   Select the environment (Development, Staging, or Production) for which the Devices will be provisioned from the bottom left of the
-                  menu bar (above Safe Mode).
+                  menu bar.
                 </li>
               </ol>
+            </div>
+            <div style={styles.stepGraphic}>
+              <img src={Step2} alt ="Step 2" />
             </div>
           </Card.Body>
         </Card>
