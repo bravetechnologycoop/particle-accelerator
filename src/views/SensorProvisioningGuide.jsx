@@ -165,7 +165,7 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step4} alt="Step 4" width="800px" />
+              <img src={Step4} alt="Step 4" width="650px" />
             </div>
           </Card.Body>
         </Card>
@@ -207,7 +207,7 @@ function SensorProvisioningGuide() {
               </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step6} alt="Step 6" />
+              <img src={Step6} alt="Step 6" width="90%" />
             </div>
           </Card.Body>
         </Card>
