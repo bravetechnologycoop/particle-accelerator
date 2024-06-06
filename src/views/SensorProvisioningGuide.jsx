@@ -67,33 +67,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol>
-                <li style={styles.stepTitle}>
-                  Write the command <code>particle usb setup-done</code> to a new Particle Boron device.
-                </li>
-              </ol>
-              <ul>
-                <li>
-                  You must have the{' '}
-                  <a href="https://docs.particle.io/tutorials/developer-tools/cli/" target="_blank" rel="noreferrer">
-                    Particle CLI
-                  </a>{' '}
-                  installed to do this.
-                </li>
-              </ul>
-            </div>
-            <div style={styles.stepGraphic}>
-              <img src={Step1} alt="Step 1" />
-            </div>
-          </Card.Body>
-        </Card>
-      </div>
-
-      <div style={styles.cardBoundary}>
-        <Card style={styles.cardInterior}>
-          <Card.Body style={styles.cardBodyParent}>
-            <div style={styles.stepText}>
-              <ol start="2">
+              <ol start="1">
                 <li style={styles.stepTitle}>
                   Log into the Brave <a href="/particle">Particle</a> account and your <a href="/clickup">ClickUp</a> account in the PA.
                 </li>
@@ -110,7 +84,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="3">
+              <ol start="2">
                 <li style={styles.stepTitle}>
                   Select the environment (Development, Staging, or Production) for which the Devices will be provisioned from the bottom left of the
                   menu bar (above Safe Mode).
@@ -125,7 +99,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="4">
+              <ol start="3">
                 <li style={styles.stepTitle}>
                   Use the <a href="/activator">Activator</a> to register the Boron to Brave&apos;s <u>Production Sensor</u> Particle product family.
                 </li>
@@ -170,7 +144,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="5">
+              <ol start="4">
                 <li style={styles.stepTitle}>
                   Connect the Boron to power and wait for the <u>Breathing Cyan</u> light.
                 </li>
@@ -192,7 +166,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="6">
+              <ol start="5">
                 <li style={styles.stepTitle}>
                   Obtain an IM21 Door Sensor and retrieve it&apos;s BLE ID (shown in image) and use the{' '}
                   <a href="/door-sensor-pairing">Door Sensor Pairing Tool</a> to pair the IM21 to the Boron.
@@ -216,7 +190,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="7">
+              <ol start="6">
                 <li style={styles.stepTitle}>Wait for the Device to finish pairing.</li>
               </ol>
               <ul>
@@ -234,7 +208,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="8">
+              <ol start="7">
                 <li style={styles.stepTitle}>
                   Connect the Particle to a Brave Sensor PCB and open the{' '}
                   <a
@@ -265,7 +239,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="9">
+              <ol start="8">
                 <li style={styles.stepTitle}>To declare the device successfully tested, wait until the following debugging values are achieved.</li>
               </ol>
               <div style={{ paddingLeft: '2em' }}>
@@ -323,7 +297,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="10">
+              <ol start="9">
                 <li style={styles.stepTitle}>
                   Pass <code>0</code> to <code>Turn_Debugging_Publishes_On_Off</code> to stop the event stream.
                 </li>
@@ -343,7 +317,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="11">
+              <ol start="10">
                 <li style={styles.stepTitle}>
                   Change the ClickUp status of the device from{' '}
                   <mark style={{ background: ClickupStatuses.pairedDoorSensor.color }}>Paired Door Sensor</mark>
@@ -367,7 +341,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="12">
+              <ol start="11">
                 <li style={styles.stepTitle}>
                   With the Boron, PCB, and Antenna inside an enclosure with a Paired Door Sensor, select the current device in the{' '}
                   <a href="/renamer">Renamer</a>
@@ -388,7 +362,7 @@ function SensorProvisioningGuide() {
         <Card style={styles.cardInterior}>
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
-              <ol start="13">
+              <ol start="12">
                 <li style={styles.stepTitle}>
                   Connect the{' '}
                   <a href="https://www.polono.com/pages/driver-user-manual" target="_blank" rel="noreferrer">
