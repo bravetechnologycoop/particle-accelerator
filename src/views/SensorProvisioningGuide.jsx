@@ -244,21 +244,21 @@ function SensorProvisioningGuide() {
                 <ul>
                   <li>Upon connection, this should be the status.</li>
                 </ul>
-                <code>door_status</code> (closed door, no tamper) = <code>0x01</code>
+                <code>door_status</code> (closed door, tamper in) = <code>0x00</code>
                 <ul>
                   <li>Join the Door Sensor Blocks and hold down the tamper at the back.</li>
                 </ul>
-                <code>door_status</code> (closed door, tamper) = <code>0x02</code>
+                <code>door_status</code> (closed door, tamper out) = <code>0x01</code>
                 <ul>
                   <li>Join the Door Sensor Blocks and do not hold down the tamper at the back.</li>
                 </ul>
-                <code>door_status</code> (open door, no tamper) = <code>0x03</code>
+                <code>door_status</code> (open door, tamper in) = <code>0x02</code>
                 <ul>
                   <li>Separate the Door Sensor Blocks and hold down the tamper at the back.</li>
                 </ul>
-                <code>door_status</code> (open door, tamper) = <code>0x04</code>
+                <code>door_status</code> (open door, tamper out) = <code>0x03</code>
                 <ul>
-                  <li>Seperate the Door Sensor Blocks and hold down the tamper at the back.</li>
+                  <li>Seperate the Door Sensor Blocks and do not hold down the tamper at the back.</li>
                 </ul>
               </div>
             </div>
