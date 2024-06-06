@@ -20,7 +20,8 @@ the code was deployed.
 - Added boron light statuses in step 4 (CU-860ravv7d).
 - Changed all instances of IM21 to IM24 (CU-860ravv7d).
 - Updated door statuses in step 8 to the more accurate, newer ones (CU-860ravv7d).
-- Changed the label printer in step 11 into the currently in use (CU-860ravv7d).
+- Separated testing door sensor and boron sensor into 2 different steps (CU-860ravv7d).
+- Changed the label printer in step 12 into the currently in use (CU-860ravv7d).
 
 
 ## [2.2.0] - 2023-23-18
