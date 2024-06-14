@@ -11,6 +11,11 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+
+- Updated npm package `braces` (CU-86dtuapr4).
+- Updated npm package `webpack-dev-middleware` (CU-86dtuapr4).
+
 ## [2.2.0] - 2023-23-18
 
 ### Added
