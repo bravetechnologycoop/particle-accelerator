@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+
+- Removed door sensor pairing page
+
 ## [2.2.0] - 2023-23-18
 
 ### Added
