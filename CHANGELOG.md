@@ -11,8 +11,13 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Added new item to allowlist for `braces` npm package being out of date (CU-86dtuapr4).
+
 ### Changed
 
+- Updated `webpack-dev-middleware` npm package (CU-86dtuapr4).
 - Updated all the images in the Sensor Provisioning Guide (CU-860ravv7d).
 - Removed steps 1 and 11 completely (CU-860ravv7d).
 - Changed steps 6,7, and 8 to reflect the updated method of pairing the Door Sensor to the Boron (CU-860ravv7d).
@@ -22,7 +27,6 @@ the code was deployed.
 - Updated door statuses in step 8 to the more accurate, newer ones (CU-860ravv7d).
 - Separated testing door sensor and boron sensor into 2 different steps (CU-860ravv7d).
 - Changed the label printer in step 12 into the currently in use (CU-860ravv7d).
-
 
 ## [2.2.0] - 2023-23-18
 
