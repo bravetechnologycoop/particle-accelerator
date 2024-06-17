@@ -9,8 +9,9 @@ import Step6 from '../graphics/sensor-provisioning-guide/Step6.svg'
 import Step7 from '../graphics/sensor-provisioning-guide/Step7.svg'
 import Step8 from '../graphics/sensor-provisioning-guide/Step8.svg'
 import Step9 from '../graphics/sensor-provisioning-guide/Step9.svg'
-import Step11 from '../graphics/sensor-provisioning-guide/Step11.svg'
+import Step11_1 from '../graphics/sensor-provisioning-guide/Step11-1.svg'
 import Step11_2 from '../graphics/sensor-provisioning-guide/Step11-2.svg'
+import Step11_3 from '../graphics/sensor-provisioning-guide/Step11-3.svg'
 import Step12 from '../graphics/sensor-provisioning-guide/Step12.svg'
 import '../stylesheets/SensorProvisioningGuide.css'
 
@@ -325,16 +326,29 @@ function SensorProvisioningGuide() {
             <div style={styles.stepText}>
               <ol start="11">
                 <li style={styles.stepTitle}>
-                  With the Boron, PCB, and Antenna inside an enclosure with a Paired Door Sensor, select the current device in the{' '}
-                  <a href="/renamer">Renamer</a>
-                  <hr />
-                  Enter a unique <code>locationID</code> for the device and follow the prompts for all of the other configurations.
+                  Use the Renamer
                 </li>
               </ol>
+              <ul>
+                <li>
+                  With the Boron, PCB, and Antenna inside an enclosure with a Paired Door Sensor, select the current device in the{' '}
+                  <a href="/renamer">Renamer</a>
+                </li>
+                <li>
+                  Enter a unique <code>locationID</code> for the device and follow the prompts for all of the other configurations.
+                </li>
+                <li>
+                  Make sure that the <code>purchase twilio number</code> checkbox is unticked.
+                </li>
+                <li>
+                  Get a twilio phone number from the <code>List of Preferred Twilio Phone Numbers</code> file in Brave's Google Drive. Ensure that you pick the correct device and country.
+                </li>
+              </ul>
             </div>
             <div style={styles.stepGraphic}>
-              <img src={Step11} alt="Step 11" />
+              <img src={Step11_1} alt="Step 11-1" />
               <img src={Step11_2} alt="Step 11-2" />
+              <img src={Step11_3} alt="Step 11-3" />
             </div>
           </Card.Body>
         </Card>
