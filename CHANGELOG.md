@@ -19,6 +19,7 @@ the code was deployed.
 
 - Updated `webpack-dev-middleware` npm package (CU-86dtuapr4).
 - Removed door sensor pairing page (CU-860ravwq2).
+- Updated `ws` npm package (CU-86dtuv7h6).
 
 ## [2.2.0] - 2023-23-18
 
