@@ -18,6 +18,7 @@ the code was deployed.
 ### Changed
 
 - Updated `webpack-dev-middleware` npm package (CU-86dtuapr4).
+- Updated `ws` npm package (CU-86dtuv7h6).
 
 ## [2.2.0] - 2023-23-18
 
