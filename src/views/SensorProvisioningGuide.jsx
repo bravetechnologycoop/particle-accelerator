@@ -325,9 +325,7 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="11">
-                <li style={styles.stepTitle}>
-                  Use the Renamer
-                </li>
+                <li style={styles.stepTitle}>Use the Renamer</li>
               </ol>
               <ul>
                 <li>
@@ -341,7 +339,8 @@ function SensorProvisioningGuide() {
                   Make sure that the <code>purchase twilio number</code> checkbox is unticked.
                 </li>
                 <li>
-                  Get a twilio phone number from the <code>List of Preferred Twilio Phone Numbers</code> file in Brave's Google Drive. Ensure that you pick the correct device and country.
+                  Get a twilio phone number from the <code>List of Preferred Twilio Phone Numbers</code> file in Brave&apos;s Google Drive. Ensure
+                  that you pick the correct device and country.
                 </li>
               </ul>
             </div>
