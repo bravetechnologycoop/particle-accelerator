@@ -11,8 +11,13 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Added new item to allowlist for `braces` npm package being out of date (CU-86dtuapr4).
+
 ### Changed
 
+- Updated `webpack-dev-middleware` npm package (CU-86dtuapr4).
 - Removed door sensor pairing page (CU-860ravwq2).
 
 ## [2.2.0] - 2023-23-18
