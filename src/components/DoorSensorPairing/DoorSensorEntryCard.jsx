@@ -47,20 +47,6 @@ function DoorSensorEntryCard(props) {
           }
         }}
       >
-        <Form.Label>Pair Door Sensor</Form.Label>
-        <Form.Control
-          placeholder="a1,b2,c3"
-          value={doorSensorID}
-          maxLength="8"
-          onChange={x => {
-            setDoorSensorID(x.target.value)
-          }}
-        />
-        <div style={{ paddingTop: '10px' }}>
-          <Button variant={buttonStyle} type="submit" disabled={buttonStyle === 'success'}>
-            {buttonText}
-          </Button>
-        </div>
       </Form>
     </Card>
   )

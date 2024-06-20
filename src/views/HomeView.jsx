@@ -48,7 +48,6 @@ function HomeView() {
             <ul>
               <li>Activator</li>
               <li>Device Lookup</li>
-              <li>Door Sensor Pairing</li>
               <li>Renamer</li>
             </ul>
             <b>ClickUp</b>: Login Using a Brave-Linked ClickUp Account via ClickUp
@@ -58,7 +57,6 @@ function HomeView() {
               <li>Button Registration</li>
               <li>Twilio Number Purchasing</li>
               <li>Activator</li>
-              <li>Door Sensor Pairing</li>
               <li>Sensor Provisioning Guide</li>
               <li>Device Manager</li>
             </ul>
@@ -150,44 +148,6 @@ function HomeView() {
             </ul>
             The Device Manager allows the user to interface with the tasks in the PA tracker in order to share and add devices across different
             browsers/users.
-          </Card.Text>
-        </Card>
-      </div>
-
-      <div style={styles.cardBoundary}>
-        <Card style={styles.cardInterior}>
-          <Card.Title style={styles.cardTitle}>Door Sensor Pairing</Card.Title>
-          <Card.Text>
-            <b>Product</b>: Sensor
-            <br />
-            <b>Authentication</b>: Particle and ClickUp
-            <br />
-            <br />
-            <b>Requirements</b>:
-            <ul>
-              <li>
-                A device that has been added through the Activator tool.
-                <br />
-                (It is recommended that this device is online.)
-              </li>
-              <li>An unclaimed IM21 Door Sensor ID</li>
-            </ul>
-            <b>Effects</b>:
-            <ul>
-              <li>Pairs the door sensor to the Boron</li>
-              <li>Updates the PA Tracker in ClickUp</li>
-            </ul>
-            <hr />
-            Door Sensor Pairing allows a user to seamlessly pair a Boron to an IM21 door sensor. By adding the hex code for the IM21 door sensor in
-            the format <code>a1,b2,c3</code> (3 sets of 2 hex characters, separated by commas), the Door Sensor Pairing tool will call the firmware
-            function associated with pairing the door from the Particle Console.
-            <br />
-            <br />
-            <b>Caution</b>: The Door Sensor Pairing tool is currently a one-attempt tool, so if you get the IM21 ID incorrect, you will have to change
-            it through the Particle Console.
-            <br />
-            <br />
-            It is strongly recommended, but not necessary that the Boron is online before using this tool.
           </Card.Text>
         </Card>
       </div>

@@ -73,15 +73,6 @@ const Pages = {
     },
     loginBadge: false,
   },
-  doorSensorPairing: {
-    displayName: 'Door Sensor Pairing',
-    paths: ['/door-sensor-pairing'],
-    authorizations: {
-      clickup: true,
-      particle: true,
-    },
-    loginBadge: false,
-  },
   renamer: {
     displayName: 'Renamer',
     paths: ['/renamer'],
