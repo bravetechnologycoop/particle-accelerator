@@ -11,6 +11,8 @@ the code was deployed.
 
 ## [Unreleased]
 
+## [3.0.0] - 2024-07-02
+
 ### Added
 
 - Added new item to allowlist for `braces` npm package being out of date (CU-86dtuapr4).
@@ -30,7 +32,7 @@ the code was deployed.
 - Separated testing door sensor and boron sensor into 2 different steps (CU-860ravv7d).
 - Changed the label printer in step 12 into the currently in use (CU-860ravv7d).
 
-## [2.2.0] - 2023-23-18
+## [2.2.0] - 2023-12-18
 
 ### Added
 
@@ -136,7 +138,8 @@ the code was deployed.
 
 - Initial version (CU-21ghk0x).
 
-[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v2.2.0...HEAD
+[unreleased]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/bravetechnologycoop/particle-accelerator/compare/v1.8.0...v2.0.0
