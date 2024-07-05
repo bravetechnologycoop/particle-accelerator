@@ -31,5 +31,5 @@ jobs:
     - name: Run Security Audit
       working-directory: ./src
       if: github.event_name == 'pull_request'
-      run: npx audit-ci --config ./audit-
+      run: npx audit-ci --config ./audit-ci.json
 
