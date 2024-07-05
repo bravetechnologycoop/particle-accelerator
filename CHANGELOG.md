@@ -15,6 +15,7 @@ the code was deployed.
 
 ### Added
 
+- Configured repository to use Github Actions instead of Travis (CU-86dthadwg).
 - Added new item to allowlist for `braces` npm package being out of date (CU-86dtuapr4).
 
 ### Changed
