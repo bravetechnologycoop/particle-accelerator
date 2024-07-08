@@ -29,7 +29,6 @@ jobs:
       run: npm run lint
 
     - name: Run Security Audit
-      working-directory: particle-accelerator
       if: github.event_name == 'pull_request'
       run: npx audit-ci --config ./audit-ci.json
 
