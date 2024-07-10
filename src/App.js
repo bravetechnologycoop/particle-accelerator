@@ -8,12 +8,19 @@ import PageNotFound from './upper-level-components/PageNotFound'
 import GoogleLoginScreen from './upper-level-components/GoogleLoginScreen'
 
 function App() {
-  const [googlePayload, setGooglePayload] = useState(null)
+  const isLocal = process.env.REACT_APP_ENV === 'local'
+  let state = null
+
+  if (isLocal) {
+    state = { name: 'Local' }
+  }
+
+  const [googlePayload, setGooglePayload] = useState(state)
 
   // If not logged in, display the Google login screen instead.
   // NOTE: The GoogleLoginScreen component checks cookies for an existing session,
   //   and will call onLogin in the case that the previous session is recent enough.
-  if (googlePayload == null) {
+  if (googlePayload == null && !isLocal) {
     // eslint-disable-next-line react/jsx-filename-extension
     return <GoogleLoginScreen onLogin={payload => setGooglePayload(payload)} />
   }
