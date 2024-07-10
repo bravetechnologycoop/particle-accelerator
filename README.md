@@ -1,5 +1,3 @@
-[![Build Status](https://app.travis-ci.com/bravetechnologycoop/particle-accelerator.svg?branch=main)](https://app.travis-ci.com/bravetechnologycoop/particle-accelerator)
-
 # The PA/Personal Assistant/Particle Accelerator/Papa Alpha...
 
 ## Deployment instructions
