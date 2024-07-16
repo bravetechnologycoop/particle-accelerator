@@ -13,6 +13,7 @@ the code was deployed.
 
 ### Added
 
+- Configured repository to use Github Actions instead of Travis (CU-86dthadwg).
 - Added new environment value `REACT_APP_ENV` to disable google login if local (CU-86dtx3b7n).
 
 ### Changed

@@ -1,4 +1,4 @@
-[![Build Status](https://app.travis-ci.com/bravetechnologycoop/particle-accelerator.svg?branch=main)](https://app.travis-ci.com/bravetechnologycoop/particle-accelerator)
+# Particle-Accelerator [![Build Status](https://github.com/bravetechnologycoop/particle-accelerator/actions/workflows/CI.yml/badge.svg)](https://github.com/bravetechnologycoop/particle-accelerator/actions/workflows/CI.yml)
 
 # The PA/Personal Assistant/Particle Accelerator/Papa Alpha...
 

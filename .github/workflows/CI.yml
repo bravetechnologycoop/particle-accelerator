@@ -1,0 +1,31 @@
+name: CI
+
+on: 
+  push:
+    branches: ['*']
+
+jobs:
+  security_audit_and_linting:
+    name: Security Audit and Linting
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ./.nvmrc
+    
+    - name: Install npm Dependencies
+      working-directory: ./src
+      run: npm ci
+
+    - name: Run Linter
+      working-directory: ./src
+      run: npm run lint
+
+    - name: Run Security Audit
+      run: npx audit-ci --config ./audit-ci.json
+
