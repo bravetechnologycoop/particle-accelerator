@@ -15,6 +15,7 @@ the code was deployed.
 
 - Configured repository to use Github Actions instead of Travis (CU-86dthadwg).
 - Added new environment value `REACT_APP_ENV` to disable google login if local (CU-86dtx3b7n).
+- Added Uptime and Downtime messages in `Message Clients` page for easy copy pasting (CU-86du6rgt5).
 
 ### Changed
 
