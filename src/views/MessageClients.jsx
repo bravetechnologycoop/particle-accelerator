@@ -25,7 +25,7 @@ function MessageClients(props) {
     alignContent: 'flex-start',
     maxWidth: '1600px',
     height: '100vh',
-    overflow: 'auto',
+    overflowY: 'scroll',
   }
 
   const summaryColumnStyles = {
@@ -104,7 +104,7 @@ function MessageClients(props) {
             Notice: Your Brave Sensor System is down for maintenance. During this time, you may not receive bathroom alerts. You will receive another
             text message when everything is back online. Thank you for your patience. Have a nice day!
           </p>
-          <h4>Uptime Messasges</h4>
+          <h4>Uptime Messages</h4>
           <p>Notice: Your Brave Buttons System is now back online and functioning normally. Thank you!</p>
           <p>Notice: Your Brave Sensor System is now back online and functioning normally. Thank you!</p>
           <Form.Group>
