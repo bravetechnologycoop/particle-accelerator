@@ -30,7 +30,7 @@
     "react-scripts": "5.0.0",
     "react-to-print": "^2.14.4",
     "web-vitals": "^2.1.4",
-    "webpack": "^4.44.2"
+    "webpack": "^5.94.0"
   },
   "scripts": {
     "start": "react-scripts start",
