@@ -11,6 +11,8 @@ the code was deployed.
 
 ## [Unreleased]
 
+- Added more environment variables (PARTICLE_API_KEY, database credentials) (CU-86dupwqgq)
+
 ## [3.1.0] - 2024-08-20
 
 ### Added
