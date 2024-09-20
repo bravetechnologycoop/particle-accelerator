@@ -33,7 +33,7 @@ read -p "Enter Client Display Name: " CLIENT_DISPLAY_NAME
 read -p "Enter Function Name: " FUNCTION_NAME
 read -p "Enter Argument: " ARGUMENT
 
-# Query to get the client_id for the given display name and fetch associated device serial numbers
+# Query to get all device serial numbers for given client name
 query="SELECT d.serial_number 
        FROM devices d 
        JOIN clients c ON d.client_id = c.id 
