@@ -11,8 +11,9 @@ the code was deployed.
 
 ## [Unreleased]
 
-- Added more environment variables (PARTICLE_API_KEY, database credentials) (CU-86dupwqgq)
-- Added script to use Particle API to call a function for all of a client's sensors (CU-86dup733k)
+- Added more environment variables (PARTICLE_API_KEY, database credentials) (CU-86dupwqgq).
+- Added script to use Particle API to call a function for all of a client's sensors (CU-86dup733k).
+- Updated README.md: pa dev database name (CU-86durxb29).
 
 ## [3.1.0] - 2024-08-20
 

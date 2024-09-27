@@ -31,14 +31,14 @@
 ---
 
 1. Make any changes to the environment variables
-   1. Navigate to Digital Ocean --> Apps --> particle-accelerator-dev
-   1. Navigate to Settings --> Components: particle-accelerator
+   1. Navigate to Digital Ocean --> Apps --> dev-particle-accelerator 
+   1. Navigate to Settings --> Components: dev-particle-accelerator
    1. Beside "Environment Variables", click "Edit"
    1. Make changes
    1. Click "Save"
-1. Update the branch that will be deployed anytime a new commit it made
-   1. Navigate to Digital Ocean --> Apps --> particle-accelerator-dev
-   1. Navigate to Settings --> Components: particle-accelerator
+1. Update the branch that will be deployed anytime a new commit is made
+   1. Navigate to Digital Ocean --> Apps --> dev-particle-accelerator
+   1. Navigate to Settings --> Components: dev-particle-accelerator
    1. Beside "Source", click "Edit"
    1. Select the branch that you want to have automatically deployed from the "Branch" dropdown list
    1. Click "Save"
@@ -48,11 +48,34 @@
 ---
 
 1. Make any changes to the environment variables in `.env`
+1. Make sure to have `REACT_APP_ENV=local` in `.env`
 1. Run `npm ci` to download dependencies
 1. Run `npm start` to build and deploy to http://localhost:3000
 
 ## Principles of the Program
 
+### History
+
+---
+
+The PA started as the 'Particle Accelerator' and was only meant to activate Borons, and check them with the Device Lookup page (then called the Validator).
+At this time, the PA was also an Electron app and ran on the desktop. As time progressed, it was deemed more viable for the PA
+to become a React web app, so the original Electron react was flipped over to the browser. A navigation bar was added, and
+from there, features were rapidly added. Due to the very primitive nature of the first releases of the PA, there may exist
+some pockets of code that don't quite fit the style of the rest of the project.
+
+### General Format
+
+---
+
+Nearly all of the tools in the PA work on the following basis:
+
+1. User inputs information
+2. User clicks 'submit'
+3. A react hook containing the status of the request is set to `loading` or something of the like, which updates a badge/spinner to indicate loading to the user
+4. A request for the data/operation/etc is handled with `async/await` while the user waits
+5. Based on the response from the operation in step 4, the hook containing the status is updated to show the user the result of their input.
+6. Whatever data is returned is supplied to a hook/function/variable, etc.
 ### Prop Tree
 
 ---
@@ -104,29 +127,6 @@ A `.env.example` file can also be found in this repo.
   1. (main, desirable, way) css-in-js `styles` constants containing CSS.
   2. Stylesheets in the `stylesheets` directory: used only for styling hovers and clicking properties, or existing components (harder to do in css-in-js)
   3. Inline styles, which are regretted and frowned upon. A future make-work project would be to remove the heavy usage of inline styles in this project.
-
-### History
-
----
-
-The PA started as the 'Particle Accelerator' and was only meant to activate Borons, and check them with the Device Lookup page (then called the Validator).
-At this time, the PA was also an Electron app and ran on the desktop. As time progressed, it was deemed more viable for the PA
-to become a React web app, so the original Electron react was flipped over to the browser. A navigation bar was added, and
-from there, features were rapidly added. Due to the very primitive nature of the first releases of the PA, there may exist
-some pockets of code that don't quite fit the style of the rest of the project.
-
-### General Format
-
----
-
-Nearly all of the tools in the PA work on the following basis:
-
-1. User inputs information
-2. User clicks 'submit'
-3. A react hook containing the status of the request is set to `loading` or something of the like, which updates a badge/spinner to indicate loading to the user
-4. A request for the data/operation/etc is handled with `async/await` while the user waits
-5. Based on the response from the operation in step 4, the hook containing the status is updated to show the user the result of their input.
-6. Whatever data is returned is supplied to a hook/function/variable, etc.
 
 ### Clickup-as-a-databse
 
@@ -185,7 +185,7 @@ The PA attempts to use Clickup [the PA Tracker] as a primitive database. This is
 
 ## Roadmap
 
-### Tier 1
+### Tier 1 [DONE]
 
 - Add a better encryption mechanism for the entire site (Google OAuth?)
 
