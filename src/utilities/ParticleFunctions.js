@@ -313,3 +313,27 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
     return false
   }
 }
+
+/**
+ * callClientParticleFunction: call the particle function for a single device for a client
+ * @param {string} deviceID       serial number of Boron device for which the function needs to be called
+ * @param {string} functionName   name of the function
+ * @param {string} arg            argument of the function
+ * @param {string} token          particle auth token
+ * @return {Promise<boolean>}     true if successful, false if not
+ */
+export async function callClientParticleFunction(deviceID, functionName, argument, token) {
+  try {
+    // use the particle sdk to call the function for device
+    const response = await particle.callFunction({
+      deviceId: deviceID,
+      name: functionName,
+      argument,
+      auth: token,
+    })
+    return response.body.connected && response.body.id === deviceID && response.body.return_value === 1
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
