@@ -43,8 +43,7 @@ function ClientParticleFunctons(props) {
   async function handleSubmit(event) {
     event.preventDefault()
     try {
-      console.log(displayName)
-
+      console.log(displayName, environment, cookies.googleIdToken)
       const allClientDevices = await getClientDevices(displayName, environment, cookies.googleIdToken)
 
       if (!allClientDevices || allClientDevices.length === 0) {
