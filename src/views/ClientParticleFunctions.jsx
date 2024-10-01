@@ -24,7 +24,18 @@ const styles = {
   },
 }
 
-const deviceFunctionList = ['Force_Reset', 'HELP']
+const deviceFunctionList = [
+  'Force_Reset',
+  'Turn_Debugging_Publishes_On_Off',
+  'Change_Occupant_Detection_Timer',
+  'Change_Initial_Timer',
+  'Change_Duration_Timer',
+  'Change_Stillness_Timer',
+  'Change_Long_Stillness_Timer',
+  'Change_INS_Threshold',
+  'Change_IM21_Door_ID',
+  'Reset_Stillness_Timer_For_Alerting_Session',
+]
 
 function ClientParticleFunctons(props) {
   const { token, changeToken, environment } = props
@@ -44,6 +55,7 @@ function ClientParticleFunctons(props) {
     event.preventDefault()
     try {
       console.log(displayName, environment, cookies.googleIdToken)
+
       const allClientDevices = await getClientDevices(displayName, environment, cookies.googleIdToken)
 
       if (!allClientDevices || allClientDevices.length === 0) {
@@ -55,14 +67,21 @@ function ClientParticleFunctons(props) {
 
       console.log('Retrieved devices:', allClientDevices)
 
-      const result = await callClientParticleFunction({
-        deviceID: allClientDevices,
-        functionName,
-        argument,
-        token,
+      // call the Particle function for each device in parallel
+      const results = await Promise.all(
+        allClientDevices.map(device => callClientParticleFunction(device.serial_number, functionName, argument, token)),
+      )
+
+      // log
+      results.forEach((success, index) => {
+        const device = allClientDevices[index]
+        if (success) {
+          console.log(`Function call succeeded for device ${device.serial_number}`)
+        } else {
+          console.error(`Function call failed for device ${device.serial_number}`)
+        }
       })
 
-      console.log('Particle function result:', result)
       setErrorMessage('Particle function called successfully!')
       setShowAlert(true)
     } catch (error) {
