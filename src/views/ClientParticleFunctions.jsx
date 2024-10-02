@@ -50,18 +50,14 @@ function ClientParticleFunctions(props) {
 
   const [allClientDevices, setAllClientDevices] = useState([])
   const [selectedDevices, setSelectedDevices] = useState([])
-  const [results, setResults] = useState({}) 
+  const [results, setResults] = useState({})
 
   useEffect(() => {
     changeToken(getParticleToken())
   }, [changeToken])
 
-  const toggleDeviceSelection = serialNumber => {
-    setSelectedDevices(prev =>
-      prev.includes(serialNumber)
-        ? prev.filter(dev => dev !== serialNumber)
-        : [...prev, serialNumber]
-    )
+  function toggleDeviceSelection(serialNumber) {
+    setSelectedDevices(prev => (prev.includes(serialNumber) ? prev.filter(dev => dev !== serialNumber) : [...prev, serialNumber]))
   }
 
   async function handleFetchDevices(event) {
@@ -96,9 +92,7 @@ function ClientParticleFunctions(props) {
 
     try {
       const callResults = await Promise.all(
-        selectedDevices.map(serialNumber =>
-          callClientParticleFunction(serialNumber, functionName, argument, token)
-        )
+        selectedDevices.map(serialNumber => callClientParticleFunction(serialNumber, functionName, argument, token)),
       )
 
       const newResults = {}
@@ -135,14 +129,8 @@ function ClientParticleFunctions(props) {
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
-            <Form.Control
-              placeholder="Client Name"
-              value={displayName}
-              onChange={x => setDisplayName(x.target.value)}
-            />
-            <Form.Text className="text-muted">
-              The display name of the client in the database.
-            </Form.Text>
+            <Form.Control placeholder="Client Name" value={displayName} onChange={x => setDisplayName(x.target.value)} />
+            <Form.Text className="text-muted">The display name of the client in the database.</Form.Text>
           </Form.Group>
           <Button variant="primary" type="submit">
             Fetch Devices
@@ -168,11 +156,7 @@ function ClientParticleFunctions(props) {
           <Form>
             <Form.Group className="mb-3" controlId="formFunctionSelect">
               <Form.Label>Select Particle Function</Form.Label>
-              <Form.Control
-                as="select"
-                value={functionName}
-                onChange={x => setFunctionName(x.target.value)}
-              >
+              <Form.Control as="select" value={functionName} onChange={x => setFunctionName(x.target.value)}>
                 {deviceFunctionList.map(func => (
                   <option key={func} value={func}>
                     {func}
@@ -183,15 +167,8 @@ function ClientParticleFunctions(props) {
 
             <Form.Group className="mb-3" controlId="formArgument">
               <Form.Label>Argument</Form.Label>
-              <Form.Control
-                placeholder="Argument"
-                value={argument}
-                maxLength="15"
-                onChange={x => setArgument(x.target.value)}
-              />
-              <Form.Text className="text-muted">
-                The argument for the function trying to be called.
-              </Form.Text>
+              <Form.Control placeholder="Argument" value={argument} maxLength="15" onChange={x => setArgument(x.target.value)} />
+              <Form.Text className="text-muted">The argument for the function trying to be called.</Form.Text>
             </Form.Group>
 
             <Button variant="primary" onClick={handleCallFunction}>
@@ -206,8 +183,7 @@ function ClientParticleFunctions(props) {
             <ul>
               {allClientDevices.map(device => (
                 <li key={device.serial_number}>
-                  {device.name} ({device.serial_number}) -{' '}
-                  {results[device.serial_number] ? 'Success [✓]' : 'Failed [x]'}
+                  {device.name} ({device.serial_number}) - {results[device.serial_number] ? 'Success [✓]' : 'Failed [x]'}
                 </li>
               ))}
             </ul>
