@@ -22,6 +22,17 @@ const styles = {
     paddingLeft: '5px',
     paddingBottom: '5px',
   },
+  deviceList: {
+    listStyleType: 'none',
+    paddingLeft: 0,
+  },
+  deviceListItem: {
+    borderBottom: '1px solid #ddd',
+    padding: '10px 0',
+  },
+  selectAll: {
+    marginBottom: '10px',
+  },
 }
 
 const deviceFunctionList = [
@@ -47,19 +58,32 @@ function ClientParticleFunctions(props) {
 
   const [errorMessage, setErrorMessage] = useState('')
   const [showAlert, setShowAlert] = useState(false)
+  const [alertVariant, setAlertVariant] = useState('danger')
 
   const [allClientDevices, setAllClientDevices] = useState([])
   const [selectedDevices, setSelectedDevices] = useState([])
-  const [results, setResults] = useState({})
 
   useEffect(() => {
     changeToken(getParticleToken())
   }, [changeToken])
 
+  // Toggle a specific device's selection
   function toggleDeviceSelection(serialNumber) {
     setSelectedDevices(prev => (prev.includes(serialNumber) ? prev.filter(dev => dev !== serialNumber) : [...prev, serialNumber]))
   }
 
+  // Select or deselect all devices
+  function handleSelectAll(event) {
+    if (event.target.checked) {
+      // Select all devices
+      setSelectedDevices(allClientDevices.map(device => device.serial_number))
+    } else {
+      // Deselect all devices
+      setSelectedDevices([])
+    }
+  }
+
+  // Handle fetching devices for the client
   async function handleFetchDevices(event) {
     event.preventDefault()
     try {
@@ -67,47 +91,45 @@ function ClientParticleFunctions(props) {
       if (!devices || devices.length === 0) {
         console.error('No client devices found.')
         setErrorMessage('No client devices found for this client name.')
+        setAlertVariant('danger')
         setShowAlert(true)
         return
       }
 
       setAllClientDevices(devices)
+      setSelectedDevices([]) // Reset selections
       setErrorMessage('')
       setShowAlert(false)
       console.log('Devices fetched:', devices)
     } catch (error) {
       console.error('Error fetching devices:', error)
       setErrorMessage('An error occurred while fetching devices. Please try again.')
+      setAlertVariant('danger')
       setShowAlert(true)
     }
   }
 
+  // Handle calling the Particle function for selected devices
   async function handleCallFunction() {
     if (selectedDevices.length === 0) {
       console.error('No devices selected for function call.')
       setErrorMessage('Please select at least one device.')
+      setAlertVariant('danger')
       setShowAlert(true)
       return
     }
 
     try {
-      const callResults = await Promise.all(
-        selectedDevices.map(serialNumber => callClientParticleFunction(serialNumber, functionName, argument, token)),
-      )
+      await Promise.all(selectedDevices.map(serialNumber => callClientParticleFunction(serialNumber, functionName, argument, token)))
 
-      const newResults = {}
-      selectedDevices.forEach((serialNumber, index) => {
-        newResults[serialNumber] = callResults[index]
-      })
-
-      setResults(newResults)
-      setErrorMessage('Particle function called successfully!')
+      setErrorMessage('Particle function called successfully for selected devices!')
+      setAlertVariant('success')
       setShowAlert(true)
-
-      console.log('Function call results:', newResults)
+      console.log('Function call succeeded for selected devices.')
     } catch (error) {
       console.error('Error calling particle function:', error)
       setErrorMessage('An error occurred while calling the particle function. Please try again.')
+      setAlertVariant('danger')
       setShowAlert(true)
     }
   }
@@ -120,7 +142,7 @@ function ClientParticleFunctions(props) {
       </div>
 
       {showAlert && (
-        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+        <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
           {errorMessage}
         </Alert>
       )}
@@ -137,20 +159,39 @@ function ClientParticleFunctions(props) {
           </Button>
         </Form>
 
+        <br />
+        <hr />
+        <br />
+
         {allClientDevices.length > 0 && (
           <div>
             <h5>Select Devices</h5>
-            {allClientDevices.map(device => (
-              <Form.Check
-                key={device.serial_number}
-                type="checkbox"
-                label={`${device.name} (${device.serial_number})`}
-                checked={selectedDevices.includes(device.serial_number)}
-                onChange={() => toggleDeviceSelection(device.serial_number)}
-              />
-            ))}
+            <Form.Check
+              type="checkbox"
+              label="Select All Devices"
+              onChange={handleSelectAll}
+              checked={selectedDevices.length === allClientDevices.length}
+              style={styles.selectAll}
+            />
+
+            <ul style={styles.deviceList}>
+              {allClientDevices.map(device => (
+                <li key={device.serial_number} style={styles.deviceListItem}>
+                  <Form.Check
+                    type="checkbox"
+                    label={`${device.name} (${device.serial_number})`}
+                    checked={selectedDevices.includes(device.serial_number)}
+                    onChange={() => toggleDeviceSelection(device.serial_number)}
+                  />
+                </li>
+              ))}
+            </ul>
           </div>
         )}
+
+        <br />
+        <hr />
+        <br />
 
         {allClientDevices.length > 0 && (
           <Form>
@@ -175,19 +216,6 @@ function ClientParticleFunctions(props) {
               Call Particle Function
             </Button>
           </Form>
-        )}
-
-        {Object.keys(results).length > 0 && (
-          <div>
-            <h5>Function Call Results</h5>
-            <ul>
-              {allClientDevices.map(device => (
-                <li key={device.serial_number}>
-                  {device.name} ({device.serial_number}) - {results[device.serial_number] ? 'Success [✓]' : 'Failed [x]'}
-                </li>
-              ))}
-            </ul>
-          </div>
         )}
       </div>
     </div>
