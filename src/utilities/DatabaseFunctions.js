@@ -76,13 +76,8 @@ export async function getClientDevices(displayName, environment, googleIdToken) 
     displayName,
   }
 
-  console.log(`Sending request to: ${baseUrl}/pa/get-client-devices with data: ${data}`)
-
   try {
     const response = await axios.post(`${baseUrl}/pa/get-client-devices`, data)
-
-    console.log('Returned result from server:', response)
-
     const resultArray = []
     response.data.clients.forEach(client => resultArray.push(client))
     return resultArray

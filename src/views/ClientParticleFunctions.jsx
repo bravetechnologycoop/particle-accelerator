@@ -37,55 +37,82 @@ const deviceFunctionList = [
   'Reset_Stillness_Timer_For_Alerting_Session',
 ]
 
-function ClientParticleFunctons(props) {
+function ClientParticleFunctions(props) {
   const { token, changeToken, environment } = props
 
   const [cookies] = useCookies(['googleIdToken'])
   const [displayName, setDisplayName] = useState('')
   const [functionName, setFunctionName] = useState('')
   const [argument, setArgument] = useState('')
+
   const [errorMessage, setErrorMessage] = useState('')
   const [showAlert, setShowAlert] = useState(false)
+
+  const [allClientDevices, setAllClientDevices] = useState([])
+  const [selectedDevices, setSelectedDevices] = useState([])
+  const [results, setResults] = useState({}) 
 
   useEffect(() => {
     changeToken(getParticleToken())
   }, [changeToken])
 
-  async function handleSubmit(event) {
+  const toggleDeviceSelection = serialNumber => {
+    setSelectedDevices(prev =>
+      prev.includes(serialNumber)
+        ? prev.filter(dev => dev !== serialNumber)
+        : [...prev, serialNumber]
+    )
+  }
+
+  async function handleFetchDevices(event) {
     event.preventDefault()
     try {
-      console.log(displayName, environment, cookies.googleIdToken)
-
-      const allClientDevices = await getClientDevices(displayName, environment, cookies.googleIdToken)
-
-      if (!allClientDevices || allClientDevices.length === 0) {
+      const devices = await getClientDevices(displayName, environment, cookies.googleIdToken)
+      if (!devices || devices.length === 0) {
         console.error('No client devices found.')
         setErrorMessage('No client devices found for this client name.')
         setShowAlert(true)
         return
       }
 
-      console.log('Retrieved devices:', allClientDevices)
+      setAllClientDevices(devices)
+      setErrorMessage('')
+      setShowAlert(false)
+      console.log('Devices fetched:', devices)
+    } catch (error) {
+      console.error('Error fetching devices:', error)
+      setErrorMessage('An error occurred while fetching devices. Please try again.')
+      setShowAlert(true)
+    }
+  }
 
-      // call the Particle function for each device in parallel
-      const results = await Promise.all(
-        allClientDevices.map(device => callClientParticleFunction(device.serial_number, functionName, argument, token)),
+  async function handleCallFunction() {
+    if (selectedDevices.length === 0) {
+      console.error('No devices selected for function call.')
+      setErrorMessage('Please select at least one device.')
+      setShowAlert(true)
+      return
+    }
+
+    try {
+      const callResults = await Promise.all(
+        selectedDevices.map(serialNumber =>
+          callClientParticleFunction(serialNumber, functionName, argument, token)
+        )
       )
 
-      // log
-      results.forEach((success, index) => {
-        const device = allClientDevices[index]
-        if (success) {
-          console.log(`Function call succeeded for device ${device.serial_number}`)
-        } else {
-          console.error(`Function call failed for device ${device.serial_number}`)
-        }
+      const newResults = {}
+      selectedDevices.forEach((serialNumber, index) => {
+        newResults[serialNumber] = callResults[index]
       })
 
+      setResults(newResults)
       setErrorMessage('Particle function called successfully!')
       setShowAlert(true)
+
+      console.log('Function call results:', newResults)
     } catch (error) {
-      console.error('Error retrieving devices or calling particle function:', error)
+      console.error('Error calling particle function:', error)
       setErrorMessage('An error occurred while calling the particle function. Please try again.')
       setShowAlert(true)
     }
@@ -105,43 +132,96 @@ function ClientParticleFunctons(props) {
       )}
 
       <div style={styles.scrollView}>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
-            <Form.Control placeholder="Client Name" value={displayName} onChange={x => setDisplayName(x.target.value)} />
-            <Form.Text className="text-muted">The display name of the client in the database.</Form.Text>
+            <Form.Control
+              placeholder="Client Name"
+              value={displayName}
+              onChange={x => setDisplayName(x.target.value)}
+            />
+            <Form.Text className="text-muted">
+              The display name of the client in the database.
+            </Form.Text>
           </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formFunctionSelect">
-            <Form.Label>Select Particle Function</Form.Label>
-            <Form.Control as="select" value={functionName} onChange={x => setFunctionName(x.target.value)}>
-              {deviceFunctionList.map(func => (
-                <option key={func} value={func}>
-                  {func}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formArgument">
-            <Form.Label>Argument</Form.Label>
-            <Form.Control placeholder="Argument" value={argument} maxLength="15" onChange={x => setArgument(x.target.value)} />
-            <Form.Text className="text-muted">The argument for the function trying to be called.</Form.Text>
-          </Form.Group>
-
           <Button variant="primary" type="submit">
-            Submit
+            Fetch Devices
           </Button>
         </Form>
+
+        {allClientDevices.length > 0 && (
+          <div>
+            <h5>Select Devices</h5>
+            {allClientDevices.map(device => (
+              <Form.Check
+                key={device.serial_number}
+                type="checkbox"
+                label={`${device.name} (${device.serial_number})`}
+                checked={selectedDevices.includes(device.serial_number)}
+                onChange={() => toggleDeviceSelection(device.serial_number)}
+              />
+            ))}
+          </div>
+        )}
+
+        {allClientDevices.length > 0 && (
+          <Form>
+            <Form.Group className="mb-3" controlId="formFunctionSelect">
+              <Form.Label>Select Particle Function</Form.Label>
+              <Form.Control
+                as="select"
+                value={functionName}
+                onChange={x => setFunctionName(x.target.value)}
+              >
+                {deviceFunctionList.map(func => (
+                  <option key={func} value={func}>
+                    {func}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formArgument">
+              <Form.Label>Argument</Form.Label>
+              <Form.Control
+                placeholder="Argument"
+                value={argument}
+                maxLength="15"
+                onChange={x => setArgument(x.target.value)}
+              />
+              <Form.Text className="text-muted">
+                The argument for the function trying to be called.
+              </Form.Text>
+            </Form.Group>
+
+            <Button variant="primary" onClick={handleCallFunction}>
+              Call Particle Function
+            </Button>
+          </Form>
+        )}
+
+        {Object.keys(results).length > 0 && (
+          <div>
+            <h5>Function Call Results</h5>
+            <ul>
+              {allClientDevices.map(device => (
+                <li key={device.serial_number}>
+                  {device.name} ({device.serial_number}) -{' '}
+                  {results[device.serial_number] ? 'Success [✓]' : 'Failed [x]'}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-ClientParticleFunctons.propTypes = {
+ClientParticleFunctions.propTypes = {
   token: PropTypes.string.isRequired,
   changeToken: PropTypes.func.isRequired,
   environment: PropTypes.string.isRequired,
 }
 
-export default ClientParticleFunctons
+export default ClientParticleFunctions

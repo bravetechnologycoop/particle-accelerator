@@ -324,7 +324,6 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
  */
 export async function callClientParticleFunction(deviceID, functionName, argument, token) {
   try {
-    // use the particle sdk to call the function for device
     const response = await particle.callFunction({
       deviceId: deviceID,
       name: functionName,
