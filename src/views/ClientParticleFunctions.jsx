@@ -27,11 +27,10 @@ const styles = {
     paddingLeft: 0,
   },
   deviceListItem: {
-    borderBottom: '1px solid #ddd',
-    padding: '10px 0',
+    padding: '2px 0',
   },
   selectAll: {
-    marginBottom: '10px',
+    margin: '8px 0px 8px 0px',
   },
 }
 
@@ -75,10 +74,8 @@ function ClientParticleFunctions(props) {
   // Select or deselect all devices
   function handleSelectAll(event) {
     if (event.target.checked) {
-      // Select all devices
       setSelectedDevices(allClientDevices.map(device => device.serial_number))
     } else {
-      // Deselect all devices
       setSelectedDevices([])
     }
   }
@@ -89,7 +86,6 @@ function ClientParticleFunctions(props) {
     try {
       const devices = await getClientDevices(displayName, environment, cookies.googleIdToken)
       if (!devices || devices.length === 0) {
-        console.error('No client devices found.')
         setErrorMessage('No client devices found for this client name.')
         setAlertVariant('danger')
         setShowAlert(true)
@@ -100,9 +96,7 @@ function ClientParticleFunctions(props) {
       setSelectedDevices([]) // Reset selections
       setErrorMessage('')
       setShowAlert(false)
-      console.log('Devices fetched:', devices)
     } catch (error) {
-      console.error('Error fetching devices:', error)
       setErrorMessage('An error occurred while fetching devices. Please try again.')
       setAlertVariant('danger')
       setShowAlert(true)
@@ -112,7 +106,6 @@ function ClientParticleFunctions(props) {
   // Handle calling the Particle function for selected devices
   async function handleCallFunction() {
     if (selectedDevices.length === 0) {
-      console.error('No devices selected for function call.')
       setErrorMessage('Please select at least one device.')
       setAlertVariant('danger')
       setShowAlert(true)
@@ -125,9 +118,7 @@ function ClientParticleFunctions(props) {
       setErrorMessage('Particle function called successfully for selected devices!')
       setAlertVariant('success')
       setShowAlert(true)
-      console.log('Function call succeeded for selected devices.')
     } catch (error) {
-      console.error('Error calling particle function:', error)
       setErrorMessage('An error occurred while calling the particle function. Please try again.')
       setAlertVariant('danger')
       setShowAlert(true)
@@ -159,9 +150,7 @@ function ClientParticleFunctions(props) {
           </Button>
         </Form>
 
-        <br />
         <hr />
-        <br />
 
         {allClientDevices.length > 0 && (
           <div>
@@ -189,9 +178,7 @@ function ClientParticleFunctions(props) {
           </div>
         )}
 
-        <br />
         <hr />
-        <br />
 
         {allClientDevices.length > 0 && (
           <Form>
