@@ -154,6 +154,26 @@ function HomeView() {
 
       <div style={styles.cardBoundary}>
         <Card style={styles.cardInterior}>
+          <Card.Title style={styles.cardTitle}>Particle Client Functions</Card.Title>
+          <Card.Text>
+            <b>Product</b>: Sensor
+            <br />
+            <b>Authentication</b>: Particle
+            <br />
+            <b>Requirements</b>:
+            <ul>
+              <li>Particle auth</li>
+              <li>Clients display name in the sensors database</li>
+            </ul>
+            <hr />
+            The Particle Client Functions tool allows users to call a Particle function for all devices associated with a given client. This is done
+            by retrieving the devices from the database and invoking functions using the Particle JS SDK.
+          </Card.Text>
+        </Card>
+      </div>
+
+      <div style={styles.cardBoundary}>
+        <Card style={styles.cardInterior}>
           <Card.Title style={styles.cardTitle}>Renamer</Card.Title>
           <Card.Text>
             <b>Product</b>: Sensor
