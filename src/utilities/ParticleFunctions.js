@@ -320,7 +320,7 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
  * @param {string} functionName   name of the function
  * @param {string} arg            argument of the function
  * @param {string} token          particle auth token
- * @return {Promise<boolean>}     true if successful, false if not
+ * @return {Promise<{success: boolean, deviceID: string}>} Object containing success status and device ID
  */
 export async function callClientParticleFunction(deviceID, functionName, argument, token) {
   try {
@@ -330,9 +330,11 @@ export async function callClientParticleFunction(deviceID, functionName, argumen
       argument,
       auth: token,
     })
-    return response.body.connected && response.body.id === deviceID && response.body.return_value === 1
+
+    const success = response.body.connected && response.body.id === deviceID && response.body.return_value === 1
+    return { success, deviceID }
   } catch (err) {
-    console.error(err)
-    return false
+    console.error(`Error calling particle function for device ${deviceID}:`, err)
+    return { success: false, deviceID }
   }
 }

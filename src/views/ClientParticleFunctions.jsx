@@ -55,9 +55,10 @@ function ClientParticleFunctions(props) {
   const [functionName, setFunctionName] = useState('')
   const [argument, setArgument] = useState('')
 
+  const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertVariant, setAlertVariant] = useState('danger')
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+  const [showErrorAlert, setShowErrorAlert] = useState(false)
 
   const [allClientDevices, setAllClientDevices] = useState([])
   const [selectedDevices, setSelectedDevices] = useState([])
@@ -66,12 +67,10 @@ function ClientParticleFunctions(props) {
     changeToken(getParticleToken())
   }, [changeToken])
 
-  // Toggle a specific device's selection
   function toggleDeviceSelection(serialNumber) {
     setSelectedDevices(prev => (prev.includes(serialNumber) ? prev.filter(dev => dev !== serialNumber) : [...prev, serialNumber]))
   }
 
-  // Select or deselect all devices
   function handleSelectAll(event) {
     if (event.target.checked) {
       setSelectedDevices(allClientDevices.map(device => device.serial_number))
@@ -80,48 +79,63 @@ function ClientParticleFunctions(props) {
     }
   }
 
-  // Handle fetching devices for the client
   async function handleFetchDevices(event) {
     event.preventDefault()
     try {
       const devices = await getClientDevices(displayName, environment, cookies.googleIdToken)
       if (!devices || devices.length === 0) {
         setErrorMessage('No client devices found for this client name.')
-        setAlertVariant('danger')
-        setShowAlert(true)
+        setShowErrorAlert(true)
         return
       }
 
       setAllClientDevices(devices)
-      setSelectedDevices([]) // Reset selections
+      setSelectedDevices([])
       setErrorMessage('')
-      setShowAlert(false)
+      setShowErrorAlert(false)
     } catch (error) {
       setErrorMessage('An error occurred while fetching devices. Please try again.')
-      setAlertVariant('danger')
-      setShowAlert(true)
+      setShowErrorAlert(true)
     }
   }
 
-  // Handle calling the Particle function for selected devices
   async function handleCallFunction() {
     if (selectedDevices.length === 0) {
       setErrorMessage('Please select at least one device.')
-      setAlertVariant('danger')
-      setShowAlert(true)
+      setShowErrorAlert(true)
       return
     }
 
-    try {
-      await Promise.all(selectedDevices.map(serialNumber => callClientParticleFunction(serialNumber, functionName, argument, token)))
+    const successfulCalls = []
+    const failedCalls = []
 
-      setErrorMessage('Particle function called successfully for selected devices!')
-      setAlertVariant('success')
-      setShowAlert(true)
+    try {
+      const results = await Promise.all(selectedDevices.map(serialNumber => callClientParticleFunction(serialNumber, functionName, argument, token)))
+
+      results.forEach(result => {
+        if (result.success) {
+          successfulCalls.push(result.deviceID)
+        } else {
+          failedCalls.push(result.deviceID)
+        }
+      })
+
+      if (successfulCalls.length > 0) {
+        setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices.`)
+        setShowSuccessAlert(true)
+      }
+
+      if (failedCalls.length > 0) {
+        setErrorMessage(
+          `Error calling function for ${failedCalls.length} devices: ${failedCalls.join(
+            ', ',
+          )}. Please check the status of these devices in Particle console.`,
+        )
+        setShowErrorAlert(true)
+      }
     } catch (error) {
       setErrorMessage('An error occurred while calling the particle function. Please try again.')
-      setAlertVariant('danger')
-      setShowAlert(true)
+      setShowErrorAlert(true)
     }
   }
 
@@ -132,8 +146,14 @@ function ClientParticleFunctions(props) {
         <hr />
       </div>
 
-      {showAlert && (
-        <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
+      {showSuccessAlert && (
+        <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
+          {successMessage}
+        </Alert>
+      )}
+
+      {showErrorAlert && (
+        <Alert variant="danger" onClose={() => setShowErrorAlert(false)} dismissible>
           {errorMessage}
         </Alert>
       )}
