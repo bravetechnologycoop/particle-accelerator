@@ -48,6 +48,45 @@ export async function getSensorClients(environment, googleIdToken) {
 }
 
 /**
+ * getClientDevices: gets all devices linked to a client
+ * @param {string} environment       which server to retrieve clients from
+ * @param {string} googleIdToken     Google ID token
+ * @param {string} displayName       name of client
+ * @return {Promise<{name: string, id: string}[]>}   array of all devices if successful, empty if not.
+ */
+export async function getClientDevices(displayName, environment, googleIdToken) {
+  let baseUrl = ''
+  let braveApiKey = ''
+  if (environment === Environments.dev.name) {
+    baseUrl = SENSOR_DEV_URL
+    braveApiKey = BRAVE_API_KEY_DEV
+  } else if (environment === Environments.prod.name) {
+    baseUrl = SENSOR_PROD_URL
+    braveApiKey = BRAVE_API_KEY_PROD
+  } else if (environment === Environments.staging.name) {
+    baseUrl = SENSOR_STAGING_URL
+    braveApiKey = BRAVE_API_KEY_STAGING
+  } else {
+    return []
+  }
+
+  const data = {
+    googleIdToken,
+    braveKey: braveApiKey,
+    displayName,
+  }
+
+  try {
+    const response = await axios.post(`${baseUrl}/pa/get-client-devices`, data)
+    const resultArray = []
+    response.data.clients.forEach(client => resultArray.push(client))
+    return resultArray
+  } catch (err) {
+    return []
+  }
+}
+
+/**
  * insertSensorLocation: inserts a location into the brave sensor DB
  * @param {string} googleIdToken      Google ID token
  * @param {string} password           front-end database password

@@ -313,3 +313,34 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
     return false
   }
 }
+
+/**
+ * callClientParticleFunction: call the particle function for a single device for a client
+ * @param {string} deviceID       Serial number of Boron device for which the function needs to be called
+ * @param {string} functionName   Name of the function to be called
+ * @param {string} argument       Argument for the function call
+ * @param {string} token          Particle auth token
+ * @return {Promise<{success: boolean, deviceID: string, functionName: string, returnValue?: any, error?: string}>}
+ *         Object containing success status, device ID, function name, return value, and any errors encountered
+ */
+export async function callClientParticleFunction(deviceID, functionName, argument, token) {
+  try {
+    const response = await particle.callFunction({
+      deviceId: deviceID,
+      name: functionName,
+      argument,
+      auth: token,
+    })
+
+    const returnedDeviceID = response.body.id
+    const returnValue = response.body.return_value
+    return { success: true, deviceID: returnedDeviceID, functionName, returnValue }
+  } catch (err) {
+    if (functionName === 'Force_Reset') {
+      console.warn(`Force_Reset failed as expected for device ${deviceID}:`, err)
+      return { success: true, deviceID, functionName, error: 'Force_Reset timeout or failure as expected' }
+    }
+    console.error(err)
+    return { success: false, deviceID, functionName, error: err.message }
+  }
+}

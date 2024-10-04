@@ -73,6 +73,15 @@ const Pages = {
     },
     loginBadge: false,
   },
+  clientParticleFunctions: {
+    displayName: 'Client Particle Functions',
+    paths: ['/client-particle-functions'],
+    authorizations: {
+      clickup: false,
+      particle: true,
+    },
+    loginBadge: false,
+  },
   renamer: {
     displayName: 'Renamer',
     paths: ['/renamer'],
