@@ -331,6 +331,8 @@ export async function callClientParticleFunction(deviceID, functionName, argumen
       auth: token,
     })
 
+    console.log(response)
+
     // Accept both 0 and 1 as successful return values
     const success = response.body.connected && response.body.id === deviceID && (response.body.return_value === 0 || response.body.return_value === 1)
     return { success, deviceID }
