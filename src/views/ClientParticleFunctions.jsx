@@ -57,8 +57,11 @@ function ClientParticleFunctions(props) {
 
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [returnMessage, setReturnMessage] = useState('')
+
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showErrorAlert, setShowErrorAlert] = useState(false)
+  const [showReturnAlert, setShowReturnAlert] = useState(false)
 
   const [allClientDevices, setAllClientDevices] = useState([])
   const [selectedDevices, setSelectedDevices] = useState([])
@@ -108,12 +111,22 @@ function ClientParticleFunctions(props) {
 
     const successfulCalls = []
     const failedCalls = []
+    const returnValueCalls = [] // for calls that give a meaningful return value
 
     try {
       const results = await Promise.all(selectedDevices.map(serialNumber => callClientParticleFunction(serialNumber, functionName, argument, token)))
 
       results.forEach(result => {
-        if (result.success) {
+        if (result.success && argument === 'e') {
+          successfulCalls.push(result.deviceID)
+
+          // make a return value object for display
+          const returnValueObject = {
+            deviceID: result.deviceID,
+            returnValue: result.returnValue,
+          }
+          returnValueCalls.push(returnValueObject)
+        } else if (result.success) {
           successfulCalls.push(result.deviceID)
         } else {
           failedCalls.push(result.deviceID)
@@ -123,6 +136,12 @@ function ClientParticleFunctions(props) {
       if (successfulCalls.length > 0) {
         setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices.`)
         setShowSuccessAlert(true)
+      }
+
+      if (returnValueCalls.length > 0) {
+        const returnMessageFormatted = returnValueCalls.map(call => `Device ID: ${call.deviceID} - Return Value: ${call.returnValue}`).join('\n')
+        setReturnMessage(`Here are the return values of the function calls:\n${returnMessageFormatted}`)
+        setShowReturnAlert(true)
       }
 
       if (failedCalls.length > 0) {
@@ -151,7 +170,11 @@ function ClientParticleFunctions(props) {
           {successMessage}
         </Alert>
       )}
-
+      {showReturnAlert && (
+        <Alert variant="success" onClose={() => setShowReturnAlert(false)} dismissible>
+          {returnMessage}
+        </Alert>
+      )}
       {showErrorAlert && (
         <Alert variant="danger" onClose={() => setShowErrorAlert(false)} dismissible>
           {errorMessage}

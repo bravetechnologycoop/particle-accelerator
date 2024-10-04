@@ -316,11 +316,12 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
 
 /**
  * callClientParticleFunction: call the particle function for a single device for a client
- * @param {string} deviceID       serial number of Boron device for which the function needs to be called
- * @param {string} functionName   name of the function
- * @param {string} arg            argument of the function
- * @param {string} token          particle auth token
- * @return {Promise<{success: boolean, deviceID: string}>} Object containing success status and device ID
+ * @param {string} deviceID       Serial number of Boron device for which the function needs to be called
+ * @param {string} functionName   Name of the function to be called
+ * @param {string} argument       Argument for the function call
+ * @param {string} token          Particle auth token
+ * @return {Promise<{success: boolean, deviceID: string, functionName: string, returnValue?: any, error?: string}>}
+ *         Object containing success status, device ID, function name, return value, and any errors encountered
  */
 export async function callClientParticleFunction(deviceID, functionName, argument, token) {
   try {
@@ -331,13 +332,15 @@ export async function callClientParticleFunction(deviceID, functionName, argumen
       auth: token,
     })
 
-    console.log(response)
-
-    // Accept both 0 and 1 as successful return values
-    const success = response.body.connected && response.body.id === deviceID && (response.body.return_value === 0 || response.body.return_value === 1)
-    return { success, deviceID }
+    const returnedDeviceID = response.body.id
+    const returnValue = response.body.return_value
+    return { success: true, deviceID: returnedDeviceID, functionName, returnValue }
   } catch (err) {
-    console.error(`Error calling particle function for device ${deviceID}:`, err)
-    return { success: false, deviceID }
+    if (functionName === 'Force_Reset') {
+      console.warn(`Force_Reset failed as expected for device ${deviceID}:`, err)
+      return { success: true, deviceID, functionName, error: 'Force_Reset timeout or failure as expected' }
+    }
+    console.error(err)
+    return { success: false, deviceID, functionName, error: err.message }
   }
 }
