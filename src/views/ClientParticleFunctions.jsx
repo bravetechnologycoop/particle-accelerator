@@ -72,17 +72,24 @@ function ClientParticleFunctions(props) {
 
   async function handleFetchDevices(event) {
     event.preventDefault()
+
+    // clear all necessary states before fetching devices
+    setSuccessMessage('')
+    setErrorMessage('')
+    setSuccessfulCalls([])
+    setFailedCalls([])
+    setSelectedDevices([])
+    setFunctionList([])
+    setShowSuccessAlert(false)
+    setShowErrorAlert(false)
+
     try {
       const devices = await getClientDevices(displayName, environment, cookies.googleIdToken)
       if (!devices || devices.length === 0) {
         setErrorMessage('No client devices found for this client name.')
         setShowErrorAlert(true)
-        setAllClientDevices([])
-        setSelectedDevices([])
         return
       }
-
-      console.log(devices)
 
       setAllClientDevices(devices)
       setSelectedDevices([])
@@ -110,8 +117,6 @@ function ClientParticleFunctions(props) {
           })
           .filter(Boolean),
       )
-
-      console.log(firmwareChecks)
 
       const firmwareVersions = firmwareChecks.map(check => check.firmwareVersion)
 
@@ -176,7 +181,7 @@ function ClientParticleFunctions(props) {
           returnValue: result.returnValue,
         }
 
-        if (result.success) {
+        if (result.success && result.returnValue !== -1) {
           successful.push(displayObject)
         } else {
           failed.push(displayObject)
@@ -192,7 +197,9 @@ function ClientParticleFunctions(props) {
       }
 
       if (failedCalls.length > 0) {
-        setErrorMessage(`Error calling function for ${failedCalls.length} devices. Please check the status of these devices in Particle console:`)
+        setErrorMessage(
+          `Error calling function for ${failedCalls.length} devices. Please check the arguments and/or status of these devices in Particle console:`,
+        )
         setShowErrorAlert(true)
       }
     } catch (error) {
