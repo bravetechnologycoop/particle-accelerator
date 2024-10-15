@@ -120,6 +120,10 @@ function ClientParticleFunctions(props) {
       return
     }
 
+    // debug
+    console.log(allClientDevices)
+    console.log(selectedDevices)
+
     try {
       const firmwareChecks = await Promise.all(selectedDevices.map(deviceID => getFirmwareVersion(deviceID, token)))
 
