@@ -349,7 +349,8 @@ export async function getFunctionList(deviceID, token) {
     })
 
     const functions = response.body.functions || []
-    return { success: true, deviceID, functions }
+    console.log(functions)
+    return { success: true, deviceID, functions: functions }
   } catch (err) {
     console.error(`Failed to retrieve function list for device ${deviceID}:`, err)
     return { success: false, deviceID, functions: null, error: err.message || null }
