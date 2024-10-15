@@ -70,13 +70,13 @@ function ClientParticleFunctions(props) {
     changeToken(getParticleToken())
   }, [changeToken])
 
-  function toggleDeviceSelection(serialNumber) {
-    setSelectedDevices(prev => (prev.includes(serialNumber) ? prev.filter(dev => dev !== serialNumber) : [...prev, serialNumber]))
+  function toggleDeviceSelection(locationID) {
+    setSelectedDevices(prev => (prev.includes(locationID) ? prev.filter(dev => dev !== locationID) : [...prev, locationID]))
   }
 
   function handleSelectAll(event) {
     if (event.target.checked) {
-      setSelectedDevices(allClientDevices.map(device => device.serial_number))
+      setSelectedDevices(allClientDevices.map(device => device.locationID))
     } else {
       setSelectedDevices([])
     }
@@ -101,6 +101,12 @@ function ClientParticleFunctions(props) {
       setShowErrorAlert(true)
     }
   }
+
+  // function to check if the firmware of all devices is the same should be called here
+  // within the same call if firmware is the same, fetch the functionList
+  // return the firmware version and functionList here from ParticleFunctions.js
+  // if functionList is null, then that means firmware for one of the device is different
+  // all devices are on firmware: 10140 (extracted function list) type message
 
   async function handleCallFunction() {
     if (selectedDevices.length === 0) {
@@ -208,12 +214,12 @@ function ClientParticleFunctions(props) {
 
             <ul style={styles.deviceList}>
               {allClientDevices.map(device => (
-                <li key={device.serial_number} style={styles.deviceListItem}>
+                <li key={device.locationID} style={styles.deviceListItem}>
                   <Form.Check
                     type="checkbox"
-                    label={`${device.name} (${device.serial_number})`}
-                    checked={selectedDevices.includes(device.serial_number)}
-                    onChange={() => toggleDeviceSelection(device.serial_number)}
+                    label={`${device.displayName} (${device.locationID})`}
+                    onChange={() => toggleDeviceSelection(device.locationID)}
+                    checked={selectedDevices.includes(device.locationID)}
                   />
                 </li>
               ))}
