@@ -115,10 +115,6 @@ function ClientParticleFunctions(props) {
       return
     }
 
-    // debug
-    console.log(allClientDevices)
-    console.log(selectedDevices)
-
     try {
       const firmwareChecks = await Promise.all(
         selectedDevices
@@ -133,7 +129,7 @@ function ClientParticleFunctions(props) {
 
       const firmwareVersions = firmwareChecks.map(check => check.firmwareVersion)
 
-      // create new set that automatically discard duplicate entries and perform check
+      // create a new set that automatically discards duplicate entries and perform a check
       const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
       if (uniqueFirmwareVersions.length > 1) {
         setErrorMessage('Firmware versions are not consistent across selected devices.')
@@ -143,19 +139,24 @@ function ClientParticleFunctions(props) {
 
       console.log('FIRMWARE CHECKED SUCCESSFULLY')
 
-      // if firmware is consistent, extract functions using the first device in the list
-      const deviceToUse = selectedDevices[0]
-      const functionResults = await getFunctionList(deviceToUse.deviceID, token)
+      const deviceToUseLocationID = selectedDevices[0]
+      const deviceToUse = allClientDevices.find(dev => dev.locationID === deviceToUseLocationID)
+      if (deviceToUse) {
+        const functionResults = await getFunctionList(deviceToUse.deviceID, token)
 
-      if (functionResults.success) {
-        setFunctionList(functionResults.functionList)
+        if (functionResults.success) {
+          setFunctionList(functionResults.functionList)
 
-        console.log(deviceFunctionList_new)
+          console.log(deviceFunctionList_new)
 
-        setSuccessMessage(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Extracted function list successfully.`)
-        setShowSuccessAlert(true)
+          setSuccessMessage(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Extracted function list successfully.`)
+          setShowSuccessAlert(true)
+        } else {
+          setErrorMessage('Failed to extract functions from the selected device.')
+          setShowErrorAlert(true)
+        }
       } else {
-        setErrorMessage('Failed to extract functions from the selected device.')
+        setErrorMessage('Selected device not found in the client devices list.')
         setShowErrorAlert(true)
       }
     } catch (error) {
