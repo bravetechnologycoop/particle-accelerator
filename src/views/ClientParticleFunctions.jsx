@@ -38,21 +38,22 @@ function ClientParticleFunctions(props) {
   const { token, changeToken, environment } = props
 
   const [cookies] = useCookies(['googleIdToken'])
+
   const [displayName, setDisplayName] = useState('')
   const [functionName, setFunctionName] = useState('')
   const [argument, setArgument] = useState('')
 
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-
-  const [deviceFunctionList, setFunctionList] = useState([])
-  const [successfulCalls, setSuccessfulCalls] = useState([])
-  const [failedCalls, setFailedCalls] = useState([])
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showErrorAlert, setShowErrorAlert] = useState(false)
 
   const [allClientDevices, setAllClientDevices] = useState([])
   const [selectedDevices, setSelectedDevices] = useState([])
+
+  const [deviceFunctionList, setFunctionList] = useState([])
+  const [successfulCalls, setSuccessfulCalls] = useState([])
+  const [failedCalls, setFailedCalls] = useState([])
 
   useEffect(() => {
     changeToken(getParticleToken())
@@ -70,6 +71,7 @@ function ClientParticleFunctions(props) {
     }
   }
 
+  // function to get devices owned by client using database function
   async function handleFetchDevices(event) {
     event.preventDefault()
 
@@ -101,6 +103,7 @@ function ClientParticleFunctions(props) {
     }
   }
 
+  // function to check selected device firmware compatibility and get functions
   async function handleExtractFunctions() {
     if (selectedDevices.length === 0) {
       setErrorMessage('Please select at least one device to verify the firmware.')
@@ -124,15 +127,15 @@ function ClientParticleFunctions(props) {
       const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
       if (uniqueFirmwareVersions.length > 1) {
         setErrorMessage(
-          'Firmware versions are not consistent across selected devices - cannot process client functions. Please do it manually in Particle console.',
+          'Firmware versions are not consistent across selected devices - cannot execute client functions. Please do it manually in Particle console.',
         )
         setShowErrorAlert(true)
         return
       }
 
+      // use the first device to get the function list
       const deviceToUseLocationID = selectedDevices[0]
       const deviceToUse = allClientDevices.find(dev => dev.locationID === deviceToUseLocationID)
-
       if (deviceToUse) {
         const functionResults = await getFunctionList(deviceToUse.deviceID, token)
 
@@ -154,6 +157,7 @@ function ClientParticleFunctions(props) {
     }
   }
 
+  // function handler for calling selected particle function for all devices
   async function handleCallFunction() {
     if (selectedDevices.length === 0) {
       setErrorMessage('Please select at least one device.')
@@ -180,7 +184,6 @@ function ClientParticleFunctions(props) {
           locationID: result.locationID,
           returnValue: result.returnValue,
         }
-
         if (result.success && result.returnValue !== -1) {
           successful.push(displayObject)
         } else {
@@ -188,6 +191,7 @@ function ClientParticleFunctions(props) {
         }
       })
 
+      // for alert messages
       setSuccessfulCalls(successful)
       setFailedCalls(failed)
 
@@ -195,7 +199,7 @@ function ClientParticleFunctions(props) {
         setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices:`)
         setShowSuccessAlert(true)
       }
-
+      
       if (failedCalls.length > 0) {
         setErrorMessage(
           `Error calling function for ${failedCalls.length} devices. Please check the arguments and/or status of these devices in Particle console:`,
@@ -218,7 +222,6 @@ function ClientParticleFunctions(props) {
       {showSuccessAlert && (
         <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
           <p>{successMessage}</p>
-
           {successfulCalls.length > 0 && (
             <>
               <br />
@@ -235,8 +238,7 @@ function ClientParticleFunctions(props) {
 
       {showErrorAlert && (
         <Alert variant="danger" onClose={() => setShowErrorAlert(false)} dismissible>
-          {errorMessage}
-
+          <p>{errorMessage}</p>
           {failedCalls.length > 0 && (
             <>
               <br />
