@@ -72,11 +72,6 @@ function ClientParticleFunctions(props) {
     changeToken(getParticleToken())
   }, [changeToken])
 
-  // test
-  useEffect(() => {
-    console.log(deviceFunctionList_new)
-  }, [deviceFunctionList_new])
-
   function toggleDeviceSelection(locationID) {
     setSelectedDevices(prev => (prev.includes(locationID) ? prev.filter(dev => dev !== locationID) : [...prev, locationID]))
   }
@@ -146,12 +141,17 @@ function ClientParticleFunctions(props) {
         return
       }
 
+      console.log('FIRMWARE CHECKED SUCCESSFULLY')
+
       // if firmware is consistent, extract functions using the first device in the list
       const deviceToUse = selectedDevices[0]
       const functionResults = await getFunctionList(deviceToUse.deviceID, token)
 
       if (functionResults.success) {
         setFunctionList(functionResults.functionList)
+
+        console.log(deviceFunctionList_new)
+
         setSuccessMessage(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Extracted function list successfully.`)
         setShowSuccessAlert(true)
       } else {

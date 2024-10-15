@@ -316,9 +316,9 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
 
 /**
  * getFirmwareVersion: retrieves the firmware version for a single device
- * @param {string} deviceID     the deviceID of the boron
- * @param {string} token        particle auth token
- * @return {Promise<Object>}    returns object containing infomation
+ * @param {string} deviceID       the deviceID of the boron
+ * @param {string} token          particle auth token
+ * @return {Promise<Object>}      returns object containing infomation
  */
 export async function getFirmwareVersion(deviceID, token) {
   try {
@@ -327,9 +327,6 @@ export async function getFirmwareVersion(deviceID, token) {
       auth: token,
     })
 
-    console.log(response)
-
-    // check this using log
     const firmwareVersion = response.body.firmware_version
     return { success: true, deviceID, firmwareVersion }
   } catch (err) {
@@ -339,11 +336,10 @@ export async function getFirmwareVersion(deviceID, token) {
 }
 
 /**
- * TODOOOOOOOOOOOOOOOOO
  * getFunctionList: get list of functions for a device
- * @param {string} deviceID     the deviceID of the boron
- * @param {string} token        particle auth token
- * @return {Promise}            TODO: return the list of functions
+ * @param {string} deviceID       the deviceID of the boron
+ * @param {string} token          particle auth token
+ * @return {Promise<Object>}      return the list of functions, or null
  */
 export async function getFunctionList(deviceID, token) {
   try {
@@ -352,12 +348,11 @@ export async function getFunctionList(deviceID, token) {
       auth: token,
     })
 
-    console.log(response)
-
-    return null
+    const functions = response.body.functions || []
+    return { success: true, deviceID, functions }
   } catch (err) {
-    console.error(`Failed to retrieve firmware version for device ${deviceID}:`, err)
-    return null
+    console.error(`Failed to retrieve function list for device ${deviceID}:`, err)
+    return { success: false, deviceID, functions: null, error: err.message || null }
   }
 }
 
