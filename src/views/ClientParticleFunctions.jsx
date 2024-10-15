@@ -125,13 +125,21 @@ function ClientParticleFunctions(props) {
     console.log(selectedDevices)
 
     try {
-      const firmwareChecks = await Promise.all(selectedDevices.map(deviceID => getFirmwareVersion(deviceID, token)))
+      const firmwareChecks = await Promise.all(
+        selectedDevices
+          .map(locationID => {
+            const device = allClientDevices.find(dev => dev.locationID === locationID)
+            return device ? getFirmwareVersion(device.deviceID, token) : null
+          })
+          .filter(Boolean),
+      )
 
       console.log(firmwareChecks)
 
       const firmwareVersions = firmwareChecks.map(check => check.firmwareVersion)
-      const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
 
+      // create new set that automatically discard duplicate entries and perform check
+      const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
       if (uniqueFirmwareVersions.length > 1) {
         setErrorMessage('Firmware versions are not consistent across selected devices.')
         setShowErrorAlert(true)
