@@ -267,7 +267,7 @@ function ClientParticleFunctions(props) {
 
         <hr />
 
-        {allClientDevices.length > 0 && deviceFunctionList.length > 0 && (
+        {allClientDevices.length > 0 && deviceFunctionList && deviceFunctionList.length > 0 && (
           <Form>
             <Form.Group className="mb-3" controlId="formFunctionSelect">
               <Form.Label>Select Particle Function</Form.Label>
