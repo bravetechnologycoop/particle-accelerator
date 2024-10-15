@@ -46,7 +46,8 @@ function ClientParticleFunctions(props) {
   const [errorMessage, setErrorMessage] = useState('')
 
   const [deviceFunctionList, setFunctionList] = useState([])
-
+  const [successfulCalls, setSuccessfulCalls] = useState([])
+  const [failedCalls, setFailedCalls] = useState([])
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showErrorAlert, setShowErrorAlert] = useState(false)
 
@@ -155,8 +156,8 @@ function ClientParticleFunctions(props) {
       return
     }
 
-    const successfulCalls = []
-    const failedCalls = []
+    const successful = []
+    const failed = []
 
     try {
       const results = await Promise.all(
@@ -176,25 +177,22 @@ function ClientParticleFunctions(props) {
         }
 
         if (result.success) {
-          successfulCalls.push(displayObject)
+          successful.push(displayObject)
         } else {
-          failedCalls.push(displayObject)
+          failed.push(displayObject)
         }
       })
 
+      setSuccessfulCalls(successful)
+      setFailedCalls(failed)
+
       if (successfulCalls.length > 0) {
-        const successDetails = successfulCalls
-          .map(call => `[name: '${call.name}', locationID: '${call.locationID}', return_value: '${call.returnValue}']`)
-          .join('\n')
-        setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices:\n${successDetails}`)
+        setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices:`)
         setShowSuccessAlert(true)
       }
 
       if (failedCalls.length > 0) {
-        const errorDetails = failedCalls.map(call => `[name: '${call.name}', locationID: '${call.locationID}']`).join('\n')
-        setErrorMessage(
-          `Error calling function for ${failedCalls.length} devices. Please check the status of these devices in Particle console:\n${errorDetails}`,
-        )
+        setErrorMessage(`Error calling function for ${failedCalls.length} devices. Please check the status of these devices in Particle console:`)
         setShowErrorAlert(true)
       }
     } catch (error) {
@@ -212,12 +210,37 @@ function ClientParticleFunctions(props) {
 
       {showSuccessAlert && (
         <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
-          {successMessage}
+          <p>{successMessage}</p>
+
+          {successfulCalls.length > 0 && (
+            <>
+              <br />
+              {successfulCalls.map(call => (
+                <span key={`${call.name}-${call.locationID}`}>
+                  [name: &apos;{call.name}&apos;, locationID: &apos;{call.locationID}&apos;, return_value: &apos;{call.returnValue}&apos;]
+                  <br />
+                </span>
+              ))}
+            </>
+          )}
         </Alert>
       )}
+
       {showErrorAlert && (
         <Alert variant="danger" onClose={() => setShowErrorAlert(false)} dismissible>
           {errorMessage}
+
+          {failedCalls.length > 0 && (
+            <>
+              <br />
+              {failedCalls.map(call => (
+                <span key={`${call.name}-${call.locationID}`}>
+                  [name: &apos;{call.name}&apos;, locationID: &apos;{call.locationID}&apos;, return_value: &apos;{call.returnValue}&apos;]
+                  <br />
+                </span>
+              ))}
+            </>
+          )}
         </Alert>
       )}
 
