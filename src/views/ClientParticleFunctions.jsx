@@ -130,10 +130,8 @@ function ClientParticleFunctions(props) {
       if (deviceToUse) {
         const functionResults = await getFunctionList(deviceToUse.deviceID, token)
 
-        console.log(functionResults)
-
         if (functionResults.success) {
-          setFunctionList(functionResults.functionList)
+          setFunctionList(functionResults.functions)
           setSuccessMessage(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Extracted function list successfully.`)
           setShowSuccessAlert(true)
         } else {
