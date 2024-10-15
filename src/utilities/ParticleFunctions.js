@@ -315,6 +315,53 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
 }
 
 /**
+ * getFirmwareVersion: retrieves the firmware version for a single device
+ * @param {string} deviceID     the deviceID of the boron
+ * @param {string} token        particle auth token
+ * @return {Promise<Object>}    returns object containing infomation
+ */
+export async function getFirmwareVersion(deviceID, token) {
+  try {
+    const response = await particle.getDevice({
+      deviceId: deviceID,
+      auth: token,
+    })
+
+    console.log(response)
+
+    // check this using log
+    const firmwareVersion = response.body.firmware_version
+    return { success: true, deviceID, firmwareVersion }
+  } catch (err) {
+    console.error(`Failed to retrieve firmware version for device ${deviceID}:`, err)
+    return { success: false, deviceID, error: err.message }
+  }
+}
+
+/**
+ * TODOOOOOOOOOOOOOOOOO
+ * getFunctionList: get list of functions for a device
+ * @param {string} deviceID     the deviceID of the boron
+ * @param {string} token        particle auth token
+ * @return {Promise}            TODO: return the list of functions
+ */
+export async function getFunctionList(deviceID, token) {
+  try {
+    const response = await particle.getDevice({
+      deviceId: deviceID,
+      auth: token,
+    })
+
+    console.log(response)
+
+    return null
+  } catch (err) {
+    console.error(`Failed to retrieve firmware version for device ${deviceID}:`, err)
+    return null
+  }
+}
+
+/**
  * callClientParticleFunction: call the particle function for a single device for a client
  * @param {string} deviceID       Serial number of Boron device for which the function needs to be called
  * @param {string} functionName   Name of the function to be called

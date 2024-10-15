@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { getParticleToken } from '../utilities/StorageFunctions'
 
 const { getClientDevices } = require('../utilities/DatabaseFunctions')
-const { callClientParticleFunction } = require('../utilities/ParticleFunctions')
+const { callClientParticleFunction, getFirmwareVersion, getFunctionList } = require('../utilities/ParticleFunctions')
 
 const styles = {
   column: {
@@ -59,6 +59,8 @@ function ClientParticleFunctions(props) {
   const [errorMessage, setErrorMessage] = useState('')
   const [returnMessage, setReturnMessage] = useState('')
 
+  const [deviceFunctionList_new, setFunctionList] = useState([])
+
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showErrorAlert, setShowErrorAlert] = useState(false)
   const [showReturnAlert, setShowReturnAlert] = useState(false)
@@ -69,6 +71,11 @@ function ClientParticleFunctions(props) {
   useEffect(() => {
     changeToken(getParticleToken())
   }, [changeToken])
+
+  // test
+  useEffect(() => {
+    console.log(deviceFunctionList_new)
+  }, [deviceFunctionList_new])
 
   function toggleDeviceSelection(locationID) {
     setSelectedDevices(prev => (prev.includes(locationID) ? prev.filter(dev => dev !== locationID) : [...prev, locationID]))
@@ -89,6 +96,8 @@ function ClientParticleFunctions(props) {
       if (!devices || devices.length === 0) {
         setErrorMessage('No client devices found for this client name.')
         setShowErrorAlert(true)
+        setAllClientDevices([])
+        setSelectedDevices([])
         return
       }
 
@@ -104,11 +113,44 @@ function ClientParticleFunctions(props) {
     }
   }
 
-  // function to check if the firmware of all devices is the same should be called here
-  // within the same call if firmware is the same, fetch the functionList
-  // return the firmware version and functionList here from ParticleFunctions.js
-  // if functionList is null, then that means firmware for one of the device is different
-  // all devices are on firmware: 10140 (extracted function list) type message
+  async function handleExtractFunctions() {
+    if (selectedDevices.length === 0) {
+      setErrorMessage('Please select at least one device to verify the firmware.')
+      setShowErrorAlert(true)
+      return
+    }
+
+    try {
+      const firmwareChecks = await Promise.all(selectedDevices.map(deviceID => getFirmwareVersion(deviceID, token)))
+
+      console.log(firmwareChecks)
+
+      const firmwareVersions = firmwareChecks.map(check => check.firmwareVersion)
+      const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
+
+      if (uniqueFirmwareVersions.length > 1) {
+        setErrorMessage('Firmware versions are not consistent across selected devices.')
+        setShowErrorAlert(true)
+        return
+      }
+
+      // if firmware is consistent, extract functions using the first device in the list
+      const deviceToUse = selectedDevices[0]
+      const functionResults = await getFunctionList(deviceToUse.deviceID, token)
+
+      if (functionResults.success) {
+        setFunctionList(functionResults.functionList)
+        setSuccessMessage(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Extracted function list successfully.`)
+        setShowSuccessAlert(true)
+      } else {
+        setErrorMessage('Failed to extract functions from the selected device.')
+        setShowErrorAlert(true)
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred while verifying firmware. Please try again.')
+      setShowErrorAlert(true)
+    }
+  }
 
   async function handleCallFunction() {
     if (selectedDevices.length === 0) {
@@ -226,12 +268,16 @@ function ClientParticleFunctions(props) {
                 </li>
               ))}
             </ul>
+
+            <Button variant="primary" onClick={handleExtractFunctions}>
+              Extract Functions
+            </Button>
           </div>
         )}
 
         <hr />
 
-        {allClientDevices.length > 0 && (
+        {allClientDevices.length > 0 && deviceFunctionList.length > 0 && (
           <Form>
             <Form.Group className="mb-3" controlId="formFunctionSelect">
               <Form.Label>Select Particle Function</Form.Label>
