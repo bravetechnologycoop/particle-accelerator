@@ -34,19 +34,6 @@ const styles = {
   },
 }
 
-const deviceFunctionList = [
-  'Force_Reset',
-  'Turn_Debugging_Publishes_On_Off',
-  'Change_Occupant_Detection_Timer',
-  'Change_Initial_Timer',
-  'Change_Duration_Timer',
-  'Change_Stillness_Timer',
-  'Change_Long_Stillness_Timer',
-  'Change_INS_Threshold',
-  'Change_IM21_Door_ID',
-  'Reset_Stillness_Timer_For_Alerting_Session',
-]
-
 function ClientParticleFunctions(props) {
   const { token, changeToken, environment } = props
 
@@ -57,13 +44,11 @@ function ClientParticleFunctions(props) {
 
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [returnMessage, setReturnMessage] = useState('')
 
-  const [deviceFunctionList_new, setFunctionList] = useState([])
+  const [deviceFunctionList, setFunctionList] = useState([])
 
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showErrorAlert, setShowErrorAlert] = useState(false)
-  const [showReturnAlert, setShowReturnAlert] = useState(false)
 
   const [allClientDevices, setAllClientDevices] = useState([])
   const [selectedDevices, setSelectedDevices] = useState([])
@@ -132,23 +117,21 @@ function ClientParticleFunctions(props) {
       // create a new set that automatically discards duplicate entries and perform a check
       const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
       if (uniqueFirmwareVersions.length > 1) {
-        setErrorMessage('Firmware versions are not consistent across selected devices.')
+        setErrorMessage(
+          'Firmware versions are not consistent across selected devices - cannot process client functions. Please do it manually in Particle console.',
+        )
         setShowErrorAlert(true)
         return
       }
 
-      console.log('FIRMWARE CHECKED SUCCESSFULLY')
-
       const deviceToUseLocationID = selectedDevices[0]
       const deviceToUse = allClientDevices.find(dev => dev.locationID === deviceToUseLocationID)
+
       if (deviceToUse) {
         const functionResults = await getFunctionList(deviceToUse.deviceID, token)
 
         if (functionResults.success) {
           setFunctionList(functionResults.functionList)
-
-          console.log(deviceFunctionList_new)
-
           setSuccessMessage(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Extracted function list successfully.`)
           setShowSuccessAlert(true)
         } else {
@@ -174,44 +157,43 @@ function ClientParticleFunctions(props) {
 
     const successfulCalls = []
     const failedCalls = []
-    const returnValueCalls = [] // for calls that give a meaningful return value
 
     try {
-      const results = await Promise.all(selectedDevices.map(serialNumber => callClientParticleFunction(serialNumber, functionName, argument, token)))
+      const results = await Promise.all(
+        selectedDevices
+          .map(locationID => {
+            const device = allClientDevices.find(dev => dev.locationID === locationID)
+            return device ? callClientParticleFunction(device.displayName, device.locationID, device.deviceID, functionName, argument, token) : null
+          })
+          .filter(Boolean),
+      )
 
       results.forEach(result => {
-        if (result.success && argument === 'e') {
-          successfulCalls.push(result.deviceID)
+        const displayObject = {
+          name: result.displayName,
+          locationID: result.locationID,
+          returnValue: result.returnValue,
+        }
 
-          // make a return value object for display
-          const returnValueObject = {
-            deviceID: result.deviceID,
-            returnValue: result.returnValue,
-          }
-          returnValueCalls.push(returnValueObject)
-        } else if (result.success) {
-          successfulCalls.push(result.deviceID)
+        if (result.success) {
+          successfulCalls.push(displayObject)
         } else {
-          failedCalls.push(result.deviceID)
+          failedCalls.push(displayObject)
         }
       })
 
       if (successfulCalls.length > 0) {
-        setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices.`)
+        const successDetails = successfulCalls
+          .map(call => `[name: '${call.name}', locationID: '${call.locationID}', return_value: '${call.returnValue}']`)
+          .join('\n')
+        setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices:\n${successDetails}`)
         setShowSuccessAlert(true)
       }
 
-      if (returnValueCalls.length > 0) {
-        const returnMessageFormatted = returnValueCalls.map(call => `Device ID: ${call.deviceID} - Return Value: ${call.returnValue}`).join('\n')
-        setReturnMessage(`Here are the return values of the function calls:\n${returnMessageFormatted}`)
-        setShowReturnAlert(true)
-      }
-
       if (failedCalls.length > 0) {
+        const errorDetails = failedCalls.map(call => `[name: '${call.name}', locationID: '${call.locationID}']`).join('\n')
         setErrorMessage(
-          `Error calling function for ${failedCalls.length} devices: ${failedCalls.join(
-            ', ',
-          )}. Please check the status of these devices in Particle console.`,
+          `Error calling function for ${failedCalls.length} devices. Please check the status of these devices in Particle console:\n${errorDetails}`,
         )
         setShowErrorAlert(true)
       }
@@ -231,11 +213,6 @@ function ClientParticleFunctions(props) {
       {showSuccessAlert && (
         <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
           {successMessage}
-        </Alert>
-      )}
-      {showReturnAlert && (
-        <Alert variant="success" onClose={() => setShowReturnAlert(false)} dismissible>
-          {returnMessage}
         </Alert>
       )}
       {showErrorAlert && (
