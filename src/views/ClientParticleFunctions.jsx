@@ -93,7 +93,7 @@ function ClientParticleFunctions(props) {
       }
 
       console.log(devices)
-        
+
       setAllClientDevices(devices)
       setSelectedDevices([])
       setErrorMessage('')
