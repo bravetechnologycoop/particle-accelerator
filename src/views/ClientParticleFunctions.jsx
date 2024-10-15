@@ -199,7 +199,7 @@ function ClientParticleFunctions(props) {
         setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices:`)
         setShowSuccessAlert(true)
       }
-      
+
       if (failedCalls.length > 0) {
         setErrorMessage(
           `Error calling function for ${failedCalls.length} devices. Please check the arguments and/or status of these devices in Particle console:`,
