@@ -79,6 +79,9 @@ function ClientParticleFunctions(props) {
 
   async function handleFetchDevices(event) {
     event.preventDefault()
+
+    setClientData({ functionName: '', argument: '' })
+    setDevices({ all: [], selected: [] }) 
     setAlerts([])
 
     try {
@@ -100,6 +103,7 @@ function ClientParticleFunctions(props) {
       return
     }
 
+    setClientData({ functionName: '', argument: '' })
     setAlerts([])
 
     try {
@@ -112,7 +116,7 @@ function ClientParticleFunctions(props) {
           .filter(Boolean),
       )
 
-      // Perform firmware check
+      // perform firmware check
       const firmwareVersions = firmwareChecks.map(check => check.firmwareVersion)
       const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
       if (uniqueFirmwareVersions.length > 1) {
@@ -120,7 +124,7 @@ function ClientParticleFunctions(props) {
         return
       }
 
-      // Use the first device to get the function list
+      // use the first device to get the function list
       const deviceToUseLocationID = devices.selected[0]
       const deviceToUse = devices.all.find(dev => dev.locationID === deviceToUseLocationID)
       if (deviceToUse) {
@@ -170,6 +174,7 @@ function ClientParticleFunctions(props) {
       const successCallResults = []
       const failCallResults = []
 
+      // depending upon call success, store the call results
       results.forEach(result => {
         const resultDetails = {
           name: result.displayName,
@@ -184,7 +189,7 @@ function ClientParticleFunctions(props) {
         }
       })
 
-      // Render call data in alerts
+      // render call results as alert messages
       if (successCallResults.length > 0) {
         addAlert(`Successfully called functions for ${successCallResults.length} devices.`, 'success', successCallResults)
       }
@@ -203,7 +208,7 @@ function ClientParticleFunctions(props) {
         <hr />
       </div>
 
-      {/* Render alerts and optionally callsArray in alerts */}
+      {/* render alerts and optionally callsArray in alerts */}
       {alerts.map(alert => (
         <Alert key={alert.id} variant={alert.type} onClose={() => removeAlert(alert.id)} dismissible>
           <p>{alert.message}</p>
@@ -220,7 +225,7 @@ function ClientParticleFunctions(props) {
       ))}
 
       <div style={styles.scrollView}>
-        {/* Fetch devices from database */}
+        {/* fetch devices from database */}
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
@@ -234,10 +239,10 @@ function ClientParticleFunctions(props) {
 
         <hr />
 
-        {/* If all devices are fetched correctly */}
+        {/* given all devices are fetched correctly */}
         {devices && devices.all.length > 0 && (
           <div>
-            {/* Device selection */}
+            {/* device selection */}
             <h5>Select Devices</h5>
             <Form.Check
               type="checkbox"
@@ -247,7 +252,7 @@ function ClientParticleFunctions(props) {
               style={styles.selectAll}
             />
             <ul style={styles.deviceList}>
-              {/* Map each device from all devices to a list item */}
+              {/* map each device from all devices to a list item */}
               {devices.all.map(device => (
                 <li key={device.locationID} style={styles.deviceListItem}>
                   <Form.Check
@@ -260,7 +265,7 @@ function ClientParticleFunctions(props) {
               ))}
             </ul>
 
-            {/* Function Extraction */}
+            {/* get function list */}
             <Button variant="primary" onClick={handleGetFunctions}>
               Get Functions
             </Button>
@@ -269,10 +274,11 @@ function ClientParticleFunctions(props) {
 
         <hr />
 
-        {/* Given selected devices and functionList, select function / arg and call  */}
+        {/* given selected devices and functionList */}
         {devices.selected.length > 0 && functionList && functionList.length > 0 && (
           <Form>
-            {/* Set client data */}
+
+            {/* set client data */}
             <Form.Group className="mb-3" controlId="formFunctionSelect">
               <Form.Label>Select Particle Function</Form.Label>
               <Form.Control as="select" name="functionName" value={clientData.functionName} onChange={handleInputChange}>
@@ -290,7 +296,7 @@ function ClientParticleFunctions(props) {
               <Form.Text className="text-muted">The argument for the function being called.</Form.Text>
             </Form.Group>
 
-            {/* Call particle functions */}
+            {/* call particle functions */}
             <Button variant="primary" onClick={handleCallFunction}>
               Call Particle Function
             </Button>
