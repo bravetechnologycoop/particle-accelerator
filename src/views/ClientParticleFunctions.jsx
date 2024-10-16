@@ -1,4 +1,4 @@
-import { Form, Alert } from 'react-bootstrap'
+import { Form, Alert, Spinner } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { useCookies } from 'react-cookie'
@@ -37,6 +37,7 @@ const styles = {
 function ClientParticleFunctions(props) {
   const { token, changeToken, environment } = props
   const [cookies] = useCookies(['googleIdToken'])
+  const [loading, setLoading] = useState(false);
 
   const [displayName, setDisplayName] = useState('')
   const [clientData, setClientData] = useState({ functionName: '', argument: '' })
@@ -80,6 +81,7 @@ function ClientParticleFunctions(props) {
   async function handleFetchDevices(event) {
     event.preventDefault()
 
+    setLoading(true);
     setClientData({ functionName: '', argument: '' })
     setDevices({ all: [], selected: [] }) 
     setAlerts([])
@@ -94,6 +96,8 @@ function ClientParticleFunctions(props) {
       }
     } catch (error) {
       addAlert('An error occurred while fetching devices. Please try again.', 'danger')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -103,6 +107,7 @@ function ClientParticleFunctions(props) {
       return
     }
 
+    setLoading(true);
     setClientData({ functionName: '', argument: '' })
     setAlerts([])
 
@@ -141,6 +146,8 @@ function ClientParticleFunctions(props) {
       }
     } catch (error) {
       addAlert('An error occurred while verifying firmware. Please try again.', 'danger')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -150,6 +157,7 @@ function ClientParticleFunctions(props) {
       return
     }
 
+    setLoading(true)
     setAlerts([])
 
     try {
@@ -198,6 +206,8 @@ function ClientParticleFunctions(props) {
       }
     } catch (error) {
       addAlert('An error occurred while calling the function. Please try again.', 'danger')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -232,8 +242,8 @@ function ClientParticleFunctions(props) {
             <Form.Control placeholder="Client Name" value={displayName} onChange={x => setDisplayName(x.target.value)} />
             <Form.Text className="text-muted">The display name of the client in the database.</Form.Text>
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Fetch Devices
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Fetch Devices'}
           </Button>
         </Form>
 
@@ -266,8 +276,8 @@ function ClientParticleFunctions(props) {
             </ul>
 
             {/* get function list */}
-            <Button variant="primary" onClick={handleGetFunctions}>
-              Get Functions
+            <Button variant="primary" onClick={handleGetFunctions} disabled={loading}>
+              {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Get Functions'}
             </Button>
           </div>
         )}
@@ -297,8 +307,8 @@ function ClientParticleFunctions(props) {
             </Form.Group>
 
             {/* call particle functions */}
-            <Button variant="primary" onClick={handleCallFunction}>
-              Call Particle Function
+            <Button variant="primary" onClick={handleCallFunction} disabled={loading}>
+              {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Call Particle Function'}
             </Button>
           </Form>
         )}
