@@ -53,35 +53,6 @@ function ClientParticleFunctions(props) {
     changeToken(getParticleToken())
   }, [changeToken])
 
-  // temporary logs for state changes
-  useEffect(() => {
-    console.log('loadingFetch changed:', loadingFetch)
-  }, [loadingFetch])
-
-  useEffect(() => {
-    console.log('loadingFunctions changed:', loadingFunctions)
-  }, [loadingFunctions])
-
-  useEffect(() => {
-    console.log('loadingCallFunction changed:', loadingCallFunction)
-  }, [loadingCallFunction])
-
-  useEffect(() => {
-    console.log('alerts changed:', alerts)
-  }, [alerts])
-
-  useEffect(() => {
-    console.log('devices changed:', devices)
-  }, [devices])
-
-  useEffect(() => {
-    console.log('functionList changed:', functionList)
-  }, [functionList])
-
-  useEffect(() => {
-    console.log('clientData changed:', clientData)
-  }, [clientData])
-
   function toggleDeviceSelection(locationID) {
     setDevices(prevDevices => ({
       ...prevDevices,
