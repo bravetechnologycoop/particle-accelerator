@@ -15,7 +15,9 @@ the code was deployed.
 
 - Added more environment variables (PARTICLE_API_KEY, database credentials) (CU-86dupwqgq).
 - New tool: Particle Client Functions for calling particle functions for all devices of client (CU-86due80fw).
-- Added new database function to retrieve devices linked to a client (CU-86due80fw).
+- Added new react page for particle client functions tool - core component code in src/views/ClientParticleFunctions.jsx (CU-86due80fw).
+- Added new database function - getClientDevices; that retrieves devices owned by a client (CU-86due80fw).
+- Added three new particle functions - getFirmwareVersion, getFunctionList, callClientParticleFunction - all used as utility functions that interact with Particle JS SDK (CU-86due80fw).
 
 ### Changed
 
