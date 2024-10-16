@@ -36,179 +36,163 @@ const styles = {
 
 function ClientParticleFunctions(props) {
   const { token, changeToken, environment } = props
-
   const [cookies] = useCookies(['googleIdToken'])
 
   const [displayName, setDisplayName] = useState('')
-  const [functionName, setFunctionName] = useState('')
-  const [argument, setArgument] = useState('')
+  const [clientData, setClientData] = useState({ functionName: '', argument: '' })
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
-
-  const [allClientDevices, setAllClientDevices] = useState([])
-  const [selectedDevices, setSelectedDevices] = useState([])
-
-  const [deviceFunctionList, setFunctionList] = useState([])
-  const [successfulCalls, setSuccessfulCalls] = useState([])
-  const [failedCalls, setFailedCalls] = useState([])
+  const [alerts, setAlerts] = useState([])
+  const [devices, setDevices] = useState({ all: [], selected: [] })
+  const [functionList, setFunctionList] = useState([])
 
   useEffect(() => {
     changeToken(getParticleToken())
   }, [changeToken])
 
   function toggleDeviceSelection(locationID) {
-    setSelectedDevices(prev => (prev.includes(locationID) ? prev.filter(dev => dev !== locationID) : [...prev, locationID]))
+    setDevices(prevDevices => ({
+      ...prevDevices,
+      selected: prevDevices.selected.includes(locationID)
+        ? prevDevices.selected.filter(dev => dev !== locationID)
+        : [...prevDevices.selected, locationID],
+    }))
   }
 
   function handleSelectAll(event) {
-    if (event.target.checked) {
-      setSelectedDevices(allClientDevices.map(device => device.locationID))
-    } else {
-      setSelectedDevices([])
-    }
+    setDevices(prevDevices => ({
+      ...prevDevices,
+      selected: event.target.checked ? prevDevices.all.map(device => device.locationID) : [],
+    }))
   }
 
-  // function to get devices owned by client using database function
+  function addAlert(message, type, callsArray = null) {
+    setAlerts(prevAlerts => [...prevAlerts, { id: Date.now(), message, type, callsArray }])
+  }
+
+  function removeAlert(id) {
+    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== id))
+  }
+
+  function handleInputChange(e) {
+    setClientData({ ...clientData, [e.target.name]: e.target.value })
+  }
+
   async function handleFetchDevices(event) {
     event.preventDefault()
-
-    // clear all necessary states before fetching devices
-    setSuccessMessage('')
-    setErrorMessage('')
-    setSuccessfulCalls([])
-    setFailedCalls([])
-    setSelectedDevices([])
-    setFunctionList([])
-    setShowSuccessAlert(false)
-    setShowErrorAlert(false)
+    setAlerts([])
 
     try {
-      const devices = await getClientDevices(displayName, environment, cookies.googleIdToken)
-      if (!devices || devices.length === 0) {
-        setErrorMessage('No client devices found for this client name.')
-        setShowErrorAlert(true)
-        return
+      const fetchedDevices = await getClientDevices(displayName, environment, cookies.googleIdToken)
+      if (!fetchedDevices || fetchedDevices.length === 0) {
+        addAlert('No client devices found for this client name.', 'danger')
+      } else {
+        setDevices({ all: fetchedDevices, selected: [] })
+        addAlert(`Successfully fetched ${fetchedDevices.length} devices.`, 'success')
       }
-
-      setAllClientDevices(devices)
-      setSelectedDevices([])
-      setErrorMessage('')
-      setShowErrorAlert(false)
     } catch (error) {
-      setErrorMessage('An error occurred while fetching devices. Please try again.')
-      setShowErrorAlert(true)
+      addAlert('An error occurred while fetching devices. Please try again.', 'danger')
     }
   }
 
-  // function to check selected device firmware compatibility and get functions
-  async function handleExtractFunctions() {
-    if (selectedDevices.length === 0) {
-      setErrorMessage('Please select at least one device to verify the firmware.')
-      setShowErrorAlert(true)
+  async function handleGetFunctions() {
+    if (devices.selected.length === 0) {
+      addAlert('Please select at least one device.', 'danger')
       return
     }
 
+    setAlerts([])
+
     try {
       const firmwareChecks = await Promise.all(
-        selectedDevices
+        devices.selected
           .map(locationID => {
-            const device = allClientDevices.find(dev => dev.locationID === locationID)
+            const device = devices.all.find(dev => dev.locationID === locationID)
             return device ? getFirmwareVersion(device.deviceID, token) : null
           })
           .filter(Boolean),
       )
 
+      // Perform firmware check
       const firmwareVersions = firmwareChecks.map(check => check.firmwareVersion)
-
-      // create a new set that automatically discards duplicate entries and perform a check
       const uniqueFirmwareVersions = [...new Set(firmwareVersions)]
       if (uniqueFirmwareVersions.length > 1) {
-        setErrorMessage(
-          'Firmware versions are not consistent across selected devices - cannot execute client functions. Please do it manually in Particle console.',
-        )
-        setShowErrorAlert(true)
+        addAlert('Firmware versions are not consistent across selected devices. Please handle manually in the Particle console.', 'danger')
         return
       }
 
-      // use the first device to get the function list
-      const deviceToUseLocationID = selectedDevices[0]
-      const deviceToUse = allClientDevices.find(dev => dev.locationID === deviceToUseLocationID)
+      // Use the first device to get the function list
+      const deviceToUseLocationID = devices.selected[0]
+      const deviceToUse = devices.all.find(dev => dev.locationID === deviceToUseLocationID)
       if (deviceToUse) {
         const functionResults = await getFunctionList(deviceToUse.deviceID, token)
 
         if (functionResults.success) {
           setFunctionList(functionResults.functions)
-          setSuccessMessage(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Extracted function list successfully.`)
-          setShowSuccessAlert(true)
+          addAlert(`All devices are on firmware version: ${uniqueFirmwareVersions[0]}. Function list extracted successfully.`, 'success')
         } else {
-          setErrorMessage('Failed to extract functions from the selected device.')
-          setShowErrorAlert(true)
+          addAlert('Failed to extract functions from the selected device.', 'danger')
         }
       } else {
-        setErrorMessage('Selected device not found in the client devices list.')
-        setShowErrorAlert(true)
+        addAlert('Selected device not found in the client devices list.', 'danger')
       }
     } catch (error) {
-      setErrorMessage('An error occurred while verifying firmware. Please try again.')
-      setShowErrorAlert(true)
+      addAlert('An error occurred while verifying firmware. Please try again.', 'danger')
     }
   }
 
-  // function handler for calling selected particle function for all devices
   async function handleCallFunction() {
-    if (selectedDevices.length === 0) {
-      setErrorMessage('Please select at least one device.')
-      setShowErrorAlert(true)
+    if (devices.selected.length === 0) {
+      addAlert('Please select at least one device.', 'danger')
       return
     }
 
-    const successful = []
-    const failed = []
+    setAlerts([])
 
     try {
       const results = await Promise.all(
-        selectedDevices
+        devices.selected
           .map(locationID => {
-            const device = allClientDevices.find(dev => dev.locationID === locationID)
-            return device ? callClientParticleFunction(device.displayName, device.locationID, device.deviceID, functionName, argument, token) : null
+            const device = devices.all.find(dev => dev.locationID === locationID)
+            return device
+              ? callClientParticleFunction(
+                  device.displayName,
+                  device.locationID,
+                  device.deviceID,
+                  clientData.functionName,
+                  clientData.argument,
+                  token,
+                )
+              : null
           })
           .filter(Boolean),
       )
 
+      const successCallResults = []
+      const failCallResults = []
+
       results.forEach(result => {
-        const displayObject = {
+        const resultDetails = {
           name: result.displayName,
           locationID: result.locationID,
           returnValue: result.returnValue,
         }
+
         if (result.success && result.returnValue !== -1) {
-          successful.push(displayObject)
+          successCallResults.push(resultDetails)
         } else {
-          failed.push(displayObject)
+          failCallResults.push(resultDetails)
         }
       })
 
-      // for alert messages
-      setSuccessfulCalls(successful)
-      setFailedCalls(failed)
-
-      if (successfulCalls.length > 0) {
-        setSuccessMessage(`Successfully called particle functions for ${successfulCalls.length} devices:`)
-        setShowSuccessAlert(true)
+      // Render call data in alerts
+      if (successCallResults.length > 0) {
+        addAlert(`Successfully called functions for ${successCallResults.length} devices.`, 'success', successCallResults)
       }
-
-      if (failedCalls.length > 0) {
-        setErrorMessage(
-          `Error calling function for ${failedCalls.length} devices. Please check the arguments and/or status of these devices in Particle console:`,
-        )
-        setShowErrorAlert(true)
+      if (failCallResults.length > 0) {
+        addAlert(`Failed to call functions for ${failCallResults.length} devices.`, 'danger', failCallResults)
       }
     } catch (error) {
-      setErrorMessage('An error occurred while calling the particle function. Please try again.')
-      setShowErrorAlert(true)
+      addAlert('An error occurred while calling the function. Please try again.', 'danger')
     }
   }
 
@@ -219,41 +203,24 @@ function ClientParticleFunctions(props) {
         <hr />
       </div>
 
-      {showSuccessAlert && (
-        <Alert variant="success" onClose={() => setShowSuccessAlert(false)} dismissible>
-          <p>{successMessage}</p>
-          {successfulCalls.length > 0 && (
-            <>
-              <br />
-              {successfulCalls.map(call => (
-                <span key={`${call.name}-${call.locationID}`}>
-                  [name: &apos;{call.name}&apos;, locationID: &apos;{call.locationID}&apos;, return_value: &apos;{call.returnValue}&apos;]
-                  <br />
-                </span>
+      {/* Render alerts and optionally callsArray in alerts */}
+      {alerts.map(alert => (
+        <Alert key={alert.id} variant={alert.type} onClose={() => removeAlert(alert.id)} dismissible>
+          <p>{alert.message}</p>
+          {alert.callsArray && (
+            <div>
+              {alert.callsArray.map(call => (
+                <div key={`${call.name}-${call.locationID}`}>
+                  <strong>{call.name}</strong> (Location ID: {call.locationID}) - Return Value: {call.returnValue}
+                </div>
               ))}
-            </>
+            </div>
           )}
         </Alert>
-      )}
-
-      {showErrorAlert && (
-        <Alert variant="danger" onClose={() => setShowErrorAlert(false)} dismissible>
-          <p>{errorMessage}</p>
-          {failedCalls.length > 0 && (
-            <>
-              <br />
-              {failedCalls.map(call => (
-                <span key={`${call.name}-${call.locationID}`}>
-                  [name: &apos;{call.name}&apos;, locationID: &apos;{call.locationID}&apos;, return_value: &apos;{call.returnValue}&apos;]
-                  <br />
-                </span>
-              ))}
-            </>
-          )}
-        </Alert>
-      )}
+      ))}
 
       <div style={styles.scrollView}>
+        {/* Fetch devices from database */}
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
@@ -267,57 +234,63 @@ function ClientParticleFunctions(props) {
 
         <hr />
 
-        {allClientDevices.length > 0 && (
+        {/* If all devices are fetched correctly */}
+        {devices && devices.all.length > 0 && (
           <div>
+            {/* Device selection */}
             <h5>Select Devices</h5>
             <Form.Check
               type="checkbox"
               label="Select All Devices"
               onChange={handleSelectAll}
-              checked={selectedDevices.length === allClientDevices.length}
+              checked={devices.selected.length === devices.all.length}
               style={styles.selectAll}
             />
-
             <ul style={styles.deviceList}>
-              {allClientDevices.map(device => (
+              {/* Map each device from all devices to a list item */}
+              {devices.all.map(device => (
                 <li key={device.locationID} style={styles.deviceListItem}>
                   <Form.Check
                     type="checkbox"
                     label={`${device.displayName} (${device.locationID})`}
                     onChange={() => toggleDeviceSelection(device.locationID)}
-                    checked={selectedDevices.includes(device.locationID)}
+                    checked={devices.selected.includes(device.locationID)}
                   />
                 </li>
               ))}
             </ul>
 
-            <Button variant="primary" onClick={handleExtractFunctions}>
-              Extract Functions
+            {/* Function Extraction */}
+            <Button variant="primary" onClick={handleGetFunctions}>
+              Get Functions
             </Button>
           </div>
         )}
 
         <hr />
 
-        {allClientDevices.length > 0 && deviceFunctionList && deviceFunctionList.length > 0 && (
+        {/* Given selected devices and functionList, select function / arg and call  */}
+        {devices.selected.length > 0 && functionList && functionList.length > 0 && (
           <Form>
+            {/* Set client data */}
             <Form.Group className="mb-3" controlId="formFunctionSelect">
               <Form.Label>Select Particle Function</Form.Label>
-              <Form.Control as="select" value={functionName} onChange={x => setFunctionName(x.target.value)}>
-                {deviceFunctionList.map(func => (
+              <Form.Control as="select" name="functionName" value={clientData.functionName} onChange={handleInputChange}>
+                <option value="">-- Select Function --</option>
+                {functionList.map(func => (
                   <option key={func} value={func}>
                     {func}
                   </option>
                 ))}
               </Form.Control>
             </Form.Group>
-
             <Form.Group className="mb-3" controlId="formArgument">
               <Form.Label>Argument</Form.Label>
-              <Form.Control placeholder="Argument" value={argument} maxLength="15" onChange={x => setArgument(x.target.value)} />
-              <Form.Text className="text-muted">The argument for the function trying to be called.</Form.Text>
+              <Form.Control name="argument" placeholder="Argument" value={clientData.argument} maxLength="15" onChange={handleInputChange} />
+              <Form.Text className="text-muted">The argument for the function being called.</Form.Text>
             </Form.Group>
 
+            {/* Call particle functions */}
             <Button variant="primary" onClick={handleCallFunction}>
               Call Particle Function
             </Button>
