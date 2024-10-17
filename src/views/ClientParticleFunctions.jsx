@@ -84,8 +84,9 @@ function ClientParticleFunctions(props) {
     event.preventDefault()
 
     setLoadingFetch(true)
-    setClientData({ functionName: '', argument: '' })
     setDevices({ all: [], selected: [] })
+    setClientData({ functionName: '', argument: '' })
+    setFunctionList([])
     setAlerts([])
 
     try {
@@ -111,6 +112,7 @@ function ClientParticleFunctions(props) {
 
     setLoadingFunctions(true)
     setClientData({ functionName: '', argument: '' })
+    setFunctionList([])
     setAlerts([])
 
     try {
