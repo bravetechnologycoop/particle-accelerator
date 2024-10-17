@@ -25,6 +25,7 @@ import ClickupLogo from '../graphics/ClickupLogo.svg'
 import ParticleLogo from '../graphics/ParticleLogo.svg'
 import Pages from './Pages'
 import SystemStatus from '../views/SystemStatus'
+import ClientParticleFunctions from '../views/ClientParticleFunctions'
 
 function Frame(props) {
   const {
@@ -103,6 +104,9 @@ function Frame(props) {
     />
   )
   viewConfig[Pages.deviceLookup.displayName] = <Validator token={particleToken} changeToken={changeToken} particleSettings={particleSettings} />
+  viewConfig[Pages.clientParticleFunctions.displayName] = (
+    <ClientParticleFunctions token={particleToken} changeToken={changeToken} environment={environment} />
+  )
   viewConfig[Pages.google.displayName] = <GoogleLogin googlePayload={googlePayload} />
   viewConfig[Pages.particle.displayName] = (
     <ParticleLogin

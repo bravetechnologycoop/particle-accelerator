@@ -313,3 +313,91 @@ export async function pairDoorSensor(deviceID, doorSensorID, productID, token) {
     return false
   }
 }
+
+/**
+ * getFirmwareVersion: retrieves the firmware version for a single device
+ * @param {string} deviceID       the deviceID of the boron
+ * @param {string} token          particle auth token
+ * @return {Promise<Object>}      returns object containing infomation
+ */
+export async function getFirmwareVersion(deviceID, token) {
+  try {
+    const response = await particle.getDevice({
+      deviceId: deviceID,
+      auth: token,
+    })
+
+    const firmwareVersion = response.body.firmware_version
+    return { success: true, deviceID, firmwareVersion }
+  } catch (err) {
+    console.error(`Failed to retrieve firmware version for device ${deviceID}:`, err)
+    return { success: false, deviceID, error: err.message }
+  }
+}
+
+/**
+ * getFunctionList: get list of functions for a device
+ * @param {string} deviceID       the deviceID of the boron
+ * @param {string} token          particle auth token
+ * @return {Promise<Object>}      return the list of functions, or null
+ */
+export async function getFunctionList(deviceID, token) {
+  try {
+    const response = await particle.getDevice({
+      deviceId: deviceID,
+      auth: token,
+    })
+
+    const functions = response.body.functions || []
+    return { success: true, deviceID, functions }
+  } catch (err) {
+    console.error(`Failed to retrieve function list for device ${deviceID}:`, err)
+    return { success: false, deviceID, functions: null, error: err.message || null }
+  }
+}
+
+/**
+ * callClientParticleFunction: call the particle function for a single device owned by a client
+ * @param {string} displayName    displayName of device; only used in return for identification
+ * @param {string} locationID     locationID of device; only used in return for identification
+ * @param {string} deviceID       the deviceID of the boron
+ * @param {string} functionName   name of the function to be called
+ * @param {string} argument       argument for the function call
+ * @param {string} token          particle auth token
+ * @return {Promise<Object>}      return object containing success, displayName, locationID, return value
+ */
+export async function callClientParticleFunction(displayName, locationID, deviceID, functionName, argument, token) {
+  if (functionName === 'Force_Reset') {
+    try {
+      // this promise wouldnt resolve and call will fail
+      // expected behaviour of the force reset function
+      // YOU SHALL NOT PANIC!
+      await particle.callFunction({
+        deviceId: deviceID,
+        name: functionName,
+        argument,
+        auth: token,
+      })
+
+      return { success: true, displayName, locationID, returnValue: -1 }
+    } catch (err) {
+      console.warn(`Force_Reset failed as expected for deviceID ${deviceID}:`, err)
+      return { success: true, displayName, locationID, returnValue: -1 }
+    }
+  } else {
+    try {
+      const response = await particle.callFunction({
+        deviceId: deviceID,
+        name: functionName,
+        argument,
+        auth: token,
+      })
+
+      const callreturnValue = response.body.return_value
+      return { success: true, displayName, locationID, returnValue: callreturnValue }
+    } catch (err) {
+      console.error(err)
+      return { success: false, deviceID, locationID, returnValue: -1 }
+    }
+  }
+}
