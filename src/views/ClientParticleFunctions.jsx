@@ -9,21 +9,17 @@ const { getClientDevices } = require('../utilities/DatabaseFunctions')
 const { callClientParticleFunction, getFirmwareVersion, getFunctionList } = require('../utilities/ParticleFunctions')
 
 const styles = {
-  column: {
-    flex: '0 0 35%',
-    padding: 20,
-    alignItems: 'top',
+  pageContainer: {
     display: 'flex',
     flexDirection: 'column',
     height: '100vh',
-    overflow: 'hidden',
-  },
-  scrollView: {
     overflowY: 'auto',
+    padding: '20px',
+  },
+  contentContainer: {
     paddingRight: '5px',
     paddingLeft: '5px',
     paddingBottom: '5px',
-    maxHeight: '80vh',
   },
   deviceList: {
     listStyleType: 'none',
@@ -33,7 +29,7 @@ const styles = {
     padding: '2px 0',
   },
   selectAll: {
-    margin: '8px 0px 8px 0px',
+    margin: '8px 0',
   },
 }
 
@@ -218,7 +214,7 @@ function ClientParticleFunctions(props) {
   }
 
   return (
-    <div style={styles.column}>
+    <div style={styles.pageContainer}>
       <div>
         <h3>Client Particle Functions</h3>
         <hr />
@@ -240,7 +236,7 @@ function ClientParticleFunctions(props) {
         </Alert>
       ))}
 
-      <div style={styles.scrollView}>
+      <div style={styles.contentContainer}>
         {/* fetch devices from database */}
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
