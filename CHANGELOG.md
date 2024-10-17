@@ -13,7 +13,7 @@ the code was deployed.
 
 ### Added
 
-- Fix bug: added scrolling to client particle fucntions page (CU-86duybbue).
+- Added scrolling to client particle functions page - fixed bug (CU-86duybbue).
 
 ## [3.2.0] - 2024-10-17
 
