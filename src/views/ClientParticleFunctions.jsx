@@ -15,12 +15,15 @@ const styles = {
     alignItems: 'top',
     display: 'flex',
     flexDirection: 'column',
+    height: '100vh',
+    overflow: 'hidden',
   },
   scrollView: {
-    overflow: 'auto',
+    overflowY: 'auto',
     paddingRight: '5px',
     paddingLeft: '5px',
     paddingBottom: '5px',
+    maxHeight: '80vh',
   },
   deviceList: {
     listStyleType: 'none',
