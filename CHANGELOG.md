@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Added scrolling to client particle functions page - fixed bug (CU-86duybbue).
+
 ## [3.2.0] - 2024-10-17
 
 ### Added
