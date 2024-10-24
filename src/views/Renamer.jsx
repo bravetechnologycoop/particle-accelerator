@@ -48,6 +48,7 @@ export default function Renamer(props) {
   // config options for the dashboard
   const [client, setClient] = useState('')
   const [displayName, setDisplayName] = useState('')
+  const [deviceType, setDeviceType] = useState('')
   const [password, setPassword] = useState('')
   const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('')
 
@@ -70,6 +71,10 @@ export default function Renamer(props) {
 
   function changeTwilioPhoneNumber(phoneNumber) {
     setTwilioPhoneNumber(phoneNumber)
+  }
+
+  function changeDeviceType(newdeviceType) {
+    setDeviceType(newdeviceType)
   }
 
   function toggleParticleCheck() {
@@ -202,11 +207,13 @@ export default function Renamer(props) {
         password,
         locationID,
         displayName,
+        deviceType,
         selectedDevice.deviceID,
         newTwilioPhoneNumber,
         client,
         environment,
       )
+
       // modify clickup custom field value
       const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
         selectedDevice.clickupTaskID,
@@ -339,6 +346,8 @@ export default function Renamer(props) {
               changeClient={changeClient}
               displayName={displayName}
               changeDisplayName={changeDisplayName}
+              deviceType={deviceType}
+              changeDeviceType={changeDeviceType}
               password={password}
               changePassword={changePassword}
               environment={environment}

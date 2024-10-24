@@ -98,7 +98,17 @@ export async function getClientDevices(displayName, environment, googleIdToken) 
  * @param {string} environment        which server to insert a sensor location to.
  * @return {Promise<boolean>}         true if successful, false if not
  */
-export async function insertSensorLocation(googleIdToken, password, locationID, displayName, particleDeviceID, twilioNumber, clientID, environment) {
+export async function insertSensorLocation(
+  googleIdToken,
+  password,
+  locationID,
+  displayName,
+  particleDeviceID,
+  twilioNumber,
+  clientID,
+  deviceType,
+  environment,
+) {
   let baseUrl = ''
   let braveApiKey = ''
   if (environment === Environments.dev.name) {
@@ -120,6 +130,7 @@ export async function insertSensorLocation(googleIdToken, password, locationID, 
     password,
     locationID,
     displayName,
+    deviceType,
     particleDeviceID,
     twilioNumber,
     clientID,
