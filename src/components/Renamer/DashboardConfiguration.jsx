@@ -28,8 +28,8 @@ function DashboardConfiguration(props) {
   const [cookies] = useCookies(['googleIdToken'])
 
   const deviceTypeList = [
-    { id: 'DEVICE_SENSOR_SINGLESTALL', name: 'Single-Stall Sensor' },
-    { id: 'DEVICE_SENSOR_MULTISTALL', name: 'Multi-Stall Sensor' },
+    { id: 'SENSOR_SINGLESTALL', name: 'Single-Stall Sensor' },
+    { id: 'SENSOR_MULTISTALL', name: 'Multi-Stall Sensor' },
   ]
 
   useEffect(() => {
