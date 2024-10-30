@@ -136,6 +136,8 @@ export async function insertSensorLocation(
     clientID,
   }
 
+  console.log(data)
+
   try {
     const response = await axios.post(`${baseUrl}/pa/create-sensor-location`, data)
     return response.data.message === 'success'
