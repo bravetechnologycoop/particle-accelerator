@@ -22,8 +22,8 @@ function DashboardConfiguration(props) {
     displayTwilioPhoneNumber,
   } = props
 
-  console.log("Props received in DashboardConfiguration:", props);
-  
+  console.log('Props received in DashboardConfiguration:', props)
+
   const [clientList, setClientList] = useState([])
   const [clientLoading, setClientLoading] = useState('idle')
   const [initialized, setInitialized] = useState(false)
