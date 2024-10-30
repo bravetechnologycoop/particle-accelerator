@@ -207,10 +207,10 @@ export default function Renamer(props) {
         password,
         locationID,
         displayName,
-        deviceType,
         selectedDevice.deviceID,
         newTwilioPhoneNumber,
         client,
+        deviceType,
         environment,
       )
 
