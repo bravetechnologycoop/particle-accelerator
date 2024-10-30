@@ -8,20 +8,22 @@ import DropdownList from '../general/DropdownList'
 function DashboardConfiguration(props) {
   const {
     dashboardCheck,
+    client,
+    changeClient,
     displayName,
     changeDisplayName,
     deviceType,
     changeDeviceType,
-    client,
-    changeClient,
     password,
     changePassword,
     environment,
-    displayTwilioPhoneNumber,
     twilioPhoneNumber,
     changeTwilioPhoneNumber,
+    displayTwilioPhoneNumber,
   } = props
 
+  console.log("Props received in DashboardConfiguration:", props);
+  
   const [clientList, setClientList] = useState([])
   const [clientLoading, setClientLoading] = useState('idle')
   const [initialized, setInitialized] = useState(false)
