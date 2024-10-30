@@ -126,16 +126,18 @@ export async function insertSensorLocation(
   }
 
   const data = {
-    googleIdToken,
     braveKey: braveApiKey,
     password,
     locationID,
     displayName,
-    deviceType,
     particleDeviceID,
     twilioNumber,
     clientID,
+    deviceType,
+    googleIdToken,
   }
+
+  console.log(data)
 
   try {
     const response = await axios.post(`${baseUrl}/pa/create-sensor-location`, data)
