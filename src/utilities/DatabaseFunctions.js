@@ -137,8 +137,6 @@ export async function insertSensorLocation(
     googleIdToken,
   }
 
-  console.log(data)
-
   try {
     const response = await axios.post(`${baseUrl}/pa/create-sensor-location`, data)
     return response.data.message === 'success'
