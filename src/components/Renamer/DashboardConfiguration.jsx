@@ -8,22 +8,29 @@ import DropdownList from '../general/DropdownList'
 function DashboardConfiguration(props) {
   const {
     dashboardCheck,
-    displayName,
-    changeDisplayName,
     client,
     changeClient,
+    displayName,
+    changeDisplayName,
+    deviceType,
+    changeDeviceType,
     password,
     changePassword,
     environment,
-    displayTwilioPhoneNumber,
     twilioPhoneNumber,
     changeTwilioPhoneNumber,
+    displayTwilioPhoneNumber,
   } = props
 
   const [clientList, setClientList] = useState([])
   const [clientLoading, setClientLoading] = useState('idle')
   const [initialized, setInitialized] = useState(false)
   const [cookies] = useCookies(['googleIdToken'])
+
+  const deviceTypeList = [
+    { id: 'SENSOR_SINGLESTALL', name: 'Single-Stall Sensor' },
+    { id: 'SENSOR_MULTISTALL', name: 'Multi-Stall Sensor' },
+  ]
 
   useEffect(() => {
     async function retrieveClients() {
@@ -48,6 +55,11 @@ function DashboardConfiguration(props) {
             <Form.Group>
               <Form.Label>Display Name</Form.Label>
               <Form.Control value={displayName} onChange={x => changeDisplayName(x.target.value)} />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Device Type</Form.Label>
+              <DropdownList itemList={deviceTypeList} item={deviceType} changeItem={changeDeviceType} loading="" title="Device Type" />
             </Form.Group>
 
             <Form.Group>
@@ -81,6 +93,8 @@ DashboardConfiguration.propTypes = {
   changeClient: PropTypes.func.isRequired,
   displayName: PropTypes.string.isRequired,
   changeDisplayName: PropTypes.func.isRequired,
+  deviceType: PropTypes.string.isRequired,
+  changeDeviceType: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,
   changePassword: PropTypes.func.isRequired,
   environment: PropTypes.string.isRequired,

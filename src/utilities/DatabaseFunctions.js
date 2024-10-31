@@ -92,13 +92,24 @@ export async function getClientDevices(displayName, environment, googleIdToken) 
  * @param {string} password           front-end database password
  * @param {string} locationID         new locationID for the DB
  * @param {string} displayName        display name on dashboard
- * @param {string} particleDeviceID   Particle deviceID of location's sensor
- * @param {string} twilioNumber       Twilio number for the location
- * @param {string} clientID           Unique clientID for location
+ * @param {string} particleDeviceID   particle deviceID of location's sensor
+ * @param {string} twilioNumber       twilio number for the location
+ * @param {string} clientID           unique clientID for location
+ * @param {string} deviceType         location device type
  * @param {string} environment        which server to insert a sensor location to.
  * @return {Promise<boolean>}         true if successful, false if not
  */
-export async function insertSensorLocation(googleIdToken, password, locationID, displayName, particleDeviceID, twilioNumber, clientID, environment) {
+export async function insertSensorLocation(
+  googleIdToken,
+  password,
+  locationID,
+  displayName,
+  particleDeviceID,
+  twilioNumber,
+  clientID,
+  deviceType,
+  environment,
+) {
   let baseUrl = ''
   let braveApiKey = ''
   if (environment === Environments.dev.name) {
@@ -115,7 +126,6 @@ export async function insertSensorLocation(googleIdToken, password, locationID, 
   }
 
   const data = {
-    googleIdToken,
     braveKey: braveApiKey,
     password,
     locationID,
@@ -123,6 +133,8 @@ export async function insertSensorLocation(googleIdToken, password, locationID, 
     particleDeviceID,
     twilioNumber,
     clientID,
+    deviceType,
+    googleIdToken,
   }
 
   try {

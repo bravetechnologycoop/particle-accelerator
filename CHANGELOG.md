@@ -11,6 +11,14 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Added
+
+- Added device type to dashboard configuration in the PA renamer (CU-86duvwbq2).
+
+### Changed
+
+- Updated the database function insertSensorLocation to handle device_type field (CU-86duvwbq2). 
+
 ## [3.2.1] - 2024-10-18
 
 ### Added
