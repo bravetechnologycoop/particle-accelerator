@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie'
 import PropTypes from 'prop-types'
 import { getParticleToken } from '../utilities/StorageFunctions'
 
-const { getClientDevices } = require('../utilities/DatabaseFunctions')
+const { getClientDevices, getSensorClients } = require('../utilities/DatabaseFunctions')
 const { callClientParticleFunction, getFirmwareVersion, getFunctionList } = require('../utilities/ParticleFunctions')
 
 const styles = {
@@ -31,26 +31,35 @@ const styles = {
   selectAll: {
     margin: '8px 0',
   },
+  dropdownContainer: {
+    position: 'relative',
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    width: '100%',
+    zIndex: 1000,
+  },
 }
 
 function ClientParticleFunctions(props) {
   const { token, changeToken, environment } = props
   const [cookies] = useCookies(['googleIdToken'])
 
-  const [loadingFetch, setLoadingFetch] = useState(false)
+  const [loadingClients, setLoadingClients] = useState(false)
+  const [loadingDevices, setloadingDevices] = useState(false)
   const [loadingFunctions, setLoadingFunctions] = useState(false)
   const [loadingCallFunction, setLoadingCallFunction] = useState(false)
+
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false)
 
   const [displayName, setDisplayName] = useState('')
   const [clientData, setClientData] = useState({ functionName: '', argument: '' })
 
   const [alerts, setAlerts] = useState([])
   const [devices, setDevices] = useState({ all: [], selected: [] })
+  const [clientList, setClientList] = useState([])
   const [functionList, setFunctionList] = useState([])
-
-  useEffect(() => {
-    changeToken(getParticleToken())
-  }, [changeToken])
 
   function toggleDeviceSelection(locationID) {
     setDevices(prevDevices => ({
@@ -80,10 +89,22 @@ function ClientParticleFunctions(props) {
     setClientData({ ...clientData, [e.target.name]: e.target.value })
   }
 
+  async function retrieveClients() {
+    setLoadingClients(true)
+    try {
+      const clients = await getSensorClients(environment, cookies.googleIdToken)
+      setClientList(clients)
+    } catch (error) {
+      addAlert('An error occurred while fetching clients. Please try again.', 'danger')
+    } finally {
+      setLoadingClients(false)
+    }
+  }
+
   async function handleFetchDevices(event) {
     event.preventDefault()
 
-    setLoadingFetch(true)
+    setloadingDevices(true)
     setDevices({ all: [], selected: [] })
     setClientData({ functionName: '', argument: '' })
     setFunctionList([])
@@ -100,7 +121,7 @@ function ClientParticleFunctions(props) {
     } catch (error) {
       addAlert('An error occurred while fetching devices. Please try again.', 'danger')
     } finally {
-      setLoadingFetch(false)
+      setloadingDevices(false)
     }
   }
 
@@ -215,6 +236,16 @@ function ClientParticleFunctions(props) {
     }
   }
 
+  useEffect(() => {
+    changeToken(getParticleToken())
+  }, [changeToken])
+
+  useEffect(() => {
+    retrieveClients()
+  }, [environment, cookies.googleIdToken])
+
+  const filteredClients = clientList.filter(client => client.name && client.name.toLowerCase().includes(searchTerm.toLowerCase()))
+
   return (
     <div style={styles.pageContainer}>
       <div>
@@ -239,15 +270,49 @@ function ClientParticleFunctions(props) {
       ))}
 
       <div style={styles.contentContainer}>
-        {/* fetch devices from database */}
+        {/* fetch devices from database and search client */}
         <Form onSubmit={handleFetchDevices}>
-          <Form.Group className="mb-3" controlId="formDisplayName">
+          <Form.Group className="mb-3" controlId="formDisplayName" style={styles.dropdownContainer}>
             <Form.Label>Client Name</Form.Label>
-            <Form.Control placeholder="Client Name" value={displayName} onChange={x => setDisplayName(x.target.value)} />
+            <Form.Control
+              type="text"
+              placeholder="Search Client"
+              value={searchTerm}
+              onChange={e => {
+                setSearchTerm(e.target.value)
+                setShowDropdown(true)
+              }}
+              onFocus={() => setShowDropdown(true)}
+              onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+              disabled={loadingClients} // disable search when loadingClients
+            />
+            {/* render the client dropdown with buttons */}
+            {showDropdown && (
+              <div className="dropdown-menu show" style={styles.dropdownMenu}>
+                {filteredClients.length > 0 ? (
+                  filteredClients.map(client => (
+                    <button
+                      key={client.id}
+                      type="button"
+                      className="dropdown-item"
+                      onClick={() => {
+                        setDisplayName(client.name)
+                        setSearchTerm(client.name)
+                        setShowDropdown(false)
+                      }}
+                    >
+                      {client.name}
+                    </button>
+                  ))
+                ) : (
+                  <div className="dropdown-item">No results found</div>
+                )}
+              </div>
+            )}
             <Form.Text className="text-muted">The display name of the client in the database.</Form.Text>
           </Form.Group>
-          <Button variant="primary" type="submit" disabled={loadingFetch}>
-            {loadingFetch ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Fetch Devices'}
+          <Button variant="primary" type="submit" disabled={loadingDevices}>
+            {loadingDevices ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Fetch Devices'}
           </Button>
         </Form>
 

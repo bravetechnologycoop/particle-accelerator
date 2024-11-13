@@ -13,6 +13,7 @@ the code was deployed.
 
 ### Added
 
+- Added client dropdown to client particle functions tool (CU-86dv68thj).
 - Added device type to dashboard configuration in the PA renamer (CU-86duvwbq2).
 
 ### Changed
