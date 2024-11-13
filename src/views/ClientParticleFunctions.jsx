@@ -49,7 +49,6 @@ function ClientParticleFunctions(props) {
   const [devices, setDevices] = useState({ all: [], selected: [] })
   const [clientList, setClientList] = useState([])
   const [functionList, setFunctionList] = useState([])
-  const [searchTerm, setSearchTerm] = useState('')
 
   function toggleDeviceSelection(locationID) {
     setDevices(prevDevices => ({
@@ -236,8 +235,6 @@ function ClientParticleFunctions(props) {
     retrieveClients()
   }, [environment, cookies.googleIdToken])
 
-  const filteredClients = clientList.filter(client => client.displayName && client.displayName.toLowerCase().includes(searchTerm.toLowerCase()))
-
   return (
     <div style={styles.pageContainer}>
       <div>
@@ -266,16 +263,9 @@ function ClientParticleFunctions(props) {
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Search Client"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              disabled={loadingClients}
-            />
             <Form.Control as="select" value={displayName} onChange={x => setDisplayName(x.target.value)} disabled={loadingClients}>
               <option value="">-- Select Client --</option>
-              {filteredClients.map(client => (
+              {clientList.map(client => (
                 <option key={client.id} value={client.displayName}>
                   {client.displayName}
                 </option>
