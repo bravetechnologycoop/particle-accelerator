@@ -42,6 +42,9 @@ function ClientParticleFunctions(props) {
   const [loadingFunctions, setLoadingFunctions] = useState(false)
   const [loadingCallFunction, setLoadingCallFunction] = useState(false)
 
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false)
+
   const [displayName, setDisplayName] = useState('')
   const [clientData, setClientData] = useState({ functionName: '', argument: '' })
 
@@ -233,6 +236,8 @@ function ClientParticleFunctions(props) {
     retrieveClients()
   }, [environment, cookies.googleIdToken])
 
+  const filteredClients = clientList.filter(client => client.name && client.name.toLowerCase().includes(searchTerm.toLowerCase()))
+
   return (
     <div style={styles.pageContainer}>
       <div>
@@ -261,14 +266,39 @@ function ClientParticleFunctions(props) {
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
-            <Form.Control as="select" value={displayName} onChange={x => setDisplayName(x.target.value)} disabled={loadingClients}>
-              <option value="">-- Select Client --</option>
-              {clientList.map(client => (
-                <option key={client.id} value={client.name}>
-                  {client.name}
-                </option>
-              ))}
-            </Form.Control>
+            <Form.Control
+              type="text"
+              placeholder="Search Client"
+              value={searchTerm}
+              onChange={e => {
+                setSearchTerm(e.target.value)
+                setShowDropdown(true)
+              }}
+              onFocus={() => setShowDropdown(true)}
+              onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+              disabled={loadingClients}
+            />
+            {showDropdown && (
+              <div className="dropdown-menu show" style={{ width: '100%' }}>
+                {filteredClients.length > 0 ? (
+                  filteredClients.map(client => (
+                    <button
+                      key={client.id}
+                      type="button"
+                      className="dropdown-item"
+                      onMouseDown={() => {
+                        setDisplayName(client.name)
+                        setShowDropdown(false)
+                      }}
+                    >
+                      {client.name}
+                    </button>
+                  ))
+                ) : (
+                  <div className="dropdown-item">No results found</div>
+                )}
+              </div>
+            )}
             <Form.Text className="text-muted">The display name of the client in the database.</Form.Text>
           </Form.Group>
           <Button variant="primary" type="submit" disabled={loadingDevices}>
