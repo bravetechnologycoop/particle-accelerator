@@ -49,6 +49,7 @@ function ClientParticleFunctions(props) {
   const [devices, setDevices] = useState({ all: [], selected: [] })
   const [clientList, setClientList] = useState([])
   const [functionList, setFunctionList] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
 
   function toggleDeviceSelection(locationID) {
     setDevices(prevDevices => ({
@@ -78,25 +79,19 @@ function ClientParticleFunctions(props) {
     setClientData({ ...clientData, [e.target.name]: e.target.value })
   }
 
-  useEffect(() => {
-    changeToken(getParticleToken())
-  }, [changeToken])
-
-  useEffect(() => {
-    async function retrieveClients() {
-      setLoadingClients(true)
-      try {
-        const clients = await getSensorClients(environment, cookies.googleIdToken)
-        setClientList(clients)
-      } catch (error) {
-        addAlert('An error occurred while fetching clients. Please try again.', 'danger')
-      } finally {
-        setLoadingClients(false)
-      }
+  async function retrieveClients() {
+    setLoadingClients(true)
+    try {
+      const clients = await getSensorClients(environment, cookies.googleIdToken)
+      console.log('clients:', clients)
+      setClientList(clients)
+      console.log('clientList:', clientList)
+    } catch (error) {
+      addAlert('An error occurred while fetching clients. Please try again.', 'danger')
+    } finally {
+      setLoadingClients(false)
     }
-
-    retrieveClients()
-  }, [environment, cookies.googleIdToken])
+  }
 
   async function handleFetchDevices(event) {
     event.preventDefault()
@@ -233,6 +228,16 @@ function ClientParticleFunctions(props) {
     }
   }
 
+  useEffect(() => {
+    changeToken(getParticleToken())
+  }, [changeToken])
+
+  useEffect(() => {
+    retrieveClients()
+  }, [environment, cookies.googleIdToken])
+
+  const filteredClients = clientList.filter(client => client.displayName.toLowerCase().includes(searchTerm.toLowerCase()))
+
   return (
     <div style={styles.pageContainer}>
       <div>
@@ -261,9 +266,16 @@ function ClientParticleFunctions(props) {
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Search Client"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              disabled={loadingClients}
+            />
             <Form.Control as="select" value={displayName} onChange={x => setDisplayName(x.target.value)} disabled={loadingClients}>
               <option value="">-- Select Client --</option>
-              {clientList.map(client => (
+              {filteredClients.map(client => (
                 <option key={client.id} value={client.displayName}>
                   {client.displayName}
                 </option>
