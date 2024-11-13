@@ -236,7 +236,7 @@ function ClientParticleFunctions(props) {
     retrieveClients()
   }, [environment, cookies.googleIdToken])
 
-  const filteredClients = clientList.filter(client => client.displayName.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredClients = clientList.filter(client => client.displayName && client.displayName.toLowerCase().includes(searchTerm.toLowerCase()))
 
   return (
     <div style={styles.pageContainer}>
