@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie'
 import PropTypes from 'prop-types'
 import { getParticleToken } from '../utilities/StorageFunctions'
 
-const { getClientDevices } = require('../utilities/DatabaseFunctions')
+const { getClientDevices, getSensorClients } = require('../utilities/DatabaseFunctions')
 const { callClientParticleFunction, getFirmwareVersion, getFunctionList } = require('../utilities/ParticleFunctions')
 
 const styles = {
@@ -37,7 +37,8 @@ function ClientParticleFunctions(props) {
   const { token, changeToken, environment } = props
   const [cookies] = useCookies(['googleIdToken'])
 
-  const [loadingFetch, setLoadingFetch] = useState(false)
+  const [loadingClients, setLoadingClients] = useState(false)
+  const [loadingDevices, setloadingDevices] = useState(false)
   const [loadingFunctions, setLoadingFunctions] = useState(false)
   const [loadingCallFunction, setLoadingCallFunction] = useState(false)
 
@@ -46,11 +47,8 @@ function ClientParticleFunctions(props) {
 
   const [alerts, setAlerts] = useState([])
   const [devices, setDevices] = useState({ all: [], selected: [] })
+  const [clientList, setClientList] = useState([])
   const [functionList, setFunctionList] = useState([])
-
-  useEffect(() => {
-    changeToken(getParticleToken())
-  }, [changeToken])
 
   function toggleDeviceSelection(locationID) {
     setDevices(prevDevices => ({
@@ -80,10 +78,30 @@ function ClientParticleFunctions(props) {
     setClientData({ ...clientData, [e.target.name]: e.target.value })
   }
 
+  useEffect(() => {
+    changeToken(getParticleToken())
+  }, [changeToken])
+
+  useEffect(() => {
+    async function retrieveClients() {
+      setLoadingClients(true)
+      try {
+        const clients = await getSensorClients(environment, cookies.googleIdToken)
+        setClientList(clients)
+      } catch (error) {
+        addAlert('An error occurred while fetching clients. Please try again.', 'danger')
+      } finally {
+        setLoadingClients(false)
+      }
+    }
+
+    retrieveClients()
+  }, [environment, cookies.googleIdToken])
+
   async function handleFetchDevices(event) {
     event.preventDefault()
 
-    setLoadingFetch(true)
+    setloadingDevices(true)
     setDevices({ all: [], selected: [] })
     setClientData({ functionName: '', argument: '' })
     setFunctionList([])
@@ -100,7 +118,7 @@ function ClientParticleFunctions(props) {
     } catch (error) {
       addAlert('An error occurred while fetching devices. Please try again.', 'danger')
     } finally {
-      setLoadingFetch(false)
+      setloadingDevices(false)
     }
   }
 
@@ -243,11 +261,18 @@ function ClientParticleFunctions(props) {
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName">
             <Form.Label>Client Name</Form.Label>
-            <Form.Control placeholder="Client Name" value={displayName} onChange={x => setDisplayName(x.target.value)} />
+            <Form.Control as="select" value={displayName} onChange={x => setDisplayName(x.target.value)} disabled={loadingClients}>
+              <option value="">-- Select Client --</option>
+              {clientList.map(client => (
+                <option key={client.id} value={client.displayName}>
+                  {client.displayName}
+                </option>
+              ))}
+            </Form.Control>
             <Form.Text className="text-muted">The display name of the client in the database.</Form.Text>
           </Form.Group>
-          <Button variant="primary" type="submit" disabled={loadingFetch}>
-            {loadingFetch ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Fetch Devices'}
+          <Button variant="primary" type="submit" disabled={loadingDevices}>
+            {loadingDevices ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Fetch Devices'}
           </Button>
         </Form>
 
