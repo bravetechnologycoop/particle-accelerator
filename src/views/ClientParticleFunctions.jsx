@@ -82,9 +82,7 @@ function ClientParticleFunctions(props) {
     setLoadingClients(true)
     try {
       const clients = await getSensorClients(environment, cookies.googleIdToken)
-      console.log('clients:', clients)
       setClientList(clients)
-      console.log('clientList:', clientList)
     } catch (error) {
       addAlert('An error occurred while fetching clients. Please try again.', 'danger')
     } finally {
@@ -266,8 +264,8 @@ function ClientParticleFunctions(props) {
             <Form.Control as="select" value={displayName} onChange={x => setDisplayName(x.target.value)} disabled={loadingClients}>
               <option value="">-- Select Client --</option>
               {clientList.map(client => (
-                <option key={client.id} value={client.displayName}>
-                  {client.displayName}
+                <option key={client.id} value={client.name}>
+                  {client.name}
                 </option>
               ))}
             </Form.Control>
