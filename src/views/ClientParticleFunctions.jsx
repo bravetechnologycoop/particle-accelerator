@@ -286,7 +286,7 @@ function ClientParticleFunctions(props) {
               onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
               disabled={loadingClients} // disable search when loadingClients
             />
-            {/* render the client dropdown with buttons*/}
+            {/* render the client dropdown with buttons */}
             {showDropdown && (
               <div className="dropdown-menu show" style={styles.dropdownMenu}>
                 {filteredClients.length > 0 ? (
