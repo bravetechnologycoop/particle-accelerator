@@ -270,7 +270,7 @@ function ClientParticleFunctions(props) {
       ))}
 
       <div style={styles.contentContainer}>
-        {/* fetch devices from database */}
+        {/* fetch devices from database and search client */}
         <Form onSubmit={handleFetchDevices}>
           <Form.Group className="mb-3" controlId="formDisplayName" style={styles.dropdownContainer}>
             <Form.Label>Client Name</Form.Label>
@@ -284,8 +284,9 @@ function ClientParticleFunctions(props) {
               }}
               onFocus={() => setShowDropdown(true)}
               onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
-              disabled={loadingClients}
+              disabled={loadingClients} // disable search when loadingClients
             />
+            {/* render the client dropdown with buttons*/}
             {showDropdown && (
               <div className="dropdown-menu show" style={styles.dropdownMenu}>
                 {filteredClients.length > 0 ? (
