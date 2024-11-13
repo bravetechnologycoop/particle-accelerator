@@ -31,6 +31,14 @@ const styles = {
   selectAll: {
     margin: '8px 0',
   },
+  dropdownContainer: {
+    position: 'relative',
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    width: '100%',
+    zIndex: 1000,
+  },
 }
 
 function ClientParticleFunctions(props) {
@@ -264,7 +272,7 @@ function ClientParticleFunctions(props) {
       <div style={styles.contentContainer}>
         {/* fetch devices from database */}
         <Form onSubmit={handleFetchDevices}>
-          <Form.Group className="mb-3" controlId="formDisplayName">
+          <Form.Group className="mb-3" controlId="formDisplayName" style={styles.dropdownContainer}>
             <Form.Label>Client Name</Form.Label>
             <Form.Control
               type="text"
@@ -279,15 +287,16 @@ function ClientParticleFunctions(props) {
               disabled={loadingClients}
             />
             {showDropdown && (
-              <div className="dropdown-menu show" style={{ width: '100%' }}>
+              <div className="dropdown-menu show" style={styles.dropdownMenu}>
                 {filteredClients.length > 0 ? (
                   filteredClients.map(client => (
                     <button
                       key={client.id}
                       type="button"
                       className="dropdown-item"
-                      onMouseDown={() => {
+                      onClick={() => {
                         setDisplayName(client.name)
+                        setSearchTerm(client.name)
                         setShowDropdown(false)
                       }}
                     >
