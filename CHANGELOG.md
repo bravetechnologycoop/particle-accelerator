@@ -11,6 +11,8 @@ the code was deployed.
 
 ## [Unreleased]
 
+## [3.2.2] - 2024-11-14
+
 ### Added
 
 - Added client dropdown to client particle functions tool (CU-86dv68thj).
