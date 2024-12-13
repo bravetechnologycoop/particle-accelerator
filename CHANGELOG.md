@@ -11,6 +11,10 @@ the code was deployed.
 
 ## [Unreleased]
 
+### Changed
+
+- Updated steps 5 and 6 of the provisioning guide to include steps for IM21 sensors (CU-86dvcc4nb).
+
 ## [3.2.2] - 2024-11-14
 
 ### Added

@@ -185,11 +185,12 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="5">
-                <li style={styles.stepTitle}>Obtain an IM24 Door Sensor and retrieve it&apos;s BLE ID (shown in image) to pair it to the Boron.</li>
+                <li style={styles.stepTitle}>Obtain an IM24 or IM21 Door Sensor and retrieve it&apos;s BLE ID (IM24 shown in image) to pair it to the Boron.</li>
               </ol>
               <ul>
-                <li>The BLE ID can be found at the side of the bigger block of the IM24 sensor.</li>
-                <li>Take note of the last 6 digits of the ID.</li>
+                <li>The BLE ID can be found at the side of the bigger block of the IM sensor.</li>
+                <li>For IM24, take note of the last 6 digits of the ID.</li>
+                <li>For IM21, take note of the first 6 digits of the 2nd half.</li>
               </ul>
             </div>
             <div style={styles.stepGraphic}>
@@ -204,14 +205,14 @@ function SensorProvisioningGuide() {
           <Card.Body style={styles.cardBodyParent}>
             <div style={styles.stepText}>
               <ol start="6">
-                <li style={styles.stepTitle}>Open the Particle Console to the device and pair the Boron with the IM24 Door Sensor.</li>
+                <li style={styles.stepTitle}>Open the Particle Console to the device and pair the Boron with the Door Sensor.</li>
               </ol>
               <ul>
                 <li>In the top right, change Sandbox to Brave Technology Coop.</li>
                 <li>Click on Production Sensor Devices.</li>
                 <li>Click on Devices (cube on left bar) and search for the newly connected device by name.</li>
                 <li>
-                  Under functions, input in <code>Change_IM24_Door_ID</code> the last 6 digits of the IM24 ID with commas after every 2 digits.
+                  Under functions, input in <code>Change_IM24_Door_ID</code> or <code>Change_IM21_Door_ID</code> the digits from step 5 with commas after every 2 digits.
                 </li>
               </ul>
             </div>
