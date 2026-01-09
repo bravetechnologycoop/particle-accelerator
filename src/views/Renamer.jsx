@@ -44,6 +44,7 @@ export default function Renamer(props) {
   const [twilioStatus, setTwilioStatus] = useState('notSelected')
   const [dashboardStatus, setDashboardStatus] = useState('notSelected')
   const [twilioErrorMessage, setTwilioErrorMessage] = useState('')
+  const [dashboardErrorMessage, setDashboardErrorMessage] = useState('')
 
   // config options for the dashboard
   const [client, setClient] = useState('')
@@ -202,35 +203,40 @@ export default function Renamer(props) {
       setDashboardStatus('waiting')
 
       newTwilioPhoneNumber = twilioCheck ? newTwilioPhoneNumber : twilioPhoneNumber
-      const databaseInsert = await insertSensorLocation(
-        cookies.googleIdToken,
-        password,
-        locationID,
-        displayName,
-        selectedDevice.deviceID,
-        newTwilioPhoneNumber,
-        client,
-        deviceType,
-        environment,
-      )
+      try {
+        const databaseInsert = await insertSensorLocation(
+          cookies.googleIdToken,
+          password,
+          locationID,
+          displayName,
+          selectedDevice.deviceID,
+          newTwilioPhoneNumber,
+          client,
+          deviceType,
+          environment,
+        )
 
-      // modify clickup custom field value
-      const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
-        selectedDevice.clickupTaskID,
-        process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
-        newTwilioPhoneNumber,
-        clickupToken,
-      )
-      if (twilioFieldChange) {
-        modifyDeviceValues.twilioNumber = newTwilioPhoneNumber
-      }
-      const clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.addedToDatabase.name, clickupToken)
-      if (databaseInsert && clickupStatusChange) {
-        setDashboardStatus('true')
-        modifyDeviceValues.clickupStatus = ClickupStatuses.addedToDatabase.name
-        modifyDeviceValues.clickupStatusColour = ClickupStatuses.addedToDatabase.colour
-      } else {
+        // modify clickup custom field value
+        const twilioFieldChange = await modifyClickupTaskCustomFieldValue(
+          selectedDevice.clickupTaskID,
+          process.env.REACT_APP_CLICKUP_CUSTOM_FIELD_ID_TWILIO,
+          newTwilioPhoneNumber,
+          clickupToken,
+        )
+        if (twilioFieldChange) {
+          modifyDeviceValues.twilioNumber = newTwilioPhoneNumber
+        }
+        const clickupStatusChange = await modifyClickupTaskStatus(selectedDevice.clickupTaskID, ClickupStatuses.addedToDatabase.name, clickupToken)
+        if (databaseInsert && clickupStatusChange) {
+          setDashboardStatus('true')
+          modifyDeviceValues.clickupStatus = ClickupStatuses.addedToDatabase.name
+          modifyDeviceValues.clickupStatusColour = ClickupStatuses.addedToDatabase.colour
+        } else {
+          setDashboardStatus('error')
+        }
+      } catch (err) {
         setDashboardStatus('error')
+        setDashboardErrorMessage(err.message)
       }
     }
     modifyActivatedDevice(selectedDevice.clickupTaskID, modifyDeviceValues)
@@ -379,6 +385,11 @@ export default function Renamer(props) {
                   <div style={{ paddingRight: '10px' }}>Registering to Dashboard:</div>
                   <StatusBadge status={dashboardStatus} />{' '}
                 </div>
+                {dashboardStatus === 'error' && dashboardErrorMessage && (
+                  <div>
+                    <p style={{ color: 'red' }}>{dashboardErrorMessage}</p>
+                  </div>
+                )}
               </Card.Body>
             </Card>
           </div>

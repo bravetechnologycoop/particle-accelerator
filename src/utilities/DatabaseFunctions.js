@@ -141,6 +141,10 @@ export async function insertSensorLocation(
     const response = await axios.post(`${baseUrl}/pa/create-sensor-location`, data)
     return response.data.message === 'success'
   } catch (err) {
+    if (err.response && err.response.status === 409) {
+      console.error('Error: Particle device ID already exists in the database')
+      throw new Error('Particle device ID already exists in the database')
+    }
     console.error(err)
     return false
   }
