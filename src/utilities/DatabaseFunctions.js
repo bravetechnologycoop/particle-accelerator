@@ -144,7 +144,7 @@ export async function insertSensorLocation(
     console.error('Error in insertSensorLocation:', err)
     console.error('Error response status:', err.response?.status)
     console.error('Error response data:', err.response?.data)
-    
+
     if (err.response && err.response.status === 409) {
       console.error('Caught 409 error - Particle device ID already exists')
       throw new Error('Particle device ID already exists in the database')
