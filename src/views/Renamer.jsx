@@ -201,6 +201,7 @@ export default function Renamer(props) {
     }
     if (dashboardCheck) {
       setDashboardStatus('waiting')
+      setDashboardErrorMessage('') // Clear previous error message
 
       newTwilioPhoneNumber = twilioCheck ? newTwilioPhoneNumber : twilioPhoneNumber
       try {
@@ -235,6 +236,8 @@ export default function Renamer(props) {
           setDashboardStatus('error')
         }
       } catch (err) {
+        console.error('Caught error in Renamer:', err)
+        console.error('Error message:', err.message)
         setDashboardStatus('error')
         setDashboardErrorMessage(err.message)
       }

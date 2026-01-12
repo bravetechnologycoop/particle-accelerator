@@ -141,11 +141,15 @@ export async function insertSensorLocation(
     const response = await axios.post(`${baseUrl}/pa/create-sensor-location`, data)
     return response.data.message === 'success'
   } catch (err) {
+    console.error('Error in insertSensorLocation:', err)
+    console.error('Error response status:', err.response?.status)
+    console.error('Error response data:', err.response?.data)
+    
     if (err.response && err.response.status === 409) {
-      console.error('Error: Particle device ID already exists in the database')
+      console.error('Caught 409 error - Particle device ID already exists')
       throw new Error('Particle device ID already exists in the database')
     }
-    console.error(err)
+    console.error('Non-409 error, returning false')
     return false
   }
 }
