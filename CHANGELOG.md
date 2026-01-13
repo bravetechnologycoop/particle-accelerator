@@ -11,6 +11,8 @@ the code was deployed.
 
 ## [Unreleased]
 
+- Added a way to catch a 409 error (new) from the pa/create-sensor-location endpoint (CU-86dxzrvv7)
+
 ### Changed
 
 - Updated steps 5 and 6 of the provisioning guide to include steps for IM21 sensors (CU-86dvcc4nb).
